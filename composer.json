@@ -7,6 +7,9 @@
             "email": "johannes@sulu.io"
         }
     ],
+    "require": {
+        "php": "^8.2"
+    },
     "require-dev": {
         "schranz/mono": "^2.0.1"
     },

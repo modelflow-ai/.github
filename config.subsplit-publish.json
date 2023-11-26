@@ -1,3 +1,9 @@
 {
-    "sub-splits": []
+    "sub-splits": [
+        {
+            "name": "Core",
+            "directory": "packages/core",
+            "target": "git@github.com:modelflow-ai/core.git"
+        }
+    ]
 }
