@@ -1,0 +1,62 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "0233380b64c54919a403b99af9b729be",
+    "packages": [],
+    "packages-dev": [
+        {
+            "name": "schranz/mono",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/alexander-schranz/mono.git",
+                "reference": "726733b7a49821c67822787ded324f245eefd11a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/alexander-schranz/mono/zipball/726733b7a49821c67822787ded324f245eefd11a",
+                "reference": "726733b7a49821c67822787ded324f245eefd11a",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1"
+            },
+            "bin": [
+                "bin/mono"
+            ],
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander Schranz",
+                    "email": "alexander@sulu.io"
+                }
+            ],
+            "description": "A binary to run commands in a monorepo",
+            "keywords": [
+                "mono",
+                "monorepo",
+                "monorepository"
+            ],
+            "support": {
+                "issues": "https://github.com/alexander-schranz/mono/issues",
+                "source": "https://github.com/alexander-schranz/mono/tree/2.0.1"
+            },
+            "time": "2023-10-28T12:17:16+00:00"
+        }
+    ],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
+}

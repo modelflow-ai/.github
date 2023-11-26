@@ -1,0 +1,21 @@
+{
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Johannes Wachter",
+            "email": "johannes@sulu.io"
+        }
+    ],
+    "require-dev": {
+        "schranz/mono": "^2.0.1"
+    },
+    "scripts": {
+        "post-install-cmd": "@php vendor/bin/mono run composer install",
+        "post-update-cmd": "@php vendor/bin/mono run composer update",
+        "fix": "@php vendor/bin/mono run composer fix",
+        "lint": "@php vendor/bin/mono run composer lint",
+        "test": "@php vendor/bin/mono run composer test",
+        "build-docs": "sphinx-build docs docs/_build"
+    }
+}
