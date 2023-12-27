@@ -1,35 +1,13 @@
 {
-    "name": "modelflow-ai/core",
-    "description": "Abstraction of different ai ecosystems and their models.",
-    "type": "library",
-    "license": "MIT",
-    "keywords": [
-        "abstraction",
-        "ai",
-        "openai",
-        "ollama",
-        "llama2",
-        "gpt4",
-        "gpt3.5"
-    ],
-    "autoload": {
-        "psr-4": {
-            "ModelflowAi\\Core\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "ModelflowAi\\Core\\Tests\\": "tests/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Johannes Wachter",
-            "email": "johannes@sulu.io"
-        }
-    ],
+    "type": "project",
+    "license": "proprietary",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
-        "php": "^8.2"
+        "php": ">=8.2",
+        "modelflow-ai/core": "^0.1",
+        "modelflow-ai/openai": "^0.1",
+        "modelflow-ai/ollama": "^0.1"
     },
     "require-dev": {
         "php-cs-fixer/shim": "^3.15",
@@ -64,17 +42,23 @@
     "repositories": [
         {
             "type": "path",
-            "url": "./../*",
+            "url": "./../../packages/*",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "./../../integrations/*",
             "options": {
                 "symlink": true
             }
         }
     ],
-    "minimum-stability": "dev",
     "config": {
         "allow-plugins": {
-            "phpstan/extension-installer": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "phpstan/extension-installer": true
         }
     }
 }

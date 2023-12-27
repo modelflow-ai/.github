@@ -4,6 +4,16 @@
             "name": "Core",
             "directory": "packages/core",
             "target": "git@github.com:modelflow-ai/core.git"
+        },
+        {
+            "name": "Ollama",
+            "directory": "packages/ollama",
+            "target": "git@github.com:modelflow-ai/ollama.git"
+        },
+        {
+            "name": "OpenAI",
+            "directory": "packages/openai",
+            "target": "git@github.com:modelflow-ai/openai.git"
         }
     ]
 }

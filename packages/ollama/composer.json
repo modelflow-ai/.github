@@ -1,25 +1,22 @@
 {
-    "name": "modelflow-ai/core",
-    "description": "Abstraction of different ai ecosystems and their models.",
+    "name": "modelflow-ai/ollama",
+    "description": "Integrates the ollama ecosystem into modelflow-ai.",
     "type": "library",
     "license": "MIT",
     "keywords": [
-        "abstraction",
         "ai",
-        "openai",
         "ollama",
         "llama2",
-        "gpt4",
-        "gpt3.5"
+        "modelflow-ai"
     ],
     "autoload": {
         "psr-4": {
-            "ModelflowAi\\Core\\": "src/"
+            "ModelflowAi\\Ollama\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "ModelflowAi\\Core\\Tests\\": "tests/"
+            "ModelflowAi\\Ollama\\Tests\\": "tests/"
         }
     },
     "authors": [
@@ -29,7 +26,10 @@
         }
     ],
     "require": {
-        "php": "^8.2"
+        "php": "^8.2",
+        "modelflow-ai/core": "^0.1",
+        "webmozart/assert": "^1.11",
+        "symfony/http-client": "^7.0"
     },
     "require-dev": {
         "php-cs-fixer/shim": "^3.15",
@@ -73,8 +73,7 @@
     "minimum-stability": "dev",
     "config": {
         "allow-plugins": {
-            "phpstan/extension-installer": true,
-            "php-http/discovery": true
+            "phpstan/extension-installer": true
         }
     }
 }

@@ -1,25 +1,22 @@
 {
-    "name": "modelflow-ai/core",
-    "description": "Abstraction of different ai ecosystems and their models.",
+    "name": "modelflow-ai/openai",
+    "description": "Integrates the openai ecosystem into modelflow-ai.",
     "type": "library",
     "license": "MIT",
     "keywords": [
-        "abstraction",
         "ai",
         "openai",
-        "ollama",
-        "llama2",
         "gpt4",
         "gpt3.5"
     ],
     "autoload": {
         "psr-4": {
-            "ModelflowAi\\Core\\": "src/"
+            "ModelflowAi\\Openai\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "ModelflowAi\\Core\\Tests\\": "tests/"
+            "ModelflowAi\\Openai\\Tests\\": "tests/"
         }
     },
     "authors": [
@@ -29,7 +26,11 @@
         }
     ],
     "require": {
-        "php": "^8.2"
+        "php": "^8.2",
+        "modelflow-ai/core": "^0.1",
+        "openai-php/client": "dev-main",
+        "symfony/http-client": "7.1.x-dev",
+        "nyholm/psr7": "^1.8@dev"
     },
     "require-dev": {
         "php-cs-fixer/shim": "^3.15",
