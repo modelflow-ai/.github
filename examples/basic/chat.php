@@ -17,10 +17,12 @@ use ModelflowAi\Core\AIRequestHandlerInterface;
 use ModelflowAi\Core\Request\AIChatMessage;
 use ModelflowAi\Core\Request\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Request\Criteria\PrivacyRequirement;
+use ModelflowAi\Core\Response\AIChatResponse;
 
 /** @var AIRequestHandlerInterface $handler */
 $handler = require_once __DIR__ . '/bootstrap.php';
 
+/** @var AIChatResponse $response */
 $response = $handler->createChatRequest(
     new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'You are an angry bot'),
     new AIChatMessage(AIChatMessageRoleEnum::USER, 'Hello world'),
@@ -29,4 +31,4 @@ $response = $handler->createChatRequest(
     ->build()
     ->execute();
 
-echo sprintf('%s: %s', $response->getMessage()->role->value, $response->getMessage()->content);
+echo \sprintf('%s: %s', $response->getMessage()->role->value, $response->getMessage()->content);

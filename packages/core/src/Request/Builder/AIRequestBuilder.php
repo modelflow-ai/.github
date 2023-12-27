@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Core\Request\Builder;
 
+use ModelflowAi\Core\Request\AIRequest;
 use ModelflowAi\Core\Request\Criteria\AiCriteriaInterface;
 use ModelflowAi\Core\Request\Criteria\AIRequestCriteria;
 
@@ -41,4 +42,6 @@ abstract class AIRequestBuilder
 
         return $this;
     }
+
+    public abstract function build(): AIRequest;
 }

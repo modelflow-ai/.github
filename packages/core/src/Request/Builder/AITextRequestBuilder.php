@@ -33,6 +33,10 @@ class AITextRequestBuilder extends AIRequestBuilder
 
     public function build(): AITextRequest
     {
-        return new AITextRequest($this->text, $this->criteria, $this->requestHandler);
+        return new AITextRequest(
+            $this->text,
+            $this->criteria,
+            $this->requestHandler,
+        );
     }
 }

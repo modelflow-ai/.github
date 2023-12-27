@@ -16,6 +16,8 @@ namespace ModelflowAi\Core\Request;
 use ModelflowAi\Core\Request\Criteria\AIRequestCriteria;
 use ModelflowAi\Core\Request\Criteria\PerformanceRequirement;
 use ModelflowAi\Core\Request\Criteria\PrivacyRequirement;
+use ModelflowAi\Core\Response\AIChatResponse;
+use ModelflowAi\Core\Response\AIResponseInterface;
 
 abstract class AIRequest implements AIRequestInterface
 {
@@ -40,4 +42,6 @@ abstract class AIRequest implements AIRequestInterface
     {
         return $this->criteria->matches($criteria);
     }
+
+    public abstract function execute(): AIResponseInterface;
 }
