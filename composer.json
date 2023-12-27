@@ -18,7 +18,6 @@
         "post-update-cmd": "@php vendor/bin/mono run composer update",
         "fix": "@php vendor/bin/mono run composer fix",
         "lint": "@php vendor/bin/mono run composer lint",
-        "test": "@php vendor/bin/mono run composer test",
-        "build-docs": "sphinx-build docs docs/_build"
+        "test": "@php vendor/bin/mono run composer test"
     }
 }
