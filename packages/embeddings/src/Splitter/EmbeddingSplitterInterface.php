@@ -1,0 +1,23 @@
+<?php
+
+namespace ModelflowAi\Embeddings\Splitter;
+
+use ModelflowAi\Embeddings\Model\EmbeddingInterface;
+
+/**
+ * Inspired by https://github.com/theodo-group/LLPhant/blob/4825d36/src/Embeddings/DocumentSplitter/DocumentSplitter.php
+ */
+interface EmbeddingSplitterInterface
+{
+    /**
+     * @return EmbeddingInterface[]
+     */
+    public function splitEmbedding(EmbeddingInterface $embedding,): array;
+
+    /**
+     * @param EmbeddingInterface[] $embeddings
+     *
+     * @return EmbeddingInterface[]
+     */
+    public function splitEmbeddings(array $embeddings): array;
+}
