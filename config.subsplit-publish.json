@@ -6,6 +6,11 @@
             "target": "git@github.com:modelflow-ai/core.git"
         },
         {
+            "name": "Embeddings",
+            "directory": "packages/embeddings",
+            "target": "git@github.com:modelflow-ai/embeddings.git"
+        },
+        {
             "name": "Ollama",
             "directory": "packages/ollama",
             "target": "git@github.com:modelflow-ai/ollama.git"
