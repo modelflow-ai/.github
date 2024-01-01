@@ -1,11 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of the Modelflow AI package.
+ *
+ * (c) Johannes Wachter <johannes@sulu.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace ModelflowAi\Embeddings\Generator;
 
 use ModelflowAi\Core\Embeddings\EmbeddingAdapterInterface;
 use ModelflowAi\Embeddings\Formatter\EmbeddingFormatterInterface;
-use ModelflowAi\Embeddings\Splitter\EmbeddingSplitterInterface;
 use ModelflowAi\Embeddings\Model\EmbeddingInterface;
+use ModelflowAi\Embeddings\Splitter\EmbeddingSplitterInterface;
 
 class EmbeddingGenerator implements EmbeddingGeneratorInterface
 {
@@ -14,7 +25,6 @@ class EmbeddingGenerator implements EmbeddingGeneratorInterface
         private readonly EmbeddingFormatterInterface $embeddingFormatter,
         private readonly EmbeddingAdapterInterface $embeddingAdapter,
     ) {
-
     }
 
     public function embed(EmbeddingInterface $embedding, ?callable $headerGenerator = null): array

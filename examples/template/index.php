@@ -13,15 +13,7 @@ declare(strict_types=1);
 
 namespace App;
 
-use ModelflowAi\Embeddings\Adapter\Cache\CacheEmbeddingAdapter;
-use ModelflowAi\Embeddings\Formatter\EmbeddingFormatter;
-use ModelflowAi\Embeddings\Splitter\EmbeddingSplitter;
-use ModelflowAi\Embeddings\Generator\EmbeddingGenerator;
-use ModelflowAi\Embeddings\Store\Memory\MemoryEmbeddingsStore;
-use ModelflowAi\Ollama\Embeddings\OllamaEmbeddingAdapter;
 use ModelflowAi\PromptTemplate\PromptTemplate;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use Symfony\Component\HttpClient\HttpClient;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
