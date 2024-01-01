@@ -1,25 +1,22 @@
 {
-    "name": "modelflow-ai/core",
-    "description": "Abstraction of different ai ecosystems and their models.",
+    "name": "modelflow-ai/prompt-template",
+    "description": "Templating library for ai prompts.",
     "type": "library",
     "license": "MIT",
     "keywords": [
-        "abstraction",
         "ai",
-        "openai",
-        "ollama",
-        "llama2",
-        "gpt4",
-        "gpt3.5"
+        "prompts template",
+        "prompts",
+        "template"
     ],
     "autoload": {
         "psr-4": {
-            "ModelflowAi\\Core\\": "src/"
+            "ModelflowAi\\PromptTemplate\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "ModelflowAi\\Core\\Tests\\": "tests/"
+            "ModelflowAi\\PromptTemplate\\Tests\\": "tests/"
         }
     },
     "authors": [
@@ -29,8 +26,7 @@
         }
     ],
     "require": {
-        "php": "^8.2",
-        "modelflow-ai/prompt-template": "0.1.x-dev"
+        "php": "^8.2"
     },
     "require-dev": {
         "php-cs-fixer/shim": "^3.15",

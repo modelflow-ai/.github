@@ -2,8 +2,8 @@
 
 namespace ModelflowAi\Core\Tests\Unit\Request;
 
-use ModelflowAi\Core\Request\AIChatMessage;
-use ModelflowAi\Core\Request\AIChatMessageRoleEnum;
+use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
+use ModelflowAi\PromptTemplate\Chat\AIChatMessageRoleEnum;
 use PHPUnit\Framework\TestCase;
 
 class AIChatMessageTest extends TestCase

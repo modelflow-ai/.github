@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace ModelflowAi\Core;
 
 use ModelflowAi\Core\DecisionTree\AIModelDecisionTreeInterface;
-use ModelflowAi\Core\Request\AIChatMessage;
 use ModelflowAi\Core\Request\AIChatRequest;
 use ModelflowAi\Core\Request\AIRequestInterface;
 use ModelflowAi\Core\Request\AITextRequest;
@@ -23,6 +22,7 @@ use ModelflowAi\Core\Request\Builder\AITextRequestBuilder;
 use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\Core\Response\AIResponseInterface;
 use ModelflowAi\Core\Response\AITextResponse;
+use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
 use Webmozart\Assert\Assert;
 
 class AIRequestHandler implements AIRequestHandlerInterface

@@ -19,6 +19,11 @@
             "name": "OpenAI",
             "directory": "packages/openai",
             "target": "git@github.com:modelflow-ai/openai.git"
+        },
+        {
+            "name": "Prompt Template",
+            "directory": "packages/prompt-template",
+            "target": "git@github.com:modelflow-ai/prompt-template.git"
         }
     ]
 }

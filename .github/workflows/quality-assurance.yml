@@ -37,7 +37,7 @@ jobs:
               run: composer lint
 
     test:
-        name: "Lint"
+        name: "Test"
         runs-on: ubuntu-latest
 
         steps:

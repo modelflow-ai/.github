@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace ModelflowAi\Ollama\Model;
 
 use ModelflowAi\Core\Model\AIModelAdapterInterface;
-use ModelflowAi\Core\Request\AIChatMessage;
-use ModelflowAi\Core\Request\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Request\AIChatRequest;
 use ModelflowAi\Core\Request\AIRequestInterface;
 use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\Core\Response\AIResponseInterface;
+use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
+use ModelflowAi\PromptTemplate\Chat\AIChatMessageRoleEnum;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Webmozart\Assert\Assert;
 

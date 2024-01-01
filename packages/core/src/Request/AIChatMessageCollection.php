@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Core\Request;
 
+use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
+
 class AIChatMessageCollection extends \ArrayObject
 {
     public function __construct(
@@ -24,7 +26,10 @@ class AIChatMessageCollection extends \ArrayObject
     public function toArray(): array
     {
         return \array_map(
-            fn (AIChatMessage $message) => $message->toArray(),
+            fn (AIChatMessage $message) => [
+                'role' => $message->role->value,
+                'content' => $message->content,
+            ],
             $this->getArrayCopy(),
         );
     }
