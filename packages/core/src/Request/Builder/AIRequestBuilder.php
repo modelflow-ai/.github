@@ -43,5 +43,5 @@ abstract class AIRequestBuilder
         return $this;
     }
 
-    public abstract function build(): AIRequest;
+    abstract public function build(): AIRequest;
 }

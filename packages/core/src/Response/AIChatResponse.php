@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Core\Response;
 
-use ModelflowAi\Core\Request\AIChatMessage;
 use ModelflowAi\Core\Request\AIRequestInterface;
+use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
 
 class AIChatResponse implements AIResponseInterface
 {

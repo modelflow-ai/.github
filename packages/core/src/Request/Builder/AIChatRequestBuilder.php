@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Core\Request\Builder;
 
-use ModelflowAi\Core\Request\AIChatMessage;
 use ModelflowAi\Core\Request\AIChatMessageCollection;
 use ModelflowAi\Core\Request\AIChatRequest;
+use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
 
 class AIChatRequestBuilder extends AIRequestBuilder
 {
