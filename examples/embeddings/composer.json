@@ -7,7 +7,7 @@
         "php": ">=8.2",
         "modelflow-ai/core": "^0.1",
         "modelflow-ai/embeddings": "^0.1",
-        "modelflow-ai/ollama": "^0.1",
+        "modelflow-ai/ollama-adapter": "^0.1",
         "symfony/cache": "^7.0"
     },
     "require-dev": {

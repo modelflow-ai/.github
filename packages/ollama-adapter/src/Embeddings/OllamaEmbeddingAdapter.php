@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\Ollama\Embeddings;
+namespace ModelflowAi\OllamaAdapter\Embeddings;
 
 use ModelflowAi\Core\Embeddings\EmbeddingAdapterInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;

@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\Openai\Embeddings;
+namespace ModelflowAi\OpenaiAdapter\Embeddings;
 
 use ModelflowAi\Core\Embeddings\EmbeddingAdapterInterface;
 use OpenAI\Client;

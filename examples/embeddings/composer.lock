@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a73d74911cf32cba99bf0fd1298ce67b",
+    "content-hash": "306504404596b1e6d325866691871339",
     "packages": [
         {
             "name": "modelflow-ai/core",
@@ -186,12 +186,12 @@
             }
         },
         {
-            "name": "modelflow-ai/ollama",
+            "name": "modelflow-ai/ollama-adapter",
             "version": "0.1.x-dev",
             "dist": {
                 "type": "path",
-                "url": "./../../packages/ollama",
-                "reference": "63b9f93a7b5a9e2579a98ebc47b873b04a478b48"
+                "url": "./../../packages/ollama-adapter",
+                "reference": "5d2e59141670992947e37990b2b4b8d4355bbaea"
             },
             "require": {
                 "modelflow-ai/core": "^0.1",
@@ -210,12 +210,12 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "ModelflowAi\\Ollama\\": "src/"
+                    "ModelflowAi\\OllamaAdapter\\": "src/"
                 }
             },
             "autoload-dev": {
                 "psr-4": {
-                    "ModelflowAi\\Ollama\\Tests\\": "tests/"
+                    "ModelflowAi\\OllamaAdapter\\Tests\\": "tests/"
                 }
             },
             "scripts": {
@@ -1871,16 +1871,16 @@
         },
         {
             "name": "php-cs-fixer/shim",
-            "version": "v3.45.0",
+            "version": "v3.46.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/shim.git",
-                "reference": "6612ded23a774a376efe7332b4fc8333cdd324af"
+                "reference": "e9fc76796f284c050615937b9bd2df7688452c33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/shim/zipball/6612ded23a774a376efe7332b4fc8333cdd324af",
-                "reference": "6612ded23a774a376efe7332b4fc8333cdd324af",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/shim/zipball/e9fc76796f284c050615937b9bd2df7688452c33",
+                "reference": "e9fc76796f284c050615937b9bd2df7688452c33",
                 "shasum": ""
             },
             "require": {
@@ -1917,9 +1917,9 @@
             "description": "A tool to automatically fix PHP code style",
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/shim/issues",
-                "source": "https://github.com/PHP-CS-Fixer/shim/tree/v3.45.0"
+                "source": "https://github.com/PHP-CS-Fixer/shim/tree/v3.46.0"
             },
-            "time": "2023-12-30T02:07:42+00:00"
+            "time": "2024-01-03T21:39:12+00:00"
         },
         {
             "name": "phpstan/extension-installer",
@@ -1967,16 +1967,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.50",
+            "version": "1.10.54",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "06a98513ac72c03e8366b5a0cb00750b487032e4"
+                "reference": "3e25f279dada0adc14ffd7bad09af2e2fc3523bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/06a98513ac72c03e8366b5a0cb00750b487032e4",
-                "reference": "06a98513ac72c03e8366b5a0cb00750b487032e4",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/3e25f279dada0adc14ffd7bad09af2e2fc3523bb",
+                "reference": "3e25f279dada0adc14ffd7bad09af2e2fc3523bb",
                 "shasum": ""
             },
             "require": {
@@ -2025,7 +2025,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-13T10:59:42+00:00"
+            "time": "2024-01-05T15:50:47+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",

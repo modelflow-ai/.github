@@ -1,13 +1,13 @@
 {
     "name": "modelflow-ai/ollama",
-    "description": "Integrates the ollama ecosystem into modelflow-ai.",
+    "description": "Client for ollama API.",
     "type": "library",
     "license": "MIT",
     "keywords": [
         "ai",
         "ollama",
-        "llama2",
-        "modelflow-ai"
+        "api",
+        "client"
     ],
     "autoload": {
         "psr-4": {
@@ -26,10 +26,7 @@
         }
     ],
     "require": {
-        "php": "^8.2",
-        "modelflow-ai/core": "^0.1",
-        "webmozart/assert": "^1.11",
-        "symfony/http-client": "^7.0"
+        "php": "^8.2"
     },
     "require-dev": {
         "php-cs-fixer/shim": "^3.15",
