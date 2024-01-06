@@ -11,19 +11,17 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\Ollama\Model;
+namespace ModelflowAi\OllamaAdapter\Model;
 
 use ModelflowAi\Core\Model\AIModelAdapterInterface;
-use ModelflowAi\Core\Request\AIChatRequest;
 use ModelflowAi\Core\Request\AIRequestInterface;
-use ModelflowAi\Core\Response\AIChatResponse;
+use ModelflowAi\Core\Request\AITextRequest;
 use ModelflowAi\Core\Response\AIResponseInterface;
-use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
-use ModelflowAi\PromptTemplate\Chat\AIChatMessageRoleEnum;
+use ModelflowAi\Core\Response\AITextResponse;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Webmozart\Assert\Assert;
 
-class OllamaModelChatAdapter implements AIModelAdapterInterface
+class OllamaModelTextAdapter implements AIModelAdapterInterface
 {
     public function __construct(
         private readonly HttpClientInterface $client,
@@ -34,33 +32,27 @@ class OllamaModelChatAdapter implements AIModelAdapterInterface
     }
 
     /**
-     * @param AIChatRequest $request
+     * @param AITextRequest $request
      */
     public function handleRequest(AIRequestInterface $request): AIResponseInterface
     {
-        Assert::isInstanceOf($request, AIChatRequest::class);
+        Assert::isInstanceOf($request, AITextRequest::class);
 
-        $response = $this->client->request('POST', $this->url . '/chat', [
+        $response = $this->client->request('POST', $this->url . '/generate', [
             'json' => [
                 'model' => $this->model,
-                'messages' => $request->getMessages()->toArray(),
+                'prompt' => $request->getText(),
                 'stream' => false,
             ],
         ]);
 
         $content = \json_decode($response->getContent(), true, 512, \JSON_THROW_ON_ERROR);
 
-        return new AIChatResponse(
-            $request,
-            new AIChatMessage(
-                AIChatMessageRoleEnum::from($content['message']['role']),
-                $content['message']['content'],
-            ),
-        );
+        return new AITextResponse($request, $content['response']);
     }
 
     public function supports(AIRequestInterface $request): bool
     {
-        return $request instanceof AIChatRequest;
+        return $request instanceof AITextRequest;
     }
 }

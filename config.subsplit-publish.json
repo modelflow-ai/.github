@@ -11,14 +11,29 @@
             "target": "git@github.com:modelflow-ai/embeddings.git"
         },
         {
+            "name": "Mistral",
+            "directory": "packages/mistral",
+            "target": "git@github.com:modelflow-ai/mistral.git"
+        },
+        {
+            "name": "MistralAdapter",
+            "directory": "packages/mistral-adapter",
+            "target": "git@github.com:modelflow-ai/mistral-adapter.git"
+        },
+        {
             "name": "Ollama",
             "directory": "packages/ollama",
             "target": "git@github.com:modelflow-ai/ollama.git"
         },
         {
-            "name": "OpenAI",
-            "directory": "packages/openai",
-            "target": "git@github.com:modelflow-ai/openai.git"
+            "name": "OllamaAdapter",
+            "directory": "packages/ollama-adapter",
+            "target": "git@github.com:modelflow-ai/ollama-adapter.git"
+        },
+        {
+            "name": "OpenAIAdapter",
+            "directory": "packages/openai-adapter",
+            "target": "git@github.com:modelflow-ai/openai-adapter.git"
         },
         {
             "name": "PromptTemplate",

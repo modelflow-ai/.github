@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\Openai\Model;
+namespace ModelflowAi\OpenaiAdapter\Model;
 
 use ModelflowAi\Core\Model\AIModelAdapterInterface;
 use ModelflowAi\Core\Request\AIChatRequest;

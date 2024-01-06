@@ -248,16 +248,16 @@
         },
         {
             "name": "php-cs-fixer/shim",
-            "version": "v3.45.0",
+            "version": "v3.46.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/shim.git",
-                "reference": "6612ded23a774a376efe7332b4fc8333cdd324af"
+                "reference": "e9fc76796f284c050615937b9bd2df7688452c33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/shim/zipball/6612ded23a774a376efe7332b4fc8333cdd324af",
-                "reference": "6612ded23a774a376efe7332b4fc8333cdd324af",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/shim/zipball/e9fc76796f284c050615937b9bd2df7688452c33",
+                "reference": "e9fc76796f284c050615937b9bd2df7688452c33",
                 "shasum": ""
             },
             "require": {
@@ -294,9 +294,9 @@
             "description": "A tool to automatically fix PHP code style",
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/shim/issues",
-                "source": "https://github.com/PHP-CS-Fixer/shim/tree/v3.45.0"
+                "source": "https://github.com/PHP-CS-Fixer/shim/tree/v3.46.0"
             },
-            "time": "2023-12-30T02:07:42+00:00"
+            "time": "2024-01-03T21:39:12+00:00"
         },
         {
             "name": "phpstan/extension-installer",
@@ -348,12 +348,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "9e32c78a00da3ff38f78031810959ab6d9fe56ad"
+                "reference": "2720a9d605a9e43fa399a9537aa853f24449d2f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9e32c78a00da3ff38f78031810959ab6d9fe56ad",
-                "reference": "9e32c78a00da3ff38f78031810959ab6d9fe56ad",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/2720a9d605a9e43fa399a9537aa853f24449d2f8",
+                "reference": "2720a9d605a9e43fa399a9537aa853f24449d2f8",
                 "shasum": ""
             },
             "require": {
@@ -403,7 +403,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-01T14:22:37+00:00"
+            "time": "2024-01-06T18:56:06+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
@@ -787,12 +787,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "6044de35a5d3ce46de34bfcc66819193fc5b3d1d"
+                "reference": "13087a8a4434e736f5635e47724545e9d58585e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6044de35a5d3ce46de34bfcc66819193fc5b3d1d",
-                "reference": "6044de35a5d3ce46de34bfcc66819193fc5b3d1d",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/13087a8a4434e736f5635e47724545e9d58585e3",
+                "reference": "13087a8a4434e736f5635e47724545e9d58585e3",
                 "shasum": ""
             },
             "require": {
@@ -880,7 +880,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-01T15:57:03+00:00"
+            "time": "2024-01-06T16:46:12+00:00"
         },
         {
             "name": "rector/rector",

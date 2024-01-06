@@ -20,9 +20,9 @@ use ModelflowAi\Core\DecisionTree\AIModelDecisionTree;
 use ModelflowAi\Core\DecisionTree\DecisionRule;
 use ModelflowAi\Core\Request\Criteria\PerformanceRequirement;
 use ModelflowAi\Core\Request\Criteria\PrivacyRequirement;
-use ModelflowAi\Ollama\Model\OllamaModelChatAdapter;
-use ModelflowAi\Ollama\Model\OllamaModelTextAdapter;
-use ModelflowAi\Openai\Model\GPT4ModelChatAdapter;
+use ModelflowAi\OllamaAdapter\Model\OllamaModelChatAdapter;
+use ModelflowAi\OllamaAdapter\Model\OllamaModelTextAdapter;
+use ModelflowAi\OpenaiAdapter\Model\GPT4ModelChatAdapter;
 use Symfony\Component\HttpClient\HttpClient;
 
 $httpClient = HttpClient::create();

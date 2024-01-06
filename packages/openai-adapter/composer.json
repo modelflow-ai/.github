@@ -1,13 +1,36 @@
 {
-    "type": "project",
-    "license": "proprietary",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
+    "name": "modelflow-ai/openai-adapter",
+    "description": "Integrates the openai ecosystem into modelflow-ai.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "ai",
+        "openai",
+        "gpt4",
+        "gpt3.5"
+    ],
+    "autoload": {
+        "psr-4": {
+            "ModelflowAi\\OpenaiAdapter\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ModelflowAi\\OpenaiAdapter\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Johannes Wachter",
+            "email": "johannes@sulu.io"
+        }
+    ],
     "require": {
-        "php": ">=8.2",
+        "php": "^8.2",
         "modelflow-ai/core": "^0.1",
-        "modelflow-ai/openai-adapter": "^0.1",
-        "modelflow-ai/ollama-adapter": "^0.1"
+        "openai-php/client": "dev-main",
+        "symfony/http-client": "7.1.x-dev",
+        "nyholm/psr7": "^1.8@dev"
     },
     "require-dev": {
         "php-cs-fixer/shim": "^3.15",
@@ -31,7 +54,7 @@
             "@lint-rector",
             "@lint-composer"
         ],
-        "lint-composer": "@composer validate --strict --no-check-publish",
+        "lint-composer": "@composer validate --strict",
         "rector": "@php vendor/bin/rector process",
         "php-cs-fix": "@php vendor/bin/php-cs-fixer fix",
         "fix": [
@@ -42,23 +65,17 @@
     "repositories": [
         {
             "type": "path",
-            "url": "./../../packages/*",
-            "options": {
-                "symlink": true
-            }
-        },
-        {
-            "type": "path",
-            "url": "./../../integrations/*",
+            "url": "./../*",
             "options": {
                 "symlink": true
             }
         }
     ],
+    "minimum-stability": "dev",
     "config": {
         "allow-plugins": {
-            "php-http/discovery": true,
-            "phpstan/extension-installer": true
+            "phpstan/extension-installer": true,
+            "php-http/discovery": true
         }
     }
 }
