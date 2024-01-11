@@ -1,16 +1,31 @@
 # Mistral
 
-The Mistral package integrates the Mistral AI model into Modelflow AI, providing a seamless way to leverage the power of
-AI in your PHP applications.
+The Mistral package is a comprehensive API client for [Mistral AI](https://mistral.ai/), developed using PHP. It
+provides a robust and efficient
+interface for interacting with the Mistral AI model, enabling developers to seamlessly integrate AI capabilities into
+their PHP applications.
+
+This package is designed with a focus on ease of use, performance, and flexibility. It allows developers to leverage the
+full potential of the Mistral AI model, from creating chat conversations to getting chat completions, all through a
+simple and intuitive API.
+
+While the Mistral package can be used in conjunction with other packages, it is important to note that it operates
+independently and is not directly connected to any other package or system. This independence ensures that developers
+can integrate the Mistral package into their projects without any dependencies or conflicts.
 
 ## Installation
 
-Ensure you have PHP 8.2 or higher and Composer installed on your machine. Then, add the package to your project by
-running the following command:
+To install the Mistral package, you need to have PHP 8.2 or higher and Composer installed on your machine. Then, you can
+add the package to your project by running the following command:
 
 ```bash
 composer require modelflow-ai/mistral
 ```
+
+## Examples
+
+Here are some examples of how you can use the Mistral package in your PHP applications. You can find more detailed
+examples in the [examples directory](examples).
 
 ## Usage
 
