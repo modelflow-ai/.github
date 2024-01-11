@@ -11,20 +11,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-use ModelflowAi\Mistral\Client;
-use ModelflowAi\Mistral\Transport\SymfonyHttpTransporter;
-use Symfony\Component\Dotenv\Dotenv;
-use Symfony\Component\HttpClient\HttpClient;
+use ModelflowAi\Mistral\Mistral;
+use Symfony\Component\Dotenv\Dotenv;use Symfony\Component\HttpClient\HttpClient;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
 (new Dotenv())->bootEnv(__DIR__ . '/.env');
 
-$transporter = new SymfonyHttpTransporter(HttpClient::create(), 'https://api.mistral.ai/v1/', [
-    'Authorization' => 'Bearer ' . $_SERVER['MISTRAL_API_KEY'],
-]);
-
-$client = new Client($transporter);
+$client = Mistral::client($_SERVER['MISTRAL_API_KEY']);
 
 $response = $client->chat()->create([
     'model' => 'mistral-tiny',
