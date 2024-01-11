@@ -15,11 +15,17 @@ namespace ModelflowAi\Mistral\Responses;
 
 final readonly class MetaInformation
 {
+    /**
+     * @param array<string, string> $headers
+     */
     private function __construct(
         public array $headers,
     ) {
     }
 
+    /**
+     * @param array<string, string> $headers
+     */
     public static function from(array $headers): self
     {
         return new self(

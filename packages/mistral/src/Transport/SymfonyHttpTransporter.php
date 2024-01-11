@@ -23,6 +23,9 @@ class SymfonyHttpTransporter implements TransportInterface
 {
     private readonly HttpClientInterface $client;
 
+    /**
+     * @param array<string, string> $headers
+     */
     public function __construct(
         HttpClientInterface $client,
         string $baseUrl,
@@ -52,6 +55,7 @@ class SymfonyHttpTransporter implements TransportInterface
     {
         $response = $this->request($payload);
 
+        // @phpstan-ignore-next-line
         return new TextResponse($response->getContent(), MetaInformation::from($response->getHeaders()));
     }
 
@@ -59,6 +63,7 @@ class SymfonyHttpTransporter implements TransportInterface
     {
         $response = $this->request($payload);
 
+        // @phpstan-ignore-next-line
         return new ObjectResponse($response->toArray(), MetaInformation::from($response->getHeaders()));
     }
 }

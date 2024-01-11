@@ -12,7 +12,7 @@ declare(strict_types=1);
  */
 
 use ModelflowAi\Mistral\Mistral;
-use Symfony\Component\Dotenv\Dotenv;use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\Dotenv\Dotenv;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 

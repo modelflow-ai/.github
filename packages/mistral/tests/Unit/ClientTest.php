@@ -1,18 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of the Modelflow AI package.
+ *
+ * (c) Johannes Wachter <johannes@sulu.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace ModelflowAi\Mistral\Tests\Unit;
 
 use ModelflowAi\Mistral\Client;
 use ModelflowAi\Mistral\Resources\Chat;
-use ModelflowAi\Mistral\Transport\Payload;
-use ModelflowAi\Mistral\Transport\SymfonyHttpTransporter;
-use ModelflowAi\Mistral\Transport\Response\ObjectResponse;
 use ModelflowAi\Mistral\Transport\TransportInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
-use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class ClientTest extends TestCase
 {

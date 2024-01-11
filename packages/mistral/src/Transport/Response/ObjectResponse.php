@@ -17,6 +17,9 @@ use ModelflowAi\Mistral\Responses\MetaInformation;
 
 readonly class ObjectResponse extends Response
 {
+    /**
+     * @param array<string, mixed> $data
+     */
     public function __construct(
         public array $data,
         MetaInformation $meta,

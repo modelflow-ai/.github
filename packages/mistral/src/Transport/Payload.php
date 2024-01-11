@@ -19,6 +19,9 @@ use ModelflowAi\Mistral\Transport\ValueObjects\ResourceUri;
 
 readonly class Payload
 {
+    /**
+     * @param array<string, mixed> $parameters
+     */
     private function __construct(
         public ContentType $contentType,
         public Method $method,
@@ -27,6 +30,9 @@ readonly class Payload
     ) {
     }
 
+    /**
+     * @param array<string, mixed> $parameters
+     */
     public static function create(string $resource, array $parameters): self
     {
         return new self(

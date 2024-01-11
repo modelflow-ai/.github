@@ -41,7 +41,7 @@ final class ChatTest extends TestCase
         $this->transport = $this->prophesize(TransportInterface::class);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $response = new ObjectResponse(DataFixtures::CHAT_CREATE_RESPONSE, MetaInformation::from([]));
         $this->transport->requestObject(
@@ -72,7 +72,7 @@ final class ChatTest extends TestCase
         $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE['usage']['total_tokens'], $result->usage->totalTokens);
     }
 
-    public function testCreateAsStream()
+    public function testCreateAsStream(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
@@ -84,7 +84,7 @@ final class ChatTest extends TestCase
         $chat->create($parameters);
     }
 
-    public function testCreateMissingModel()
+    public function testCreateMissingModel(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
@@ -94,10 +94,11 @@ final class ChatTest extends TestCase
             'messages' => DataFixtures::CHAT_CREATE_REQUEST['messages'],
         ];
 
+        // @phpstan-ignore-next-line
         $chat->create($parameters);
     }
 
-    public function testCreateMissingMessages()
+    public function testCreateMissingMessages(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
@@ -107,6 +108,7 @@ final class ChatTest extends TestCase
             'model' => DataFixtures::CHAT_CREATE_REQUEST['model'],
         ];
 
+        // @phpstan-ignore-next-line
         $chat->create($parameters);
     }
 

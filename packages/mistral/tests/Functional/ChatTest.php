@@ -1,9 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of the Modelflow AI package.
+ *
+ * (c) Johannes Wachter <johannes@sulu.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace ModelflowAi\Mistral\Tests\Functional;
 
 use ModelflowAi\Mistral\Client;
-use ModelflowAi\Mistral\Resources\Chat;
 use ModelflowAi\Mistral\Responses\CreateResponse;
 use ModelflowAi\Mistral\Responses\MetaInformation;
 use ModelflowAi\Mistral\Tests\DataFixtures;

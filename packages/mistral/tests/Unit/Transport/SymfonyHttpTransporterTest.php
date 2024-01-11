@@ -39,8 +39,10 @@ final class SymfonyHttpTransporterTest extends TestCase
 
     public function testRequestObject(): void
     {
-        $client = new MockHttpClient(new MockResponse(\json_encode(DataFixtures::CHAT_CREATE_RESPONSE), ['http_code' => 200]));
-        $transporter = new SymfonyHttpTransporter($client, 'https://api.example.com');
+        $transporter = $this->createInstance(new MockResponse(
+            (string) \json_encode(DataFixtures::CHAT_CREATE_RESPONSE),
+            ['http_code' => 200],
+        ));
 
         $payload = Payload::create('chat/completions', DataFixtures::CHAT_CREATE_REQUEST);
 

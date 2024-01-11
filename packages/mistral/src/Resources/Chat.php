@@ -50,9 +50,13 @@ class Chat
 
         $response = $this->transport->requestObject($payload);
 
+        // @phpstan-ignore-next-line
         return CreateResponse::from($response->data, $response->meta);
     }
 
+    /**
+     * @param array<string, mixed> $parameters
+     */
     private function validateParameters(array $parameters): void
     {
         Assert::keyExists($parameters, 'model');
