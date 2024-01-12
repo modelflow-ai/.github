@@ -15,6 +15,7 @@ namespace ModelflowAi\OpenaiAdapter\Embeddings;
 
 use ModelflowAi\Core\Embeddings\EmbeddingAdapterInterface;
 use OpenAI\Client;
+use OpenAI\Responses\Embeddings\CreateResponseEmbedding;
 
 final readonly class OpenaiEmbeddingAdapter implements EmbeddingAdapterInterface
 {
@@ -32,6 +33,14 @@ final readonly class OpenaiEmbeddingAdapter implements EmbeddingAdapterInterface
             'encoding_format' => 'float',
         ]);
 
-        return $response->embeddings;
+        /** @var float[] $embeddings */
+        $embeddings = \array_values(
+            \array_map(
+                fn (CreateResponseEmbedding $embedding) => \array_values($embedding->embedding),
+                $response->embeddings,
+            ),
+        );
+
+        return $embeddings;
     }
 }

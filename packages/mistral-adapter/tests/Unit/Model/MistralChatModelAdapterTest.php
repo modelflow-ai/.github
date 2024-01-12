@@ -15,7 +15,7 @@ namespace ModelflowAi\MistralAdapter\Tests\Unit\Model;
 
 use ModelflowAi\Core\Request\AIChatMessageCollection;
 use ModelflowAi\Core\Request\AIChatRequest;
-use ModelflowAi\Core\Request\Criteria\AIRequestCriteria;
+use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
 use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\Mistral\ClientInterface;
 use ModelflowAi\Mistral\Model;
@@ -67,7 +67,7 @@ final class MistralChatModelAdapterTest extends TestCase
 
         $request = new AIChatRequest(new AIChatMessageCollection(
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'some text'),
-        ), new AIRequestCriteria(), fn () => null);
+        ), new AIRequestCriteriaCollection(), fn () => null);
 
         $adapter = new MistralChatModelAdapter($client->reveal());
         $result = $adapter->handleRequest($request);

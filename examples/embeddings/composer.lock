@@ -12,11 +12,15 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/core",
-                "reference": "ebd7d960d0d1633bdec7d620b6d5bf918958bb68"
+                "reference": "763546ef82f810b10691c200a1b37bfb2516cc8e"
             },
             "require": {
                 "modelflow-ai/prompt-template": "0.1.x-dev",
-                "php": "^8.2"
+                "php": "^8.2",
+                "webmozart/assert": "^1.11"
+            },
+            "conflict": {
+                "phpstan/phpstan": "^1.10.55"
             },
             "require-dev": {
                 "php-cs-fixer/shim": "^3.15",
@@ -101,13 +105,16 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/embeddings",
-                "reference": "7af5ade164229b8c6e993d8093c2712a6b5d96a4"
+                "reference": "c6b3f24f90578a7f3385acbb239e21a1e7dc1818"
             },
             "require": {
                 "modelflow-ai/core": "^0.1",
                 "php": "^8.2",
                 "psr/cache": "^3.0@dev",
-                "symfony/property-access": "7.1.x-dev"
+                "symfony/property-access": "^6.4 || ^7.0"
+            },
+            "conflict": {
+                "phpstan/phpstan": "^1.10.55"
             },
             "require-dev": {
                 "php-cs-fixer/shim": "^3.15",
@@ -191,12 +198,12 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/ollama-adapter",
-                "reference": "5d2e59141670992947e37990b2b4b8d4355bbaea"
+                "reference": "e06de32cc9b385c43a040b6359e0565264bb97e6"
             },
             "require": {
                 "modelflow-ai/core": "^0.1",
                 "php": "^8.2",
-                "symfony/http-client": "^7.0",
+                "symfony/http-client": "^6.4 || ^7.0",
                 "webmozart/assert": "^1.11"
             },
             "require-dev": {
@@ -279,10 +286,13 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/prompt-template",
-                "reference": "8e9b97e488365a2bb7b80a6643f916531345fe70"
+                "reference": "9f241dcb4a44f17e86fa5cfd6fd75a5b72c1131f"
             },
             "require": {
                 "php": "^8.2"
+            },
+            "conflict": {
+                "phpstan/phpstan": "^1.10.55"
             },
             "require-dev": {
                 "php-cs-fixer/shim": "^3.15",
@@ -1184,16 +1194,16 @@
         },
         {
             "name": "symfony/property-access",
-            "version": "7.1.x-dev",
+            "version": "v7.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
-                "reference": "a2561fb5ea503e0731e47a775356d70bb3de58bc"
+                "reference": "740e8cb8c54a4f16c82179e8558c29d9fc49901d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-access/zipball/a2561fb5ea503e0731e47a775356d70bb3de58bc",
-                "reference": "a2561fb5ea503e0731e47a775356d70bb3de58bc",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/740e8cb8c54a4f16c82179e8558c29d9fc49901d",
+                "reference": "740e8cb8c54a4f16c82179e8558c29d9fc49901d",
                 "shasum": ""
             },
             "require": {
@@ -1240,7 +1250,7 @@
                 "reflection"
             ],
             "support": {
-                "source": "https://github.com/symfony/property-access/tree/7.1"
+                "source": "https://github.com/symfony/property-access/tree/v7.0.0"
             },
             "funding": [
                 {
@@ -1256,7 +1266,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-26T14:02:43+00:00"
+            "time": "2023-09-27T14:05:33+00:00"
         },
         {
             "name": "symfony/property-info",
@@ -1704,25 +1714,27 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.18.0",
+            "version": "v5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "1bcbb2179f97633e98bbbc87044ee2611c7d7999"
+                "reference": "4a21235f7e56e713259a6f76bf4b5ea08502b9dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/1bcbb2179f97633e98bbbc87044ee2611c7d7999",
-                "reference": "1bcbb2179f97633e98bbbc87044ee2611c7d7999",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/4a21235f7e56e713259a6f76bf4b5ea08502b9dc",
+                "reference": "4a21235f7e56e713259a6f76bf4b5ea08502b9dc",
                 "shasum": ""
             },
             "require": {
+                "ext-ctype": "*",
+                "ext-json": "*",
                 "ext-tokenizer": "*",
-                "php": ">=7.0"
+                "php": ">=7.4"
             },
             "require-dev": {
                 "ircmaxell/php-yacc": "^0.0.7",
-                "phpunit/phpunit": "^6.5 || ^7.0 || ^8.0 || ^9.0"
+                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0"
             },
             "bin": [
                 "bin/php-parse"
@@ -1730,7 +1742,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.9-dev"
+                    "dev-master": "5.0-dev"
                 }
             },
             "autoload": {
@@ -1754,9 +1766,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v4.18.0"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.0.0"
             },
-            "time": "2023-12-10T21:03:43+00:00"
+            "time": "2024-01-07T17:17:35+00:00"
         },
         {
             "name": "phar-io/manifest",

@@ -25,6 +25,7 @@ interface EmbeddingsStoreInterface
     public function addDocuments(array $embeddings): void;
 
     /**
+     * @param float[] $vector
      * @param array<string, scalar> $additionalArguments
      *
      * @return EmbeddingInterface[]

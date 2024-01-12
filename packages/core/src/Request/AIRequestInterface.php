@@ -13,13 +13,12 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Core\Request;
 
-use ModelflowAi\Core\Request\Criteria\AIRequestCriteria;
-use ModelflowAi\Core\Request\Criteria\PerformanceRequirement;
-use ModelflowAi\Core\Request\Criteria\PrivacyRequirement;
+use ModelflowAi\Core\Request\Criteria\AiCriteriaInterface;
+use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
 
 interface AIRequestInterface
 {
-    public function getCriteria(): AIRequestCriteria;
+    public function getCriteria(): AIRequestCriteriaCollection;
 
-    public function matches(PrivacyRequirement|PerformanceRequirement $criteria): bool;
+    public function matches(AiCriteriaInterface $criteria): bool;
 }

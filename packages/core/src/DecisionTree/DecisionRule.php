@@ -15,9 +15,13 @@ namespace ModelflowAi\Core\DecisionTree;
 
 use ModelflowAi\Core\Model\AIModelAdapterInterface;
 use ModelflowAi\Core\Request\AIRequestInterface;
+use ModelflowAi\Core\Request\Criteria\AiCriteriaInterface;
 
 class DecisionRule implements DecisionRuleInterface
 {
+    /**
+     * @param AiCriteriaInterface[] $criteria
+     */
     public function __construct(
         private readonly AIModelAdapterInterface $adapter,
         private readonly array $criteria = [],

@@ -24,7 +24,7 @@ class AITextRequestBuilder extends AIRequestBuilder
         return new self($requestHandler);
     }
 
-    public function text(string $text): self
+    public function text(?string $text = null): self
     {
         $this->text = $text;
 
@@ -33,6 +33,10 @@ class AITextRequestBuilder extends AIRequestBuilder
 
     public function build(): AITextRequest
     {
+        if (null === $this->text) {
+            throw new \RuntimeException('No text given');
+        }
+
         return new AITextRequest(
             $this->text,
             $this->criteria,

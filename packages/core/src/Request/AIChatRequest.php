@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Core\Request;
 
-use ModelflowAi\Core\Request\Criteria\AIRequestCriteria;
+use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
 use ModelflowAi\Core\Response\AIChatResponse;
 
 class AIChatRequest extends AIRequest implements AIRequestInterface
 {
     public function __construct(
         private readonly AIChatMessageCollection $messages,
-        AIRequestCriteria $criteria,
+        AIRequestCriteriaCollection $criteria,
         callable $requestHandler,
     ) {
         parent::__construct($criteria, $requestHandler);

@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Core\Request;
 
-use ModelflowAi\Core\Request\Criteria\AIRequestCriteria;
-use ModelflowAi\Core\Request\Criteria\PerformanceRequirement;
-use ModelflowAi\Core\Request\Criteria\PrivacyRequirement;
+use ModelflowAi\Core\Request\Criteria\AiCriteriaInterface;
+use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
 use ModelflowAi\Core\Response\AIResponseInterface;
 
 abstract class AIRequest implements AIRequestInterface
@@ -26,18 +25,18 @@ abstract class AIRequest implements AIRequestInterface
     protected $requestHandler;
 
     public function __construct(
-        private readonly AIRequestCriteria $criteria,
+        private readonly AIRequestCriteriaCollection $criteria,
         callable $requestHandler,
     ) {
         $this->requestHandler = $requestHandler;
     }
 
-    public function getCriteria(): AIRequestCriteria
+    public function getCriteria(): AIRequestCriteriaCollection
     {
         return $this->criteria;
     }
 
-    public function matches(PrivacyRequirement|PerformanceRequirement $criteria): bool
+    public function matches(AiCriteriaInterface $criteria): bool
     {
         return $this->criteria->matches($criteria);
     }

@@ -15,14 +15,23 @@ namespace ModelflowAi\Core\Request;
 
 use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
 
+/**
+ * @extends \ArrayObject<int, AIChatMessage>
+ */
 class AIChatMessageCollection extends \ArrayObject
 {
     public function __construct(
         AIChatMessage ...$messages,
     ) {
-        parent::__construct($messages);
+        parent::__construct(\array_values($messages));
     }
 
+    /**
+     * @return array<array{
+     *     role: "assistant"|"system"|"user",
+     *     content: string,
+     * }>
+     */
     public function toArray(): array
     {
         return \array_map(

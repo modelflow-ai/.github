@@ -48,6 +48,7 @@ class OllamaModelChatAdapter implements AIModelAdapterInterface
             ],
         ]);
 
+        /** @var array{ message: array{ role: string, content: string } } $content */
         $content = \json_decode($response->getContent(), true, 512, \JSON_THROW_ON_ERROR);
 
         return new AIChatResponse(

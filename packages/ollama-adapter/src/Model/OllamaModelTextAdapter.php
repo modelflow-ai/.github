@@ -46,6 +46,7 @@ class OllamaModelTextAdapter implements AIModelAdapterInterface
             ],
         ]);
 
+        /** @var array{ response: string } $content */
         $content = \json_decode($response->getContent(), true, 512, \JSON_THROW_ON_ERROR);
 
         return new AITextResponse($request, $content['response']);

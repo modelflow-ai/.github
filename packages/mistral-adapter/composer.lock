@@ -12,11 +12,15 @@
             "dist": {
                 "type": "path",
                 "url": "./../core",
-                "reference": "ebd7d960d0d1633bdec7d620b6d5bf918958bb68"
+                "reference": "763546ef82f810b10691c200a1b37bfb2516cc8e"
             },
             "require": {
                 "modelflow-ai/prompt-template": "0.1.x-dev",
-                "php": "^8.2"
+                "php": "^8.2",
+                "webmozart/assert": "^1.11"
+            },
+            "conflict": {
+                "phpstan/phpstan": "^1.10.55"
             },
             "require-dev": {
                 "php-cs-fixer/shim": "^3.15",
@@ -194,10 +198,13 @@
             "dist": {
                 "type": "path",
                 "url": "./../prompt-template",
-                "reference": "8e9b97e488365a2bb7b80a6643f916531345fe70"
+                "reference": "9f241dcb4a44f17e86fa5cfd6fd75a5b72c1131f"
             },
             "require": {
                 "php": "^8.2"
+            },
+            "conflict": {
+                "phpstan/phpstan": "^1.10.55"
             },
             "require-dev": {
                 "php-cs-fixer/shim": "^3.15",
@@ -1994,12 +2001,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "8b62b98f2d0ec696c95f20aeaa5e86cd325882eb"
+                "reference": "9b5ee4923ed5aebae24a46f2cb45f907f0afcc10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/8b62b98f2d0ec696c95f20aeaa5e86cd325882eb",
-                "reference": "8b62b98f2d0ec696c95f20aeaa5e86cd325882eb",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/9b5ee4923ed5aebae24a46f2cb45f907f0afcc10",
+                "reference": "9b5ee4923ed5aebae24a46f2cb45f907f0afcc10",
                 "shasum": ""
             },
             "require": {
@@ -2087,7 +2094,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-08T04:40:01+00:00"
+            "time": "2024-01-12T14:55:35+00:00"
         },
         {
             "name": "rector/rector",
@@ -3121,7 +3128,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "jangregor/phpstan-prophecy": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

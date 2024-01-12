@@ -12,11 +12,15 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/core",
-                "reference": "ebd7d960d0d1633bdec7d620b6d5bf918958bb68"
+                "reference": "763546ef82f810b10691c200a1b37bfb2516cc8e"
             },
             "require": {
                 "modelflow-ai/prompt-template": "0.1.x-dev",
-                "php": "^8.2"
+                "php": "^8.2",
+                "webmozart/assert": "^1.11"
+            },
+            "conflict": {
+                "phpstan/phpstan": "^1.10.55"
             },
             "require-dev": {
                 "php-cs-fixer/shim": "^3.15",
@@ -194,7 +198,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/mistral-adapter",
-                "reference": "5464e6d4f72299947262d94ffdaf49b55bc82c2a"
+                "reference": "e9a4b270d9b904c903045050a84b8605ed562e6e"
             },
             "require": {
                 "modelflow-ai/core": "^0.1",
@@ -202,7 +206,9 @@
                 "php": "^8.2"
             },
             "require-dev": {
+                "jangregor/phpstan-prophecy": "dev-master",
                 "php-cs-fixer/shim": "^3.15",
+                "phpspec/prophecy-phpunit": "^2.1",
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^1.10",
                 "phpstan/phpstan-phpunit": "^1.3",
@@ -280,12 +286,12 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/ollama-adapter",
-                "reference": "5d2e59141670992947e37990b2b4b8d4355bbaea"
+                "reference": "e06de32cc9b385c43a040b6359e0565264bb97e6"
             },
             "require": {
                 "modelflow-ai/core": "^0.1",
                 "php": "^8.2",
-                "symfony/http-client": "^7.0",
+                "symfony/http-client": "^6.4 || ^7.0",
                 "webmozart/assert": "^1.11"
             },
             "require-dev": {
@@ -368,14 +374,14 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/openai-adapter",
-                "reference": "06650b55dcc1ca82591c04b25ef124a4d1f280d9"
+                "reference": "e50290f09e35e1ee075dd8c92d42ac7c82ca792d"
             },
             "require": {
                 "modelflow-ai/core": "^0.1",
-                "nyholm/psr7": "^1.8@dev",
-                "openai-php/client": "dev-main",
+                "nyholm/psr7": "^1.8",
+                "openai-php/client": "^0.8",
                 "php": "^8.2",
-                "symfony/http-client": "7.1.x-dev"
+                "symfony/http-client": "^6.4 || ^7.0"
             },
             "require-dev": {
                 "php-cs-fixer/shim": "^3.15",
@@ -457,10 +463,13 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/prompt-template",
-                "reference": "8e9b97e488365a2bb7b80a6643f916531345fe70"
+                "reference": "9f241dcb4a44f17e86fa5cfd6fd75a5b72c1131f"
             },
             "require": {
                 "php": "^8.2"
+            },
+            "conflict": {
+                "phpstan/phpstan": "^1.10.55"
             },
             "require-dev": {
                 "php-cs-fixer/shim": "^3.15",
@@ -616,21 +625,21 @@
         },
         {
             "name": "openai-php/client",
-            "version": "dev-main",
+            "version": "v0.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openai-php/client.git",
-                "reference": "721039607a894e58c0d710c1898892672f8e6da2"
+                "reference": "ce84f541fe8a2869de7f48030d5757be1fd604c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openai-php/client/zipball/721039607a894e58c0d710c1898892672f8e6da2",
-                "reference": "721039607a894e58c0d710c1898892672f8e6da2",
+                "url": "https://api.github.com/repos/openai-php/client/zipball/ce84f541fe8a2869de7f48030d5757be1fd604c9",
+                "reference": "ce84f541fe8a2869de7f48030d5757be1fd604c9",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.1.0",
-                "php-http/discovery": "^1.19.2",
+                "php-http/discovery": "^1.19.1",
                 "php-http/multipart-stream-builder": "^1.3.0",
                 "psr/http-client": "^1.0.3",
                 "psr/http-client-implementation": "^1.0.1",
@@ -643,14 +652,13 @@
                 "laravel/pint": "^1.13.7",
                 "mockery/mockery": "^1.6.7",
                 "nunomaduro/collision": "^7.10.0",
-                "pestphp/pest": "^2.30.0",
-                "pestphp/pest-plugin-arch": "^2.6",
-                "pestphp/pest-plugin-type-coverage": "^2.7.0",
-                "phpstan/phpstan": "^1.10.55",
+                "pestphp/pest": "^2.28.1",
+                "pestphp/pest-plugin-arch": "^2.5",
+                "pestphp/pest-plugin-type-coverage": "^2.5.0",
+                "phpstan/phpstan": "^1.10.50",
                 "rector/rector": "^0.16.0",
-                "symfony/var-dumper": "^6.4.2"
+                "symfony/var-dumper": "^6.4"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -689,7 +697,7 @@
             ],
             "support": {
                 "issues": "https://github.com/openai-php/client/issues",
-                "source": "https://github.com/openai-php/client/tree/main"
+                "source": "https://github.com/openai-php/client/tree/v0.8.1"
             },
             "funding": [
                 {
@@ -705,7 +713,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-01-08T12:36:19+00:00"
+            "time": "2023-12-22T15:18:26+00:00"
         },
         {
             "name": "php-http/discovery",
@@ -1106,16 +1114,16 @@
         },
         {
             "name": "symfony/http-client",
-            "version": "7.1.x-dev",
+            "version": "v7.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "853362285d857d29df4e9a4751959d7edb349c3e"
+                "reference": "db714986d3b84330bb6196fdb201c9f79b3a8853"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/853362285d857d29df4e9a4751959d7edb349c3e",
-                "reference": "853362285d857d29df4e9a4751959d7edb349c3e",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/db714986d3b84330bb6196fdb201c9f79b3a8853",
+                "reference": "db714986d3b84330bb6196fdb201c9f79b3a8853",
                 "shasum": ""
             },
             "require": {
@@ -1178,7 +1186,7 @@
                 "http"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client/tree/7.1"
+                "source": "https://github.com/symfony/http-client/tree/v7.0.2"
             },
             "funding": [
                 {
@@ -1194,7 +1202,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-30T20:01:23+00:00"
+            "time": "2023-12-02T12:51:19+00:00"
         },
         {
             "name": "symfony/http-client-contracts",

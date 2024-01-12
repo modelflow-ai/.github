@@ -19,7 +19,7 @@ use ModelflowAi\Mistral\Resources\Embeddings;
 use ModelflowAi\Mistral\Resources\EmbeddingsInterface;
 use ModelflowAi\Mistral\Transport\TransportInterface;
 
-final readonly class Client
+final readonly class Client implements ClientInterface
 {
     public function __construct(
         private TransportInterface $transport,

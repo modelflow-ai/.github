@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Core\Request;
 
-use ModelflowAi\Core\Request\Criteria\AIRequestCriteria;
+use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
 use ModelflowAi\Core\Response\AITextResponse;
 
 class AITextRequest extends AIRequest implements AIRequestInterface
 {
     public function __construct(
         protected readonly string $text,
-        AIRequestCriteria $criteria,
+        AIRequestCriteriaCollection $criteria,
         callable $requestHandler,
     ) {
         parent::__construct($criteria, $requestHandler);
