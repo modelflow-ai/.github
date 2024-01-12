@@ -28,9 +28,9 @@
     "require": {
         "php": "^8.2",
         "modelflow-ai/core": "^0.1",
-        "openai-php/client": "dev-main",
-        "symfony/http-client": "7.1.x-dev",
-        "nyholm/psr7": "^1.8@dev"
+        "openai-php/client": "^0.8",
+        "symfony/http-client": "^6.4 || ^7.0",
+        "nyholm/psr7": "^1.8"
     },
     "require-dev": {
         "php-cs-fixer/shim": "^3.15",

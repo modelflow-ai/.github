@@ -23,8 +23,14 @@ interface EmbeddingInterface
 
     public function setFormattedContent(string $formattedContent): void;
 
+    /**
+     * @return float[]|null
+     */
     public function getVector(): ?array;
 
+    /**
+     * @param float[] $vector
+     */
     public function setVector(array $vector): void;
 
     public function getHash(): string;

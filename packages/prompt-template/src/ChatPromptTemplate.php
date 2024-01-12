@@ -35,7 +35,7 @@ readonly class ChatPromptTemplate
     }
 
     /**
-     * @param array<string, scalar> $inputValues
+     * @param array<string, string> $inputValues
      *
      * @return AIChatMessage[]
      */

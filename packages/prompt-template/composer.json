@@ -36,6 +36,9 @@
         "phpunit/phpunit": "^10.3",
         "rector/rector": "^0.18.1"
     },
+    "conflict": {
+        "phpstan/phpstan": "^1.10.55"
+    },
     "scripts": {
         "test": [
             "Composer\\Config::disableProcessTimeout",

@@ -26,7 +26,7 @@ readonly class PromptTemplate implements \Stringable
     }
 
     /**
-     * @param array<string, scalar> $inputValues
+     * @param array<string, string> $inputValues
      */
     public function format(array $inputValues = []): string
     {

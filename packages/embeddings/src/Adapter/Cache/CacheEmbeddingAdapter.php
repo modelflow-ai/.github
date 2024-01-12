@@ -29,7 +29,10 @@ class CacheEmbeddingAdapter implements EmbeddingAdapterInterface
         $hash = \hash('sha256', $text);
         $cacheItem = $this->cacheItemPool->getItem($hash);
         if ($cacheItem->isHit()) {
-            return $cacheItem->get();
+            /** @var float[] $result */
+            $result = $cacheItem->get();
+
+            return $result;
         }
 
         $result = $this->adapter->embedText($text);

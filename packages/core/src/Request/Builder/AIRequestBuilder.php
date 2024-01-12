@@ -15,11 +15,11 @@ namespace ModelflowAi\Core\Request\Builder;
 
 use ModelflowAi\Core\Request\AIRequest;
 use ModelflowAi\Core\Request\Criteria\AiCriteriaInterface;
-use ModelflowAi\Core\Request\Criteria\AIRequestCriteria;
+use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
 
 abstract class AIRequestBuilder
 {
-    protected AIRequestCriteria $criteria;
+    protected AIRequestCriteriaCollection $criteria;
 
     /**
      * @var callable
@@ -31,12 +31,12 @@ abstract class AIRequestBuilder
     ) {
         $this->requestHandler = $requestHandler;
 
-        $this->criteria = new AIRequestCriteria();
+        $this->criteria = new AIRequestCriteriaCollection();
     }
 
     public function addCriteria(AiCriteriaInterface $criteria): self
     {
-        $this->criteria = new AIRequestCriteria(
+        $this->criteria = new AIRequestCriteriaCollection(
             \array_merge($this->criteria->criteria, [$criteria]),
         );
 

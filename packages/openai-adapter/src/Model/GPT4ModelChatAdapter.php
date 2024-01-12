@@ -44,7 +44,7 @@ final readonly class GPT4ModelChatAdapter implements AIModelAdapterInterface
             $request,
             new AIChatMessage(
                 AIChatMessageRoleEnum::from($result->choices[0]->message->role),
-                $result->choices[0]->message->content,
+                $result->choices[0]->message->content ?? '',
             ),
         );
     }

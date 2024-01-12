@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Core\Request\Criteria;
 
-readonly class AIRequestCriteria
+readonly class AIRequestCriteriaCollection
 {
     /**
      * @param AiCriteriaInterface[] $criteria
