@@ -5,9 +5,10 @@
          colors="true"
          bootstrap="vendor/autoload.php"
          cacheDirectory=".phpunit.cache"
+         displayDetailsOnTestsThatTriggerWarnings="true"
 >
     <php>
-        <ini name="error_reporting" value="-1" />
+        <ini name="error_reporting" value="32767" />
         <ini name="date.timezone" value="Europe/Berlin" />
         <ini name="display_errors" value="1" />
         <server name="SHELL_VERBOSITY" value="-1" />

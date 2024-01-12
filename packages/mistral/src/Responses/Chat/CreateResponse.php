@@ -11,7 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\Mistral\Responses;
+namespace ModelflowAi\Mistral\Responses\Chat;
+
+use ModelflowAi\Mistral\Responses\MetaInformation;
+use ModelflowAi\Mistral\Responses\Usage;
 
 final readonly class CreateResponse
 {

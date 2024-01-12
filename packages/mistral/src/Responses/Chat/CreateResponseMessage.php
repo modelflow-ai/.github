@@ -11,30 +11,27 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\Mistral\Responses;
+namespace ModelflowAi\Mistral\Responses\Chat;
 
-final readonly class Usage
+final readonly class CreateResponseMessage
 {
     private function __construct(
-        public int $promptTokens,
-        public ?int $completionTokens,
-        public int $totalTokens,
+        public string $role,
+        public ?string $content,
     ) {
     }
 
     /**
      * @param array{
-     *     prompt_tokens: int,
-     *     completion_tokens?: int|null,
-     *     total_tokens: int,
+     *     role: string,
+     *     content: ?string,
      * } $attributes
      */
     public static function from(array $attributes): self
     {
         return new self(
-            $attributes['prompt_tokens'],
-            $attributes['completion_tokens'] ?? null,
-            $attributes['total_tokens'],
+            $attributes['role'],
+            $attributes['content'] ?? null,
         );
     }
 }

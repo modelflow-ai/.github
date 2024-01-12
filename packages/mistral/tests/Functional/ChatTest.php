@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace ModelflowAi\Mistral\Tests\Functional;
 
 use ModelflowAi\Mistral\Client;
-use ModelflowAi\Mistral\Responses\CreateResponse;
+use ModelflowAi\Mistral\Responses\Chat\CreateResponse;
 use ModelflowAi\Mistral\Responses\MetaInformation;
 use ModelflowAi\Mistral\Tests\DataFixtures;
 use ModelflowAi\Mistral\Transport\Enums\ContentType;

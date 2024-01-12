@@ -11,9 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\Mistral\Tests\Unit\Responses;
+namespace ModelflowAi\Mistral\Tests\Unit\Responses\Chat;
 
-use ModelflowAi\Mistral\Responses\CreateResponseMessage;
+use ModelflowAi\Mistral\Responses\Chat\CreateResponseMessage;
 use ModelflowAi\Mistral\Tests\DataFixtures;
 use PHPUnit\Framework\TestCase;
 

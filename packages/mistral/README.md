@@ -67,6 +67,24 @@ $response = $chat->create($parameters);
 echo $response->id;
 ```
 
+### Using the Embeddings Resource
+
+The Embeddings resource allows you to generate and manipulate embeddings for your data.
+
+```php
+$embeddings = $client->embeddings();
+
+// Generate embeddings for your data
+$parameters = [
+    'model' => 'mistral-medium',
+    'texts' => ['text1', 'text2']
+];
+$response = $embeddings->create($parameters);
+
+// The response is an instance of CreateResponse
+echo $response->id;
+```
+
 ## API Documentation
 
 For more detailed information about the Mistral API, please refer to
@@ -74,15 +92,15 @@ the [official API documentation](https://docs.mistral.ai/api).
 
 ## Open Points
 
-### Embeddings
-
-The integration of embeddings into the Mistral package is currently under development. This feature will allow users to
-generate and manipulate embeddings for their data, providing a powerful tool for machine learning tasks.
-
 ### Model API
 
 The Model API is another area that we are actively working on. Once completed, this will provide users with the ability
 to manage and interact with their AI models directly from the Mistral package.
+
+### Streaming Responses
+
+We are currently working on implementing a feature to stream responses. This will allow users to receive data in
+real-time, improving the efficiency and responsiveness of their applications.
 
 ## Contributing
 
