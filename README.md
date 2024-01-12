@@ -5,18 +5,16 @@ is written in PHP and uses Composer for dependency management.
 
 ## Packages
 
-This repository consists of several packages:
+This repository consists of several packages, each residing in its own directory under the `packages/` directory:
 
-- **Core**: The core functionalities of Modelflow AI.
-- **Embeddings**: Handles the embeddings for the AI models.
-- **Mistral**: A specific AI model integrated into Modelflow AI.
-- **MistralAdapter**: The adapter for the Mistral AI model.
-- **Ollama**: Another specific AI model integrated into Modelflow AI.
-- **OllamaAdapter**: The adapter for the Ollama AI model.
-- **OpenAIAdapter**: The adapter for integrating OpenAI models.
-- **PromptTemplate**: Provides templates for AI prompts.
-
-Each package resides in its own directory under the `packages/` directory.
+- **Core**: The core functionalities of Modelflow AI. [More Info](https://github.com/modelflow-ai/core)
+- **Embeddings**: Handles the embeddings for the AI models. [More Info](https://github.com/modelflow-ai/embeddings)
+- **Mistral**: An API client for the Mistral AI model. [More Info](https://github.com/modelflow-ai/mistral)
+- **MistralAdapter**: The adapter for the Mistral API client. [More Info](https://github.com/modelflow-ai/mistral-adapter)
+- **Ollama**: An API client for the Ollama AI model. [More Info](https://github.com/modelflow-ai/ollama)
+- **OllamaAdapter**: The adapter for the Ollama API client. [More Info](https://github.com/modelflow-ai/ollama-adapter)
+- **OpenAIAdapter**: The adapter for integrating OpenAI models. [More Info](https://github.com/modelflow-ai/openai-adapter)
+- **PromptTemplate**: Provides templates for AI prompts. [More Info](https://github.com/modelflow-ai/prompt-template)
 
 ## Installation
 
@@ -34,5 +32,5 @@ Contributions are welcome. Please open an issue to discuss your idea or submit a
 
 ## License
 
-This project is licensed under the MIT License. For the full copyright and license information, please view the LICENSE
-file that was distributed with this source code.
+This project is licensed under the MIT License. For the full copyright and license information, please view the
+[LICENSE](LICENSE) file that was distributed with this source code.

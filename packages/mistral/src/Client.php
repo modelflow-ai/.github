@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace ModelflowAi\Mistral;
 
 use ModelflowAi\Mistral\Resources\Chat;
+use ModelflowAi\Mistral\Resources\ChatInterface;
 use ModelflowAi\Mistral\Resources\Embeddings;
+use ModelflowAi\Mistral\Resources\EmbeddingsInterface;
 use ModelflowAi\Mistral\Transport\TransportInterface;
 
 final readonly class Client
@@ -29,7 +31,7 @@ final readonly class Client
      *
      * @see https://docs.mistral.ai/api/#operation/createChatCompletion
      */
-    public function chat(): Chat
+    public function chat(): ChatInterface
     {
         return new Chat($this->transport);
     }
@@ -39,7 +41,7 @@ final readonly class Client
      *
      * @see https://docs.mistral.ai/api/#operation/createEmbedding
      */
-    public function embeddings(): Embeddings
+    public function embeddings(): EmbeddingsInterface
     {
         return new Embeddings($this->transport);
     }

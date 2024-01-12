@@ -11,23 +11,24 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\OpenaiAdapter\Model;
+namespace ModelflowAi\MistralAdapter\Model;
 
 use ModelflowAi\Core\Model\AIModelAdapterInterface;
 use ModelflowAi\Core\Request\AIChatRequest;
 use ModelflowAi\Core\Request\AIRequestInterface;
 use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\Core\Response\AIResponseInterface;
+use ModelflowAi\Mistral\ClientInterface;
+use ModelflowAi\Mistral\Model;
 use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
 use ModelflowAi\PromptTemplate\Chat\AIChatMessageRoleEnum;
-use OpenAI\Client;
 use Webmozart\Assert\Assert;
 
-final readonly class GPT4ModelChatAdapter implements AIModelAdapterInterface
+final readonly class MistralChatModelAdapter implements AIModelAdapterInterface
 {
     public function __construct(
-        private Client $client,
-        private string $model = 'gpt-4',
+        private ClientInterface $client,
+        private Model $model = Model::TINY,
     ) {
     }
 
@@ -36,7 +37,7 @@ final readonly class GPT4ModelChatAdapter implements AIModelAdapterInterface
         Assert::isInstanceOf($request, AIChatRequest::class);
 
         $result = $this->client->chat()->create([
-            'model' => $this->model,
+            'model' => $this->model->value,
             'messages' => $request->getMessages()->toArray(),
         ]);
 
@@ -44,7 +45,7 @@ final readonly class GPT4ModelChatAdapter implements AIModelAdapterInterface
             $request,
             new AIChatMessage(
                 AIChatMessageRoleEnum::from($result->choices[0]->message->role),
-                $result->choices[0]->message->content,
+                $result->choices[0]->message->content ?? '',
             ),
         );
     }

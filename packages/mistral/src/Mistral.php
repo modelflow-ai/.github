@@ -19,7 +19,7 @@ final class Mistral
     {
     }
 
-    public static function client(string $apiKey): Client
+    public static function client(string $apiKey): ClientInterface
     {
         return self::factory()
             ->withApiKey($apiKey)

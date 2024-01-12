@@ -37,7 +37,7 @@ abstract class AIRequestBuilder
     public function addCriteria(AiCriteriaInterface $criteria): self
     {
         $this->criteria = new AIRequestCriteria(
-            $this->criteria->criteria + [$criteria],
+            \array_merge($this->criteria->criteria, [$criteria]),
         );
 
         return $this;

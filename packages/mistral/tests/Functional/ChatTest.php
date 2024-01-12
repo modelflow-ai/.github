@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ModelflowAi\Mistral\Tests\Functional;
 
 use ModelflowAi\Mistral\Client;
+use ModelflowAi\Mistral\ClientInterface;
 use ModelflowAi\Mistral\Responses\Chat\CreateResponse;
 use ModelflowAi\Mistral\Responses\MetaInformation;
 use ModelflowAi\Mistral\Tests\DataFixtures;
@@ -59,7 +60,7 @@ class ChatTest extends TestCase
         $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE['id'], $response->id);
     }
 
-    private function createInstance(TransportInterface $transport): Client
+    private function createInstance(TransportInterface $transport): ClientInterface
     {
         return new Client($transport);
     }

@@ -15,7 +15,8 @@ namespace ModelflowAi\Core\Request\Criteria;
 
 enum PrivacyRequirement: int implements AiCriteriaInterface
 {
-    case HIGH = 2;
+    case HIGH = 4;
+    case MEDIUM = 2;
     case LOW = 1;
 
     public function matches(AiCriteriaInterface $toMatch): bool

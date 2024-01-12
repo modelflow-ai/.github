@@ -20,25 +20,42 @@ use ModelflowAi\Core\DecisionTree\AIModelDecisionTree;
 use ModelflowAi\Core\DecisionTree\DecisionRule;
 use ModelflowAi\Core\Request\Criteria\PerformanceRequirement;
 use ModelflowAi\Core\Request\Criteria\PrivacyRequirement;
+use ModelflowAi\Mistral\Mistral;
+use ModelflowAi\Mistral\Model;
+use ModelflowAi\MistralAdapter\Model\MistralChatModelAdapter;
 use ModelflowAi\OllamaAdapter\Model\OllamaModelChatAdapter;
 use ModelflowAi\OllamaAdapter\Model\OllamaModelTextAdapter;
 use ModelflowAi\OpenaiAdapter\Model\GPT4ModelChatAdapter;
+use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpClient\HttpClient;
 
-$httpClient = HttpClient::create();
+(new Dotenv())->bootEnv(__DIR__ . '/.env');
 
+$adapter = [];
+
+$mistralApiKey = $_ENV['MISTRAL_API_KEY'];
+if ($mistralApiKey) {
+    $mistralClient = Mistral::client($mistralApiKey);
+    $mistralChatAdapter = new MistralChatModelAdapter($mistralClient, Model::MEDIUM);
+
+    $adapter[] = new DecisionRule($mistralChatAdapter, [PrivacyRequirement::MEDIUM]);
+}
+
+$openaiApiKey = $_ENV['OPENAI_KEY'];
+if ($openaiApiKey) {
+    $openAiClient = \OpenAI::client($openaiApiKey);
+    $gpt4Adapter = new GPT4ModelChatAdapter($openAiClient);
+
+    $adapter[] = new DecisionRule($gpt4Adapter, [PrivacyRequirement::LOW, PerformanceRequirement::SMART]);
+}
+
+$httpClient = HttpClient::create();
 $llama2ChatAdapter = new OllamaModelChatAdapter($httpClient);
 $llama2TextAdapter = new OllamaModelTextAdapter($httpClient);
 
-$openAiKey = \getenv('OPENAI_KEY') ?: '';
-$openAiClient = \OpenAI::client($openAiKey);
+$adapter[] = new DecisionRule($llama2TextAdapter, [PrivacyRequirement::HIGH]);
+$adapter[] = new DecisionRule($llama2ChatAdapter, [PrivacyRequirement::HIGH]);
 
-$gpt4Adapter = new GPT4ModelChatAdapter($openAiClient);
-
-$decisionTree = new AIModelDecisionTree([
-    new DecisionRule($llama2TextAdapter, [PrivacyRequirement::HIGH]),
-    new DecisionRule($llama2ChatAdapter, [PrivacyRequirement::HIGH]),
-    new DecisionRule($gpt4Adapter, [PrivacyRequirement::LOW, PerformanceRequirement::SMART]),
-]);
+$decisionTree = new AIModelDecisionTree($adapter);
 
 return new AIRequestHandler($decisionTree);

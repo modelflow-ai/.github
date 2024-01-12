@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ModelflowAi\Mistral\Tests\Unit\Resources;
 
 use ModelflowAi\Mistral\Resources\Chat;
+use ModelflowAi\Mistral\Resources\ChatInterface;
 use ModelflowAi\Mistral\Responses\Chat\CreateResponse;
 use ModelflowAi\Mistral\Responses\MetaInformation;
 use ModelflowAi\Mistral\Tests\DataFixtures;
@@ -112,7 +113,7 @@ final class ChatTest extends TestCase
         $chat->create($parameters);
     }
 
-    private function createInstance(TransportInterface $transport): Chat
+    private function createInstance(TransportInterface $transport): ChatInterface
     {
         return new Chat($transport);
     }

@@ -11,16 +11,17 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\OpenaiAdapter\Embeddings;
+namespace ModelflowAi\MistralAdapter\Embeddings;
 
 use ModelflowAi\Core\Embeddings\EmbeddingAdapterInterface;
-use OpenAI\Client;
+use ModelflowAi\Mistral\ClientInterface;
+use ModelflowAi\Mistral\Model;
 
-final readonly class OpenaiEmbeddingAdapter implements EmbeddingAdapterInterface
+final readonly class MistralEmbeddingAdapter implements EmbeddingAdapterInterface
 {
     public function __construct(
-        private Client $client,
-        private string $model = 'text-embedding-ada-002',
+        private ClientInterface $client,
+        private string $model = Model::EMBED->value,
     ) {
     }
 
@@ -28,10 +29,9 @@ final readonly class OpenaiEmbeddingAdapter implements EmbeddingAdapterInterface
     {
         $response = $this->client->embeddings()->create([
             'model' => $this->model,
-            'input' => $text,
-            'encoding_format' => 'float',
+            'input' => [$text],
         ]);
 
-        return $response->embeddings;
+        return $response->data[0]->embedding;
     }
 }

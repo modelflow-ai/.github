@@ -18,7 +18,7 @@ use ModelflowAi\Mistral\Transport\Payload;
 use ModelflowAi\Mistral\Transport\TransportInterface;
 use Webmozart\Assert\Assert;
 
-final readonly class Chat
+final readonly class Chat implements ChatInterface
 {
     use Concerns\Streamable;
 
@@ -27,20 +27,6 @@ final readonly class Chat
     ) {
     }
 
-    /**
-     * @param array{
-     *     model: string,
-     *     messages: array<array{
-     *         role: "system"|"user"|"assistant",
-     *         content: string,
-     *     }>,
-     *     temperature?: float,
-     *     top_p?: float,
-     *     max_tokens?: int,
-     *     safe_mode?: boolean,
-     *     random_seed?: int,
-     * } $parameters
-     */
     public function create(array $parameters): CreateResponse
     {
         $this->ensureNotStreamed($parameters);

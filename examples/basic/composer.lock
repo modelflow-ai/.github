@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "63e6bbafacfae7ce0d5d2df0e1a8cffb",
+    "content-hash": "a6183bb89e93d9e46066c90c2e7ca3bd",
     "packages": [
         {
             "name": "modelflow-ai/core",
@@ -89,6 +89,185 @@
                 "llama2",
                 "ollama",
                 "openai"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "modelflow-ai/mistral",
+            "version": "0.1.x-dev",
+            "dist": {
+                "type": "path",
+                "url": "./../../packages/mistral",
+                "reference": "aa01ea8e00b918dac2fab42ad0d1c584449d73b1"
+            },
+            "require": {
+                "php": "^8.2",
+                "symfony/http-client": "^6.4 || ^7.0",
+                "webmozart/assert": "^1.11"
+            },
+            "conflict": {
+                "phpstan/phpstan": "^1.10.55"
+            },
+            "require-dev": {
+                "jangregor/phpstan-prophecy": "^1.0",
+                "php-cs-fixer/shim": "^3.15",
+                "phpspec/prophecy-phpunit": "^2.1",
+                "phpstan/extension-installer": "^1.2",
+                "phpstan/phpstan": "^1.10",
+                "phpstan/phpstan-phpunit": "^1.3",
+                "phpunit/phpunit": "^10.3",
+                "rector/rector": "^0.18.1",
+                "symfony/dotenv": "^6.4 || ^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ModelflowAi\\Mistral\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "ModelflowAi\\Mistral\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "Composer\\Config::disableProcessTimeout",
+                    "vendor/bin/phpunit"
+                ],
+                "phpstan": [
+                    "@php vendor/bin/phpstan analyze"
+                ],
+                "lint-rector": [
+                    "@php vendor/bin/rector process --dry-run"
+                ],
+                "lint-php-cs": [
+                    "@php vendor/bin/php-cs-fixer fix --verbose --diff --dry-run"
+                ],
+                "lint": [
+                    "@phpstan",
+                    "@lint-php-cs",
+                    "@lint-rector",
+                    "@lint-composer"
+                ],
+                "lint-composer": [
+                    "@composer validate --strict"
+                ],
+                "rector": [
+                    "@php vendor/bin/rector process"
+                ],
+                "php-cs-fix": [
+                    "@php vendor/bin/php-cs-fixer fix"
+                ],
+                "fix": [
+                    "@rector",
+                    "@php-cs-fix"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Johannes Wachter",
+                    "email": "johannes@sulu.io"
+                }
+            ],
+            "description": "Client for mistral API.",
+            "keywords": [
+                "ai",
+                "api",
+                "client",
+                "mistral"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "modelflow-ai/mistral-adapter",
+            "version": "0.1.x-dev",
+            "dist": {
+                "type": "path",
+                "url": "./../../packages/mistral-adapter",
+                "reference": "5464e6d4f72299947262d94ffdaf49b55bc82c2a"
+            },
+            "require": {
+                "modelflow-ai/core": "^0.1",
+                "modelflow-ai/mistral": "^0.1",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "php-cs-fixer/shim": "^3.15",
+                "phpstan/extension-installer": "^1.2",
+                "phpstan/phpstan": "^1.10",
+                "phpstan/phpstan-phpunit": "^1.3",
+                "phpunit/phpunit": "^10.3",
+                "rector/rector": "^0.18.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ModelflowAi\\MistralAdapter\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "ModelflowAi\\MistralAdapter\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "Composer\\Config::disableProcessTimeout",
+                    "vendor/bin/phpunit"
+                ],
+                "phpstan": [
+                    "@php vendor/bin/phpstan analyze"
+                ],
+                "lint-rector": [
+                    "@php vendor/bin/rector process --dry-run"
+                ],
+                "lint-php-cs": [
+                    "@php vendor/bin/php-cs-fixer fix --verbose --diff --dry-run"
+                ],
+                "lint": [
+                    "@phpstan",
+                    "@lint-php-cs",
+                    "@lint-rector",
+                    "@lint-composer"
+                ],
+                "lint-composer": [
+                    "@composer validate --strict"
+                ],
+                "rector": [
+                    "@php vendor/bin/rector process"
+                ],
+                "php-cs-fix": [
+                    "@php vendor/bin/php-cs-fixer fix"
+                ],
+                "fix": [
+                    "@rector",
+                    "@php-cs-fix"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Johannes Wachter",
+                    "email": "johannes@sulu.io"
+                }
+            ],
+            "description": "Integrates the mistral into modelflow-ai.",
+            "keywords": [
+                "ai",
+                "mistral",
+                "modelflow-ai"
             ],
             "transport-options": {
                 "symlink": true,
@@ -189,7 +368,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/openai-adapter",
-                "reference": "6b746e1bf36d724df205a9a8bd7f27ebd0a409b6"
+                "reference": "06650b55dcc1ca82591c04b25ef124a4d1f280d9"
             },
             "require": {
                 "modelflow-ai/core": "^0.1",
@@ -209,12 +388,12 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "ModelflowAi\\Openai\\": "src/"
+                    "ModelflowAi\\OpenaiAdapter\\": "src/"
                 }
             },
             "autoload-dev": {
                 "psr-4": {
-                    "ModelflowAi\\Openai\\Tests\\": "tests/"
+                    "ModelflowAi\\OpenaiAdapter\\Tests\\": "tests/"
                 }
             },
             "scripts": {
@@ -441,17 +620,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/openai-php/client.git",
-                "reference": "d2e7110c2a0bad6e27bb4a690f6ae9dc78e473ef"
+                "reference": "721039607a894e58c0d710c1898892672f8e6da2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openai-php/client/zipball/d2e7110c2a0bad6e27bb4a690f6ae9dc78e473ef",
-                "reference": "d2e7110c2a0bad6e27bb4a690f6ae9dc78e473ef",
+                "url": "https://api.github.com/repos/openai-php/client/zipball/721039607a894e58c0d710c1898892672f8e6da2",
+                "reference": "721039607a894e58c0d710c1898892672f8e6da2",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.1.0",
-                "php-http/discovery": "^1.19.1",
+                "php-http/discovery": "^1.19.2",
                 "php-http/multipart-stream-builder": "^1.3.0",
                 "psr/http-client": "^1.0.3",
                 "psr/http-client-implementation": "^1.0.1",
@@ -464,12 +643,12 @@
                 "laravel/pint": "^1.13.7",
                 "mockery/mockery": "^1.6.7",
                 "nunomaduro/collision": "^7.10.0",
-                "pestphp/pest": "^2.28.1",
-                "pestphp/pest-plugin-arch": "^2.5",
-                "pestphp/pest-plugin-type-coverage": "^2.5.0",
-                "phpstan/phpstan": "^1.10.50",
+                "pestphp/pest": "^2.30.0",
+                "pestphp/pest-plugin-arch": "^2.6",
+                "pestphp/pest-plugin-type-coverage": "^2.7.0",
+                "phpstan/phpstan": "^1.10.55",
                 "rector/rector": "^0.16.0",
-                "symfony/var-dumper": "^6.4"
+                "symfony/var-dumper": "^6.4.2"
             },
             "default-branch": true,
             "type": "library",
@@ -526,7 +705,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-12-26T10:18:53+00:00"
+            "time": "2024-01-08T12:36:19+00:00"
         },
         {
             "name": "php-http/discovery",
@@ -1298,25 +1477,27 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.18.0",
+            "version": "v5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "1bcbb2179f97633e98bbbc87044ee2611c7d7999"
+                "reference": "4a21235f7e56e713259a6f76bf4b5ea08502b9dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/1bcbb2179f97633e98bbbc87044ee2611c7d7999",
-                "reference": "1bcbb2179f97633e98bbbc87044ee2611c7d7999",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/4a21235f7e56e713259a6f76bf4b5ea08502b9dc",
+                "reference": "4a21235f7e56e713259a6f76bf4b5ea08502b9dc",
                 "shasum": ""
             },
             "require": {
+                "ext-ctype": "*",
+                "ext-json": "*",
                 "ext-tokenizer": "*",
-                "php": ">=7.0"
+                "php": ">=7.4"
             },
             "require-dev": {
                 "ircmaxell/php-yacc": "^0.0.7",
-                "phpunit/phpunit": "^6.5 || ^7.0 || ^8.0 || ^9.0"
+                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0"
             },
             "bin": [
                 "bin/php-parse"
@@ -1324,7 +1505,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.9-dev"
+                    "dev-master": "5.0-dev"
                 }
             },
             "autoload": {
@@ -1348,9 +1529,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v4.18.0"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.0.0"
             },
-            "time": "2023-12-10T21:03:43+00:00"
+            "time": "2024-01-07T17:17:35+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -3065,6 +3246,80 @@
                 }
             ],
             "time": "2023-02-07T11:34:05+00:00"
+        },
+        {
+            "name": "symfony/dotenv",
+            "version": "v7.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/dotenv.git",
+                "reference": "1e3e123fd1887fb2097ad38205a9a866a52d4dcc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/dotenv/zipball/1e3e123fd1887fb2097ad38205a9a866a52d4dcc",
+                "reference": "1e3e123fd1887fb2097ad38205a9a866a52d4dcc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2"
+            },
+            "conflict": {
+                "symfony/console": "<6.4",
+                "symfony/process": "<6.4"
+            },
+            "require-dev": {
+                "symfony/console": "^6.4|^7.0",
+                "symfony/process": "^6.4|^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Dotenv\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Registers environment variables from a .env file",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "dotenv",
+                "env",
+                "environment"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/dotenv/tree/v7.0.2"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-12-28T19:18:20+00:00"
         },
         {
             "name": "theseer/tokenizer",
