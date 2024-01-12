@@ -64,4 +64,34 @@ final class DataFixtures
             'total_tokens' => 336,
         ],
     ];
+
+    public const EMBEDDINGS_CREATE_REQUEST = [
+        'model' => Model::EMBED->value,
+        'input' => [
+            'Hello',
+            'WORLD',
+        ],
+    ];
+
+    public const EMBEDDINGS_CREATE_RESPONSE = [
+        'id' => 'embd-aad6fc62b17349b192ef09225058bc45',
+        'object' => 'list',
+        'data' => [
+            [
+                'object' => 'embedding',
+                'embedding' => [0.1, 0.2, 0.3],
+                'index' => 0,
+            ],
+            [
+                'object' => 'embedding',
+                'embedding' => [0.4, 0.5, 0.6],
+                'index' => 1,
+            ],
+        ],
+        'model' => Model::EMBED->value,
+        'usage' => [
+            'prompt_tokens' => 9,
+            'total_tokens' => 9,
+        ],
+    ];
 }

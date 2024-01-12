@@ -18,4 +18,5 @@ enum Model: string
     case TINY = 'mistral-tiny';
     case SMALL = 'mistral-small';
     case MEDIUM = 'mistral-medium';
+    case EMBED = 'mistral-embed';
 }

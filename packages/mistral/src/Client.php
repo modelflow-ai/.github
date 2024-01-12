@@ -14,12 +14,13 @@ declare(strict_types=1);
 namespace ModelflowAi\Mistral;
 
 use ModelflowAi\Mistral\Resources\Chat;
+use ModelflowAi\Mistral\Resources\Embeddings;
 use ModelflowAi\Mistral\Transport\TransportInterface;
 
-class Client
+final readonly class Client
 {
     public function __construct(
-        private readonly TransportInterface $transport,
+        private TransportInterface $transport,
     ) {
     }
 
@@ -31,5 +32,15 @@ class Client
     public function chat(): Chat
     {
         return new Chat($this->transport);
+    }
+
+    /**
+     * Get a vector representation of a given input that can be easily consumed by machine learning models and algorithms.
+     *
+     * @see https://docs.mistral.ai/api/#operation/createEmbedding
+     */
+    public function embeddings(): Embeddings
+    {
+        return new Embeddings($this->transport);
     }
 }

@@ -13,17 +13,17 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Mistral\Resources;
 
-use ModelflowAi\Mistral\Responses\CreateResponse;
+use ModelflowAi\Mistral\Responses\Chat\CreateResponse;
 use ModelflowAi\Mistral\Transport\Payload;
 use ModelflowAi\Mistral\Transport\TransportInterface;
 use Webmozart\Assert\Assert;
 
-class Chat
+final readonly class Chat
 {
     use Concerns\Streamable;
 
     public function __construct(
-        private readonly TransportInterface $transport,
+        private TransportInterface $transport,
     ) {
     }
 
@@ -67,6 +67,7 @@ class Chat
         foreach ($parameters['messages'] as $message) {
             Assert::keyExists($message, 'role');
             Assert::string($message['role']);
+            Assert::inArray($message['role'], ['system', 'user', 'assistant']);
             Assert::keyExists($message, 'content');
             Assert::string($message['content']);
         }
