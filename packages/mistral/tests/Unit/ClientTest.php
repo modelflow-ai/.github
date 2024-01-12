@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ModelflowAi\Mistral\Tests\Unit;
 
 use ModelflowAi\Mistral\Client;
+use ModelflowAi\Mistral\ClientInterface;
 use ModelflowAi\Mistral\Resources\Chat;
 use ModelflowAi\Mistral\Transport\TransportInterface;
 use PHPUnit\Framework\TestCase;
@@ -42,7 +43,7 @@ final class ClientTest extends TestCase
         $this->assertInstanceOf(Chat::class, $chat);
     }
 
-    private function createInstance(TransportInterface $transport): Client
+    private function createInstance(TransportInterface $transport): ClientInterface
     {
         return new Client($transport);
     }

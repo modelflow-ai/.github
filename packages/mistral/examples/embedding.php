@@ -18,7 +18,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 (new Dotenv())->bootEnv(__DIR__ . '/.env');
 
-$client = Mistral::client($_SERVER['MISTRAL_API_KEY']);
+$client = Mistral::client($_ENV['MISTRAL_API_KEY']);
 
 $response = $client->embeddings()->create([
     'input' => [

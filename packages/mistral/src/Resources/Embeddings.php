@@ -19,19 +19,13 @@ use ModelflowAi\Mistral\Transport\Payload;
 use ModelflowAi\Mistral\Transport\TransportInterface;
 use Webmozart\Assert\Assert;
 
-final readonly class Embeddings
+final readonly class Embeddings implements EmbeddingsInterface
 {
     public function __construct(
         private TransportInterface $transport,
     ) {
     }
 
-    /**
-     * @param array{
-     *     model?: string,
-     *     input: string[],
-     * } $parameters
-     */
     public function create(array $parameters): CreateResponse
     {
         $this->validateParameters($parameters);

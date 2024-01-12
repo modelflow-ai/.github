@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App;
 
 use ModelflowAi\Core\AIRequestHandlerInterface;
+use ModelflowAi\Core\Request\Criteria\PerformanceRequirement;
 use ModelflowAi\Core\Request\Criteria\PrivacyRequirement;
 use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
@@ -30,7 +31,7 @@ $response = $handler->createChatRequest(
         new AIChatMessage(AIChatMessageRoleEnum::USER, 'Hello {where}!'),
     )->format(['where' => 'world', 'feeling' => 'angry']),
 )
-    ->addCriteria(PrivacyRequirement::HIGH)
+    ->addCriteria(PrivacyRequirement::MEDIUM)
     ->build()
     ->execute();
 

@@ -19,7 +19,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class Factory
 {
-    private HttpClientInterface $client;
+    private HttpClientInterface $httpClient;
 
     private string $baseUrl = 'https://api.mistral.ai/v1/';
 
@@ -27,7 +27,7 @@ final class Factory
 
     public function withHttpClient(HttpClientInterface $client): self
     {
-        $this->client = $client;
+        $this->httpClient = $client;
 
         return $this;
     }
@@ -46,9 +46,9 @@ final class Factory
         return $this;
     }
 
-    public function make(): Client
+    public function make(): ClientInterface
     {
-        $transporter = new SymfonyHttpTransporter($this->client ?? HttpClient::create(), $this->baseUrl, [
+        $transporter = new SymfonyHttpTransporter($this->httpClient ?? HttpClient::create(), $this->baseUrl, [
             'Authorization' => 'Bearer ' . $this->apiKey,
         ]);
 

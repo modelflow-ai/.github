@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ModelflowAi\Mistral\Tests\Unit\Resources;
 
 use ModelflowAi\Mistral\Resources\Embeddings;
+use ModelflowAi\Mistral\Resources\EmbeddingsInterface;
 use ModelflowAi\Mistral\Responses\Embeddings\CreateResponse;
 use ModelflowAi\Mistral\Responses\MetaInformation;
 use ModelflowAi\Mistral\Tests\DataFixtures;
@@ -110,7 +111,7 @@ final class EmbeddingsTest extends TestCase
         $embeddings->create($parameters);
     }
 
-    private function createInstance(TransportInterface $transport): Embeddings
+    private function createInstance(TransportInterface $transport): EmbeddingsInterface
     {
         return new Embeddings($transport);
     }
