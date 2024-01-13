@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Mistral\Responses\Chat;
 
-use ModelflowAi\Mistral\Responses\MetaInformation;
-use ModelflowAi\Mistral\Responses\Usage;
+use ModelflowAi\ApiClient\Responses\MetaInformation;
+use ModelflowAi\ApiClient\Responses\Usage;
 
 final readonly class CreateResponse
 {

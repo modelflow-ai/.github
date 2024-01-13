@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Mistral\Tests\Unit;
 
+use ModelflowAi\ApiClient\Transport\TransportInterface;
 use ModelflowAi\Mistral\Client;
 use ModelflowAi\Mistral\ClientInterface;
 use ModelflowAi\Mistral\Resources\Chat;
-use ModelflowAi\Mistral\Transport\TransportInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;

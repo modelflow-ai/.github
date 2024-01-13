@@ -27,8 +27,8 @@
     ],
     "require": {
         "php": "^8.2",
-        "webmozart/assert": "^1.11",
-        "symfony/http-client": "^6.4 || ^7.0"
+        "modelflow-ai/api-client": "^0.1",
+        "webmozart/assert": "^1.11"
     },
     "require-dev": {
         "php-cs-fixer/shim": "^3.15",

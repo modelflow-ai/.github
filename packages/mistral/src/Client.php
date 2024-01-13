@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Mistral;
 
+use ModelflowAi\ApiClient\Transport\TransportInterface;
 use ModelflowAi\Mistral\Resources\Chat;
 use ModelflowAi\Mistral\Resources\ChatInterface;
 use ModelflowAi\Mistral\Resources\Embeddings;
 use ModelflowAi\Mistral\Resources\EmbeddingsInterface;
-use ModelflowAi\Mistral\Transport\TransportInterface;
 
 final readonly class Client implements ClientInterface
 {

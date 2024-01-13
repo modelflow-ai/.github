@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Mistral\Tests\Unit\Responses\Chat;
 
+use ModelflowAi\ApiClient\Responses\MetaInformation;
 use ModelflowAi\Mistral\Responses\Chat\CreateResponse;
-use ModelflowAi\Mistral\Responses\MetaInformation;
 use ModelflowAi\Mistral\Tests\DataFixtures;
 use PHPUnit\Framework\TestCase;
 
