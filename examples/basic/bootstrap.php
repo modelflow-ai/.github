@@ -23,11 +23,11 @@ use ModelflowAi\Core\Request\Criteria\PrivacyRequirement;
 use ModelflowAi\Mistral\Mistral;
 use ModelflowAi\Mistral\Model;
 use ModelflowAi\MistralAdapter\Model\MistralChatModelAdapter;
-use ModelflowAi\OllamaAdapter\Model\OllamaModelChatAdapter;
-use ModelflowAi\OllamaAdapter\Model\OllamaModelTextAdapter;
+use ModelflowAi\Ollama\Ollama;
+use ModelflowAi\OllamaAdapter\Model\OllamaChatModelAdapter;
+use ModelflowAi\OllamaAdapter\Model\OllamaTextModelAdapter;
 use ModelflowAi\OpenaiAdapter\Model\GPT4ModelChatAdapter;
 use Symfony\Component\Dotenv\Dotenv;
-use Symfony\Component\HttpClient\HttpClient;
 
 (new Dotenv())->bootEnv(__DIR__ . '/.env');
 
@@ -49,9 +49,9 @@ if ($openaiApiKey) {
     $adapter[] = new DecisionRule($gpt4Adapter, [PrivacyRequirement::LOW, PerformanceRequirement::SMART]);
 }
 
-$httpClient = HttpClient::create();
-$llama2ChatAdapter = new OllamaModelChatAdapter($httpClient);
-$llama2TextAdapter = new OllamaModelTextAdapter($httpClient);
+$client = Ollama::client();
+$llama2ChatAdapter = new OllamaChatModelAdapter($client);
+$llama2TextAdapter = new OllamaTextModelAdapter($client);
 
 $adapter[] = new DecisionRule($llama2TextAdapter, [PrivacyRequirement::HIGH]);
 $adapter[] = new DecisionRule($llama2ChatAdapter, [PrivacyRequirement::HIGH]);

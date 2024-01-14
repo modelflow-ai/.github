@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Mistral;
 
-use ModelflowAi\Mistral\Transport\SymfonyHttpTransporter;
+use ModelflowAi\ApiClient\Transport\SymfonyHttpTransporter;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 

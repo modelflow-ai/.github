@@ -1142,12 +1142,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "ff095c3c65c144f32a811685a81195c4df53fb99"
+                "reference": "ce019e9ad711e31ee87c2c4c72e538b5240970c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/ff095c3c65c144f32a811685a81195c4df53fb99",
-                "reference": "ff095c3c65c144f32a811685a81195c4df53fb99",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/ce019e9ad711e31ee87c2c4c72e538b5240970c3",
+                "reference": "ce019e9ad711e31ee87c2c4c72e538b5240970c3",
                 "shasum": ""
             },
             "require": {
@@ -1193,7 +1193,7 @@
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
                 "source": "https://github.com/nikic/PHP-Parser/tree/master"
             },
-            "time": "2024-01-10T19:34:09+00:00"
+            "time": "2024-01-14T09:02:54+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -1853,12 +1853,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "9b5ee4923ed5aebae24a46f2cb45f907f0afcc10"
+                "reference": "7852a2942f6bb8a70a51077bf4c1ed3fe88c563c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/9b5ee4923ed5aebae24a46f2cb45f907f0afcc10",
-                "reference": "9b5ee4923ed5aebae24a46f2cb45f907f0afcc10",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/7852a2942f6bb8a70a51077bf4c1ed3fe88c563c",
+                "reference": "7852a2942f6bb8a70a51077bf4c1ed3fe88c563c",
                 "shasum": ""
             },
             "require": {
@@ -1946,7 +1946,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-12T14:55:35+00:00"
+            "time": "2024-01-14T10:19:59+00:00"
         },
         {
             "name": "rector/rector",

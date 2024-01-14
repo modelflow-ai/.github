@@ -13,16 +13,16 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Mistral\Tests\Unit\Resources;
 
+use ModelflowAi\ApiClient\Responses\MetaInformation;
+use ModelflowAi\ApiClient\Transport\Enums\ContentType;
+use ModelflowAi\ApiClient\Transport\Enums\Method;
+use ModelflowAi\ApiClient\Transport\Payload;
+use ModelflowAi\ApiClient\Transport\Response\ObjectResponse;
+use ModelflowAi\ApiClient\Transport\TransportInterface;
 use ModelflowAi\Mistral\Resources\Embeddings;
 use ModelflowAi\Mistral\Resources\EmbeddingsInterface;
 use ModelflowAi\Mistral\Responses\Embeddings\CreateResponse;
-use ModelflowAi\Mistral\Responses\MetaInformation;
 use ModelflowAi\Mistral\Tests\DataFixtures;
-use ModelflowAi\Mistral\Transport\Enums\ContentType;
-use ModelflowAi\Mistral\Transport\Enums\Method;
-use ModelflowAi\Mistral\Transport\Payload;
-use ModelflowAi\Mistral\Transport\Response\ObjectResponse;
-use ModelflowAi\Mistral\Transport\TransportInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;

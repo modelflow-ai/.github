@@ -13,14 +13,15 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Mistral\Resources;
 
+use ModelflowAi\ApiClient\Resources\Concerns\Streamable;
+use ModelflowAi\ApiClient\Transport\Payload;
+use ModelflowAi\ApiClient\Transport\TransportInterface;
 use ModelflowAi\Mistral\Responses\Chat\CreateResponse;
-use ModelflowAi\Mistral\Transport\Payload;
-use ModelflowAi\Mistral\Transport\TransportInterface;
 use Webmozart\Assert\Assert;
 
 final readonly class Chat implements ChatInterface
 {
-    use Concerns\Streamable;
+    use Streamable;
 
     public function __construct(
         private TransportInterface $transport,

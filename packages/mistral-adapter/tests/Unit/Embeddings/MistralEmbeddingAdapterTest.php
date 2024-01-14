@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace ModelflowAi\MistralAdapter\Tests\Unit\Embeddings;
 
+use ModelflowAi\ApiClient\Responses\MetaInformation;
 use ModelflowAi\Mistral\ClientInterface;
 use ModelflowAi\Mistral\Model;
 use ModelflowAi\Mistral\Resources\EmbeddingsInterface;
 use ModelflowAi\Mistral\Responses\Embeddings\CreateResponse;
-use ModelflowAi\Mistral\Responses\MetaInformation;
 use ModelflowAi\MistralAdapter\Embeddings\MistralEmbeddingAdapter;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;

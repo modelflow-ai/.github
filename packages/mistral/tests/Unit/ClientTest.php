@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Mistral\Tests\Unit;
 
+use ModelflowAi\ApiClient\Transport\TransportInterface;
 use ModelflowAi\Mistral\Client;
 use ModelflowAi\Mistral\ClientInterface;
 use ModelflowAi\Mistral\Resources\Chat;
-use ModelflowAi\Mistral\Transport\TransportInterface;
+use ModelflowAi\Mistral\Resources\Embeddings;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -35,12 +36,20 @@ final class ClientTest extends TestCase
         $this->transport = $this->prophesize(TransportInterface::class);
     }
 
-    public function testRequest(): void
+    public function testChat(): void
     {
         $client = $this->createInstance($this->transport->reveal());
 
         $chat = $client->chat();
         $this->assertInstanceOf(Chat::class, $chat);
+    }
+
+    public function testEmbeddings(): void
+    {
+        $client = $this->createInstance($this->transport->reveal());
+
+        $embeddings = $client->embeddings();
+        $this->assertInstanceOf(Embeddings::class, $embeddings);
     }
 
     private function createInstance(TransportInterface $transport): ClientInterface
