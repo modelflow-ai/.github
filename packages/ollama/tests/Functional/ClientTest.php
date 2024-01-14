@@ -22,6 +22,7 @@ use ModelflowAi\ApiClient\Transport\TransportInterface;
 use ModelflowAi\Ollama\Client;
 use ModelflowAi\Ollama\ClientInterface;
 use ModelflowAi\Ollama\Responses\Chat\CreateResponse as ChatCreateResponse;
+use ModelflowAi\Ollama\Responses\Completion\CreateResponse as CompletionCreateResponse;
 use ModelflowAi\Ollama\Responses\Embeddings\CreateResponse as EmbeddingsCreateResponse;
 use ModelflowAi\Ollama\Tests\DataFixtures;
 use PHPUnit\Framework\TestCase;
@@ -59,6 +60,24 @@ class ClientTest extends TestCase
 
         $this->assertInstanceOf(ChatCreateResponse::class, $response);
         $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE['message']['content'], $response->message->content);
+    }
+
+    public function testCompletion(): void
+    {
+        $client = $this->createInstance($this->transport->reveal());
+
+        $response = new ObjectResponse(DataFixtures::COMPLETION_CREATE_RESPONSE, MetaInformation::from([]));
+        $this->transport->requestObject(
+            Argument::that(fn (Payload $payload) => 'generate' === $payload->resourceUri->uri
+                && Method::POST === $payload->method
+                && ContentType::JSON === $payload->contentType
+                && @\array_merge(DataFixtures::COMPLETION_CREATE_REQUEST, ['format' => 'json', 'stream' => false]) === $payload->parameters),
+        )->willReturn($response);
+
+        $response = $client->completion()->create(DataFixtures::COMPLETION_CREATE_REQUEST);
+
+        $this->assertInstanceOf(CompletionCreateResponse::class, $response);
+        $this->assertSame(DataFixtures::COMPLETION_CREATE_RESPONSE['response'], $response->response);
     }
 
     public function testEmbedding(): void

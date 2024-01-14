@@ -18,19 +18,17 @@ use ModelflowAi\Core\Request\AIChatRequest;
 use ModelflowAi\Core\Request\AIRequestInterface;
 use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\Core\Response\AIResponseInterface;
+use ModelflowAi\Ollama\ClientInterface;
 use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
 use ModelflowAi\PromptTemplate\Chat\AIChatMessageRoleEnum;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Webmozart\Assert\Assert;
 
-class OllamaModelChatAdapter implements AIModelAdapterInterface
+final readonly class OllamaChatModelAdapter implements AIModelAdapterInterface
 {
     public function __construct(
-        private readonly HttpClientInterface $client,
-        private readonly string $model = 'llama2',
-        private readonly string $url = 'http://localhost:11434/api',
+        private ClientInterface $client,
+        private string $model = 'llama2',
     ) {
-        \ini_set('default_socket_timeout', -1);
     }
 
     /**
@@ -40,22 +38,16 @@ class OllamaModelChatAdapter implements AIModelAdapterInterface
     {
         Assert::isInstanceOf($request, AIChatRequest::class);
 
-        $response = $this->client->request('POST', $this->url . '/chat', [
-            'json' => [
-                'model' => $this->model,
-                'messages' => $request->getMessages()->toArray(),
-                'stream' => false,
-            ],
+        $response = $this->client->chat()->create([
+            'model' => $this->model,
+            'messages' => $request->getMessages()->toArray(),
         ]);
-
-        /** @var array{ message: array{ role: string, content: string } } $content */
-        $content = \json_decode($response->getContent(), true, 512, \JSON_THROW_ON_ERROR);
 
         return new AIChatResponse(
             $request,
             new AIChatMessage(
-                AIChatMessageRoleEnum::from($content['message']['role']),
-                $content['message']['content'],
+                AIChatMessageRoleEnum::from($response->message->role),
+                $response->message->content ?? '',
             ),
         );
     }

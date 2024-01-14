@@ -1,9 +1,8 @@
 # Mistral
 
 The Mistral package is a comprehensive API client for [Mistral AI](https://mistral.ai/), developed using PHP. It
-provides a robust and efficient
-interface for interacting with the Mistral AI model, enabling developers to seamlessly integrate AI capabilities into
-their PHP applications.
+provides a robust and efficient interface for interacting with the Mistral AI model, enabling developers to seamlessly
+integrate AI capabilities into their PHP applications.
 
 This package is designed with a focus on ease of use, performance, and flexibility. It allows developers to leverage the
 full potential of the Mistral AI model, from creating chat conversations to getting chat completions, all through a
@@ -101,6 +100,14 @@ to manage and interact with their AI models directly from the Mistral package.
 
 We are currently working on implementing a feature to stream responses. This will allow users to receive data in
 real-time, improving the efficiency and responsiveness of their applications.
+
+## Testing
+
+To run the tests, use PHPUnit:
+
+```bash
+composer test
+```
 
 ## Contributing
 

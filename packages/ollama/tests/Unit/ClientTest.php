@@ -17,6 +17,8 @@ use ModelflowAi\ApiClient\Transport\TransportInterface;
 use ModelflowAi\Ollama\Client;
 use ModelflowAi\Ollama\ClientInterface;
 use ModelflowAi\Ollama\Resources\Chat;
+use ModelflowAi\Ollama\Resources\Completion;
+use ModelflowAi\Ollama\Resources\Embeddings;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -35,12 +37,28 @@ final class ClientTest extends TestCase
         $this->transport = $this->prophesize(TransportInterface::class);
     }
 
-    public function testRequest(): void
+    public function testChat(): void
     {
         $client = $this->createInstance($this->transport->reveal());
 
         $chat = $client->chat();
         $this->assertInstanceOf(Chat::class, $chat);
+    }
+
+    public function testCompletion(): void
+    {
+        $client = $this->createInstance($this->transport->reveal());
+
+        $chat = $client->completion();
+        $this->assertInstanceOf(Completion::class, $chat);
+    }
+
+    public function testEmbeddings(): void
+    {
+        $client = $this->createInstance($this->transport->reveal());
+
+        $chat = $client->embeddings();
+        $this->assertInstanceOf(Embeddings::class, $chat);
     }
 
     private function createInstance(TransportInterface $transport): ClientInterface

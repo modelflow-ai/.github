@@ -18,17 +18,15 @@ use ModelflowAi\Core\Request\AIRequestInterface;
 use ModelflowAi\Core\Request\AITextRequest;
 use ModelflowAi\Core\Response\AIResponseInterface;
 use ModelflowAi\Core\Response\AITextResponse;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use ModelflowAi\Ollama\ClientInterface;
 use Webmozart\Assert\Assert;
 
-class OllamaModelTextAdapter implements AIModelAdapterInterface
+final readonly class OllamaTextModelAdapter implements AIModelAdapterInterface
 {
     public function __construct(
-        private readonly HttpClientInterface $client,
-        private readonly string $model = 'llama2',
-        private readonly string $url = 'http://localhost:11434/api',
+        private ClientInterface $client,
+        private string $model = 'llama2',
     ) {
-        \ini_set('default_socket_timeout', -1);
     }
 
     /**
@@ -38,18 +36,12 @@ class OllamaModelTextAdapter implements AIModelAdapterInterface
     {
         Assert::isInstanceOf($request, AITextRequest::class);
 
-        $response = $this->client->request('POST', $this->url . '/generate', [
-            'json' => [
-                'model' => $this->model,
-                'prompt' => $request->getText(),
-                'stream' => false,
-            ],
+        $response = $this->client->completion()->create([
+            'model' => $this->model,
+            'prompt' => $request->getText(),
         ]);
 
-        /** @var array{ response: string } $content */
-        $content = \json_decode($response->getContent(), true, 512, \JSON_THROW_ON_ERROR);
-
-        return new AITextResponse($request, $content['response']);
+        return new AITextResponse($request, $response->response);
     }
 
     public function supports(AIRequestInterface $request): bool

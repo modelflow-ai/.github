@@ -16,6 +16,8 @@ namespace ModelflowAi\Ollama;
 use ModelflowAi\ApiClient\Transport\TransportInterface;
 use ModelflowAi\Ollama\Resources\Chat;
 use ModelflowAi\Ollama\Resources\ChatInterface;
+use ModelflowAi\Ollama\Resources\Completion;
+use ModelflowAi\Ollama\Resources\CompletionInterface;
 use ModelflowAi\Ollama\Resources\Embeddings;
 use ModelflowAi\Ollama\Resources\EmbeddingsInterface;
 
@@ -29,6 +31,11 @@ final readonly class Client implements ClientInterface
     public function chat(): ChatInterface
     {
         return new Chat($this->transport);
+    }
+
+    public function completion(): CompletionInterface
+    {
+        return new Completion($this->transport);
     }
 
     public function embeddings(): EmbeddingsInterface
