@@ -1,6 +1,11 @@
 {
     "sub-splits": [
         {
+            "name": "ApiClient",
+            "directory": "packages/api-client",
+            "target": "git@github.com:modelflow-ai/api-client.git"
+        },
+        {
             "name": "Core",
             "directory": "packages/core",
             "target": "git@github.com:modelflow-ai/core.git"

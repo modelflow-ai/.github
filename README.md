@@ -9,12 +9,16 @@ This repository consists of several packages, each residing in its own directory
 
 - **Core**: The core functionalities of Modelflow AI. [More Info](https://github.com/modelflow-ai/core)
 - **Embeddings**: Handles the embeddings for the AI models. [More Info](https://github.com/modelflow-ai/embeddings)
-- **Mistral**: An API client for the Mistral AI model. [More Info](https://github.com/modelflow-ai/mistral)
 - **MistralAdapter**: The adapter for the Mistral API client. [More Info](https://github.com/modelflow-ai/mistral-adapter)
-- **Ollama**: An API client for the Ollama AI model. [More Info](https://github.com/modelflow-ai/ollama)
 - **OllamaAdapter**: The adapter for the Ollama API client. [More Info](https://github.com/modelflow-ai/ollama-adapter)
 - **OpenAIAdapter**: The adapter for integrating OpenAI models. [More Info](https://github.com/modelflow-ai/openai-adapter)
 - **PromptTemplate**: Provides templates for AI prompts. [More Info](https://github.com/modelflow-ai/prompt-template)
+
+Independent packages:
+
+- **Api Client**: A basic API client. [More Info](https://github.com/modelflow-ai/api-client)
+- **Mistral**: An API client for the Mistral AI model. [More Info](https://github.com/modelflow-ai/mistral)
+- **Ollama**: An API client for the Ollama AI model. [More Info](https://github.com/modelflow-ai/ollama)
 
 ## Installation
 
