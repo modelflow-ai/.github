@@ -18,7 +18,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 use ModelflowAi\Core\AIRequestHandler;
 use ModelflowAi\Core\DecisionTree\AIModelDecisionTree;
 use ModelflowAi\Core\DecisionTree\DecisionRule;
-use ModelflowAi\Core\Request\Criteria\PerformanceRequirement;
+use ModelflowAi\Core\Request\Criteria\CapabilityRequirement;
 use ModelflowAi\Core\Request\Criteria\PrivacyRequirement;
 use ModelflowAi\Mistral\Mistral;
 use ModelflowAi\Mistral\Model;
@@ -46,7 +46,7 @@ if ($openaiApiKey) {
     $openAiClient = \OpenAI::client($openaiApiKey);
     $gpt4Adapter = new GPT4ModelChatAdapter($openAiClient);
 
-    $adapter[] = new DecisionRule($gpt4Adapter, [PrivacyRequirement::LOW, PerformanceRequirement::SMART]);
+    $adapter[] = new DecisionRule($gpt4Adapter, [PrivacyRequirement::LOW, CapabilityRequirement::SMART]);
 }
 
 $client = Ollama::client();
