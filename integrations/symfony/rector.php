@@ -11,13 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\Core\Request\Criteria;
+use Rector\Config\RectorConfig;
 
-interface AiCriteriaInterface
-{
-    public function matches(self $toMatch): bool;
-
-    public function getValue(): int;
-
-    public function getName(): string;
-}
+return static function (RectorConfig $rectorConfig): void {
+    $config = require __DIR__ . '/../../rector.php';
+    $config($rectorConfig, __DIR__);
+};

@@ -27,7 +27,7 @@ class EmbeddingGenerator implements EmbeddingGeneratorInterface
     ) {
     }
 
-    public function embed(EmbeddingInterface $embedding, ?callable $headerGenerator = null): array
+    public function generateEmbedding(EmbeddingInterface $embedding, ?callable $headerGenerator = null): array
     {
         $result = [];
         foreach ($this->embeddingSplitter->splitEmbedding($embedding) as $splitEmbedding) {
@@ -36,6 +36,16 @@ class EmbeddingGenerator implements EmbeddingGeneratorInterface
                 $headerGenerator ? $headerGenerator($embedding) : '',
             );
             $newEmbedding->setVector($this->embeddingAdapter->embedText($newEmbedding->getContent()));
+        }
+
+        return $result;
+    }
+
+    public function generateEmbeddings(array $embeddings, ?callable $headerGenerator = null): array
+    {
+        $result = [];
+        foreach ($embeddings as $embedding) {
+            $result = \array_merge($result, $this->generateEmbedding($embedding, $headerGenerator));
         }
 
         return $result;

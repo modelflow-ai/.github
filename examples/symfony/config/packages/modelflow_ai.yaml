@@ -1,0 +1,61 @@
+modelflow_ai:
+    providers:
+        openai:
+            enabled: true
+            credentials:
+                api_key: "%env(OPENAI_API_KEY)%"
+        mistral:
+            enabled: true
+            credentials:
+                api_key: "%env(MISTRAL_API_KEY)%"
+        ollama:
+            enabled: true
+            url: "%env(OLLAMA_URL)%"
+
+    adapters:
+        gpt4:
+            enabled: true
+        gpt3.5:
+            enabled: true
+        mistral_tiny:
+            enabled: true
+        mistral_small:
+            enabled: true
+        mistral_medium:
+            enabled: true
+        llama2:
+            enabled: true
+        nexusraven:
+            enabled: true
+        llava:
+            enabled: true
+
+    embeddings:
+        generators:
+            app.openai_embeddings_generator:
+                enabled: true
+                provider: "openai"
+                model: "text-embedding-ada-002"
+                splitter:
+                    max_length: 1000
+                    separator: " "
+                cache:
+                    enabled: true
+                    cache_pool: cache.app
+
+    chat:
+        adapters:
+            - gpt4
+            - gpt3.5
+            - mistral_tiny
+            - mistral_small
+            - mistral_medium
+            - llama2
+            - nexusraven
+            - llava
+
+    text:
+        adapters:
+            - llama2
+            - nexusraven
+            - llava

@@ -1,26 +1,25 @@
 {
-    "name": "modelflow-ai/core",
-    "description": "Abstraction of different ai ecosystems and their models.",
+    "name": "modelflow-ai/symfony-bundle",
+    "description": "An integration of modelflow-ai via a bundle into the Symfony Framework.",
     "type": "library",
     "license": "MIT",
     "keywords": [
-        "abstraction",
         "ai",
         "openai",
-        "ollama",
         "mistral",
-        "llama2",
+        "ollama",
         "gpt4",
-        "gpt3.5"
+        "gpt3.5",
+        "llama2"
     ],
     "autoload": {
         "psr-4": {
-            "ModelflowAi\\Core\\": "src/"
+            "ModelflowAi\\Integration\\Symfony\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "ModelflowAi\\Core\\Tests\\": "tests/"
+            "ModelflowAi\\Integration\\Symfony\\Tests\\": "tests/"
         }
     },
     "authors": [
@@ -31,8 +30,7 @@
     ],
     "require": {
         "php": "^8.2",
-        "modelflow-ai/prompt-template": "0.1.x-dev",
-        "webmozart/assert": "^1.11"
+        "modelflow-ai/core": "^0.1"
     },
     "require-dev": {
         "php-cs-fixer/shim": "^3.15",
@@ -41,9 +39,6 @@
         "phpstan/phpstan-phpunit": "^1.3",
         "phpunit/phpunit": "^10.3",
         "rector/rector": "^0.18.1"
-    },
-    "conflict": {
-        "phpstan/phpstan": "^1.10.55"
     },
     "scripts": {
         "test": [
@@ -70,7 +65,7 @@
     "repositories": [
         {
             "type": "path",
-            "url": "./../*",
+            "url": "./../../packages/*",
             "options": {
                 "symlink": true
             }

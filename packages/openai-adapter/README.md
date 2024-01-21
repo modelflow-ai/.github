@@ -1,7 +1,3 @@
-Sure, let's proceed with the `OpenAIAdapter` package. Here's a basic structure for a README file for the `OpenAIAdapter`
-package:
-
-```markdown
 # OpenAIAdapter
 
 The OpenAIAdapter package integrates OpenAI models into Modelflow AI.
@@ -29,7 +25,3 @@ at [https://github.com/modelflow-ai/modelflow-ai](https://github.com/modelflow-a
 
 This project is licensed under the MIT License. For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
-
-```
-
-Remember to replace `modelflow-ai/openai-adapter` with the actual package name on Packagist.

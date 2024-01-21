@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Core\Request\Criteria;
 
-enum PerformanceRequirement: int implements AiCriteriaInterface
+enum CapabilityRequirement: int implements AiCriteriaInterface
 {
-    case SMART = 2;
-    case FAST = 1;
+    case SMART = 8;
+    case ADVANCED = 4;
+    case INTERMEDIATE = 2;
+    case BASIC = 1;
 
     public function matches(AiCriteriaInterface $toMatch): bool
     {
@@ -25,5 +27,15 @@ enum PerformanceRequirement: int implements AiCriteriaInterface
         }
 
         return $this->value >= $toMatch->value;
+    }
+
+    public function getValue(): int
+    {
+        return $this->value;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 }

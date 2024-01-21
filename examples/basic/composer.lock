@@ -100,7 +100,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/core",
-                "reference": "763546ef82f810b10691c200a1b37bfb2516cc8e"
+                "reference": "171df3ad11633ea0e9f2a3bd9e5d58b8ece6fc5d"
             },
             "require": {
                 "modelflow-ai/prompt-template": "0.1.x-dev",
@@ -179,6 +179,7 @@
                 "gpt3.5",
                 "gpt4",
                 "llama2",
+                "mistral",
                 "ollama",
                 "openai"
             ],
@@ -1836,16 +1837,16 @@
         },
         {
             "name": "php-cs-fixer/shim",
-            "version": "v3.46.0",
+            "version": "v3.47.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/shim.git",
-                "reference": "e9fc76796f284c050615937b9bd2df7688452c33"
+                "reference": "851a945ee0ae0f9d08c426ec2b1702bb34bd4ea2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/shim/zipball/e9fc76796f284c050615937b9bd2df7688452c33",
-                "reference": "e9fc76796f284c050615937b9bd2df7688452c33",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/shim/zipball/851a945ee0ae0f9d08c426ec2b1702bb34bd4ea2",
+                "reference": "851a945ee0ae0f9d08c426ec2b1702bb34bd4ea2",
                 "shasum": ""
             },
             "require": {
@@ -1882,9 +1883,9 @@
             "description": "A tool to automatically fix PHP code style",
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/shim/issues",
-                "source": "https://github.com/PHP-CS-Fixer/shim/tree/v3.46.0"
+                "source": "https://github.com/PHP-CS-Fixer/shim/tree/v3.47.1"
             },
-            "time": "2024-01-03T21:39:12+00:00"
+            "time": "2024-01-16T18:54:50+00:00"
         },
         {
             "name": "phpstan/extension-installer",
@@ -2367,16 +2368,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.5.6",
+            "version": "10.5.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "ab9a20b623b235165d24faa9d1da925cb54939c0"
+                "reference": "e5c5b397a95cb0db013270a985726fcae93e61b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ab9a20b623b235165d24faa9d1da925cb54939c0",
-                "reference": "ab9a20b623b235165d24faa9d1da925cb54939c0",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/e5c5b397a95cb0db013270a985726fcae93e61b8",
+                "reference": "e5c5b397a95cb0db013270a985726fcae93e61b8",
                 "shasum": ""
             },
             "require": {
@@ -2448,7 +2449,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.6"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.7"
             },
             "funding": [
                 {
@@ -2464,7 +2465,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-13T12:49:56+00:00"
+            "time": "2024-01-14T16:40:30+00:00"
         },
         {
             "name": "rector/rector",

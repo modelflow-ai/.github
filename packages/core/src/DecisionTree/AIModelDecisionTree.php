@@ -16,12 +16,12 @@ namespace ModelflowAi\Core\DecisionTree;
 use ModelflowAi\Core\Model\AIModelAdapterInterface;
 use ModelflowAi\Core\Request\AIRequestInterface;
 
-class AIModelDecisionTree implements AIModelDecisionTreeInterface
+final readonly class AIModelDecisionTree implements AIModelDecisionTreeInterface
 {
     /**
      * @param DecisionRuleInterface[] $rules
      */
-    public function __construct(private readonly array $rules)
+    public function __construct(private array $rules)
     {
     }
 

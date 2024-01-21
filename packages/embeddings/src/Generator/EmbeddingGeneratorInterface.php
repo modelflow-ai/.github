@@ -20,5 +20,12 @@ interface EmbeddingGeneratorInterface
     /**
      * @return EmbeddingInterface[]
      */
-    public function embed(EmbeddingInterface $embedding, ?callable $headerGenerator = null): array;
+    public function generateEmbedding(EmbeddingInterface $embedding, ?callable $headerGenerator = null): array;
+
+    /**
+     * @param EmbeddingInterface[] $embeddings
+     *
+     * @return EmbeddingInterface[]
+     */
+    public function generateEmbeddings(array $embeddings, ?callable $headerGenerator = null): array;
 }
