@@ -32,7 +32,7 @@ final class Factory
 
     public function withBaseUrl(string $baseUrl): self
     {
-        $this->baseUrl = rtrim($baseUrl, '/') . '/';
+        $this->baseUrl = \rtrim($baseUrl, '/') . '/';
 
         return $this;
     }

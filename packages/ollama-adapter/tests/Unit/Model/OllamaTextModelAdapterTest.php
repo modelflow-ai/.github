@@ -24,7 +24,7 @@ use ModelflowAi\OllamaAdapter\Model\OllamaTextModelAdapter;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-final class MistralTextModelAdapterTest extends TestCase
+final class OllamaTextModelAdapterTest extends TestCase
 {
     use ProphecyTrait;
 

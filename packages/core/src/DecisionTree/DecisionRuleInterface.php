@@ -20,5 +20,5 @@ interface DecisionRuleInterface
 {
     public function matches(AIRequestInterface $request): bool;
 
-    public function getAdapter(): AiModelAdapterInterface;
+    public function getAdapter(): AIModelAdapterInterface;
 }

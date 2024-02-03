@@ -26,7 +26,7 @@ use ModelflowAi\MistralAdapter\Model\MistralChatModelAdapter;
 use ModelflowAi\Ollama\Ollama;
 use ModelflowAi\OllamaAdapter\Model\OllamaChatModelAdapter;
 use ModelflowAi\OllamaAdapter\Model\OllamaTextModelAdapter;
-use ModelflowAi\OpenaiAdapter\Model\OpenaiModelChatAdapter;
+use ModelflowAi\OpenaiAdapter\Model\OpenaiChatModelAdapter;
 use Symfony\Component\Dotenv\Dotenv;
 
 (new Dotenv())->bootEnv(__DIR__ . '/.env');
@@ -44,7 +44,7 @@ if ($mistralApiKey) {
 $openaiApiKey = $_ENV['OPENAI_KEY'];
 if ($openaiApiKey) {
     $openAiClient = \OpenAI::client($openaiApiKey);
-    $gpt4Adapter = new OpenaiModelChatAdapter($openAiClient);
+    $gpt4Adapter = new OpenaiChatModelAdapter($openAiClient);
 
     $adapter[] = new DecisionRule($gpt4Adapter, [PrivacyRequirement::LOW, CapabilityRequirement::SMART]);
 }

@@ -20,13 +20,13 @@ use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\Core\Response\AIResponseInterface;
 use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
 use ModelflowAi\PromptTemplate\Chat\AIChatMessageRoleEnum;
-use OpenAI\Client;
+use OpenAI\Contracts\ClientContract;
 use Webmozart\Assert\Assert;
 
-final readonly class OpenaiModelChatAdapter implements AIModelAdapterInterface
+final readonly class OpenaiChatModelAdapter implements AIModelAdapterInterface
 {
     public function __construct(
-        private Client $client,
+        private ClientContract $client,
         private string $model = 'gpt-4',
     ) {
     }
