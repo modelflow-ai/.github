@@ -44,6 +44,11 @@
             "name": "PromptTemplate",
             "directory": "packages/prompt-template",
             "target": "git@github.com:modelflow-ai/prompt-template.git"
+        },
+        {
+            "name": "SymfonyBundle",
+            "directory": "integrations/symfony-bundle",
+            "target": "git@github.com:modelflow-ai/symfony-bundle.git"
         }
     ]
 }

@@ -70,7 +70,15 @@ class BundleTestCase extends KernelTestCase
 
         /** @var array<string, mixed> $config */
         $config = Yaml::parse($configMatches[1] ?? '');
-        /** @var array<string, mixed> $expects */
+        /** @var array{
+         * bundles: string[],
+         * services: array<string, array{
+         * class?: string,
+         * tags?: array<string, array<string, mixed>>,
+         * aliases?: array<string, string>,
+         * }>,
+         * aliases: array<string, string>,
+         * } $expects */
         $expects = Yaml::parse($expectsMatches[1] ?? '');
 
         return [

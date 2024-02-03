@@ -21,7 +21,7 @@ use Symfony\Component\Finder\Finder;
 class ModelflowAiBundleTest extends BundleTestCase
 {
     /**
-     * @return iterable<string, array{0: string, 1: array{configuration: array<string, mixed>, expects: array<string, mixed>}}>
+     * @return iterable<string, array{0: \SplFileInfo}>
      */
     public static function provideMarkdownFiles(): iterable
     {
