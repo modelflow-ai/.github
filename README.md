@@ -20,6 +20,12 @@ Independent packages:
 - **Mistral**: An API client for the Mistral AI model. [More Info](https://github.com/modelflow-ai/mistral)
 - **Ollama**: An API client for the Ollama AI model. [More Info](https://github.com/modelflow-ai/ollama)
 
+## Integrations
+
+Modelflow AI integrates with the following php frameworks:
+
+- **Symfony** [More Info](https://github.com/modelflow-ai/symfony-bundle)
+
 ## Installation
 
 To install Modelflow AI, you need to have PHP 8.2 or higher and Composer installed on your machine. Then, you can clone
