@@ -18,7 +18,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 use ModelflowAi\Core\AIRequestHandler;
 use ModelflowAi\Core\DecisionTree\AIModelDecisionTree;
 use ModelflowAi\Core\DecisionTree\DecisionRule;
-use ModelflowAi\Core\Request\Criteria\PerformanceRequirement;
+use ModelflowAi\Core\Request\Criteria\CapabilityRequirement;
 use ModelflowAi\Core\Request\Criteria\PrivacyRequirement;
 use ModelflowAi\Mistral\Mistral;
 use ModelflowAi\Mistral\Model;
@@ -26,7 +26,7 @@ use ModelflowAi\MistralAdapter\Model\MistralChatModelAdapter;
 use ModelflowAi\Ollama\Ollama;
 use ModelflowAi\OllamaAdapter\Model\OllamaChatModelAdapter;
 use ModelflowAi\OllamaAdapter\Model\OllamaTextModelAdapter;
-use ModelflowAi\OpenaiAdapter\Model\GPT4ModelChatAdapter;
+use ModelflowAi\OpenaiAdapter\Model\OpenaiChatModelAdapter;
 use Symfony\Component\Dotenv\Dotenv;
 
 (new Dotenv())->bootEnv(__DIR__ . '/.env');
@@ -44,9 +44,9 @@ if ($mistralApiKey) {
 $openaiApiKey = $_ENV['OPENAI_KEY'];
 if ($openaiApiKey) {
     $openAiClient = \OpenAI::client($openaiApiKey);
-    $gpt4Adapter = new GPT4ModelChatAdapter($openAiClient);
+    $gpt4Adapter = new OpenaiChatModelAdapter($openAiClient);
 
-    $adapter[] = new DecisionRule($gpt4Adapter, [PrivacyRequirement::LOW, PerformanceRequirement::SMART]);
+    $adapter[] = new DecisionRule($gpt4Adapter, [PrivacyRequirement::LOW, CapabilityRequirement::SMART]);
 }
 
 $client = Ollama::client();

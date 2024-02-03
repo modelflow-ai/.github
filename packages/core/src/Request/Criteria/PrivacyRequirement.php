@@ -25,6 +25,16 @@ enum PrivacyRequirement: int implements AiCriteriaInterface
             return true;
         }
 
-        return $this->value >= $toMatch->value;
+        return $this->value <= $toMatch->value;
+    }
+
+    public function getValue(): int
+    {
+        return $this->value;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 }

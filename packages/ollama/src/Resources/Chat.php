@@ -32,7 +32,6 @@ final readonly class Chat implements ChatInterface
     {
         $this->ensureNotStreamed($parameters);
         $this->validateParameters($parameters);
-        $parameters['format'] ??= 'json';
         $parameters['stream'] = false;
 
         $payload = Payload::create('chat', $parameters);

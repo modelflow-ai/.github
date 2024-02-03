@@ -40,10 +40,7 @@ $input = [
     new ExampleEmbedding(\file_get_contents(__DIR__ . '/var/books/schildbuerger.txt') ?: '', 'schildbuerger.txt'),
     new ExampleEmbedding(\file_get_contents(__DIR__ . '/var/books/nibelungenlied.txt') ?: '', 'nibelungenlied.txt'),
 ];
-$output = [];
-foreach ($input as $embedding) {
-    $output = \array_merge($output, $embeddingGenerator->embed($embedding));
-}
+$output = $embeddingGenerator->generateEmbeddings($input);
 
 $memoryStore->addDocuments($output);
 

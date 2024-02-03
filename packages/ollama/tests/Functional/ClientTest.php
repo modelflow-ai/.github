@@ -53,7 +53,7 @@ class ClientTest extends TestCase
             Argument::that(fn (Payload $payload) => 'chat' === $payload->resourceUri->uri
                 && Method::POST === $payload->method
                 && ContentType::JSON === $payload->contentType
-                && @\array_merge(DataFixtures::CHAT_CREATE_REQUEST, ['format' => 'json', 'stream' => false]) === $payload->parameters),
+                && @\array_merge(DataFixtures::CHAT_CREATE_REQUEST, ['stream' => false]) === $payload->parameters),
         )->willReturn($response);
 
         $response = $client->chat()->create(DataFixtures::CHAT_CREATE_REQUEST);

@@ -16,4 +16,8 @@ namespace ModelflowAi\Core\Request\Criteria;
 interface AiCriteriaInterface
 {
     public function matches(self $toMatch): bool;
+
+    public function getValue(): int;
+
+    public function getName(): string;
 }

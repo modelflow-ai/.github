@@ -21,7 +21,7 @@ use ModelflowAi\OllamaAdapter\Embeddings\OllamaEmbeddingAdapter;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-final class MistralEmbeddingAdapterTest extends TestCase
+final class OllamaEmbeddingAdapterTest extends TestCase
 {
     use ProphecyTrait;
 

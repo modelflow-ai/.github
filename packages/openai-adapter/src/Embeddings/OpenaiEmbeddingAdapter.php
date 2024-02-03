@@ -14,13 +14,12 @@ declare(strict_types=1);
 namespace ModelflowAi\OpenaiAdapter\Embeddings;
 
 use ModelflowAi\Core\Embeddings\EmbeddingAdapterInterface;
-use OpenAI\Client;
-use OpenAI\Responses\Embeddings\CreateResponseEmbedding;
+use OpenAI\Contracts\ClientContract;
 
 final readonly class OpenaiEmbeddingAdapter implements EmbeddingAdapterInterface
 {
     public function __construct(
-        private Client $client,
+        private ClientContract $client,
         private string $model = 'text-embedding-ada-002',
     ) {
     }
@@ -33,14 +32,10 @@ final readonly class OpenaiEmbeddingAdapter implements EmbeddingAdapterInterface
             'encoding_format' => 'float',
         ]);
 
-        /** @var float[] $embeddings */
-        $embeddings = \array_values(
-            \array_map(
-                fn (CreateResponseEmbedding $embedding) => \array_values($embedding->embedding),
-                $response->embeddings,
-            ),
-        );
+        if ([] === $response->embeddings) {
+            throw new \RuntimeException('Could not embed text');
+        }
 
-        return $embeddings;
+        return $response->embeddings[0]->embedding;
     }
 }
