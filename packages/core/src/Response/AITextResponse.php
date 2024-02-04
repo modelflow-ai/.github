@@ -15,11 +15,11 @@ namespace ModelflowAi\Core\Response;
 
 use ModelflowAi\Core\Request\AIRequestInterface;
 
-class AITextResponse implements AIResponseInterface
+readonly class AITextResponse implements AIResponseInterface
 {
     public function __construct(
-        private readonly AIRequestInterface $request,
-        private readonly string $text,
+        private AIRequestInterface $request,
+        private string $text,
     ) {
     }
 
