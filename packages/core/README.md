@@ -1,4 +1,4 @@
-# Core
+# ModelflowAI<br/>Core
 
 The Core package provides the core functionalities of Modelflow AI.
 

@@ -1,4 +1,4 @@
-# PromptTemplate
+# ModelflowAI<br/>PromptTemplate
 
 The PromptTemplate package provides templates for AI prompts in Modelflow AI.
 

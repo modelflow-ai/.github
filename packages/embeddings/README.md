@@ -1,4 +1,4 @@
-# Embeddings
+# ModelflowAI<br/>Embeddings
 
 The Embeddings package handles the embeddings for the AI models in Modelflow AI.
 

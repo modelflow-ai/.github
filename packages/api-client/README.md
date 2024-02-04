@@ -1,14 +1,15 @@
-# Ollama
+# ModelflowAI<br/>API Client
 
-The Ollama package integrates the Ollama AI model into Modelflow AI.
+The ModelflowAI API Client serves as a foundational package, designed to be utilized by other API clients such as
+Mistral and Ollama. It provides a robust base, facilitating seamless integration and interaction with these clients.
 
 ## Installation
 
-To install the Ollama package, you need to have PHP 8.2 or higher and Composer installed on your machine. Then, you can
-add the package to your project by running the following command:
+Ensure you have PHP 8.2 or higher and Composer installed on your machine. To add the API client to your project, run the
+following command:
 
 ```bash
-composer require modelflow-ai/ollama
+composer require modelflow-ai/api-client
 ```
 
 ## Usage

@@ -1,4 +1,4 @@
-# OllamaAdapter
+# ModelflowAI<br/>OllamaAdapter
 
 The OllamaAdapter package integrates the Ollama AI model into Modelflow AI.
 

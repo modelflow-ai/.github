@@ -1,4 +1,4 @@
-# OpenAIAdapter
+# ModelflowAI<br/>OpenAIAdapter
 
 The OpenAIAdapter package integrates OpenAI models into Modelflow AI.
 

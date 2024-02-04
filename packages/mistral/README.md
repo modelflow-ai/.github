@@ -1,4 +1,4 @@
-# Mistral
+# ModelflowAI<br/>Mistral
 
 The Mistral package is a comprehensive API client for [Mistral AI](https://mistral.ai/), developed using PHP. It
 provides a robust and efficient interface for interacting with the Mistral AI model, enabling developers to seamlessly

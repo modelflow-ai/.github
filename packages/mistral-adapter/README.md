@@ -1,4 +1,4 @@
-# Mistral Adapter
+# ModelflowAI<br/>Mistral Adapter
 
 The MistralAdapter package integrates the Mistral AI model into Modelflow AI.
 

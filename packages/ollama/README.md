@@ -1,4 +1,4 @@
-# Ollama
+# ModelflowAI<br/>Ollama
 
 Ollama is a PHP package that provides an easy-to-use client for the ollama API.
 
