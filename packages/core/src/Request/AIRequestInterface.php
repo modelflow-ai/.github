@@ -14,11 +14,8 @@ declare(strict_types=1);
 namespace ModelflowAi\Core\Request;
 
 use ModelflowAi\Core\Request\Criteria\AiCriteriaInterface;
-use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
 
 interface AIRequestInterface
 {
-    public function getCriteria(): AIRequestCriteriaCollection;
-
     public function matches(AiCriteriaInterface $criteria): bool;
 }

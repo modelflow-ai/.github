@@ -31,11 +31,6 @@ abstract class AIRequest implements AIRequestInterface
         $this->requestHandler = $requestHandler;
     }
 
-    public function getCriteria(): AIRequestCriteriaCollection
-    {
-        return $this->criteria;
-    }
-
     public function matches(AiCriteriaInterface $criteria): bool
     {
         return $this->criteria->matches($criteria);

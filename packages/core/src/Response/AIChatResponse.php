@@ -16,11 +16,11 @@ namespace ModelflowAi\Core\Response;
 use ModelflowAi\Core\Request\AIRequestInterface;
 use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
 
-class AIChatResponse implements AIResponseInterface
+readonly class AIChatResponse implements AIResponseInterface
 {
     public function __construct(
-        private readonly AIRequestInterface $request,
-        private readonly AIChatMessage $message,
+        private AIRequestInterface $request,
+        private AIChatMessage $message,
     ) {
     }
 
