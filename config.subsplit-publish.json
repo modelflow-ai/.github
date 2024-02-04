@@ -47,7 +47,7 @@
         },
         {
             "name": "SymfonyBundle",
-            "directory": "integrations/symfony-bundle",
+            "directory": "integrations/symfony",
             "target": "git@github.com:modelflow-ai/symfony-bundle.git"
         }
     ]
