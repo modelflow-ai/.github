@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chat{% endblock %}
+
+{% block body %}
+    <div class="flex h-screen">
+        <!-- Toolbar -->
+        <div class="flex flex-col w-1/4 bg-gray-900 border-r border-gray-700 text-white">
+            <div class="p-4 border-b border-gray-700">
+                <h2 class="text-lg font-semibold">Chats</h2>
+                <!-- New Chat Button -->
+                <div class="pt-4">
+                    <div {{ stimulus_controller('dropdown-button') }} class="relative inline-block z-50">
+                        <button {{ stimulus_action('dropdown-button', 'toggleDropdown') }} class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full">New Chat</button>
+                        <div {{ stimulus_target('dropdown-button', 'dropdown') }} class="hidden absolute mt-1 w-56 origin-top-right bg-gray-800 border border-gray-700 rounded-md shadow-lg z-50">
+                            <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                <a href="#" class="block px-4 py-2 text-sm text-white hover:bg-gray-700" role="menuitem">Model A</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-white hover:bg-gray-700" role="menuitem">Model B</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-white hover:bg-gray-700" role="menuitem">Model C</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col p-4">
+                <!-- List of older chats -->
+                <a href="#" class="py-2 px-4 block hover:bg-gray-800">Chat 1</a>
+                <a href="#" class="py-2 px-4 block hover:bg-gray-800">Chat 2</a>
+                <a href="#" class="py-2 px-4 block hover:bg-gray-800">Chat 3</a>
+            </div>
+            <div class="mt-auto p-4 border-t border-gray-700">
+                <!-- Account Section -->
+                <div class="py-4">
+                    <h3 class="text-sm font-semibold">Account</h3>
+                    <!-- Add account management links or information here -->
+                    <a href="#" class="py-2 px-4 block hover:bg-gray-800">Settings</a>
+                    <a href="#" class="py-2 px-4 block hover:bg-gray-800">Logout</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat -->
+        <div class="flex flex-col w-3/4 bg-gray-800 text-white">
+            <div class="flex items-center bg-gray-900 p-4 border-b border-gray-700">
+                <img class="h-8 w-8 rounded-full" src="https://via.placeholder.com/50" alt="ChatGPT Avatar">
+                <div class="ml-3">
+                    <p class="text-sm font-medium">ChatGPT</p>
+                    <p class="text-xs">Online</p>
+                </div>
+            </div>
+            <div class="flex flex-col flex-1 overflow-y-auto p-4">
+                <!-- Chat messages -->
+                <div class="flex flex-col flex-1 overflow-y-auto p-4 space-y-4">
+                    <!-- Bot message -->
+                    <div class="flex items-end">
+                        <svg class="h-8 w-8 rounded-full fill-current text-gray-400 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 0C4.486 0 0 4.486 0 10s4.486 10 10 10 10-4.486 10-10S15.514 0 10 0zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm2-13H8v2h4V5zm-4 8v-2h4v2H8z"/></svg>
+                        <div class="rounded-lg p-2 bg-gray-700 flex-1">
+                            <p class="text-sm">Hello! How can I assist you today?</p>
+                        </div>
+                    </div>
+                    <!-- User message -->
+                    <div class="flex items-end">
+                        <svg class="h-8 w-8 rounded-full fill-current text-blue-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 0C4.486 0 0 4.486 0 10s4.486 10 10 10 10-4.486 10-10S15.514 0 10 0zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm2-13H8v2h4V5zm-4 8v-2h4v2H8z"/></svg>
+                        <div class="rounded-lg p-2 bg-blue-700 flex-1">
+                            <p class="text-sm text-white">I need help with my Tailwind project.</p>
+                        </div>
+                    </div>
+                    <!-- More messages can be added here following the same structure -->
+                </div>
+            </div>
+            <div class="p-4 flex items-center border-t border-gray-700">
+                <label for="file-upload" class="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full mr-4">Upload File</label>
+                <input id="file-upload" type="file" class="hidden">
+                <input type="text" class="flex-1 appearance-none rounded-full border border-gray-700 py-2 px-3 focus:outline-none focus:border-blue-500 bg-gray-700" placeholder="Type your message...">
+                <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full">Send</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
