@@ -19,6 +19,19 @@ services:
       - mercure_config:/config
 ###< symfony/mercure-bundle ###
 
+###> doctrine/doctrine-bundle ###
+  database:
+    # arm compatible mysql docker image
+    image: mysql:${MYSQL_VERSION:-8.0} # arm and x86/x64 compatible mysql image
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-app}
+      # You should definitely change the password in production
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-!ChangeMe!}
+      MYSQL_ROOT_HOST: '%'
+    volumes:
+      - ./.docker/db/data:/var/lib/mysql
+###< doctrine/doctrine-bundle ###
+
 volumes:
 ###> symfony/mercure-bundle ###
   mercure_data:
