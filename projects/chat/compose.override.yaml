@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+###> symfony/mercure-bundle ###
+  mercure:
+    environment:
+      MERCURE_EXTRA_DIRECTIVES: |
+        publish_allowed_origins *
+        cors_allowed_origins *
+    ports:
+      - "80"
+###< symfony/mercure-bundle ###

@@ -1,0 +1,26 @@
+modelflow_ai:
+    providers:
+        ollama:
+            enabled: true
+            url: "%env(OLLAMA_URL)%"
+
+    adapters:
+        llama2:
+            enabled: true
+        llava:
+            enabled: true
+
+    embeddings:
+        generators:
+            app.embeddings_generator:
+                enabled: true
+                provider: "ollama"
+                model: "llama2"
+                cache:
+                    enabled: true
+                    cache_pool: cache.app
+
+    chat:
+        adapters:
+            - llama2
+            - llava
