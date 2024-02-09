@@ -8,6 +8,9 @@ use Doctrine\ORM\EntityRepository;
 
 class ChatRepository
 {
+    /**
+     * @var EntityRepository<Chat>
+     */
     private EntityRepository $entityRepository;
 
     public function __construct(
@@ -21,6 +24,16 @@ class ChatRepository
         $this->entityManager->persist($chat);
     }
 
+    public function remove(Chat $chat): void
+    {
+        $this->entityManager->remove($chat);
+    }
+
+    /**
+     * @param array{
+     *     uuid: string,
+     * } $criteria
+     */
     public function getOneBy(array $criteria): Chat
     {
         /** @var Chat|null $entity */
@@ -30,6 +43,21 @@ class ChatRepository
         }
 
         return $entity;
+    }
+
+    /**
+     * @return array{
+     *     uuid: string,
+     *     title: string,
+     * }
+     */
+    public function listChats(): array
+    {
+        return $this->entityRepository->createQueryBuilder('chat')
+            ->select('chat.uuid', 'chat.title')
+            ->orderBy('chat.lastUsedAt', 'DESC')
+            ->getQuery()
+            ->getArrayResult();
     }
 
     public function flush(): void

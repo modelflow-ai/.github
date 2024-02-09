@@ -1,14 +1,17 @@
 import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
-    static targets = ['dropdown'];
+    static targets = ['dropdown', 'icon'];
 
     connect() {
-        let x = 0;
+        window.addEventListener('click', (event) => {
+            this.closeDropdown(event);
+        });
     }
 
     toggleDropdown() {
         this.dropdownTarget.classList.toggle('hidden');
+        this.iconTarget.classList.toggle("rotate-180");
     }
 
     closeDropdown(event) {

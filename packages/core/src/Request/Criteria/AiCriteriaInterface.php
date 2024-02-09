@@ -17,7 +17,7 @@ interface AiCriteriaInterface
 {
     public function matches(self $toMatch): bool;
 
-    public function getValue(): int;
+    public function getValue(): int|string;
 
     public function getName(): string;
 }

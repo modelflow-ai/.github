@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Repository\ChatMessageRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ModelflowAi\PromptTemplate\Chat\AIChatMessageRoleEnum;
@@ -25,6 +24,9 @@ class ChatMessage
     #[ORM\Column(type: Types::TEXT, nullable: false)]
     private string $content;
 
+    #[ORM\Column(length: 255, nullable: false)]
+    private string $model;
+
     #[ORM\Column]
     private \DateTimeImmutable $createdAt;
 
@@ -36,6 +38,7 @@ class ChatMessage
         $this->chat = $chat;
         $this->role = $role->value;
         $this->content = $content;
+        $this->model = $chat->getModel();
         $this->createdAt = new \DateTimeImmutable();
     }
 
@@ -57,6 +60,11 @@ class ChatMessage
     public function getContent(): string
     {
         return $this->content;
+    }
+
+    public function getModel(): string
+    {
+        return $this->model;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable

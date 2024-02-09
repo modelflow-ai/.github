@@ -18,6 +18,8 @@ use Symfony\Component\Uid\Uuid;
 
 class ChatController extends AbstractController
 {
+    public const DEFAULT_MODEL = 'llama2';
+
     public function __construct(
         private readonly MessageBusInterface $messageBus,
         private readonly ChatRepository $repository,
@@ -34,7 +36,7 @@ class ChatController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
-            $chat = new Chat(Uuid::v4()->toRfc4122());
+            $chat = new Chat(Uuid::v4()->toRfc4122(), $request->query->get('model', self::DEFAULT_MODEL));
             $this->repository->add($chat);
             $this->repository->flush();
 
@@ -44,14 +46,23 @@ class ChatController extends AbstractController
         }
 
         return $this->render('chat/index.html.twig', [
-            'chat' => $chat ?? null,
+            'chats' => $this->repository->listChats(),
             'form' => $form,
+            'DEFAULT_MODEL' => self::DEFAULT_MODEL,
         ]);
     }
 
     #[Route('/{uuid}', name: 'app_chat')]
     public function chat(Request $request, string $uuid): Response
     {
+        $chat = $this->repository->getOneBy(['uuid' => $uuid]);
+        if ($request->query->get('model', $chat->getModel()) !== $chat->getModel()) {
+            $chat->setModel($request->query->get('model'));
+            $this->repository->flush();
+
+            return $this->redirectToRoute('app_chat', ['uuid' => $chat->getUuid()], Response::HTTP_SEE_OTHER);
+        }
+
         $form = $this->createMessageForm();
 
         $emptyForm = clone $form;
@@ -67,8 +78,21 @@ class ChatController extends AbstractController
 
         return $this->render('chat/index.html.twig', [
             'chat' => $this->repository->getOneBy(['uuid' => $uuid]),
+            'chats' => $this->repository->listChats(),
             'form' => $form,
+            'DEFAULT_MODEL' => self::DEFAULT_MODEL,
         ]);
+    }
+
+    #[Route('/{uuid}/delete', name: 'app_chat_delete')]
+    public function chatDelete(string $uuid): Response
+    {
+        $chat = $this->repository->getOneBy(['uuid' => $uuid]);
+
+        $this->repository->remove($chat);
+        $this->repository->flush();
+
+        return $this->redirectToRoute('app_create_chat');
     }
 
     private function createMessageForm(): FormInterface
@@ -76,11 +100,12 @@ class ChatController extends AbstractController
         return $this->createFormBuilder([], ['attr' => ['enctype' => 'multipart/form-data']])
             ->add('file', FileType::class, [
                 'label' => 'Upload file',
+                'disabled' => true,
                 'row_attr' => [
                     'class' => 'mr-4',
                 ],
                 'label_attr' => [
-                    'class' => 'cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full',
+                    'class' => 'hidden cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full',
                 ],
                 'attr' => [
                     'class' => 'hidden',
