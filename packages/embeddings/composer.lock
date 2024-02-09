@@ -12,7 +12,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../core",
-                "reference": "171df3ad11633ea0e9f2a3bd9e5d58b8ece6fc5d"
+                "reference": "773ffa2ad432109d2c217417e0d6a2f0eb2b8613"
             },
             "require": {
                 "modelflow-ai/prompt-template": "0.1.x-dev",
@@ -23,7 +23,9 @@
                 "phpstan/phpstan": "^1.10.55"
             },
             "require-dev": {
+                "jangregor/phpstan-prophecy": "^1.0",
                 "php-cs-fixer/shim": "^3.15",
+                "phpspec/prophecy-phpunit": "^2.1",
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^1.10",
                 "phpstan/phpstan-phpunit": "^1.3",
@@ -1647,12 +1649,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "611b48445ec475b89b7b8d76f17a1bb012f8940a"
+                "reference": "49429bf6e3aa23b5e7521feeb92c31197efce444"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/611b48445ec475b89b7b8d76f17a1bb012f8940a",
-                "reference": "611b48445ec475b89b7b8d76f17a1bb012f8940a",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/49429bf6e3aa23b5e7521feeb92c31197efce444",
+                "reference": "49429bf6e3aa23b5e7521feeb92c31197efce444",
                 "shasum": ""
             },
             "require": {
@@ -1740,7 +1742,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-06T15:30:15+00:00"
+            "time": "2024-02-08T16:46:03+00:00"
         },
         {
             "name": "rector/rector",

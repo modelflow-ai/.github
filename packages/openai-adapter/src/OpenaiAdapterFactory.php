@@ -30,7 +30,7 @@ final readonly class OpenaiAdapterFactory implements ChatAdapterFactoryInterface
 
     public function createChatAdapter(array $options): AIModelAdapterInterface
     {
-        $model = str_replace('gpt', 'gpt-',$options['model']);
+        $model = \str_replace('gpt', 'gpt-', $options['model']);
 
         return new OpenaiChatModelAdapter(
             $this->client,
@@ -40,7 +40,7 @@ final readonly class OpenaiAdapterFactory implements ChatAdapterFactoryInterface
 
     public function createEmbeddingAdapter(array $options): EmbeddingAdapterInterface
     {
-        $model = str_replace('gpt', 'gpt-',$options['model']);
+        $model = \str_replace('gpt', 'gpt-', $options['model']);
 
         return new OpenaiEmbeddingAdapter(
             $this->client,
