@@ -205,12 +205,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "4a65773015b2d2bedb858ef48971dfe1ae84e717"
+                "reference": "e4c56dc6c72a582d1ef611b394203ae226343848"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/4a65773015b2d2bedb858ef48971dfe1ae84e717",
-                "reference": "4a65773015b2d2bedb858ef48971dfe1ae84e717",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/e4c56dc6c72a582d1ef611b394203ae226343848",
+                "reference": "e4c56dc6c72a582d1ef611b394203ae226343848",
                 "shasum": ""
             },
             "require": {
@@ -242,6 +242,7 @@
                 "symfony/http-kernel": "^6.4|^7.0",
                 "symfony/messenger": "^6.4|^7.0",
                 "symfony/process": "^6.4|^7.0",
+                "symfony/rate-limiter": "^6.4|^7.0",
                 "symfony/stopwatch": "^6.4|^7.0"
             },
             "type": "library",
@@ -289,7 +290,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-29T15:41:30+00:00"
+            "time": "2024-02-04T16:58:03+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
@@ -1170,20 +1171,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "d4f454f7e1193933f04e6500de3e79191648ed0c"
+                "reference": "016d7770cf4ca93ab8fcc30511f31003b1f8bdcd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/d4f454f7e1193933f04e6500de3e79191648ed0c",
-                "reference": "d4f454f7e1193933f04e6500de3e79191648ed0c",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/016d7770cf4ca93ab8fcc30511f31003b1f8bdcd",
+                "reference": "016d7770cf4ca93ab8fcc30511f31003b1f8bdcd",
                 "shasum": ""
             },
             "require": {
                 "doctrine/instantiator": "^1.2 || ^2.0",
                 "php": "^7.2 || 8.0.* || 8.1.* || 8.2.* || 8.3.*",
                 "phpdocumentor/reflection-docblock": "^5.2",
-                "sebastian/comparator": "^3.0 || ^4.0 || ^5.0",
-                "sebastian/recursion-context": "^3.0 || ^4.0 || ^5.0"
+                "sebastian/comparator": "^3.0 || ^4.0 || ^5.0 || ^6.0",
+                "sebastian/recursion-context": "^3.0 || ^4.0 || ^5.0 || ^6.0"
             },
             "require-dev": {
                 "phpspec/phpspec": "^6.0 || ^7.0",
@@ -1230,33 +1231,34 @@
             ],
             "support": {
                 "issues": "https://github.com/phpspec/prophecy/issues",
-                "source": "https://github.com/phpspec/prophecy/tree/v1.18.0"
+                "source": "https://github.com/phpspec/prophecy/tree/master"
             },
-            "time": "2023-12-07T16:22:33+00:00"
+            "time": "2024-02-06T10:23:13+00:00"
         },
         {
             "name": "phpspec/prophecy-phpunit",
-            "version": "v2.1.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy-phpunit.git",
-                "reference": "29f8114c2c319a4308e6b070902211e062efa392"
+                "reference": "50345c4b072aee641babb7bba90974e41586637a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy-phpunit/zipball/29f8114c2c319a4308e6b070902211e062efa392",
-                "reference": "29f8114c2c319a4308e6b070902211e062efa392",
+                "url": "https://api.github.com/repos/phpspec/prophecy-phpunit/zipball/50345c4b072aee641babb7bba90974e41586637a",
+                "reference": "50345c4b072aee641babb7bba90974e41586637a",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.3 || ^8",
                 "phpspec/prophecy": "^1.18",
-                "phpunit/phpunit": "^9.1 || ^10.1"
+                "phpunit/phpunit": "^9.1 || ^10.1 || ^11.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0-dev"
+                    "dev-master": "2.x-dev"
                 }
             },
             "autoload": {
@@ -1282,9 +1284,9 @@
             ],
             "support": {
                 "issues": "https://github.com/phpspec/prophecy-phpunit/issues",
-                "source": "https://github.com/phpspec/prophecy-phpunit/tree/v2.1.0"
+                "source": "https://github.com/phpspec/prophecy-phpunit/tree/master"
             },
-            "time": "2023-12-08T12:48:02+00:00"
+            "time": "2024-02-07T08:28:41+00:00"
         },
         {
             "name": "phpstan/extension-installer",
@@ -1820,12 +1822,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "a76110264bece2fcae400433084321af7e89c496"
+                "reference": "49429bf6e3aa23b5e7521feeb92c31197efce444"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a76110264bece2fcae400433084321af7e89c496",
-                "reference": "a76110264bece2fcae400433084321af7e89c496",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/49429bf6e3aa23b5e7521feeb92c31197efce444",
+                "reference": "49429bf6e3aa23b5e7521feeb92c31197efce444",
                 "shasum": ""
             },
             "require": {
@@ -1913,7 +1915,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-02T16:40:22+00:00"
+            "time": "2024-02-08T16:46:03+00:00"
         },
         {
             "name": "rector/rector",
@@ -2900,12 +2902,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dotenv.git",
-                "reference": "a2934c612ca3fab2fec42b2dcc7e5a0d04464b3f"
+                "reference": "04aa55c9ec386458dcd8e71584bcb22fd7ccbd0c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dotenv/zipball/a2934c612ca3fab2fec42b2dcc7e5a0d04464b3f",
-                "reference": "a2934c612ca3fab2fec42b2dcc7e5a0d04464b3f",
+                "url": "https://api.github.com/repos/symfony/dotenv/zipball/04aa55c9ec386458dcd8e71584bcb22fd7ccbd0c",
+                "reference": "04aa55c9ec386458dcd8e71584bcb22fd7ccbd0c",
                 "shasum": ""
             },
             "require": {
@@ -2966,7 +2968,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-23T15:06:13+00:00"
+            "time": "2024-02-09T11:50:29+00:00"
         },
         {
             "name": "theseer/tokenizer",

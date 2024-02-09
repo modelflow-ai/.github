@@ -117,12 +117,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "4a65773015b2d2bedb858ef48971dfe1ae84e717"
+                "reference": "e4c56dc6c72a582d1ef611b394203ae226343848"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/4a65773015b2d2bedb858ef48971dfe1ae84e717",
-                "reference": "4a65773015b2d2bedb858ef48971dfe1ae84e717",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/e4c56dc6c72a582d1ef611b394203ae226343848",
+                "reference": "e4c56dc6c72a582d1ef611b394203ae226343848",
                 "shasum": ""
             },
             "require": {
@@ -154,6 +154,7 @@
                 "symfony/http-kernel": "^6.4|^7.0",
                 "symfony/messenger": "^6.4|^7.0",
                 "symfony/process": "^6.4|^7.0",
+                "symfony/rate-limiter": "^6.4|^7.0",
                 "symfony/stopwatch": "^6.4|^7.0"
             },
             "type": "library",
@@ -201,7 +202,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-29T15:41:30+00:00"
+            "time": "2024-02-04T16:58:03+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
@@ -1203,12 +1204,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "a76110264bece2fcae400433084321af7e89c496"
+                "reference": "49429bf6e3aa23b5e7521feeb92c31197efce444"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a76110264bece2fcae400433084321af7e89c496",
-                "reference": "a76110264bece2fcae400433084321af7e89c496",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/49429bf6e3aa23b5e7521feeb92c31197efce444",
+                "reference": "49429bf6e3aa23b5e7521feeb92c31197efce444",
                 "shasum": ""
             },
             "require": {
@@ -1296,7 +1297,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-02T16:40:22+00:00"
+            "time": "2024-02-08T16:46:03+00:00"
         },
         {
             "name": "rector/rector",
