@@ -1,6 +1,5 @@
 <?php
 
-use App\Criteria\ModelCriteria;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $container): void {
@@ -16,15 +15,9 @@ return static function (ContainerConfigurator $container): void {
         $adapters = array_merge($adapters, [
             'llama2' => [
                 'enabled' => true,
-                'criteria' => [
-                    ModelCriteria::LLAMA2,
-                ],
             ],
             'llava' => [
                 'enabled' => true,
-                'criteria' => [
-                    ModelCriteria::LLAVA,
-                ],
             ],
         ]);
     }
@@ -40,15 +33,9 @@ return static function (ContainerConfigurator $container): void {
         $adapters = array_merge($adapters, [
             'gpt4' => [
                 'enabled' => true,
-                'criteria' => [
-                    ModelCriteria::GPT4,
-                ],
             ],
             'gpt3.5' => [
                 'enabled' => true,
-                'criteria' => [
-                    ModelCriteria::GPT3_5,
-                ],
             ],
         ]);
     }
@@ -64,21 +51,12 @@ return static function (ContainerConfigurator $container): void {
         $adapters = array_merge($adapters, [
             'mistral_tiny' => [
                 'enabled' => true,
-                'criteria' => [
-                    ModelCriteria::MISTRAL_TINY,
-                ],
             ],
             'mistral_small' => [
                 'enabled' => true,
-                'criteria' => [
-                    ModelCriteria::MISTRAL_SMALL,
-                ],
             ],
             'mistral_medium' => [
                 'enabled' => true,
-                'criteria' => [
-                    ModelCriteria::MISTRAL_MEDIUM,
-                ],
             ],
         ]);
     }

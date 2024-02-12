@@ -15,8 +15,8 @@ namespace ModelflowAi\Core\Tests\Unit\Request;
 
 use ModelflowAi\Core\Request\AITextRequest;
 use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
-use ModelflowAi\Core\Request\Criteria\CapabilityRequirement;
-use ModelflowAi\Core\Request\Criteria\PrivacyRequirement;
+use ModelflowAi\Core\Request\Criteria\CapabilityCriteria;
+use ModelflowAi\Core\Request\Criteria\PrivacyCriteria;
 use ModelflowAi\Core\Response\AITextResponse;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -41,14 +41,14 @@ class AITextRequestTest extends TestCase
 
     public function testMatches(): void
     {
-        $criteria1 = CapabilityRequirement::BASIC;
-        $criteria2 = PrivacyRequirement::HIGH;
+        $criteria1 = CapabilityCriteria::BASIC;
+        $criteria2 = PrivacyCriteria::HIGH;
         $criteriaCollection = new AIRequestCriteriaCollection([$criteria1, $criteria2]);
 
         $requestHandler = fn () => null;
         $request = new AITextRequest('Test content 1', $criteriaCollection, $requestHandler);
 
-        $this->assertTrue($request->matches(CapabilityRequirement::BASIC));
-        $this->assertTrue($request->matches(PrivacyRequirement::LOW));
+        $this->assertTrue($request->matches(CapabilityCriteria::BASIC));
+        $this->assertTrue($request->matches(PrivacyCriteria::LOW));
     }
 }

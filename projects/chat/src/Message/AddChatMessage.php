@@ -2,7 +2,7 @@
 
 namespace App\Message;
 
-use ModelflowAi\PromptTemplate\Chat\AIChatMessageRoleEnum;
+use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 
 final readonly class AddChatMessage
 {

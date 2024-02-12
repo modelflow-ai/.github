@@ -20,10 +20,11 @@ use ModelflowAi\Core\Request\AIChatRequest;
 use ModelflowAi\Core\Request\AITextRequest;
 use ModelflowAi\Core\Request\Builder\AIChatRequestBuilder;
 use ModelflowAi\Core\Request\Builder\AITextRequestBuilder;
+use ModelflowAi\Core\Request\Message\AIChatMessage;
+use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Response\AIChatResponse;
+use ModelflowAi\Core\Response\AIChatResponseMessage;
 use ModelflowAi\Core\Response\AITextResponse;
-use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
-use ModelflowAi\PromptTemplate\Chat\AIChatMessageRoleEnum;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -85,7 +86,10 @@ class AIRequestHandlerTest extends TestCase
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'Test content'),
         )->build();
 
-        $response = new AIChatResponse($chatRequest, new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, 'Response content'));
+        $response = new AIChatResponse(
+            $chatRequest,
+            new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Response content'),
+        );
         $this->adapter->handleRequest(Argument::type(AIChatRequest::class))->willReturn($response);
         $this->decisionTree->determineAdapter($chatRequest)->willReturn($this->adapter->reveal());
 

@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace ModelflowAi\Core\Request;
 
 use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
+use ModelflowAi\Core\Request\Criteria\FeatureCriteria;
+use ModelflowAi\Core\Request\Message\ImageBase64Part;
 use ModelflowAi\Core\Response\AIChatResponse;
 
 class AIChatRequest extends AIRequest implements AIRequestInterface
@@ -23,7 +25,16 @@ class AIChatRequest extends AIRequest implements AIRequestInterface
         AIRequestCriteriaCollection $criteria,
         callable $requestHandler,
     ) {
-        parent::__construct($criteria, $requestHandler);
+        $features = [];
+
+        $latest = $this->messages->latest();
+        foreach ($latest?->parts ?? [] as $part) {
+            if ($part instanceof ImageBase64Part) {
+                $features[] = FeatureCriteria::IMAGE_TO_TEXT;
+            }
+        }
+
+        parent::__construct($criteria->withFeatures($features), $requestHandler);
     }
 
     public function getMessages(): AIChatMessageCollection

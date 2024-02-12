@@ -17,13 +17,13 @@ use ModelflowAi\ApiClient\Responses\MetaInformation;
 use ModelflowAi\Core\Request\AIChatMessageCollection;
 use ModelflowAi\Core\Request\AIChatRequest;
 use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
+use ModelflowAi\Core\Request\Message\AIChatMessage;
+use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\Ollama\ClientInterface;
 use ModelflowAi\Ollama\Resources\ChatInterface;
 use ModelflowAi\Ollama\Responses\Chat\CreateResponse;
 use ModelflowAi\OllamaAdapter\Model\OllamaChatModelAdapter;
-use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
-use ModelflowAi\PromptTemplate\Chat\AIChatMessageRoleEnum;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 

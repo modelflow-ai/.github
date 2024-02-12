@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Core\Request;
 
-use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
+use ModelflowAi\Core\Request\Message\AIChatMessage;
 
 /**
  * @extends \ArrayObject<int, AIChatMessage>
@@ -26,19 +26,26 @@ class AIChatMessageCollection extends \ArrayObject
         parent::__construct(\array_values($messages));
     }
 
+    public function latest(): ?AIChatMessage
+    {
+        if (0 === $this->count()) {
+            return null;
+        }
+
+        return $this->offsetGet($this->count() - 1);
+    }
+
     /**
      * @return array<array{
      *     role: "assistant"|"system"|"user",
      *     content: string,
+     *     images?: string[],
      * }>
      */
     public function toArray(): array
     {
         return \array_map(
-            fn (AIChatMessage $message) => [
-                'role' => $message->role->value,
-                'content' => $message->content,
-            ],
+            fn (AIChatMessage $message) => $message->toArray(),
             $this->getArrayCopy(),
         );
     }

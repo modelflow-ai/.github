@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace ModelflowAi\PromptTemplate;
 
-use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
+use ModelflowAi\Core\Request\Message\AIChatMessage;
+use ModelflowAi\Core\Request\Message\TextPart;
 
 readonly class ChatPromptTemplate
 {
@@ -43,8 +44,19 @@ readonly class ChatPromptTemplate
     {
         $messages = [];
         foreach ($this->messages as $message) {
-            $template = new PromptTemplate($message->content);
-            $messages[] = new AIChatMessage($message->role, $template->format($inputValues));
+            $parts = [];
+            foreach ($message->parts as $part) {
+                if ($part instanceof TextPart) {
+                    $template = new PromptTemplate($part->text);
+                    $parts[] = new TextPart($template->format($inputValues));
+
+                    continue;
+                }
+
+                $parts[] = $part;
+            }
+
+            $messages[] = new AIChatMessage($message->role, $parts);
         }
 
         return $messages;

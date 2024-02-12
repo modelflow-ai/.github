@@ -15,6 +15,7 @@ namespace ModelflowAi\Core\Tests\Unit\Request\Criteria;
 
 use ModelflowAi\Core\Request\Criteria\AiCriteriaInterface;
 use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
+use ModelflowAi\Core\Request\Criteria\FeatureCriteria;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
@@ -48,5 +49,15 @@ class AIRequestCriteriaCollectionTest extends TestCase
         $criteriaCollection = new AIRequestCriteriaCollection([$mockCriteria1->reveal(), $mockCriteria2->reveal()]);
 
         $this->assertFalse($criteriaCollection->matches($toMatch->reveal()));
+    }
+
+    public function testWithFeatures(): void
+    {
+        $criteriaCollection = new AIRequestCriteriaCollection();
+        $features = [FeatureCriteria::IMAGE_TO_TEXT];
+
+        $newCriteriaCollection = $criteriaCollection->withFeatures($features);
+
+        $this->assertTrue($newCriteriaCollection->matches(FeatureCriteria::IMAGE_TO_TEXT));
     }
 }

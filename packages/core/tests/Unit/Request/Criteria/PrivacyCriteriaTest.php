@@ -14,33 +14,33 @@ declare(strict_types=1);
 namespace ModelflowAi\Core\Tests\Unit\Request\Criteria;
 
 use ModelflowAi\Core\Request\Criteria\AiCriteriaInterface;
-use ModelflowAi\Core\Request\Criteria\PrivacyRequirement;
+use ModelflowAi\Core\Request\Criteria\PrivacyCriteria;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-class PrivacyRequirementTest extends TestCase
+class PrivacyCriteriaTest extends TestCase
 {
     use ProphecyTrait;
 
     public function testMatches(): void
     {
-        $privacyRequirement = PrivacyRequirement::HIGH;
+        $privacyRequirement = PrivacyCriteria::HIGH;
 
-        $this->assertTrue($privacyRequirement->matches(PrivacyRequirement::LOW));
+        $this->assertTrue($privacyRequirement->matches(PrivacyCriteria::LOW));
     }
 
     public function testMatchesReturnsFalseWhenCriteriaDoesNotMatch(): void
     {
-        $privacyRequirement = PrivacyRequirement::LOW;
+        $privacyRequirement = PrivacyCriteria::LOW;
 
-        $this->assertFalse($privacyRequirement->matches(PrivacyRequirement::HIGH));
+        $this->assertFalse($privacyRequirement->matches(PrivacyCriteria::HIGH));
     }
 
     public function testMatchesReturnsTrueForADifferentCriteria(): void
     {
         $mockCriteria = $this->prophesize(AiCriteriaInterface::class);
 
-        $privacyRequirement = PrivacyRequirement::HIGH;
+        $privacyRequirement = PrivacyCriteria::HIGH;
 
         $this->assertTrue($privacyRequirement->matches($mockCriteria->reveal()));
     }

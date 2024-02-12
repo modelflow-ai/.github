@@ -12,10 +12,9 @@
             "dist": {
                 "type": "path",
                 "url": "./../core",
-                "reference": "773ffa2ad432109d2c217417e0d6a2f0eb2b8613"
+                "reference": "20dcbf13fa9805308ad28806eacae92973fa0e36"
             },
             "require": {
-                "modelflow-ai/prompt-template": "0.1.x-dev",
                 "php": "^8.2",
                 "webmozart/assert": "^1.11"
             },
@@ -96,94 +95,6 @@
                 "mistral",
                 "ollama",
                 "openai"
-            ],
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
-        {
-            "name": "modelflow-ai/prompt-template",
-            "version": "0.1.x-dev",
-            "dist": {
-                "type": "path",
-                "url": "./../prompt-template",
-                "reference": "9f241dcb4a44f17e86fa5cfd6fd75a5b72c1131f"
-            },
-            "require": {
-                "php": "^8.2"
-            },
-            "conflict": {
-                "phpstan/phpstan": "^1.10.55"
-            },
-            "require-dev": {
-                "php-cs-fixer/shim": "^3.15",
-                "phpstan/extension-installer": "^1.2",
-                "phpstan/phpstan": "^1.10",
-                "phpstan/phpstan-phpunit": "^1.3",
-                "phpunit/phpunit": "^10.3",
-                "rector/rector": "^0.18.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "ModelflowAi\\PromptTemplate\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "ModelflowAi\\PromptTemplate\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "Composer\\Config::disableProcessTimeout",
-                    "vendor/bin/phpunit"
-                ],
-                "phpstan": [
-                    "@php vendor/bin/phpstan analyze"
-                ],
-                "lint-rector": [
-                    "@php vendor/bin/rector process --dry-run"
-                ],
-                "lint-php-cs": [
-                    "@php vendor/bin/php-cs-fixer fix --verbose --diff --dry-run"
-                ],
-                "lint": [
-                    "@phpstan",
-                    "@lint-php-cs",
-                    "@lint-rector",
-                    "@lint-composer"
-                ],
-                "lint-composer": [
-                    "@composer validate --strict"
-                ],
-                "rector": [
-                    "@php vendor/bin/rector process"
-                ],
-                "php-cs-fix": [
-                    "@php vendor/bin/php-cs-fixer fix"
-                ],
-                "fix": [
-                    "@rector",
-                    "@php-cs-fix"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Johannes Wachter",
-                    "email": "johannes@sulu.io"
-                }
-            ],
-            "description": "Templating library for ai prompts.",
-            "keywords": [
-                "ai",
-                "prompts",
-                "prompts template",
-                "template"
             ],
             "transport-options": {
                 "symlink": true,
@@ -1269,12 +1180,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "202aaf6b7c2e1e0a622b0298e9f3f537e4d84018"
+                "reference": "2f5294676c802a62b0549f6bc8983f14294ce369"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/202aaf6b7c2e1e0a622b0298e9f3f537e4d84018",
-                "reference": "202aaf6b7c2e1e0a622b0298e9f3f537e4d84018",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/2f5294676c802a62b0549f6bc8983f14294ce369",
+                "reference": "2f5294676c802a62b0549f6bc8983f14294ce369",
                 "shasum": ""
             },
             "require": {
@@ -1322,7 +1233,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-01T08:01:43+00:00"
+            "time": "2024-02-10T11:10:03+00:00"
         },
         {
             "name": "nikic/php-parser",

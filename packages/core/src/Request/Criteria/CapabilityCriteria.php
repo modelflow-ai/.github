@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Core\Request\Criteria;
 
-enum CapabilityRequirement: int implements AiCriteriaInterface
+enum CapabilityCriteria: int implements AiCriteriaInterface
 {
     case SMART = 8;
     case ADVANCED = 4;

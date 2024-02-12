@@ -17,14 +17,14 @@ use ModelflowAi\ApiClient\Responses\MetaInformation;
 use ModelflowAi\Core\Request\AIChatMessageCollection;
 use ModelflowAi\Core\Request\AIChatRequest;
 use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
+use ModelflowAi\Core\Request\Message\AIChatMessage;
+use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\Mistral\ClientInterface;
 use ModelflowAi\Mistral\Model;
 use ModelflowAi\Mistral\Resources\ChatInterface;
 use ModelflowAi\Mistral\Responses\Chat\CreateResponse;
 use ModelflowAi\MistralAdapter\Model\MistralChatModelAdapter;
-use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
-use ModelflowAi\PromptTemplate\Chat\AIChatMessageRoleEnum;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 

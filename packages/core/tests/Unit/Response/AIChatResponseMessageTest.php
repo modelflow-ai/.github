@@ -13,34 +13,23 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Core\Tests\Unit\Response;
 
-use ModelflowAi\Core\Request\AIChatRequest;
 use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
-use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\Core\Response\AIChatResponseMessage;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 
-class AIChatResponseTest extends TestCase
+class AIChatResponseMessageTest extends TestCase
 {
-    use ProphecyTrait;
-
-    public function testGetMessage(): void
+    public function testRole(): void
     {
-        $request = $this->prophesize(AIChatRequest::class);
-
         $message = new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Test content');
-        $response = new AIChatResponse($request->reveal(), $message);
 
-        $this->assertSame($message, $response->getMessage());
+        $this->assertSame(AIChatMessageRoleEnum::ASSISTANT, $message->role);
     }
 
-    public function testGetRequest(): void
+    public function testContent(): void
     {
-        $request = $this->prophesize(AIChatRequest::class);
-
         $message = new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Test content');
-        $response = new AIChatResponse($request->reveal(), $message);
 
-        $this->assertSame($request->reveal(), $response->getRequest());
+        $this->assertSame('Test content', $message->content);
     }
 }

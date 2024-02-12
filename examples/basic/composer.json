@@ -8,7 +8,8 @@
         "modelflow-ai/core": "^0.1",
         "modelflow-ai/mistral-adapter": "^0.1",
         "modelflow-ai/openai-adapter": "^0.1",
-        "modelflow-ai/ollama-adapter": "^0.1"
+        "modelflow-ai/ollama-adapter": "^0.1",
+        "modelflow-ai/prompt-template": "^0.1"
     },
     "require-dev": {
         "php-cs-fixer/shim": "^3.15",

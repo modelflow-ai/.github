@@ -14,34 +14,34 @@ declare(strict_types=1);
 namespace ModelflowAi\Core\Tests\Unit\Request\Criteria;
 
 use ModelflowAi\Core\Request\Criteria\AiCriteriaInterface;
-use ModelflowAi\Core\Request\Criteria\CapabilityRequirement;
+use ModelflowAi\Core\Request\Criteria\FeatureCriteria;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-class CapabilityRequirementTest extends TestCase
+class FeatureCriteriaTest extends TestCase
 {
     use ProphecyTrait;
 
     public function testMatches(): void
     {
-        $capabilityRequirement = CapabilityRequirement::SMART;
+        $featureCriteria = FeatureCriteria::IMAGE_TO_TEXT;
 
-        $this->assertTrue($capabilityRequirement->matches(CapabilityRequirement::BASIC));
+        $this->assertTrue($featureCriteria->matches(FeatureCriteria::IMAGE_TO_TEXT));
     }
 
     public function testMatchesReturnsFalseWhenCriteriaDoesNotMatch(): void
     {
-        $capabilityRequirement = CapabilityRequirement::BASIC;
+        $featureCriteria = FeatureCriteria::IMAGE_TO_TEXT;
 
-        $this->assertFalse($capabilityRequirement->matches(CapabilityRequirement::SMART));
+        $this->assertFalse($featureCriteria->matches(FeatureCriteria::FUNCTIONS));
     }
 
     public function testMatchesReturnsTrueForADifferentCriteria(): void
     {
         $mockCriteria = $this->prophesize(AiCriteriaInterface::class);
 
-        $capabilityRequirement = CapabilityRequirement::SMART;
+        $featureCriteria = FeatureCriteria::IMAGE_TO_TEXT;
 
-        $this->assertTrue($capabilityRequirement->matches($mockCriteria->reveal()));
+        $this->assertTrue($featureCriteria->matches($mockCriteria->reveal()));
     }
 }
