@@ -40,7 +40,7 @@ class ChatController extends AbstractController
             $this->repository->add($chat);
             $this->repository->flush();
 
-            $this->messageBus->dispatch(new AddChatMessage($chat->getUuid(), $data['message']));
+            $this->messageBus->dispatch(new AddChatMessage($chat->getUuid(), $data['message'], $data['file']));
 
             return $this->redirectToRoute('app_chat', ['uuid' => $chat->getUuid()], Response::HTTP_SEE_OTHER);
         }
@@ -71,7 +71,7 @@ class ChatController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
-            $this->messageBus->dispatch(new AddChatMessage($uuid, $data['message']));
+            $this->messageBus->dispatch(new AddChatMessage($uuid, $data['message'], $data['file']));
 
             $form = $emptyForm;
         }
@@ -100,14 +100,14 @@ class ChatController extends AbstractController
         return $this->createFormBuilder([], ['attr' => ['enctype' => 'multipart/form-data']])
             ->add('file', FileType::class, [
                 'label' => 'Upload file',
-                'disabled' => true,
                 'row_attr' => [
                     'class' => 'mr-4',
                 ],
                 'label_attr' => [
-                    'class' => 'hidden cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full',
+                    'class' => 'cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full',
                 ],
                 'attr' => [
+                    'accept' => 'image/*',
                     'class' => 'hidden',
                 ],
                 'required' => false,

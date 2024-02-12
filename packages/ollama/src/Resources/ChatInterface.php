@@ -23,6 +23,7 @@ interface ChatInterface
      *     messages: array<array{
      *         role: "system"|"user"|"assistant",
      *         content: string,
+     *         files?: string[],
      *     }>,
      *     format?: "json",
      *     options?: array<string, string|int|float>,

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[ORM\Entity]
 class Chat
@@ -89,11 +90,15 @@ class Chat
         return $this->messages;
     }
 
+    /**
+     * @param UploadedFile[] $files
+     */
     public function addMessage(
         AIChatMessageRoleEnum $role,
         string $content,
+        array $files = [],
     ): ChatMessage {
-        $message = new ChatMessage($this, $role, $content);
+        $message = new ChatMessage($this, $role, $content, $files);
         $this->messages->add($message);
         $this->lastUsedAt = new \DateTimeImmutable();
 

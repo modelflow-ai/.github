@@ -3,6 +3,7 @@
 namespace App\Message;
 
 use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final readonly class AddChatMessage
 {
@@ -11,6 +12,7 @@ final readonly class AddChatMessage
     public function __construct(
         public string $uuid,
         public string $content,
+        public ?UploadedFile $file = null,
     ) {
         $this->role = AIChatMessageRoleEnum::USER;
     }

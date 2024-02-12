@@ -58,6 +58,11 @@ final readonly class Chat implements ChatInterface
             Assert::inArray($message['role'], ['system', 'user', 'assistant']);
             Assert::keyExists($message, 'content');
             Assert::string($message['content']);
+
+            if (isset($message['images'])) {
+                Assert::isArray($message['images']);
+                Assert::allString($message['images']);
+            }
         }
 
         if (isset($parameters['format'])) {

@@ -32,7 +32,6 @@ final readonly class Completion implements CompletionInterface
     {
         $this->ensureNotStreamed($parameters);
         $this->validateParameters($parameters);
-        $parameters['format'] ??= 'json';
         $parameters['stream'] = false;
 
         $payload = Payload::create('generate', $parameters);

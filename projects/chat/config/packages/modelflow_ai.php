@@ -16,6 +16,9 @@ return static function (ContainerConfigurator $container): void {
             'llama2' => [
                 'enabled' => true,
             ],
+            'nexusraven' => [
+                'enabled' => true,
+            ],
             'llava' => [
                 'enabled' => true,
             ],

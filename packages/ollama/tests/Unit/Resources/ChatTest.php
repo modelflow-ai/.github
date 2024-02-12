@@ -73,6 +73,37 @@ final class ChatTest extends TestCase
         $this->assertInstanceOf(MetaInformation::class, $result->meta);
     }
 
+    public function testCreateWithImages(): void
+    {
+        $response = new ObjectResponse(DataFixtures::CHAT_CREATE_RESPONSE, MetaInformation::from([]));
+        $this->transport->requestObject(
+            Argument::that(fn (Payload $payload) => 'chat' === $payload->resourceUri->uri
+            && Method::POST === $payload->method
+            && ContentType::JSON === $payload->contentType
+            && @\array_merge(DataFixtures::CHAT_CREATE_WITH_IMAGE_REQUEST, ['stream' => false]) === $payload->parameters),
+        )->willReturn($response);
+
+        $chat = $this->createInstance($this->transport->reveal());
+
+        $result = $chat->create(DataFixtures::CHAT_CREATE_WITH_IMAGE_REQUEST);
+
+        $this->assertInstanceOf(CreateResponse::class, $result);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE['model'], $result->model);
+        $this->assertSame(
+            (new \DateTimeImmutable(DataFixtures::CHAT_CREATE_RESPONSE['created_at']))->getTimestamp(),
+            $result->createdAt,
+        );
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE['message']['role'], $result->message->role);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE['message']['content'], $result->message->content);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE['done'], $result->done);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE['total_duration'], $result->totalDuration);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE['load_duration'], $result->loadDuration);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE['prompt_eval_duration'], $result->promptEvalDuration);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE['prompt_eval_count'], $result->usage->promptTokens);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE['eval_count'], $result->usage->totalTokens);
+        $this->assertInstanceOf(MetaInformation::class, $result->meta);
+    }
+
     public function testCreateAsStream(): void
     {
         $this->expectException(\InvalidArgumentException::class);

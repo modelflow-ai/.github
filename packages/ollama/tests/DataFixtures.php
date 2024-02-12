@@ -28,6 +28,17 @@ final class DataFixtures
         ],
     ];
 
+    public const CHAT_CREATE_WITH_IMAGE_REQUEST = [
+        'model' => 'llama2',
+        'messages' => [
+            ['role' => 'system', 'content' => 'System message'],
+            ['role' => 'user', 'content' => 'User message'],
+            ['role' => 'assistant', 'content' => 'Assistant message', 'images' => [
+                'iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==',
+            ]],
+        ],
+    ];
+
     public const CHAT_CREATE_RESPONSE = [
         'model' => 'llama2',
         'created_at' => '2024-01-13T12:01:31.929209Z',
