@@ -69,7 +69,12 @@
                     All connected users will receive the new messages!
                     #}
                     {% for message in chat.messages %}
-                        {% include "chat/message.stream.html.twig" with {message: message.content, role: message.role.value, model: message.model} %}
+                        {% include "chat/message.stream.html.twig" with {
+                            content: message.content,
+                            image: message.image,
+                            role: message.role.value,
+                            model: message.model,
+                        } %}
                     {% endfor %}
                 </div>
                 {% endif %}
@@ -80,7 +85,11 @@
             {% endif %}
                 {{ form_start(form) }}
                 <div class="p-4 flex items-center border-t border-gray-700">
-                    {{ form_row(form.file) }}
+                    {% if image_to_text_enabled(chatModel) %}
+                        {{ form_row(form.file) }}
+                    {% else %}
+                        {{ form_row(form.file, {label_attr: {class: 'hidden'}, attr: {disabled: true}}) }}
+                    {% endif %}
                     {{ form_row(form.message) }}
                     {{ form_row(form.send) }}
                 </div>

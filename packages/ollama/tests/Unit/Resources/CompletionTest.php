@@ -49,7 +49,7 @@ final class CompletionTest extends TestCase
             Argument::that(fn (Payload $payload) => 'generate' === $payload->resourceUri->uri
             && Method::POST === $payload->method
             && ContentType::JSON === $payload->contentType
-            && @\array_merge(DataFixtures::COMPLETION_CREATE_REQUEST, ['format' => 'json', 'stream' => false]) === $payload->parameters),
+            && @\array_merge(DataFixtures::COMPLETION_CREATE_REQUEST, ['stream' => false]) === $payload->parameters),
         )->willReturn($response);
 
         $completion = $this->createInstance($this->transport->reveal());

@@ -1,6 +1,10 @@
 <div class="flex items-end">
     <svg class="h-8 w-8 rounded-full fill-current text-blue-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 0C4.486 0 0 4.486 0 10s4.486 10 10 10 10-4.486 10-10S15.514 0 10 0zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm2-13H8v2h4V5zm-4 8v-2h4v2H8z"/></svg>
     <div class="rounded-lg p-2 bg-blue-700 flex-1">
-        <p class="text-sm text-white">{{ message }}</p>
+        {% if image|default %}
+            <img src="data:{{ image.mimeType }};base64,{{ image.content }}" alt="Optional Image" class="h-16 mb-2">
+        {% endif %}
+
+        <p class="text-sm text-white">{{ content }}</p>
     </div>
 </div>
