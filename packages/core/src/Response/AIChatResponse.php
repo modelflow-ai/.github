@@ -14,13 +14,12 @@ declare(strict_types=1);
 namespace ModelflowAi\Core\Response;
 
 use ModelflowAi\Core\Request\AIRequestInterface;
-use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
 
 readonly class AIChatResponse implements AIResponseInterface
 {
     public function __construct(
         private AIRequestInterface $request,
-        private AIChatMessage $message,
+        private AIChatResponseMessage $message,
     ) {
     }
 
@@ -29,7 +28,7 @@ readonly class AIChatResponse implements AIResponseInterface
         return $this->request;
     }
 
-    public function getMessage(): AIChatMessage
+    public function getMessage(): AIChatResponseMessage
     {
         return $this->message;
     }

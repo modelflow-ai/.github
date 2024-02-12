@@ -33,4 +33,12 @@ readonly class AIRequestCriteriaCollection
 
         return true;
     }
+
+    /**
+     * @param FeatureCriteria[] $features
+     */
+    public function withFeatures(array $features): self
+    {
+        return new self(\array_merge($this->criteria, $features));
+    }
 }

@@ -19,10 +19,10 @@ use ModelflowAi\Core\Request\AIRequestInterface;
 use ModelflowAi\Core\Request\AITextRequest;
 use ModelflowAi\Core\Request\Builder\AIChatRequestBuilder;
 use ModelflowAi\Core\Request\Builder\AITextRequestBuilder;
+use ModelflowAi\Core\Request\Message\AIChatMessage;
 use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\Core\Response\AIResponseInterface;
 use ModelflowAi\Core\Response\AITextResponse;
-use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
 use Webmozart\Assert\Assert;
 
 class AIRequestHandler implements AIRequestHandlerInterface

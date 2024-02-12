@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use ModelflowAi\PromptTemplate\Chat\AIChatMessageRoleEnum;
+use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 
 #[ORM\Entity]
 class ChatMessage

@@ -18,8 +18,8 @@ require_once __DIR__ . '/vendor/autoload.php';
 use ModelflowAi\Core\AIRequestHandler;
 use ModelflowAi\Core\DecisionTree\AIModelDecisionTree;
 use ModelflowAi\Core\DecisionTree\DecisionRule;
-use ModelflowAi\Core\Request\Criteria\CapabilityRequirement;
-use ModelflowAi\Core\Request\Criteria\PrivacyRequirement;
+use ModelflowAi\Core\Request\Criteria\CapabilityCriteria;
+use ModelflowAi\Core\Request\Criteria\PrivacyCriteria;
 use ModelflowAi\Mistral\Mistral;
 use ModelflowAi\Mistral\Model;
 use ModelflowAi\MistralAdapter\Model\MistralChatModelAdapter;
@@ -38,7 +38,7 @@ if ($mistralApiKey) {
     $mistralClient = Mistral::client($mistralApiKey);
     $mistralChatAdapter = new MistralChatModelAdapter($mistralClient, Model::MEDIUM);
 
-    $adapter[] = new DecisionRule($mistralChatAdapter, [PrivacyRequirement::MEDIUM]);
+    $adapter[] = new DecisionRule($mistralChatAdapter, [PrivacyCriteria::MEDIUM]);
 }
 
 $openaiApiKey = $_ENV['OPENAI_KEY'];
@@ -46,15 +46,15 @@ if ($openaiApiKey) {
     $openAiClient = \OpenAI::client($openaiApiKey);
     $gpt4Adapter = new OpenaiChatModelAdapter($openAiClient);
 
-    $adapter[] = new DecisionRule($gpt4Adapter, [PrivacyRequirement::LOW, CapabilityRequirement::SMART]);
+    $adapter[] = new DecisionRule($gpt4Adapter, [PrivacyCriteria::LOW, CapabilityCriteria::SMART]);
 }
 
 $client = Ollama::client();
 $llama2ChatAdapter = new OllamaChatModelAdapter($client);
 $llama2TextAdapter = new OllamaTextModelAdapter($client);
 
-$adapter[] = new DecisionRule($llama2TextAdapter, [PrivacyRequirement::HIGH]);
-$adapter[] = new DecisionRule($llama2ChatAdapter, [PrivacyRequirement::HIGH]);
+$adapter[] = new DecisionRule($llama2TextAdapter, [PrivacyCriteria::HIGH]);
+$adapter[] = new DecisionRule($llama2ChatAdapter, [PrivacyCriteria::HIGH]);
 
 $decisionTree = new AIModelDecisionTree($adapter);
 

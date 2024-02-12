@@ -2,14 +2,15 @@
 
 namespace App\MessageHandler;
 
-use App\Criteria\ModelCriteria;
+use App\Controller\ChatController;
 use App\Entity\ChatMessage;
 use App\Message\AddChatMessage;
 use App\Repository\ChatRepository;
 use ModelflowAi\Core\AIRequestHandlerInterface;
+use ModelflowAi\Core\Request\Message\AIChatMessage;
+use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Response\AIChatResponse;
-use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
-use ModelflowAi\PromptTemplate\Chat\AIChatMessageRoleEnum;
+use ModelflowAi\Integration\Symfony\Criteria\ModelCriteria;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -79,7 +80,7 @@ class AddChatMessageHandler
                 ...$messages,
                 new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'Having the conversation above. Please create a title for it! Response with the title only no prose, no "Tile: " and no quotes.'),
             ],
-        )->addCriteria(ModelCriteria::from('llama2'))->build()->execute();
+        )->addCriteria(ModelCriteria::from(ChatController::DEFAULT_MODEL))->build()->execute();
 
         $chat->setTitle($response->getMessage()->content);
         $this->repository->flush();

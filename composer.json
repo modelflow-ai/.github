@@ -7,8 +7,20 @@
             "email": "johannes@sulu.io"
         }
     ],
+    "minimum-stability": "dev",
     "require": {
-        "php": "^8.2"
+        "php": "^8.2",
+        "modelflow-ai/api-client": "^0.1",
+        "modelflow-ai/core": "^0.1",
+        "modelflow-ai/embeddings": "^0.1",
+        "modelflow-ai/mistral": "^0.1",
+        "modelflow-ai/mistral-adapter": "^0.1",
+        "modelflow-ai/ollama": "^0.1",
+        "modelflow-ai/ollama-adapter": "^0.1",
+        "modelflow-ai/openai-adapter": "^0.1",
+        "modelflow-ai/prompt-template": "^0.1",
+        "modelflow-ai/symfony-bundle": "^0.1"
+
     },
     "require-dev": {
         "schranz/mono": "^2.0.1"
@@ -16,8 +28,38 @@
     "scripts": {
         "post-install-cmd": "@php vendor/bin/mono run composer install",
         "post-update-cmd": "@php vendor/bin/mono run composer update",
-        "fix": "@php vendor/bin/mono run composer fix",
-        "lint": "@php vendor/bin/mono run composer lint",
-        "test": "@php vendor/bin/mono run composer test"
+        "fix": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php vendor/bin/mono run composer fix"
+        ],
+        "lint": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php vendor/bin/mono run composer lint"
+        ],
+        "test": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php vendor/bin/mono run composer test"
+        ]
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./packages/*",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "./integrations/*",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     }
 }

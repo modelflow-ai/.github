@@ -16,12 +16,12 @@ namespace ModelflowAi\MistralAdapter\Model;
 use ModelflowAi\Core\Model\AIModelAdapterInterface;
 use ModelflowAi\Core\Request\AIChatRequest;
 use ModelflowAi\Core\Request\AIRequestInterface;
+use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Response\AIChatResponse;
+use ModelflowAi\Core\Response\AIChatResponseMessage;
 use ModelflowAi\Core\Response\AIResponseInterface;
 use ModelflowAi\Mistral\ClientInterface;
 use ModelflowAi\Mistral\Model;
-use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
-use ModelflowAi\PromptTemplate\Chat\AIChatMessageRoleEnum;
 use Webmozart\Assert\Assert;
 
 final readonly class MistralChatModelAdapter implements AIModelAdapterInterface
@@ -43,7 +43,7 @@ final readonly class MistralChatModelAdapter implements AIModelAdapterInterface
 
         return new AIChatResponse(
             $request,
-            new AIChatMessage(
+            new AIChatResponseMessage(
                 AIChatMessageRoleEnum::from($result->choices[0]->message->role),
                 $result->choices[0]->message->content ?? '',
             ),

@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace ModelflowAi\Core\Tests\Unit\Request;
 
 use ModelflowAi\Core\Request\AIChatMessageCollection;
-use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
-use ModelflowAi\PromptTemplate\Chat\AIChatMessageRoleEnum;
+use ModelflowAi\Core\Request\Message\AIChatMessage;
+use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 

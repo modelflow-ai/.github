@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a6183bb89e93d9e46066c90c2e7ca3bd",
+    "content-hash": "2f2409da827bbe829fcf0c21534b1ee8",
     "packages": [
         {
             "name": "modelflow-ai/api-client",
@@ -100,10 +100,9 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/core",
-                "reference": "773ffa2ad432109d2c217417e0d6a2f0eb2b8613"
+                "reference": "20dcbf13fa9805308ad28806eacae92973fa0e36"
             },
             "require": {
-                "modelflow-ai/prompt-template": "0.1.x-dev",
                 "php": "^8.2",
                 "webmozart/assert": "^1.11"
             },
@@ -651,9 +650,10 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/prompt-template",
-                "reference": "9f241dcb4a44f17e86fa5cfd6fd75a5b72c1131f"
+                "reference": "4a3a1c5ed37653272bc16abab2be605a25950968"
             },
             "require": {
+                "modelflow-ai/core": "^0.1",
                 "php": "^8.2"
             },
             "conflict": {

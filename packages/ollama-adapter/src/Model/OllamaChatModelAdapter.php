@@ -16,11 +16,11 @@ namespace ModelflowAi\OllamaAdapter\Model;
 use ModelflowAi\Core\Model\AIModelAdapterInterface;
 use ModelflowAi\Core\Request\AIChatRequest;
 use ModelflowAi\Core\Request\AIRequestInterface;
+use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Response\AIChatResponse;
+use ModelflowAi\Core\Response\AIChatResponseMessage;
 use ModelflowAi\Core\Response\AIResponseInterface;
 use ModelflowAi\Ollama\ClientInterface;
-use ModelflowAi\PromptTemplate\Chat\AIChatMessage;
-use ModelflowAi\PromptTemplate\Chat\AIChatMessageRoleEnum;
 use Webmozart\Assert\Assert;
 
 final readonly class OllamaChatModelAdapter implements AIModelAdapterInterface
@@ -45,7 +45,7 @@ final readonly class OllamaChatModelAdapter implements AIModelAdapterInterface
 
         return new AIChatResponse(
             $request,
-            new AIChatMessage(
+            new AIChatResponseMessage(
                 AIChatMessageRoleEnum::from($response->message->role),
                 $response->message->content ?? '',
             ),

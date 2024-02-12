@@ -13,22 +13,18 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Core\Request\Criteria;
 
-enum PrivacyRequirement: int implements AiCriteriaInterface
+trait FlagCriteriaTrait
 {
-    case HIGH = 4;
-    case MEDIUM = 2;
-    case LOW = 1;
-
     public function matches(AiCriteriaInterface $toMatch): bool
     {
         if (!$toMatch instanceof self) {
             return true;
         }
 
-        return $this->value >= $toMatch->value;
+        return $this->getValue() === $toMatch->getValue();
     }
 
-    public function getValue(): int
+    public function getValue(): string
     {
         return $this->value;
     }

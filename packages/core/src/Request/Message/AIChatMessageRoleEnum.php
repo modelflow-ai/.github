@@ -11,13 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\PromptTemplate\Chat;
+namespace ModelflowAi\Core\Request\Message;
 
-readonly class AIChatMessage
+enum AIChatMessageRoleEnum: string
 {
-    public function __construct(
-        public AIChatMessageRoleEnum $role,
-        public string $content,
-    ) {
-    }
+    case USER = 'user';
+    case SYSTEM = 'system';
+    case ASSISTANT = 'assistant';
 }
