@@ -13,44 +13,44 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Core\Tests\Unit\Request\Builder;
 
-use ModelflowAi\Core\Request\AITextRequest;
-use ModelflowAi\Core\Request\Builder\AITextRequestBuilder;
+use ModelflowAi\Core\Request\AICompletionRequest;
+use ModelflowAi\Core\Request\Builder\AICompletionRequestBuilder;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-class AITextRequestBuilderTest extends TestCase
+class AICompletionRequestBuilderTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testText(): void
+    public function testPrompt(): void
     {
-        $builder = new AITextRequestBuilder(fn () => null);
-        $text = 'Test text';
+        $builder = new AICompletionRequestBuilder(fn () => null);
+        $prompt = 'Test text';
 
-        $builder->text($text);
+        $builder->prompt($prompt);
 
-        $this->assertSame($text, $builder->build()->getText());
+        $this->assertSame($prompt, $builder->build()->getPrompt());
     }
 
     public function testBuild(): void
     {
-        $builder = new AITextRequestBuilder(fn () => null);
-        $text = 'Test text';
+        $builder = new AICompletionRequestBuilder(fn () => null);
+        $prompt = 'Test text';
 
-        $builder->text($text);
+        $builder->prompt($prompt);
 
         $this->assertInstanceOf(
-            AITextRequest::class,
+            AICompletionRequest::class,
             $builder->build(),
         );
     }
 
-    public function testBuildThrowsExceptionWhenNoTextGiven(): void
+    public function testBuildThrowsExceptionWhenNoPromptGiven(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('No text given');
 
-        $builder = new AITextRequestBuilder(fn () => null);
+        $builder = new AICompletionRequestBuilder(fn () => null);
         $builder->build();
     }
 }

@@ -31,7 +31,7 @@ final class OllamaChatModelAdapterTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testEmbedText(): void
+    public function testHandleRequest(): void
     {
         $chat = $this->prophesize(ChatInterface::class);
         $client = $this->prophesize(ClientInterface::class);

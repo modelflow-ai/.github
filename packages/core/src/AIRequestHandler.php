@@ -39,14 +39,14 @@ class AIRequestHandler implements AIRequestHandlerInterface
         return $adapter->handleRequest($request);
     }
 
-    public function createTextRequest(?string $text = null): AITextRequestBuilder
+    public function createCompletionRequest(?string $prompt = null): AITextRequestBuilder
     {
         return AITextRequestBuilder::create(function (AITextRequest $request): AITextResponse {
             $response = $this->handle($request);
             Assert::isInstanceOf($response, AITextResponse::class);
 
             return $response;
-        })->text($text);
+        })->text($prompt);
     }
 
     public function createChatRequest(AIChatMessage ...$messages): AIChatRequestBuilder

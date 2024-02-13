@@ -15,13 +15,13 @@ namespace ModelflowAi\OllamaAdapter\Model;
 
 use ModelflowAi\Core\Model\AIModelAdapterInterface;
 use ModelflowAi\Core\Request\AIRequestInterface;
-use ModelflowAi\Core\Request\AITextRequest;
+use ModelflowAi\Core\Request\AICompletionRequest;
 use ModelflowAi\Core\Response\AIResponseInterface;
-use ModelflowAi\Core\Response\AITextResponse;
+use ModelflowAi\Core\Response\AICompletionResponse;
 use ModelflowAi\Ollama\ClientInterface;
 use Webmozart\Assert\Assert;
 
-final readonly class OllamaTextModelAdapter implements AIModelAdapterInterface
+final readonly class OllamaCompletionModelAdapter implements AIModelAdapterInterface
 {
     public function __construct(
         private ClientInterface $client,
@@ -30,22 +30,22 @@ final readonly class OllamaTextModelAdapter implements AIModelAdapterInterface
     }
 
     /**
-     * @param AITextRequest $request
+     * @param AICompletionRequest $request
      */
     public function handleRequest(AIRequestInterface $request): AIResponseInterface
     {
-        Assert::isInstanceOf($request, AITextRequest::class);
+        Assert::isInstanceOf($request, AICompletionRequest::class);
 
         $response = $this->client->completion()->create([
             'model' => $this->model,
-            'prompt' => $request->getText(),
+            'prompt' => $request->getPrompt(),
         ]);
 
-        return new AITextResponse($request, $response->response);
+        return new AICompletionResponse($request, $response->response);
     }
 
     public function supports(AIRequestInterface $request): bool
     {
-        return $request instanceof AITextRequest;
+        return $request instanceof AICompletionRequest;
     }
 }

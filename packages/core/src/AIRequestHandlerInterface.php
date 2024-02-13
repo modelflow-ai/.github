@@ -19,7 +19,7 @@ use ModelflowAi\Core\Request\Message\AIChatMessage;
 
 interface AIRequestHandlerInterface
 {
-    public function createTextRequest(?string $text = null): AITextRequestBuilder;
+    public function createCompletionRequest(?string $prompt = null): AITextRequestBuilder;
 
     public function createChatRequest(AIChatMessage ...$messages): AIChatRequestBuilder;
 }

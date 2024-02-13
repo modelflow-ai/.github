@@ -17,14 +17,14 @@ use ModelflowAi\Core\AIRequestHandler;
 use ModelflowAi\Core\DecisionTree\AIModelDecisionTreeInterface;
 use ModelflowAi\Core\Model\AIModelAdapterInterface;
 use ModelflowAi\Core\Request\AIChatRequest;
-use ModelflowAi\Core\Request\AITextRequest;
+use ModelflowAi\Core\Request\AICompletionRequest;
 use ModelflowAi\Core\Request\Builder\AIChatRequestBuilder;
-use ModelflowAi\Core\Request\Builder\AITextRequestBuilder;
+use ModelflowAi\Core\Request\Builder\AICompletionRequestBuilder;
 use ModelflowAi\Core\Request\Message\AIChatMessage;
 use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\Core\Response\AIChatResponseMessage;
-use ModelflowAi\Core\Response\AITextResponse;
+use ModelflowAi\Core\Response\AICompletionResponse;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -57,7 +57,7 @@ class AIRequestHandlerTest extends TestCase
     {
         $textRequest = $this->aiRequestHandler->createTextRequest('Test content');
 
-        $this->assertInstanceOf(AITextRequestBuilder::class, $textRequest);
+        $this->assertInstanceOf(AICompletionRequestBuilder::class, $textRequest);
     }
 
     public function testCreateChatRequest(): void
@@ -71,8 +71,8 @@ class AIRequestHandlerTest extends TestCase
     {
         $textRequest = $this->aiRequestHandler->createTextRequest('Test content')->build();
 
-        $response = new AITextResponse($textRequest, 'Response content');
-        $this->adapter->handleRequest(Argument::type(AITextRequest::class))->willReturn($response);
+        $response = new AICompletionResponse($textRequest, 'Response content');
+        $this->adapter->handleRequest(Argument::type(AICompletionRequest::class))->willReturn($response);
         $this->decisionTree->determineAdapter($textRequest)->willReturn($this->adapter->reveal());
 
         $result = $textRequest->execute();

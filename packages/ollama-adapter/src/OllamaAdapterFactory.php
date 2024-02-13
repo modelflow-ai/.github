@@ -16,14 +16,14 @@ namespace ModelflowAi\OllamaAdapter;
 use ModelflowAi\Core\Embeddings\EmbeddingAdapterInterface;
 use ModelflowAi\Core\Factory\ChatAdapterFactoryInterface;
 use ModelflowAi\Core\Factory\EmbeddingAdapterFactoryInterface;
-use ModelflowAi\Core\Factory\TextAdapterFactoryInterface;
+use ModelflowAi\Core\Factory\CompletionAdapterFactoryInterface;
 use ModelflowAi\Core\Model\AIModelAdapterInterface;
 use ModelflowAi\Ollama\ClientInterface;
 use ModelflowAi\OllamaAdapter\Embeddings\OllamaEmbeddingAdapter;
 use ModelflowAi\OllamaAdapter\Model\OllamaChatModelAdapter;
-use ModelflowAi\OllamaAdapter\Model\OllamaTextModelAdapter;
+use ModelflowAi\OllamaAdapter\Model\OllamaCompletionModelAdapter;
 
-final readonly class OllamaAdapterFactory implements ChatAdapterFactoryInterface, TextAdapterFactoryInterface, EmbeddingAdapterFactoryInterface
+final readonly class OllamaAdapterFactory implements ChatAdapterFactoryInterface, CompletionAdapterFactoryInterface, EmbeddingAdapterFactoryInterface
 {
     public function __construct(
         private ClientInterface $client,
@@ -38,9 +38,9 @@ final readonly class OllamaAdapterFactory implements ChatAdapterFactoryInterface
         );
     }
 
-    public function createTextAdapter(array $options): AIModelAdapterInterface
+    public function createCompletionAdapter(array $options): AIModelAdapterInterface
     {
-        return new OllamaTextModelAdapter(
+        return new OllamaCompletionModelAdapter(
             $this->client,
             $options['model'],
         );

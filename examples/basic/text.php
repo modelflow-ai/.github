@@ -15,16 +15,16 @@ namespace App;
 
 use ModelflowAi\Core\AIRequestHandlerInterface;
 use ModelflowAi\Core\Request\Criteria\PrivacyCriteria;
-use ModelflowAi\Core\Response\AITextResponse;
+use ModelflowAi\Core\Response\AICompletionResponse;
 use ModelflowAi\PromptTemplate\PromptTemplate;
 
 /** @var AIRequestHandlerInterface $handler */
 $handler = require_once __DIR__ . '/bootstrap.php';
 
-/** @var AITextResponse $response */
+/** @var AICompletionResponse $response */
 $response = $handler->createTextRequest(PromptTemplate::create('Hello {where}!')->format(['where' => 'world']))
     ->addCriteria(PrivacyCriteria::HIGH)
     ->build()
     ->execute();
 
-echo $response->getText();
+echo $response->getContent();
