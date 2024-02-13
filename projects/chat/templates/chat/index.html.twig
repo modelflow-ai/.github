@@ -5,8 +5,15 @@
 {% block body %}
     <div class="flex h-screen">
         <!-- Toolbar -->
-        <div class="flex flex-col w-1/4 bg-gray-900 border-r border-gray-700 text-white">
-            <div class="h-20 p-4 border-b border-gray-700">
+        <div id="toolbar" class="flex flex-col md:w-1/4 w-full bg-gray-900 text-white fixed inset-0 md:relative md:translate-x-0 -translate-x-full transition-transform duration-300 z-10">
+            <div class="flex h-20 p-4 border-b border-r border-gray-700">
+                <!-- Toggle Button (visible on small screens) -->
+                <button class="md:hidden mr-2 text-white focus:outline-none" onclick="toggleToolbar()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+
                 <h2 class="flex items-center text-lg font-semibold">
                     Chats
                     <a href="{{ path('app_create_chat') }}" class="ml-2 inline-flex items-center justify-center p-2 rounded-md text-blue-500 hover:text-blue-600 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" aria-label="New Chat">
@@ -25,7 +32,7 @@
                     </div>
                 {% endfor %}
             </div>
-            <div class="mt-auto p-4 border-t border-gray-700">
+            <div class="hidden mt-auto p-4 border-t border-gray-700">
                 <!-- Account Section -->
                 <div class="py-4">
                     <h3 class="text-sm font-semibold">Account</h3>
@@ -39,9 +46,15 @@
         {% set chatModel = chat.model|default(app.request.query.get('model')|default(DEFAULT_MODEL)) %}
 
         <!-- Chat -->
-        <div class="flex flex-col w-3/4 bg-gray-800 text-white">
+       <div id="chatContainer" class="flex flex-col md:w-3/4 w-full bg-gray-800 text-white">
             <div class="flex h-20 items-center bg-gray-900 p-4 border-b border-gray-700">
-                <img class="h-8 w-8 rounded-full" src="https://via.placeholder.com/50" alt="ChatGPT Avatar">
+                <!-- Toggle Button (visible on small screens) -->
+                <button class="md:hidden text-white focus:outline-none" onclick="toggleToolbar()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+                <!-- <img class="h-8 w-8 rounded-full" src="https://via.placeholder.com/50" alt="ChatGPT Avatar"> -->
                 <div class="ml-3" {{ stimulus_controller('dropdown-button') }}>
                     <p class="text-sm font-medium">Chat by ModelflowAI</p>
                     <button class="text-xs" {{ stimulus_action('dropdown-button', 'toggleDropdown') }}>
@@ -99,4 +112,12 @@
             {% endif %}
         </div>
     </div>
+
+    <!-- JavaScript to toggle toolbar visibility -->
+    <script>
+        function toggleToolbar() {
+            var toolbar = document.getElementById('toolbar');
+            toolbar.classList.toggle('translate-x-0');
+        }
+    </script>
 {% endblock %}
