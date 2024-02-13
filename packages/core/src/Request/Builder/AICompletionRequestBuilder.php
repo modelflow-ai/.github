@@ -13,32 +13,32 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Core\Request\Builder;
 
-use ModelflowAi\Core\Request\AITextRequest;
+use ModelflowAi\Core\Request\AICompletionRequest;
 
-class AITextRequestBuilder extends AIRequestBuilder
+class AICompletionRequestBuilder extends AIRequestBuilder
 {
-    private ?string $text = null;
+    private ?string $prompt = null;
 
     public static function create(callable $requestHandler): self
     {
         return new self($requestHandler);
     }
 
-    public function text(?string $text = null): self
+    public function prompt(?string $prompt = null): self
     {
-        $this->text = $text;
+        $this->prompt = $prompt;
 
         return $this;
     }
 
-    public function build(): AITextRequest
+    public function build(): AICompletionRequest
     {
-        if (null === $this->text) {
+        if (null === $this->prompt) {
             throw new \RuntimeException('No text given');
         }
 
-        return new AITextRequest(
-            $this->text,
+        return new AICompletionRequest(
+            $this->prompt,
             $this->criteria,
             $this->requestHandler,
         );

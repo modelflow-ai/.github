@@ -15,7 +15,7 @@ namespace ModelflowAi\Core\Factory;
 
 use ModelflowAi\Core\Model\AIModelAdapterInterface;
 
-interface TextAdapterFactoryInterface
+interface CompletionAdapterFactoryInterface
 {
     /**
      * @param array{
@@ -25,5 +25,5 @@ interface TextAdapterFactoryInterface
      *     priority: int,
      * } $options
      */
-    public function createTextAdapter(array $options): AIModelAdapterInterface;
+    public function createCompletionAdapter(array $options): AIModelAdapterInterface;
 }

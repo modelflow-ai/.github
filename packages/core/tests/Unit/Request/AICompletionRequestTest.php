@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Core\Tests\Unit\Request;
 
-use ModelflowAi\Core\Request\AITextRequest;
+use ModelflowAi\Core\Request\AICompletionRequest;
 use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
 use ModelflowAi\Core\Request\Criteria\CapabilityCriteria;
 use ModelflowAi\Core\Request\Criteria\PrivacyCriteria;
-use ModelflowAi\Core\Response\AITextResponse;
+use ModelflowAi\Core\Response\AICompletionResponse;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-class AITextRequestTest extends TestCase
+class AICompletionRequestTest extends TestCase
 {
     use ProphecyTrait;
 
@@ -29,14 +29,14 @@ class AITextRequestTest extends TestCase
     {
         $criteriaCollection = new AIRequestCriteriaCollection();
 
-        $requestHandler = fn ($request) => new AITextResponse($request, 'Response content 1');
-        $request = new AITextRequest('Test content 1', $criteriaCollection, $requestHandler);
+        $requestHandler = fn ($request) => new AICompletionResponse($request, 'Response content 1');
+        $request = new AICompletionRequest('Test content 1', $criteriaCollection, $requestHandler);
 
         $response = $request->execute();
 
-        $this->assertInstanceOf(AITextResponse::class, $response);
+        $this->assertInstanceOf(AICompletionResponse::class, $response);
         $this->assertSame($request, $response->getRequest());
-        $this->assertSame('Response content 1', $response->getText());
+        $this->assertSame('Response content 1', $response->getContent());
     }
 
     public function testMatches(): void
@@ -46,7 +46,7 @@ class AITextRequestTest extends TestCase
         $criteriaCollection = new AIRequestCriteriaCollection([$criteria1, $criteria2]);
 
         $requestHandler = fn () => null;
-        $request = new AITextRequest('Test content 1', $criteriaCollection, $requestHandler);
+        $request = new AICompletionRequest('Test content 1', $criteriaCollection, $requestHandler);
 
         $this->assertTrue($request->matches(CapabilityCriteria::BASIC));
         $this->assertTrue($request->matches(PrivacyCriteria::LOW));

@@ -14,24 +14,24 @@ declare(strict_types=1);
 namespace ModelflowAi\Core\Request;
 
 use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
-use ModelflowAi\Core\Response\AITextResponse;
+use ModelflowAi\Core\Response\AICompletionResponse;
 
-class AITextRequest extends AIRequest implements AIRequestInterface
+class AICompletionRequest extends AIRequest implements AIRequestInterface
 {
     public function __construct(
-        protected readonly string $text,
+        protected readonly string $prompt,
         AIRequestCriteriaCollection $criteria,
         callable $requestHandler,
     ) {
         parent::__construct($criteria, $requestHandler);
     }
 
-    public function getText(): string
+    public function getPrompt(): string
     {
-        return $this->text;
+        return $this->prompt;
     }
 
-    public function execute(): AITextResponse
+    public function execute(): AICompletionResponse
     {
         return \call_user_func($this->requestHandler, $this);
     }

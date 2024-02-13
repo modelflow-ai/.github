@@ -16,7 +16,7 @@ namespace ModelflowAi\OllamaAdapter\Tests\Unit\Model;
 use ModelflowAi\Ollama\ClientInterface;
 use ModelflowAi\OllamaAdapter\Embeddings\OllamaEmbeddingAdapter;
 use ModelflowAi\OllamaAdapter\Model\OllamaChatModelAdapter;
-use ModelflowAi\OllamaAdapter\Model\OllamaTextModelAdapter;
+use ModelflowAi\OllamaAdapter\Model\OllamaCompletionModelAdapter;
 use ModelflowAi\OllamaAdapter\OllamaAdapterFactory;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -40,19 +40,19 @@ class OllamaAdapterFactoryTest extends TestCase
         $this->assertInstanceOf(OllamaChatModelAdapter::class, $adapter);
     }
 
-    public function testCreateTextAdapter(): void
+    public function testCreateCompletionAdapter(): void
     {
         $client = $this->prophesize(ClientInterface::class);
 
         $factory = new OllamaAdapterFactory($client->reveal());
 
-        $adapter = $factory->createTextAdapter([
+        $adapter = $factory->createCompletionAdapter([
             'model' => 'llama2',
             'image_to_text' => true,
             'functions' => true,
             'priority' => 0,
         ]);
-        $this->assertInstanceOf(OllamaTextModelAdapter::class, $adapter);
+        $this->assertInstanceOf(OllamaCompletionModelAdapter::class, $adapter);
     }
 
     public function testCreateEmbeddingAdapter(): void

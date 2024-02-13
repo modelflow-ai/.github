@@ -14,21 +14,21 @@ declare(strict_types=1);
 namespace ModelflowAi\OllamaAdapter\Tests\Unit\Model;
 
 use ModelflowAi\ApiClient\Responses\MetaInformation;
-use ModelflowAi\Core\Request\AITextRequest;
+use ModelflowAi\Core\Request\AICompletionRequest;
 use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
-use ModelflowAi\Core\Response\AITextResponse;
+use ModelflowAi\Core\Response\AICompletionResponse;
 use ModelflowAi\Ollama\ClientInterface;
 use ModelflowAi\Ollama\Resources\CompletionInterface;
 use ModelflowAi\Ollama\Responses\Completion\CreateResponse;
-use ModelflowAi\OllamaAdapter\Model\OllamaTextModelAdapter;
+use ModelflowAi\OllamaAdapter\Model\OllamaCompletionModelAdapter;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-final class OllamaTextModelAdapterTest extends TestCase
+final class OllamaCompletionModelAdapterTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testEmbedText(): void
+    public function testHandleRequest(): void
     {
         $completion = $this->prophesize(CompletionInterface::class);
         $client = $this->prophesize(ClientInterface::class);
@@ -51,12 +51,12 @@ final class OllamaTextModelAdapterTest extends TestCase
             'eval_duration' => 5_981_849_000,
         ], MetaInformation::from([])));
 
-        $request = new AITextRequest('Prompt message', new AIRequestCriteriaCollection(), fn () => null);
+        $request = new AICompletionRequest('Prompt message', new AIRequestCriteriaCollection(), fn () => null);
 
-        $adapter = new OllamaTextModelAdapter($client->reveal());
+        $adapter = new OllamaCompletionModelAdapter($client->reveal());
         $result = $adapter->handleRequest($request);
 
-        $this->assertInstanceOf(AITextResponse::class, $result);
-        $this->assertSame('Lorem Ipsum', $result->getText());
+        $this->assertInstanceOf(AICompletionResponse::class, $result);
+        $this->assertSame('Lorem Ipsum', $result->getContent());
     }
 }

@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace ModelflowAi\Core\Tests\Unit\Response;
 
 use ModelflowAi\Core\Request\AIChatRequest;
-use ModelflowAi\Core\Request\AITextRequest;
-use ModelflowAi\Core\Response\AITextResponse;
+use ModelflowAi\Core\Request\AICompletionRequest;
+use ModelflowAi\Core\Response\AICompletionResponse;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-class AITextResponseTest extends TestCase
+class AICompletionResponseTest extends TestCase
 {
     use ProphecyTrait;
 
@@ -27,16 +27,16 @@ class AITextResponseTest extends TestCase
     {
         $request = $this->prophesize(AIChatRequest::class);
 
-        $response = new AITextResponse($request->reveal(), 'Test content');
+        $response = new AICompletionResponse($request->reveal(), 'Test content');
 
-        $this->assertSame('Test content', $response->getText());
+        $this->assertSame('Test content', $response->getContent());
     }
 
     public function testGetRequest(): void
     {
-        $request = $this->prophesize(AITextRequest::class);
+        $request = $this->prophesize(AICompletionRequest::class);
 
-        $response = new AITextResponse($request->reveal(), 'Test content');
+        $response = new AICompletionResponse($request->reveal(), 'Test content');
 
         $this->assertSame($request->reveal(), $response->getRequest());
     }

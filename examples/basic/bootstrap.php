@@ -25,7 +25,7 @@ use ModelflowAi\Mistral\Model;
 use ModelflowAi\MistralAdapter\Model\MistralChatModelAdapter;
 use ModelflowAi\Ollama\Ollama;
 use ModelflowAi\OllamaAdapter\Model\OllamaChatModelAdapter;
-use ModelflowAi\OllamaAdapter\Model\OllamaTextModelAdapter;
+use ModelflowAi\OllamaAdapter\Model\OllamaCompletionModelAdapter;
 use ModelflowAi\OpenaiAdapter\Model\OpenaiChatModelAdapter;
 use Symfony\Component\Dotenv\Dotenv;
 
@@ -51,7 +51,7 @@ if ($openaiApiKey) {
 
 $client = Ollama::client();
 $llama2ChatAdapter = new OllamaChatModelAdapter($client);
-$llama2TextAdapter = new OllamaTextModelAdapter($client);
+$llama2TextAdapter = new OllamaCompletionModelAdapter($client);
 
 $adapter[] = new DecisionRule($llama2TextAdapter, [PrivacyCriteria::HIGH]);
 $adapter[] = new DecisionRule($llama2ChatAdapter, [PrivacyCriteria::HIGH]);

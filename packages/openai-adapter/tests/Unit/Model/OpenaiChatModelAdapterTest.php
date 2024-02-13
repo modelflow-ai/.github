@@ -32,7 +32,7 @@ final class OpenaiChatModelAdapterTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testEmbedText(): void
+    public function testHandleRequest(): void
     {
         $chat = $this->prophesize(ChatContract::class);
         $client = $this->prophesize(ClientContract::class);
