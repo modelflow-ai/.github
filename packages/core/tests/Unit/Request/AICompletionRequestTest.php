@@ -30,7 +30,7 @@ class AICompletionRequestTest extends TestCase
         $criteriaCollection = new AIRequestCriteriaCollection();
 
         $requestHandler = fn ($request) => new AICompletionResponse($request, 'Response content 1');
-        $request = new AICompletionRequest('Test content 1', $criteriaCollection, $requestHandler);
+        $request = new AICompletionRequest('Test content 1', $criteriaCollection, [], $requestHandler);
 
         $response = $request->execute();
 
@@ -46,9 +46,21 @@ class AICompletionRequestTest extends TestCase
         $criteriaCollection = new AIRequestCriteriaCollection([$criteria1, $criteria2]);
 
         $requestHandler = fn () => null;
-        $request = new AICompletionRequest('Test content 1', $criteriaCollection, $requestHandler);
+        $request = new AICompletionRequest('Test content 1', $criteriaCollection, [], $requestHandler);
 
         $this->assertTrue($request->matches(CapabilityCriteria::BASIC));
         $this->assertTrue($request->matches(PrivacyCriteria::LOW));
+    }
+
+    public function testOptions(): void
+    {
+        $criteria1 = CapabilityCriteria::BASIC;
+        $criteria2 = PrivacyCriteria::HIGH;
+        $criteriaCollection = new AIRequestCriteriaCollection([$criteria1, $criteria2]);
+
+        $requestHandler = fn () => null;
+        $request = new AICompletionRequest('Test content 1', $criteriaCollection, ['format' => 'json'], $requestHandler);
+
+        $this->assertSame('json', $request->getOption('format'));
     }
 }

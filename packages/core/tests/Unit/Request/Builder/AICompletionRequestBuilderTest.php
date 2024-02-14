@@ -22,6 +22,16 @@ class AICompletionRequestBuilderTest extends TestCase
 {
     use ProphecyTrait;
 
+    public function testAsJson(): void
+    {
+        $builder = new AICompletionRequestBuilder(fn () => null);
+        $builder->prompt('Test text');
+
+        $builder->asJson();
+
+        $this->assertSame('json', $builder->build()->getOption('format'));
+    }
+
     public function testPrompt(): void
     {
         $builder = new AICompletionRequestBuilder(fn () => null);

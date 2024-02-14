@@ -40,6 +40,7 @@ class AICompletionRequestBuilder extends AIRequestBuilder
         return new AICompletionRequest(
             $this->prompt,
             $this->criteria,
+            $this->options,
             $this->requestHandler,
         );
     }

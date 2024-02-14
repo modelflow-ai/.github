@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace ModelflowAi\Core;
 
 use ModelflowAi\Core\Request\Builder\AIChatRequestBuilder;
-use ModelflowAi\Core\Request\Builder\AITextRequestBuilder;
+use ModelflowAi\Core\Request\Builder\AICompletionRequestBuilder;
 use ModelflowAi\Core\Request\Message\AIChatMessage;
 
 interface AIRequestHandlerInterface
 {
-    public function createCompletionRequest(?string $prompt = null): AITextRequestBuilder;
+    public function createCompletionRequest(?string $prompt = null): AICompletionRequestBuilder;
 
     public function createChatRequest(AIChatMessage ...$messages): AIChatRequestBuilder;
 }

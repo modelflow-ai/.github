@@ -23,6 +23,7 @@ class AIChatRequest extends AIRequest implements AIRequestInterface
     public function __construct(
         private readonly AIChatMessageCollection $messages,
         AIRequestCriteriaCollection $criteria,
+        array $options,
         callable $requestHandler,
     ) {
         $features = [];
@@ -34,7 +35,7 @@ class AIChatRequest extends AIRequest implements AIRequestInterface
             }
         }
 
-        parent::__construct($criteria->withFeatures($features), $requestHandler);
+        parent::__construct($criteria->withFeatures($features), $options, $requestHandler);
     }
 
     public function getMessages(): AIChatMessageCollection

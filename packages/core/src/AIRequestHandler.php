@@ -15,14 +15,14 @@ namespace ModelflowAi\Core;
 
 use ModelflowAi\Core\DecisionTree\AIModelDecisionTreeInterface;
 use ModelflowAi\Core\Request\AIChatRequest;
+use ModelflowAi\Core\Request\AICompletionRequest;
 use ModelflowAi\Core\Request\AIRequestInterface;
-use ModelflowAi\Core\Request\AITextRequest;
 use ModelflowAi\Core\Request\Builder\AIChatRequestBuilder;
-use ModelflowAi\Core\Request\Builder\AITextRequestBuilder;
+use ModelflowAi\Core\Request\Builder\AICompletionRequestBuilder;
 use ModelflowAi\Core\Request\Message\AIChatMessage;
 use ModelflowAi\Core\Response\AIChatResponse;
+use ModelflowAi\Core\Response\AICompletionResponse;
 use ModelflowAi\Core\Response\AIResponseInterface;
-use ModelflowAi\Core\Response\AITextResponse;
 use Webmozart\Assert\Assert;
 
 class AIRequestHandler implements AIRequestHandlerInterface
@@ -39,14 +39,14 @@ class AIRequestHandler implements AIRequestHandlerInterface
         return $adapter->handleRequest($request);
     }
 
-    public function createCompletionRequest(?string $prompt = null): AITextRequestBuilder
+    public function createCompletionRequest(?string $prompt = null): AICompletionRequestBuilder
     {
-        return AITextRequestBuilder::create(function (AITextRequest $request): AITextResponse {
+        return AICompletionRequestBuilder::create(function (AICompletionRequest $request): AICompletionResponse {
             $response = $this->handle($request);
-            Assert::isInstanceOf($response, AITextResponse::class);
+            Assert::isInstanceOf($response, AICompletionResponse::class);
 
             return $response;
-        })->text($prompt);
+        })->prompt($prompt);
     }
 
     public function createChatRequest(AIChatMessage ...$messages): AIChatRequestBuilder
