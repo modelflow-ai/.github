@@ -16,6 +16,8 @@ namespace ModelflowAi\Core\Request\Builder;
 use ModelflowAi\Core\Request\AIChatMessageCollection;
 use ModelflowAi\Core\Request\AIChatRequest;
 use ModelflowAi\Core\Request\Message\AIChatMessage;
+use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
+use ModelflowAi\Core\Request\Message\MessagePart;
 
 class AIChatRequestBuilder extends AIRequestBuilder
 {
@@ -48,11 +50,42 @@ class AIChatRequestBuilder extends AIRequestBuilder
         return $this;
     }
 
+    /**
+     * @param MessagePart[]|MessagePart|string $content
+     */
+    public function addSystemMessage(array|MessagePart|string $content): self
+    {
+        $this->messages[] = new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, $content);
+
+        return $this;
+    }
+
+    /**
+     * @param MessagePart[]|MessagePart|string $content
+     */
+    public function addAssistantMessage(array|MessagePart|string $content): self
+    {
+        $this->messages[] = new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, $content);
+
+        return $this;
+    }
+
+    /**
+     * @param MessagePart[]|MessagePart|string $content
+     */
+    public function addUserMessage(array|MessagePart|string $content): self
+    {
+        $this->messages[] = new AIChatMessage(AIChatMessageRoleEnum::USER, $content);
+
+        return $this;
+    }
+
     public function build(): AIChatRequest
     {
         return new AIChatRequest(
             new AIChatMessageCollection(...$this->messages),
             $this->criteria,
+            $this->options,
             $this->requestHandler,
         );
     }

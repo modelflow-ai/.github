@@ -67,7 +67,7 @@ final class MistralChatModelAdapterTest extends TestCase
 
         $request = new AIChatRequest(new AIChatMessageCollection(
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'some text'),
-        ), new AIRequestCriteriaCollection(), fn () => null);
+        ), new AIRequestCriteriaCollection(), [], fn () => null);
 
         $adapter = new MistralChatModelAdapter($client->reveal());
         $result = $adapter->handleRequest($request);

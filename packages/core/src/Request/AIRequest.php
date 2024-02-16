@@ -24,11 +24,25 @@ abstract class AIRequest implements AIRequestInterface
      */
     protected $requestHandler;
 
+    /**
+     * @param array{
+     *     format?: "json"|null
+     * } $options
+     */
     public function __construct(
         private readonly AIRequestCriteriaCollection $criteria,
+        private readonly array $options,
         callable $requestHandler,
     ) {
         $this->requestHandler = $requestHandler;
+    }
+
+    /**
+     * @param "format" $key
+     */
+    public function getOption(string $key, mixed $default = null): mixed
+    {
+        return $this->options[$key] ?? $default;
     }
 
     public function matches(AiCriteriaInterface $criteria): bool

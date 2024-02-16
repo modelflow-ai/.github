@@ -21,9 +21,10 @@ class AICompletionRequest extends AIRequest implements AIRequestInterface
     public function __construct(
         protected readonly string $prompt,
         AIRequestCriteriaCollection $criteria,
+        array $options,
         callable $requestHandler,
     ) {
-        parent::__construct($criteria, $requestHandler);
+        parent::__construct($criteria, $options, $requestHandler);
     }
 
     public function getPrompt(): string

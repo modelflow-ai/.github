@@ -6,10 +6,12 @@
     "require": {
         "php": ">=8.2",
         "modelflow-ai/core": "^0.1",
+        "modelflow-ai/experts": "^0.1",
         "modelflow-ai/mistral-adapter": "^0.1",
         "modelflow-ai/openai-adapter": "^0.1",
         "modelflow-ai/ollama-adapter": "^0.1",
-        "modelflow-ai/prompt-template": "^0.1"
+        "modelflow-ai/prompt-template": "^0.1",
+        "justinrainbow/json-schema": "^5.2"
     },
     "require-dev": {
         "php-cs-fixer/shim": "^3.15",

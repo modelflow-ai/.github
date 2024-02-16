@@ -53,9 +53,9 @@ class AIRequestHandlerTest extends TestCase
         $this->aiRequestHandler = new AIRequestHandler($this->decisionTree->reveal());
     }
 
-    public function testCreateTextRequest(): void
+    public function testCreateCompletionRequest(): void
     {
-        $textRequest = $this->aiRequestHandler->createTextRequest('Test content');
+        $textRequest = $this->aiRequestHandler->createCompletionRequest('Test content');
 
         $this->assertInstanceOf(AICompletionRequestBuilder::class, $textRequest);
     }
@@ -67,9 +67,9 @@ class AIRequestHandlerTest extends TestCase
         $this->assertInstanceOf(AIChatRequestBuilder::class, $chatRequest);
     }
 
-    public function testHandleTextRequest(): void
+    public function testHandleCompletionRequest(): void
     {
-        $textRequest = $this->aiRequestHandler->createTextRequest('Test content')->build();
+        $textRequest = $this->aiRequestHandler->createCompletionRequest('Test content')->build();
 
         $response = new AICompletionResponse($textRequest, 'Response content');
         $this->adapter->handleRequest(Argument::type(AICompletionRequest::class))->willReturn($response);

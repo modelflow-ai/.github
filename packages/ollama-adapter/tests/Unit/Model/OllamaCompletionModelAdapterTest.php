@@ -51,7 +51,40 @@ final class OllamaCompletionModelAdapterTest extends TestCase
             'eval_duration' => 5_981_849_000,
         ], MetaInformation::from([])));
 
-        $request = new AICompletionRequest('Prompt message', new AIRequestCriteriaCollection(), fn () => null);
+        $request = new AICompletionRequest('Prompt message', new AIRequestCriteriaCollection(), [], fn () => null);
+
+        $adapter = new OllamaCompletionModelAdapter($client->reveal());
+        $result = $adapter->handleRequest($request);
+
+        $this->assertInstanceOf(AICompletionResponse::class, $result);
+        $this->assertSame('Lorem Ipsum', $result->getContent());
+    }
+
+    public function testHandleRequestAsJson(): void
+    {
+        $completion = $this->prophesize(CompletionInterface::class);
+        $client = $this->prophesize(ClientInterface::class);
+        $client->completion()->willReturn($completion->reveal());
+
+        $completion->create([
+            'model' => 'llama2',
+            'format' => 'json',
+            'prompt' => 'Prompt message',
+        ])->willReturn(CreateResponse::from([
+            'model' => 'llama2',
+            'created_at' => '2024-01-13T12:01:31.929209Z',
+            'response' => 'Lorem Ipsum',
+            'context' => [0.1, 0.2, 0.3],
+            'done' => true,
+            'total_duration' => 6_259_208_916,
+            'load_duration' => 3_882_375,
+            'prompt_eval_duration' => 267_650_000,
+            'prompt_eval_count' => 0,
+            'eval_count' => 169,
+            'eval_duration' => 5_981_849_000,
+        ], MetaInformation::from([])));
+
+        $request = new AICompletionRequest('Prompt message', new AIRequestCriteriaCollection(), ['format' => 'json'], fn () => null);
 
         $adapter = new OllamaCompletionModelAdapter($client->reveal());
         $result = $adapter->handleRequest($request);

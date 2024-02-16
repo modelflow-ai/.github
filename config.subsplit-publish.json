@@ -16,6 +16,11 @@
             "target": "git@github.com:modelflow-ai/embeddings.git"
         },
         {
+            "name": "Experts",
+            "directory": "packages/experts",
+            "target": "git@github.com:modelflow-ai/experts.git"
+        },
+        {
             "name": "Mistral",
             "directory": "packages/mistral",
             "target": "git@github.com:modelflow-ai/mistral.git"

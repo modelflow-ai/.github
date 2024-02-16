@@ -22,6 +22,13 @@ abstract class AIRequestBuilder
     protected AIRequestCriteriaCollection $criteria;
 
     /**
+     * @var array{
+     *     format?: "json"|null
+     * }
+     */
+    protected array $options = [];
+
+    /**
      * @var callable
      */
     protected $requestHandler;
@@ -34,10 +41,22 @@ abstract class AIRequestBuilder
         $this->criteria = new AIRequestCriteriaCollection();
     }
 
-    public function addCriteria(AiCriteriaInterface $criteria): self
+    public function asJson(): self
     {
+        $this->options['format'] = 'json';
+
+        return $this;
+    }
+
+    /**
+     * @param AiCriteriaInterface|AiCriteriaInterface[] $criteria
+     */
+    public function addCriteria(AiCriteriaInterface|array $criteria): self
+    {
+        $criteria = \is_array($criteria) ? $criteria : [$criteria];
+
         $this->criteria = new AIRequestCriteriaCollection(
-            \array_merge($this->criteria->criteria, [$criteria]),
+            \array_merge($this->criteria->criteria, $criteria),
         );
 
         return $this;

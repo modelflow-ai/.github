@@ -41,7 +41,7 @@ class AIChatRequestTest extends TestCase
         $criteria = new AIRequestCriteriaCollection();
         $requestHandler = fn ($request) => null;
 
-        $request = new AIChatRequest($messages, $criteria, $requestHandler);
+        $request = new AIChatRequest($messages, $criteria, [], $requestHandler);
 
         $this->assertTrue($request->matches(FeatureCriteria::IMAGE_TO_TEXT));
     }
@@ -53,7 +53,7 @@ class AIChatRequestTest extends TestCase
         $criteriaCollection = new AIRequestCriteriaCollection();
 
         $requestHandler = fn ($request) => new AIChatResponse($request, new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Response content 1'));
-        $request = new AIChatRequest(new AIChatMessageCollection($message1, $message2), $criteriaCollection, $requestHandler);
+        $request = new AIChatRequest(new AIChatMessageCollection($message1, $message2), $criteriaCollection, [], $requestHandler);
 
         $response = $request->execute();
 
@@ -69,9 +69,21 @@ class AIChatRequestTest extends TestCase
         $criteriaCollection = new AIRequestCriteriaCollection([$criteria1, $criteria2]);
 
         $requestHandler = fn () => null;
-        $request = new AIChatRequest(new AIChatMessageCollection(), $criteriaCollection, $requestHandler);
+        $request = new AIChatRequest(new AIChatMessageCollection(), $criteriaCollection, [], $requestHandler);
 
         $this->assertTrue($request->matches(CapabilityCriteria::BASIC));
         $this->assertTrue($request->matches(PrivacyCriteria::LOW));
+    }
+
+    public function testOptions(): void
+    {
+        $criteria1 = CapabilityCriteria::BASIC;
+        $criteria2 = PrivacyCriteria::HIGH;
+        $criteriaCollection = new AIRequestCriteriaCollection([$criteria1, $criteria2]);
+
+        $requestHandler = fn () => null;
+        $request = new AIChatRequest(new AIChatMessageCollection(), $criteriaCollection, ['format' => 'json'], $requestHandler);
+
+        $this->assertSame('json', $request->getOption('format'));
     }
 }
