@@ -22,7 +22,7 @@ use ModelflowAi\PromptTemplate\PromptTemplate;
 $handler = require_once __DIR__ . '/bootstrap.php';
 
 /** @var AICompletionResponse $response */
-$response = $handler->createTextRequest(PromptTemplate::create('Hello {where}!')->format(['where' => 'world']))
+$response = $handler->createCompletionRequest(PromptTemplate::create('Hello {where}!')->format(['where' => 'world']))
     ->addCriteria(PrivacyCriteria::HIGH)
     ->build()
     ->execute();

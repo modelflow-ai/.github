@@ -15,8 +15,8 @@ namespace ModelflowAi\OllamaAdapter;
 
 use ModelflowAi\Core\Embeddings\EmbeddingAdapterInterface;
 use ModelflowAi\Core\Factory\ChatAdapterFactoryInterface;
-use ModelflowAi\Core\Factory\EmbeddingAdapterFactoryInterface;
 use ModelflowAi\Core\Factory\CompletionAdapterFactoryInterface;
+use ModelflowAi\Core\Factory\EmbeddingAdapterFactoryInterface;
 use ModelflowAi\Core\Model\AIModelAdapterInterface;
 use ModelflowAi\Ollama\ClientInterface;
 use ModelflowAi\OllamaAdapter\Embeddings\OllamaEmbeddingAdapter;

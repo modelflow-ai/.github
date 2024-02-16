@@ -13,10 +13,14 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Experts;
 
+use ModelflowAi\Core\Request\Criteria\AiCriteriaInterface;
 use ModelflowAi\Experts\ResponseFormat\ResponseFormatInterface;
 
 class Expert
 {
+    /**
+     * @param AiCriteriaInterface[] $criteria
+     */
     public function __construct(
         public string $name,
         public string $description,

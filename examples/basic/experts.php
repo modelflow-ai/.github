@@ -65,7 +65,7 @@ PROMPT,
 
 $threadFactory = new ThreadFactory($handler);
 $thread = $threadFactory->createThread($expert);
-$thread->addContext('content', json_encode([
+$thread->addContext('content', \json_encode([
     'id' => '2526a494-077b-4d08-bab6-5eb2835687a2',
     'title' => 'Drop Big Beats',
     'route' => '/blog/drop-big-beats',
@@ -76,7 +76,7 @@ $thread->addContext('content', json_encode([
             'title' => 'Drop big Beats',
             'description' => '<p>Her finger on the pulse of dance and electronic music. Usually she is not listening to the music filled up with crazy beats. But today she shared her advice for ambitious DJs and electronic musicans. Her name is Charlotte Merana and she is the general Manager of the big beats of International Talents.</p>',
             'image' => [
-                'id' => null
+                'id' => null,
             ],
         ],
         [
@@ -91,7 +91,7 @@ $thread->addContext('content', json_encode([
             'title' => '',
             'description' => '<p>Charlotte explained, she never predicted it would get this big. In her thoughts and visions she hoped for it. But if she shared her dreams 30 years earlier, the people would laugh about her. Today you can\'t believe it. Kids loving this music. Not all of them are quite kids but for example a booking agency from Berlin in Germany signed a 14-year-old  DJ. It\'s really exciting for them, but also for me. She always believed in this subculture, but never predicted that it would get this big.</p><h3>Charlotte also shared her advice for younger artist who wants to get the attention of the people.</h3><p>She told us to beginn with your friends first. Do what you know, what you already learned. Show the people what you can do and win them. Bring the people to support you. Start throwing your party and grow up a network of people who like what you do and are excited about what you do. Don\'t make a fanbpage, and put your sounds on Soundcloud or do a crazy Photoshooing.</p>',
             'image' => [
-                'id' => null
+                'id' => null,
             ],
         ],
         [

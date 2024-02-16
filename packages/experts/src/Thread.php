@@ -14,10 +14,14 @@ declare(strict_types=1);
 namespace ModelflowAi\Experts;
 
 use ModelflowAi\Core\AIRequestHandlerInterface;
+use ModelflowAi\Core\Request\Builder\AIChatRequestBuilder;
 use ModelflowAi\Core\Response\AIChatResponse;
 
 class Thread implements ThreadInterface
 {
+    /**
+     * @var array<string, mixed>
+     */
     private array $context = [];
 
     public function __construct(
@@ -26,7 +30,7 @@ class Thread implements ThreadInterface
     ) {
     }
 
-    public function addContext(string $key, string $data): self
+    public function addContext(string $key, mixed $data): self
     {
         $this->context[$key] = $data;
 
@@ -35,6 +39,7 @@ class Thread implements ThreadInterface
 
     public function run(): AIChatResponse
     {
+        /** @var AIChatRequestBuilder $builder */
         $builder = $this->requestHandler->createChatRequest()
             ->addSystemMessage($this->expert->instructions)
             ->addCriteria($this->expert->criteria)

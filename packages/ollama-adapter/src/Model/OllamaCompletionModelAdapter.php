@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace ModelflowAi\OllamaAdapter\Model;
 
 use ModelflowAi\Core\Model\AIModelAdapterInterface;
-use ModelflowAi\Core\Request\AIRequestInterface;
 use ModelflowAi\Core\Request\AICompletionRequest;
-use ModelflowAi\Core\Response\AIResponseInterface;
+use ModelflowAi\Core\Request\AIRequestInterface;
 use ModelflowAi\Core\Response\AICompletionResponse;
+use ModelflowAi\Core\Response\AIResponseInterface;
 use ModelflowAi\Ollama\ClientInterface;
 use Webmozart\Assert\Assert;
 
@@ -36,10 +36,20 @@ final readonly class OllamaCompletionModelAdapter implements AIModelAdapterInter
     {
         Assert::isInstanceOf($request, AICompletionRequest::class);
 
-        $response = $this->client->completion()->create([
+        /** @var "json"|null $format */
+        $format = $request->getOption('format');
+        Assert::inArray($format, [null, 'json'], \sprintf('Invalid format "%s" given.', $format));
+
+        $parameters = [
             'model' => $this->model,
             'prompt' => $request->getPrompt(),
-        ]);
+        ];
+
+        if ($format) {
+            $parameters['format'] = $format;
+        }
+
+        $response = $this->client->completion()->create($parameters);
 
         return new AICompletionResponse($request, $response->response);
     }

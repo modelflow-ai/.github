@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Experts;
 
-use ModelflowAi\Core\AIRequestHandlerInterface;
 use ModelflowAi\Core\Response\AIChatResponse;
 
 interface ThreadInterface

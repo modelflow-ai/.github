@@ -482,12 +482,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
-                "reference": "9cc6042fabcce71b54611b3326478ba8608cd2c0"
+                "reference": "c60f8fb8721a48cda062a2e7a50b397bba9059ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-access/zipball/9cc6042fabcce71b54611b3326478ba8608cd2c0",
-                "reference": "9cc6042fabcce71b54611b3326478ba8608cd2c0",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/c60f8fb8721a48cda062a2e7a50b397bba9059ab",
+                "reference": "c60f8fb8721a48cda062a2e7a50b397bba9059ab",
                 "shasum": ""
             },
             "require": {
@@ -550,7 +550,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-23T15:06:13+00:00"
+            "time": "2024-02-16T16:26:15+00:00"
         },
         {
             "name": "symfony/property-info",
@@ -1560,12 +1560,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "49429bf6e3aa23b5e7521feeb92c31197efce444"
+                "reference": "828c5ab97f96e1045250b57f935d70aa7277da07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/49429bf6e3aa23b5e7521feeb92c31197efce444",
-                "reference": "49429bf6e3aa23b5e7521feeb92c31197efce444",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/828c5ab97f96e1045250b57f935d70aa7277da07",
+                "reference": "828c5ab97f96e1045250b57f935d70aa7277da07",
                 "shasum": ""
             },
             "require": {
@@ -1653,7 +1653,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-08T16:46:03+00:00"
+            "time": "2024-02-14T07:01:37+00:00"
         },
         {
             "name": "rector/rector",

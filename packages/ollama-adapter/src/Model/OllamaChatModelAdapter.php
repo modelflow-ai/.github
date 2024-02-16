@@ -38,14 +38,20 @@ final readonly class OllamaChatModelAdapter implements AIModelAdapterInterface
     {
         Assert::isInstanceOf($request, AIChatRequest::class);
 
+        /** @var "json"|null $format */
         $format = $request->getOption('format');
         Assert::inArray($format, [null, 'json'], \sprintf('Invalid format "%s" given.', $format));
 
-        $response = $this->client->chat()->create(\array_filter([
+        $attributes = [
             'model' => $this->model,
-            'format' => $format,
             'messages' => $request->getMessages()->toArray(),
-        ]));
+        ];
+
+        if ($format) {
+            $attributes['format'] = $format;
+        }
+
+        $response = $this->client->chat()->create($attributes);
 
         return new AIChatResponse(
             $request,

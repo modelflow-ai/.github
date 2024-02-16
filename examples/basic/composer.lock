@@ -265,9 +265,10 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/experts",
-                "reference": "477bc4594497a263c5ad0f1834fb66ec12bd7d8b"
+                "reference": "6b3409b1cc2f9037e25e3ab61e23bd236a10d215"
             },
             "require": {
+                "modelflow-ai/core": "^0.1",
                 "php": "^8.2"
             },
             "conflict": {

@@ -64,7 +64,7 @@ final class OllamaChatModelAdapterTest extends TestCase
             new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'System message'),
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
             new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, 'Assistant message'),
-        ), new AIRequestCriteriaCollection(), fn () => null);
+        ), new AIRequestCriteriaCollection(), [], fn () => null);
 
         $adapter = new OllamaChatModelAdapter($client->reveal());
         $result = $adapter->handleRequest($request);

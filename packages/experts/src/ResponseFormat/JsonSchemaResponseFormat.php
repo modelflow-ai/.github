@@ -15,6 +15,12 @@ namespace ModelflowAi\Experts\ResponseFormat;
 
 class JsonSchemaResponseFormat implements ResponseFormatInterface
 {
+    /**
+     * @param array{
+     *     properties?: array<string, array{type: string, description: string}>,
+     *     required?: array<string>,
+     * } $schema
+     */
     public function __construct(
         public array $schema,
     ) {
@@ -23,7 +29,7 @@ class JsonSchemaResponseFormat implements ResponseFormatInterface
     public function format(): string
     {
         $lines = [
-            'Produce a JSON object that includes: ',
+            'Produce a JSON object that includes:',
         ];
 
         // Process the properties if they exist
@@ -42,7 +48,7 @@ class JsonSchemaResponseFormat implements ResponseFormatInterface
         }
 
         if (!empty($this->schema['required'])) {
-            $lines[] = 'Required properties: ' . \implode(', ', $this->schema['required']);
+            $lines[] = 'Required properties: ' . \implode(', ', \array_values($this->schema['required']));
         }
 
         $lines[] = 'It\'s crucial that your output is a clean JSON object, presented without any additional formatting, annotations, or explanatory content. The response should be ready to use as-is for a system to store it in the database or to process it further.';

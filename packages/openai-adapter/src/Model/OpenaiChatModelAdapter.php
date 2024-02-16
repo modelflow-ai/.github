@@ -35,11 +35,12 @@ final readonly class OpenaiChatModelAdapter implements AIModelAdapterInterface
     {
         Assert::isInstanceOf($request, AIChatRequest::class);
 
+        /** @var string|null $format */
         $format = $request->getOption('format');
         Assert::inArray($format, [null, 'json'], \sprintf('Invalid format "%s" given.', $format));
 
         $responseFormat = null;
-        if ($format === 'json') {
+        if ('json' === $format) {
             $responseFormat = ['type' => 'json_object'];
         }
 
