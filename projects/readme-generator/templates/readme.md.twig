@@ -1,20 +1,24 @@
-# ModelflowAI<br/>Core
+# ModelflowAI<br/>{{ title }}
 
-The Core package provides the core functionalities of Modelflow AI.
+{{ description|break_text|trim }}
 
 ## Installation
 
-To install the Core package, you need to have PHP 8.2 or higher and Composer installed on your machine. Then, you
+To install the {{ title }} package, you need to have PHP 8.2 or higher and Composer installed on your machine. Then, you
 can add the package to your project by running the following command:
 
 ```bash
-composer require modelflow-ai/core
+composer require {{ vendor|default('modelflow-ai') }}/{{ package }}
 ```
 
 ## Usage
 
+{% if usage|default %}
+{{ usage }}
+{% else %}
 Detailed usage instructions will be provided in the future. For now, you can refer to the source code and unit tests for
 usage examples.
+{% endif %}
 
 ## Contributing
 
