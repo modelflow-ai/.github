@@ -1,12 +1,12 @@
-# ModelflowAI<br/>API Client
+# ModelflowAI<br/>Api-Client
 
 The ModelflowAI API Client serves as a foundational package, designed to be utilized by other API clients such as
 Mistral and Ollama. It provides a robust base, facilitating seamless integration and interaction with these clients.
 
 ## Installation
 
-Ensure you have PHP 8.2 or higher and Composer installed on your machine. To add the API client to your project, run the
-following command:
+To install the Api-Client package, you need to have PHP 8.2 or higher and Composer installed on your machine. Then, you
+can add the package to your project by running the following command:
 
 ```bash
 composer require modelflow-ai/api-client

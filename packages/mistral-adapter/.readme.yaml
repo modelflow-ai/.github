@@ -1,0 +1,41 @@
+title: Mistral Adapter
+description: The adapter integrates Mistral AI models into Modelflow  AI.
+usage: |
+    First, initialize the client:
+
+    ```php
+    use ModelflowAi\Mistral\Mistral;
+
+    $client = Mistral::client('your-api-key');
+    ```
+
+    Then, you can use the `ModelAdapter`:
+
+    ```php
+    use ModelflowAi\Mistral\Model;
+    use ModelflowAi\MistralAdapter\Model\MistralChatModelAdapter;
+
+    $modelAdapter = new MistralChatModelAdapter($client);
+    $response = $modelAdapter->create([
+        'model' => Model::TINY->value,
+        'messages' => [
+            [
+                'role' => 'system',
+                'content' => 'your-content',
+            ],
+        ],
+    ]);
+    ```
+
+    And the `EmbeddingsAdapter`:
+
+    ```php
+    use ModelflowAi\MistralAdapter\Embeddings\MistralEmbeddingAdapter;
+
+    $embeddingsAdapter = new MistralEmbeddingAdapter($client);
+    $response = $embeddingsAdapter->create([
+        'input' => ['your-input'],
+    ]);
+    ```
+
+    Remember to replace `'your-content'`, and `'your-input'` with the actual values you want to use.

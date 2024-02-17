@@ -1,10 +1,10 @@
-# ModelflowAI<br/>OllamaAdapter
+# ModelflowAI<br/>Ollama Adapter
 
-The OllamaAdapter package integrates the Ollama AI model into Modelflow AI.
+The adapter integrates Ollama models into Modelflow AI.
 
 ## Installation
 
-To install the OllamaAdapter package, you need to have PHP 8.2 or higher and Composer installed on your machine. Then,
+To install the Ollama Adapter package, you need to have PHP 8.2 or higher and Composer installed on your machine. Then,
 you can add the package to your project by running the following command:
 
 ```bash
