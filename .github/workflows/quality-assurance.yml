@@ -36,31 +36,79 @@ jobs:
             - name: Run packages lints
               run: composer lint
 
-    test:
-        name: "Test"
-        runs-on: ubuntu-latest
+    api-client:
+        name: Api-Client
+        uses: ./.github/workflows/test.yml
+        with:
+            directory: 'packages/api-client'
+            docker: false
 
-        steps:
-            - name: Checkout project
-              uses: actions/checkout@v4
-              with:
-                  ref: "${{ github.event.pull_request.merge_commit_sha }}"
+    core:
+        name: Core
+        uses: ./.github/workflows/test.yml
+        with:
+            directory: 'packages/core'
+            docker: false
 
-            - name: Install and configure PHP
-              uses: shivammathur/setup-php@v2
-              with:
-                  php-version: '8.2'
-                  tools: 'composer:v2'
-                  ini-values: memory_limit=-1
-                  coverage: none
+    embeddings:
+        name: Embeddings
+        uses: ./.github/workflows/test.yml
+        with:
+            directory: 'packages/embeddings'
+            docker: false
 
-            - name: Install composer dependencies
-              uses: ramsey/composer-install@v2
-              env:
-                  COMPOSER_ROOT_VERSION: 0.1.x-dev
-              with:
-                  working-directory: ${{ inputs.directory }}
-                  dependency-versions: 'highest'
+    experts:
+        name: Experts
+        uses: ./.github/workflows/test.yml
+        with:
+            directory: 'packages/experts'
+            docker: false
 
-            - name: Run packages tests
-              run: composer test
+    mistral:
+        name: Mistral
+        uses: ./.github/workflows/test.yml
+        with:
+            directory: 'packages/mistral'
+            docker: false
+
+    mistral-adapter:
+        name: Mistral Adapter
+        uses: ./.github/workflows/test.yml
+        with:
+            directory: 'packages/mistral-adapter'
+            docker: false
+
+    ollama:
+        name: Ollama
+        uses: ./.github/workflows/test.yml
+        with:
+            directory: 'packages/ollama'
+            docker: false
+
+    ollama-adapter:
+        name: Ollama Adapter
+        uses: ./.github/workflows/test.yml
+        with:
+            directory: 'packages/ollama-adapter'
+            docker: false
+
+    openai-adapter:
+        name: OpenAI Adapter
+        uses: ./.github/workflows/test.yml
+        with:
+            directory: 'packages/openai-adapter'
+            docker: false
+
+    prompt-template:
+        name: Prompt Template
+        uses: ./.github/workflows/test.yml
+        with:
+            directory: 'packages/prompt-template'
+            docker: false
+
+    symfony-integration:
+        name: Symfony Integration
+        uses: ./.github/workflows/test.yml
+        with:
+            directory: 'integrations/symfony'
+            docker: false

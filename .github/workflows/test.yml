@@ -1,0 +1,64 @@
+name: Test
+
+on:
+    workflow_call:
+        inputs:
+            directory:
+                required: true
+                type: string
+            docker:
+                required: true
+                type: boolean
+
+jobs:
+    test:
+        name: "PHP ${{ matrix.php-version }}"
+        runs-on: ubuntu-latest
+
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - php-version: '8.2'
+                      dependency-versions: 'highest'
+
+        steps:
+            - name: Checkout project
+              uses: actions/checkout@v4
+              with:
+                  ref: "${{ github.event.pull_request.merge_commit_sha }}"
+
+            - name: Start Docker services
+              if: ${{ inputs.docker }}
+              working-directory: ${{ inputs.directory }}
+              run: |
+                  docker compose up --wait
+
+            - name: Install and configure PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php-version }}
+                  tools: 'composer:v2'
+                  ini-values: memory_limit=-1
+                  coverage: none
+
+            - name: Install composer dependencies
+              uses: ramsey/composer-install@v2
+              env:
+                  COMPOSER_ROOT_VERSION: 0.1.x-dev
+              with:
+                  working-directory: ${{ inputs.directory }}
+                  dependency-versions: ${{ matrix.dependency-versions }}
+
+            - name: Generate UUID
+              id: uuid
+                # GitHub does not provide any parameter which is unique inside a workflow
+                # so instead of using GitHub variables we require to generate a unique id
+              run: |
+                  echo "uuid=$(uuidgen)" >> $GITHUB_OUTPUT
+                  cat $GITHUB_OUTPUT
+
+            - name: Run packages tests
+              run: composer test
+              env:
+                  TEST_INDEX_PREFIX: 'test_${{ steps.uuid.outputs.uuid }}_'
