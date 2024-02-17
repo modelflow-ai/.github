@@ -1,5 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of the Modelflow AI package.
+ *
+ * (c) Johannes Wachter <johannes@sulu.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Command;
 
 use Symfony\Component\Console\Command\Command;
@@ -13,7 +24,7 @@ use Twig\Environment;
 class GenerateCommand extends Command
 {
     public function __construct(
-        private Environment $twig,
+        private readonly Environment $twig,
     ) {
         parent::__construct('generate');
     }
@@ -28,22 +39,34 @@ class GenerateCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Generating readme files');
 
-        foreach (glob(dirname(__DIR__, 4) . '/*/*') as $packagePath) {
+        $packagePaths = \glob(\dirname(__DIR__, 4) . '/*/*');
+        if (false === $packagePaths) {
+            throw new \RuntimeException('Could not find any package.');
+        }
+
+        foreach ($packagePaths as $packagePath) {
             if (!\is_file($packagePath . '/.readme.yaml')) {
                 continue;
             }
 
             $package = \basename($packagePath);
             $typeNames = Inflector::singularize(\basename(\dirname($packagePath)));
-            $type = \end($typeNames);
-            $config = Yaml::parse(\file_get_contents($packagePath . '/.readme.yaml'));
-            $config['package'] = $package;
+            $type = \is_array($typeNames) ? \end($typeNames) : $typeNames;
+            /** @var array{
+             *     title: string,
+             *     type: string,
+             *     package?: string,
+             *     description: string,
+             * } $config
+             */
+            $config = Yaml::parse((string) \file_get_contents($packagePath . '/.readme.yaml'));
+            $config['package'] ??= $package;
             $config['type'] = $type;
 
             $io->section($config['title'] . ' ' . $type);
             $io->text('Generating readme for ' . $package);
 
-            $content = $this->twig->render('readme.md.twig', $config);
+            $content = $this->twig->render($type . '.md.twig', $config);
             \file_put_contents($packagePath . '/README.md', $content);
 
             $io->success('Readme generated');

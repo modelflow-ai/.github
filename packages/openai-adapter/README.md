@@ -1,10 +1,10 @@
-# ModelflowAI<br/>OpenAIAdapter
+# ModelflowAI<br/>OpenAI Adapter
 
-The OpenAIAdapter package integrates OpenAI models into Modelflow AI.
+The adapter integrates OpenAI models into Modelflow AI.
 
 ## Installation
 
-To install the OpenAIAdapter package, you need to have PHP 8.2 or higher and Composer installed on your machine. Then,
+To install the OpenAI Adapter package, you need to have PHP 8.2 or higher and Composer installed on your machine. Then,
 you can add the package to your project by running the following command:
 
 ```bash

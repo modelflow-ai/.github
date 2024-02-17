@@ -1,10 +1,10 @@
-# ModelflowAI<br/>PromptTemplate
+# ModelflowAI<br/>Prompt Template
 
-The PromptTemplate package provides templates for AI prompts in Modelflow AI.
+This package provides a way to handle templates for prompts and chat-messages.
 
 ## Installation
 
-To install the PromptTemplate package, you need to have PHP 8.2 or higher and Composer installed on your machine. Then,
+To install the Prompt Template package, you need to have PHP 8.2 or higher and Composer installed on your machine. Then,
 you can add the package to your project by running the following command:
 
 ```bash
