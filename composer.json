@@ -21,6 +21,7 @@
         "modelflow-ai/ollama-adapter": "^0.1",
         "modelflow-ai/openai-adapter": "^0.1",
         "modelflow-ai/prompt-template": "^0.1",
+        "modelflow-ai/qdrant-embeddings-store": "^0.1",
         "modelflow-ai/symfony-bundle": "^0.1"
 
     },

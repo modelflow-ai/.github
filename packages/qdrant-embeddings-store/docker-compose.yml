@@ -1,0 +1,15 @@
+services:
+    qdrant:
+        image: qdrant/qdrant:v1.7.4
+        ports:
+            - "6333:6333"
+        healthcheck:
+            test: ["CMD-SHELL", "curl --silent --fail localhost:6333/healthz || exit 1"]
+            interval: 5s
+            timeout: 5s
+            retries: 20
+        volumes:
+            - qdrant-data:/qdrant/storage
+
+volumes:
+    qdrant-data:

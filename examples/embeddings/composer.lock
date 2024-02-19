@@ -195,7 +195,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/embeddings",
-                "reference": "112878e81f68763c39f382bec9746829d9474dd7"
+                "reference": "7c6acf79bf00b044b855c36d182977580135dd91"
             },
             "require": {
                 "modelflow-ai/core": "^0.1",
@@ -215,7 +215,8 @@
                 "rector/rector": "^0.18.1"
             },
             "suggest": {
-                "modelflow-ai/elasticsearch-embeddings-store": "Embeddings store using Elasticsearch"
+                "modelflow-ai/elasticsearch-embeddings-store": "Embeddings store using Elasticsearch",
+                "modelflow-ai/qdrant-embeddings-store": "Embeddings store using Qdrant"
             },
             "type": "library",
             "autoload": {
@@ -279,6 +280,7 @@
                 "embeddings",
                 "ollama",
                 "openai",
+                "qdrant",
                 "redis"
             ],
             "transport-options": {

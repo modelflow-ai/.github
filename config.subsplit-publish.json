@@ -59,6 +59,11 @@
             "name": "SymfonyBundle",
             "directory": "integrations/symfony",
             "target": "git@github.com:modelflow-ai/symfony-bundle.git"
+        },
+        {
+            "name": "QdrantEmbeddingsStore",
+            "directory": "packages/qdrant-embeddings-store",
+            "target": "git@github.com:modelflow-ai/qdrant-embeddings-store.git"
         }
     ]
 }

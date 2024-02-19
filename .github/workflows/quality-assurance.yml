@@ -84,6 +84,13 @@ jobs:
             directory: 'packages/prompt-template'
             docker: false
 
+    qdrant-embeddings-store:
+        name: Qdrant Embeddings Store
+        uses: ./.github/workflows/test.yml
+        with:
+            directory: 'packages/qdrant-embeddings-store'
+            docker: true
+
     symfony-integration:
         name: Symfony Integration
         uses: ./.github/workflows/test.yml
