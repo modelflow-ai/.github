@@ -21,6 +21,13 @@ jobs:
             directory: 'packages/core'
             docker: false
 
+    elasticsearch-embeddings-store:
+        name: Elasticsearch Embeddings Store
+        uses: ./.github/workflows/test.yml
+        with:
+            directory: 'packages/elasticsearch-embeddings-store'
+            docker: true
+
     embeddings:
         name: Embeddings
         uses: ./.github/workflows/test.yml

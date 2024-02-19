@@ -11,6 +11,11 @@
             "target": "git@github.com:modelflow-ai/core.git"
         },
         {
+            "name": "ElasticsearchEmbeddingsStore",
+            "directory": "packages/elasticsearch-embeddings-store",
+            "target": "git@github.com:modelflow-ai/elasticsearch-embeddings-store.git"
+        },
+        {
             "name": "Embeddings",
             "directory": "packages/embeddings",
             "target": "git@github.com:modelflow-ai/embeddings.git"
