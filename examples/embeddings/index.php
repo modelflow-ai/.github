@@ -13,11 +13,12 @@ declare(strict_types=1);
 
 namespace App;
 
+use Elasticsearch\ClientBuilder;
 use ModelflowAi\Embeddings\Adapter\Cache\CacheEmbeddingAdapter;
 use ModelflowAi\Embeddings\Formatter\EmbeddingFormatter;
 use ModelflowAi\Embeddings\Generator\EmbeddingGenerator;
 use ModelflowAi\Embeddings\Splitter\EmbeddingSplitter;
-use ModelflowAi\Embeddings\Store\Memory\MemoryEmbeddingsStore;
+use ModelflowAi\Embeddings\Store\Elasticsearch\ElasticsearchEmbeddingsStore;
 use ModelflowAi\Ollama\Ollama;
 use ModelflowAi\OllamaAdapter\Embeddings\OllamaEmbeddingAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
@@ -34,7 +35,18 @@ $embeddingAdapter = new CacheEmbeddingAdapter(
     new FilesystemAdapter('ollama', 0, __DIR__ . '/var/cache'),
 );
 $embeddingGenerator = new EmbeddingGenerator($embeddingSplitter, $embeddingFormatter, $embeddingAdapter);
-$memoryStore = new MemoryEmbeddingsStore();
+
+$client = ClientBuilder::create()->build();
+$client->indices()->delete(['index' => 'embeddings', 'ignore_unavailable' => true]);
+$metadata = [
+    'fileName' => [
+        'type' => 'keyword',
+    ],
+];
+$mapper = fn(ExampleEmbedding $embedding) => [
+    'fileName' => $embedding->getFileName(),
+];
+$memoryStore = new ElasticsearchEmbeddingsStore($client, 'embeddings', $mapper, $metadata);
 
 $input = [
     new ExampleEmbedding(\file_get_contents(__DIR__ . '/var/books/schildbuerger.txt') ?: '', 'schildbuerger.txt'),

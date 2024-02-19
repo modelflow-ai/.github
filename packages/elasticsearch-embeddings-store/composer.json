@@ -25,7 +25,9 @@
         }
     ],
     "require": {
-        "php": "^8.2"
+        "php": "^8.2",
+        "modelflow-ai/embeddings": "^0.1",
+        "elasticsearch/elasticsearch": "~7.17.0"
     },
     "require-dev": {
         "php-cs-fixer/shim": "^3.15",
