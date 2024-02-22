@@ -17,6 +17,7 @@ use ModelflowAi\Core\AIRequestHandlerInterface;
 use ModelflowAi\Core\Request\AIChatRequest;
 use ModelflowAi\Core\Request\Builder\AIChatRequestBuilder;
 use ModelflowAi\Core\Request\Criteria\CapabilityCriteria;
+use ModelflowAi\Core\Request\Message\AIChatMessage;
 use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\Core\Response\AIChatResponseMessage;
@@ -91,6 +92,40 @@ class ThreadTest extends TestCase
         $this->assertCount(2, $request->getMessages());
         $this->assertSame(['role' => 'system', 'content' => 'instructions'], $request->getMessages()[0]?->toArray());
         $this->assertSame(['role' => 'user', 'content' => 'Context: {"key":"value"}'], $request->getMessages()[1]?->toArray());
+    }
+
+    public function testRunWithMessage(): void
+    {
+        $expert = new Expert(
+            'name',
+            'description',
+            'instructions',
+            [CapabilityCriteria::SMART],
+        );
+
+        $thread = new Thread($this->requestHandler->reveal(), $expert);
+        $thread->addMessage(new AIChatMessage(AIChatMessageRoleEnum::USER, 'Test Question 1'));
+        $thread->addMessages([
+            new AIChatMessage(AIChatMessageRoleEnum::USER, 'Test Question 2'),
+            new AIChatMessage(AIChatMessageRoleEnum::USER, 'Test Question 3'),
+        ]);
+
+        $this->requestHandler->createChatRequest()
+            ->willReturn(new AIChatRequestBuilder(fn (AIChatRequest $request) => new AIChatResponse(
+                $request,
+                new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Test message'),
+            )));
+
+        $result = $thread->run();
+        $this->assertInstanceOf(AIChatResponse::class, $result);
+
+        $request = $result->getRequest();
+        $this->assertInstanceOf(AIChatRequest::class, $request);
+        $this->assertCount(4, $request->getMessages());
+        $this->assertSame(['role' => 'system', 'content' => 'instructions'], $request->getMessages()[0]?->toArray());
+        $this->assertSame(['role' => 'user', 'content' => 'Test Question 1'], $request->getMessages()[1]?->toArray());
+        $this->assertSame(['role' => 'user', 'content' => 'Test Question 2'], $request->getMessages()[2]?->toArray());
+        $this->assertSame(['role' => 'user', 'content' => 'Test Question 3'], $request->getMessages()[3]?->toArray());
     }
 
     public function testRunWithFormat(): void
