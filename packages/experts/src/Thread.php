@@ -15,6 +15,7 @@ namespace ModelflowAi\Experts;
 
 use ModelflowAi\Core\AIRequestHandlerInterface;
 use ModelflowAi\Core\Request\Builder\AIChatRequestBuilder;
+use ModelflowAi\Core\Request\Message\AIChatMessage;
 use ModelflowAi\Core\Response\AIChatResponse;
 
 class Thread implements ThreadInterface
@@ -23,6 +24,11 @@ class Thread implements ThreadInterface
      * @var array<string, mixed>
      */
     private array $context = [];
+
+    /**
+     * @var AIChatMessage[]
+     */
+    private array $messages = [];
 
     public function __construct(
         private readonly AIRequestHandlerInterface $requestHandler,
@@ -33,6 +39,23 @@ class Thread implements ThreadInterface
     public function addContext(string $key, mixed $data): self
     {
         $this->context[$key] = $data;
+
+        return $this;
+    }
+
+    public function addMessage(AIChatMessage $message): self
+    {
+        $this->messages[] = $message;
+
+        return $this;
+    }
+
+    /**
+     * @param AIChatMessage[] $messages
+     */
+    public function addMessages(array $messages): self
+    {
+        $this->messages = \array_merge($this->messages, $messages);
 
         return $this;
     }
@@ -51,6 +74,10 @@ class Thread implements ThreadInterface
 
         if ([] !== $this->context) {
             $builder->addUserMessage('Context: ' . \json_encode($this->context));
+        }
+
+        foreach ($this->messages as $message) {
+            $builder->addMessage($message);
         }
 
         return $builder->build()
