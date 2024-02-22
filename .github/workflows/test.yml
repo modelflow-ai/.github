@@ -12,7 +12,7 @@ on:
 
 jobs:
     test:
-        name: "PHP ${{ matrix.php-version }}"
+        name: "PHP ${{ matrix.php-version }} / Dependencies ${{ matrix.dependency-versions }} / Lint ${{ matrix.lint }}"
         runs-on: ubuntu-latest
 
         strategy:
@@ -24,7 +24,7 @@ jobs:
                       lint: true
                     - php-version: '8.2'
                       dependency-versions: 'lowest'
-                      lint: true
+                      lint: false
 
         steps:
             - name: Checkout project
