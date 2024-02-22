@@ -765,12 +765,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "ce019e9ad711e31ee87c2c4c72e538b5240970c3"
+                "reference": "af14fdb282aa0e288bfe7eb3b57893484b68dc27"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/ce019e9ad711e31ee87c2c4c72e538b5240970c3",
-                "reference": "ce019e9ad711e31ee87c2c4c72e538b5240970c3",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/af14fdb282aa0e288bfe7eb3b57893484b68dc27",
+                "reference": "af14fdb282aa0e288bfe7eb3b57893484b68dc27",
                 "shasum": ""
             },
             "require": {
@@ -816,7 +816,7 @@
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
                 "source": "https://github.com/nikic/PHP-Parser/tree/master"
             },
-            "time": "2024-01-14T09:02:54+00:00"
+            "time": "2024-02-21T20:13:45+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -1161,7 +1161,7 @@
             "description": "A PSR-5 based resolver of Class names, Types and Structural Element Names",
             "support": {
                 "issues": "https://github.com/phpDocumentor/TypeResolver/issues",
-                "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.x"
+                "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.8.1"
             },
             "time": "2024-01-18T19:15:27+00:00"
         },

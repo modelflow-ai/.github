@@ -482,12 +482,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
-                "reference": "c60f8fb8721a48cda062a2e7a50b397bba9059ab"
+                "reference": "aec67a7dab3544185a0f9da4b3e4637ff5a660f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-access/zipball/c60f8fb8721a48cda062a2e7a50b397bba9059ab",
-                "reference": "c60f8fb8721a48cda062a2e7a50b397bba9059ab",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/aec67a7dab3544185a0f9da4b3e4637ff5a660f5",
+                "reference": "aec67a7dab3544185a0f9da4b3e4637ff5a660f5",
                 "shasum": ""
             },
             "require": {
@@ -550,7 +550,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-16T16:26:15+00:00"
+            "time": "2024-02-21T09:01:35+00:00"
         },
         {
             "name": "symfony/property-info",
@@ -849,12 +849,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "ce019e9ad711e31ee87c2c4c72e538b5240970c3"
+                "reference": "af14fdb282aa0e288bfe7eb3b57893484b68dc27"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/ce019e9ad711e31ee87c2c4c72e538b5240970c3",
-                "reference": "ce019e9ad711e31ee87c2c4c72e538b5240970c3",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/af14fdb282aa0e288bfe7eb3b57893484b68dc27",
+                "reference": "af14fdb282aa0e288bfe7eb3b57893484b68dc27",
                 "shasum": ""
             },
             "require": {
@@ -900,7 +900,7 @@
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
                 "source": "https://github.com/nikic/PHP-Parser/tree/master"
             },
-            "time": "2024-01-14T09:02:54+00:00"
+            "time": "2024-02-21T20:13:45+00:00"
         },
         {
             "name": "phar-io/manifest",
