@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\Embeddings\Store\Memory;
+namespace ModelflowAi\Embeddings\Store\Filesystem;
 
 use ModelflowAi\Embeddings\Algorithm\DistanceL2Utils;
 use ModelflowAi\Embeddings\Model\EmbeddingInterface;
