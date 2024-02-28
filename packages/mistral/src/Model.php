@@ -16,7 +16,13 @@ namespace ModelflowAi\Mistral;
 enum Model: string
 {
     case TINY = 'mistral-tiny';
-    case SMALL = 'mistral-small';
-    case MEDIUM = 'mistral-medium';
+    case SMALL = 'mistral-small-latest';
+    case MEDIUM = 'mistral-medium-latest';
+    case LARGE = 'mistral-large-latest';
     case EMBED = 'mistral-embed';
+
+    public function jsonSupported(): bool
+    {
+        return self::LARGE === $this;
+    }
 }

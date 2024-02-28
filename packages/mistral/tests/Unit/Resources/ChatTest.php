@@ -19,6 +19,7 @@ use ModelflowAi\ApiClient\Transport\Enums\Method;
 use ModelflowAi\ApiClient\Transport\Payload;
 use ModelflowAi\ApiClient\Transport\Response\ObjectResponse;
 use ModelflowAi\ApiClient\Transport\TransportInterface;
+use ModelflowAi\Mistral\Model;
 use ModelflowAi\Mistral\Resources\Chat;
 use ModelflowAi\Mistral\Resources\ChatInterface;
 use ModelflowAi\Mistral\Responses\Chat\CreateResponse;
@@ -71,6 +72,46 @@ final class ChatTest extends TestCase
         $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE['usage']['prompt_tokens'], $result->usage->promptTokens);
         $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE['usage']['completion_tokens'], $result->usage->completionTokens);
         $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE['usage']['total_tokens'], $result->usage->totalTokens);
+    }
+
+    public function testCreateWithFormatForLargeModel(): void
+    {
+        $response = DataFixtures::CHAT_CREATE_RESPONSE;
+        $response['model'] = Model::LARGE->value;
+        $response['messages'][0]['content'] = '{"message": "Lorem Ipsum"}';
+
+        $parameters = DataFixtures::CHAT_CREATE_REQUEST;
+        $parameters['model'] = Model::LARGE->value;
+        $parameters['response_format'] = ['type' => 'json_object'];
+
+        $response = new ObjectResponse($response, MetaInformation::from([]));
+        $this->transport->requestObject(
+            Argument::that(fn (Payload $payload) => 'chat/completions' === $payload->resourceUri->uri
+            && Method::POST === $payload->method
+            && ContentType::JSON === $payload->contentType
+            && $parameters === $payload->parameters),
+        )->willReturn($response);
+
+        $chat = $this->createInstance($this->transport->reveal());
+
+        $result = $chat->create($parameters);
+
+        $this->assertInstanceOf(CreateResponse::class, $result);
+    }
+
+    public function testCreateWithFormatForNonLargeModel(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $parameters = DataFixtures::CHAT_CREATE_REQUEST;
+        $parameters['model'] = Model::MEDIUM->value;
+        $parameters['response_format'] = ['type' => 'json_object'];
+
+        $this->transport->requestObject(Argument::cetera())->shouldNotBeCalled();
+
+        $chat = $this->createInstance($this->transport->reveal());
+
+        $chat->create($parameters);
     }
 
     public function testCreateAsStream(): void

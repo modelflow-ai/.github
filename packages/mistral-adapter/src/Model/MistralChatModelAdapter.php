@@ -36,10 +36,22 @@ final readonly class MistralChatModelAdapter implements AIModelAdapterInterface
     {
         Assert::isInstanceOf($request, AIChatRequest::class);
 
-        $result = $this->client->chat()->create([
+        $parameters = [
             'model' => $this->model->value,
             'messages' => $request->getMessages()->toArray(),
-        ]);
+        ];
+
+        if ($this->model->jsonSupported()) {
+            /** @var string|null $format */
+            $format = $request->getOption('format');
+            Assert::inArray($format, [null, 'json'], \sprintf('Invalid format "%s" given.', $format));
+
+            if ('json' === $format) {
+                $parameters['response_format'] = ['type' => 'json_object'];
+            }
+        }
+
+        $result = $this->client->chat()->create($parameters);
 
         return new AIChatResponse(
             $request,
