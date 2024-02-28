@@ -29,6 +29,7 @@ interface ChatInterface
      *     max_tokens?: int,
      *     safe_mode?: boolean,
      *     random_seed?: int,
+     *     response_format?: array{ type: "json_object" },
      * } $parameters
      */
     public function create(array $parameters): CreateResponse;

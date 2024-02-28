@@ -32,7 +32,7 @@ final class MistralChatModelAdapterTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testEmbedText(): void
+    public function testHandleRequest(): void
     {
         $chat = $this->prophesize(ChatInterface::class);
         $client = $this->prophesize(ClientInterface::class);
@@ -75,5 +75,96 @@ final class MistralChatModelAdapterTest extends TestCase
         $this->assertInstanceOf(AIChatResponse::class, $result);
         $this->assertSame(AIChatMessageRoleEnum::ASSISTANT, $result->getMessage()->role);
         $this->assertSame('Lorem Ipsum', $result->getMessage()->content);
+    }
+
+    public function testHandleRequestAsJsonIgnoreForNonLargeModel(): void
+    {
+        $chat = $this->prophesize(ChatInterface::class);
+        $client = $this->prophesize(ClientInterface::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->create([
+            'model' => Model::TINY->value,
+            'messages' => [
+                ['role' => 'user', 'content' => 'some text'],
+            ],
+        ])->willReturn(CreateResponse::from([
+            'id' => 'cmpl-e5cc70bb28c444948073e77776eb30ef',
+            'object' => 'chat.completion',
+            'created' => 1_702_256_327,
+            'model' => Model::TINY->value,
+            'choices' => [
+                [
+                    'index' => 1,
+                    'message' => [
+                        'role' => 'assistant',
+                        'content' => 'Lorem Ipsum',
+                    ],
+                    'finish_reason' => 'testFinishReason',
+                ],
+            ],
+            'usage' => [
+                'prompt_tokens' => 312,
+                'completion_tokens' => 324,
+                'total_tokens' => 336,
+            ],
+        ], MetaInformation::from([])));
+
+        $request = new AIChatRequest(new AIChatMessageCollection(
+            new AIChatMessage(AIChatMessageRoleEnum::USER, 'some text'),
+        ), new AIRequestCriteriaCollection(), ['format' => 'json'], fn () => null);
+
+        $adapter = new MistralChatModelAdapter($client->reveal());
+        $result = $adapter->handleRequest($request);
+
+        $this->assertInstanceOf(AIChatResponse::class, $result);
+        $this->assertSame(AIChatMessageRoleEnum::ASSISTANT, $result->getMessage()->role);
+        $this->assertSame('Lorem Ipsum', $result->getMessage()->content);
+    }
+
+    public function testHandleRequestAsJsonForLargeModel(): void
+    {
+        $chat = $this->prophesize(ChatInterface::class);
+        $client = $this->prophesize(ClientInterface::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->create([
+            'model' => Model::LARGE->value,
+            'messages' => [
+                ['role' => 'user', 'content' => 'some text'],
+            ],
+            'response_format' => ['type' => 'json_object'],
+        ])->willReturn(CreateResponse::from([
+            'id' => 'cmpl-e5cc70bb28c444948073e77776eb30ef',
+            'object' => 'chat.completion',
+            'created' => 1_702_256_327,
+            'model' => Model::LARGE->value,
+            'choices' => [
+                [
+                    'index' => 1,
+                    'message' => [
+                        'role' => 'assistant',
+                        'content' => '{"message": "Lorem Ipsum"}',
+                    ],
+                    'finish_reason' => 'testFinishReason',
+                ],
+            ],
+            'usage' => [
+                'prompt_tokens' => 312,
+                'completion_tokens' => 324,
+                'total_tokens' => 336,
+            ],
+        ], MetaInformation::from([])));
+
+        $request = new AIChatRequest(new AIChatMessageCollection(
+            new AIChatMessage(AIChatMessageRoleEnum::USER, 'some text'),
+        ), new AIRequestCriteriaCollection(), ['format' => 'json'], fn () => null);
+
+        $adapter = new MistralChatModelAdapter($client->reveal(), Model::LARGE);
+        $result = $adapter->handleRequest($request);
+
+        $this->assertInstanceOf(AIChatResponse::class, $result);
+        $this->assertSame(AIChatMessageRoleEnum::ASSISTANT, $result->getMessage()->role);
+        $this->assertSame('{"message": "Lorem Ipsum"}', $result->getMessage()->content);
     }
 }

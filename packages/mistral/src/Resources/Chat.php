@@ -16,6 +16,7 @@ namespace ModelflowAi\Mistral\Resources;
 use ModelflowAi\ApiClient\Resources\Concerns\Streamable;
 use ModelflowAi\ApiClient\Transport\Payload;
 use ModelflowAi\ApiClient\Transport\TransportInterface;
+use ModelflowAi\Mistral\Model;
 use ModelflowAi\Mistral\Responses\Chat\CreateResponse;
 use Webmozart\Assert\Assert;
 
@@ -76,6 +77,15 @@ final readonly class Chat implements ChatInterface
         }
         if (isset($parameters['random_seed'])) {
             Assert::integer($parameters['random_seed']);
+        }
+
+        if (!Model::from($parameters['model'])->jsonSupported()) {
+            Assert::keyNotExists($parameters, 'response_format');
+        } elseif (Model::from($parameters['model'])->jsonSupported() && isset($parameters['response_format'])) {
+            Assert::keyExists($parameters, 'response_format');
+            Assert::isArray($parameters['response_format']);
+            Assert::keyExists($parameters['response_format'], 'type');
+            Assert::inArray($parameters['response_format']['type'], ['json_object']);
         }
     }
 }
