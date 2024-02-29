@@ -21,4 +21,6 @@ interface TransportInterface
     public function requestText(Payload $payload): TextResponse;
 
     public function requestObject(Payload $payload): ObjectResponse;
+
+    public function requestStream(Payload $payload, ?callable $decoder = null): \Iterator;
 }

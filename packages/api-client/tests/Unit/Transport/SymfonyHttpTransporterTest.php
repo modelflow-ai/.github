@@ -52,6 +52,22 @@ final class SymfonyHttpTransporterTest extends TestCase
         $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE, $response->data);
     }
 
+    public function testRequestStream(): void
+    {
+        $transporter = $this->createInstance(new MockResponse(
+            (string) \json_encode(DataFixtures::CHAT_CREATE_RESPONSE),
+            ['http_code' => 200],
+        ));
+
+        $payload = Payload::create('chat/completions', DataFixtures::CHAT_CREATE_REQUEST);
+
+        $responses = \iterator_to_array($transporter->requestStream($payload));
+
+        $this->assertCount(1, $responses);
+        $this->assertInstanceOf(ObjectResponse::class, $responses[0]);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE, $responses[0]->data);
+    }
+
     private function createInstance(ResponseInterface $response): SymfonyHttpTransporter
     {
         return new SymfonyHttpTransporter(new MockHttpClient($response), 'https://api.example.com');

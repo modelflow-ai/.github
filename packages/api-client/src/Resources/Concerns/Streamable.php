@@ -30,18 +30,4 @@ trait Streamable
 
         throw new \InvalidArgumentException('Stream option is not supported. Please use the createStreamed() method instead.');
     }
-
-    /**
-     * Set the stream parameter to true.
-     *
-     * @param array<string, mixed> $parameters
-     *
-     * @return array<string, mixed>
-     */
-    private function setStreamParameter(array $parameters): array
-    {
-        $parameters['stream'] = true;
-
-        return $parameters;
-    }
 }

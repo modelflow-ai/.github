@@ -17,6 +17,7 @@ use ModelflowAi\ApiClient\Resources\Concerns\Streamable;
 use ModelflowAi\ApiClient\Transport\Payload;
 use ModelflowAi\ApiClient\Transport\TransportInterface;
 use ModelflowAi\Ollama\Responses\Completion\CreateResponse;
+use ModelflowAi\Ollama\Responses\Completion\CreateStreamedResponse;
 use Webmozart\Assert\Assert;
 
 final readonly class Completion implements CompletionInterface
@@ -40,6 +41,19 @@ final readonly class Completion implements CompletionInterface
 
         // @phpstan-ignore-next-line
         return CreateResponse::from($response->data, $response->meta);
+    }
+
+    public function createStreamed(array $parameters): \Iterator
+    {
+        $this->validateParameters($parameters);
+        $parameters['stream'] = true;
+
+        $payload = Payload::create('generate', $parameters);
+
+        foreach ($this->transport->requestStream($payload) as $index => $response) {
+            // @phpstan-ignore-next-line
+            yield CreateStreamedResponse::from($index, $response->data, $response->meta);
+        }
     }
 
     /**

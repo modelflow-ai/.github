@@ -22,6 +22,7 @@ use ModelflowAi\ApiClient\Transport\TransportInterface;
 use ModelflowAi\Ollama\Resources\Chat;
 use ModelflowAi\Ollama\Resources\ChatInterface;
 use ModelflowAi\Ollama\Responses\Chat\CreateResponse;
+use ModelflowAi\Ollama\Responses\Chat\CreateStreamedResponse;
 use ModelflowAi\Ollama\Tests\DataFixtures;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -142,6 +143,69 @@ final class ChatTest extends TestCase
 
         // @phpstan-ignore-next-line
         $chat->create($parameters);
+    }
+
+    public function testCreateStreamed(): void
+    {
+        $responses = [];
+        foreach (DataFixtures::CHAT_CREATE_STREAMED_RESPONSES as $response) {
+            $responses[] = new ObjectResponse($response, MetaInformation::from([]));
+        }
+
+        $this->transport->requestStream(
+            Argument::that(fn (Payload $payload) => 'chat' === $payload->resourceUri->uri
+                && Method::POST === $payload->method
+                && ContentType::JSON === $payload->contentType
+                && @\array_merge(DataFixtures::CHAT_CREATE_REQUEST, ['stream' => true]) === $payload->parameters),
+        )->willReturn(new \ArrayIterator($responses));
+
+        $chat = $this->createInstance($this->transport->reveal());
+
+        $result = \iterator_to_array($chat->createStreamed(DataFixtures::CHAT_CREATE_REQUEST));
+
+        $this->assertCount(2, $result);
+
+        foreach ($result as $i => $response) {
+            $this->assertInstanceOf(CreateStreamedResponse::class, $response);
+            $this->assertSame(DataFixtures::CHAT_CREATE_STREAMED_RESPONSES[$i]['model'], $response->model);
+            $this->assertSame(
+                (new \DateTimeImmutable(DataFixtures::CHAT_CREATE_STREAMED_RESPONSES[$i]['created_at']))->getTimestamp(),
+                $response->createdAt,
+            );
+            $this->assertSame($i, $response->index);
+            $this->assertSame(DataFixtures::CHAT_CREATE_STREAMED_RESPONSES[$i]['message']['role'], $response->message->role);
+            $this->assertSame(DataFixtures::CHAT_CREATE_STREAMED_RESPONSES[$i]['message']['content'], $response->message->delta);
+            $this->assertSame(DataFixtures::CHAT_CREATE_STREAMED_RESPONSES[$i]['done'], $response->done);
+            $this->assertInstanceOf(MetaInformation::class, $response->meta);
+        }
+    }
+
+    public function testCreateStreamedMissingModel(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $chat = $this->createInstance($this->transport->reveal());
+
+        $parameters = [
+            'messages' => DataFixtures::CHAT_CREATE_REQUEST['messages'],
+        ];
+
+        // @phpstan-ignore-next-line
+        \iterator_to_array($chat->createStreamed($parameters));
+    }
+
+    public function testCreateStreamedMissingMessages(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $chat = $this->createInstance($this->transport->reveal());
+
+        $parameters = [
+            'model' => DataFixtures::CHAT_CREATE_REQUEST['model'],
+        ];
+
+        // @phpstan-ignore-next-line
+        \iterator_to_array($chat->createStreamed($parameters));
     }
 
     private function createInstance(TransportInterface $transport): ChatInterface
