@@ -42,11 +42,15 @@ $embeddingsResponse = $embeddings->create(['prompt' => 'Hello, world!']);
 echo $embeddingsResponse->embedding;
 ```
 
-## Testing
+For more examples, see the [examples](examples) directory.
 
-To run the tests, use PHPUnit:
+## Testing & Code Quality
+
+To run the tests and all the code quality tools with the following commands:
 
 ```bash
+composer fix
+composer lint
 composer test
 ```
 
@@ -54,7 +58,8 @@ composer test
 
 ### Model API
 
-The Model API is another area that we are actively working on. Once completed, this will provide users with the ability to manage and interact with their AI models directly from the Ollama package.
+The Model API is another area that we are actively working on. Once completed, this will provide users with the ability
+to manage and interact with their AI models directly from the Ollama package.
 
 ## Contributing
 

@@ -55,6 +55,27 @@ final class DataFixtures
         'eval_duration' => 5_981_849_000,
     ];
 
+    public const CHAT_CREATE_STREAMED_RESPONSES = [
+        [
+            'model' => 'llama2',
+            'created_at' => '2024-01-13T12:01:31.929209Z',
+            'message' => [
+                'role' => 'assistant',
+                'content' => 'Lorem',
+            ],
+            'done' => false,
+        ],
+        [
+            'model' => 'llama2',
+            'created_at' => '2024-01-13T12:01:31.929209Z',
+            'message' => [
+                'role' => 'assistant',
+                'content' => 'Ipsum',
+            ],
+            'done' => true,
+        ],
+    ];
+
     public const COMPLETION_CREATE_REQUEST = [
         'model' => 'llama2',
         'prompt' => 'Prompt message',
@@ -72,6 +93,23 @@ final class DataFixtures
         'prompt_eval_count' => 0,
         'eval_count' => 169,
         'eval_duration' => 5_981_849_000,
+    ];
+
+    public const COMPLETION_CREATE_STREAMED_RESPONSES = [
+        [
+            'model' => 'llama2',
+            'created_at' => '2024-01-13T12:01:31.929209Z',
+            'response' => 'Lorem',
+            'context' => [0.1, 0.2, 0.3],
+            'done' => false,
+        ],
+        [
+            'model' => 'llama2',
+            'created_at' => '2024-01-13T12:01:31.929209Z',
+            'response' => 'Ipsum',
+            'context' => [0.1, 0.2, 0.3],
+            'done' => true,
+        ],
     ];
 
     public const EMBEDDINGS_CREATE_REQUEST = [

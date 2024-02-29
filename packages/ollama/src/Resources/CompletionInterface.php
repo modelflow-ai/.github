@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ModelflowAi\Ollama\Resources;
 
 use ModelflowAi\Ollama\Responses\Completion\CreateResponse;
+use ModelflowAi\Ollama\Responses\Completion\CreateStreamedResponse;
 
 interface CompletionInterface
 {
@@ -28,4 +29,18 @@ interface CompletionInterface
      * } $parameters
      */
     public function create(array $parameters): CreateResponse;
+
+    /**
+     * @param array{
+     *     model: string,
+     *     prompt: string,
+     *     format?: "json",
+     *     options?: array<string, string|int|float>,
+     *     template?: string,
+     *     context?: float[],
+     * } $parameters
+     *
+     * @return \Iterator<int, CreateStreamedResponse>
+     */
+    public function createStreamed(array $parameters): \Iterator;
 }

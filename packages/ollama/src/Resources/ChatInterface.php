@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ModelflowAi\Ollama\Resources;
 
 use ModelflowAi\Ollama\Responses\Chat\CreateResponse;
+use ModelflowAi\Ollama\Responses\Chat\CreateStreamedResponse;
 
 interface ChatInterface
 {
@@ -31,4 +32,21 @@ interface ChatInterface
      * } $parameters
      */
     public function create(array $parameters): CreateResponse;
+
+    /**
+     * @param array{
+     *     model: string,
+     *     messages: array<array{
+     *         role: "system"|"user"|"assistant",
+     *         content: string,
+     *         files?: string[],
+     *     }>,
+     *     format?: "json",
+     *     options?: array<string, string|int|float>,
+     *     template?: string,
+     * } $parameters
+     *
+     * @return \Iterator<int, CreateStreamedResponse>
+     */
+    public function createStreamed(array $parameters): \Iterator;
 }

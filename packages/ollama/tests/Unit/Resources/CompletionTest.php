@@ -22,6 +22,7 @@ use ModelflowAi\ApiClient\Transport\TransportInterface;
 use ModelflowAi\Ollama\Resources\Completion;
 use ModelflowAi\Ollama\Resources\CompletionInterface;
 use ModelflowAi\Ollama\Responses\Completion\CreateResponse;
+use ModelflowAi\Ollama\Responses\Completion\CreateStreamedResponse;
 use ModelflowAi\Ollama\Tests\DataFixtures;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -110,6 +111,66 @@ final class CompletionTest extends TestCase
 
         // @phpstan-ignore-next-line
         $completion->create($parameters);
+    }
+
+    public function testCreateStreamed(): void
+    {
+        $responses = [];
+        foreach (DataFixtures::COMPLETION_CREATE_STREAMED_RESPONSES as $response) {
+            $responses[] = new ObjectResponse($response, MetaInformation::from([]));
+        }
+
+        $this->transport->requestStream(
+            Argument::that(fn (Payload $payload) => 'generate' === $payload->resourceUri->uri
+            && Method::POST === $payload->method
+            && ContentType::JSON === $payload->contentType
+            && @\array_merge(DataFixtures::COMPLETION_CREATE_REQUEST, ['stream' => true]) === $payload->parameters),
+        )->willReturn(new \ArrayIterator($responses));
+
+        $completion = $this->createInstance($this->transport->reveal());
+
+        $result = \iterator_to_array($completion->createStreamed(DataFixtures::COMPLETION_CREATE_REQUEST));
+        $this->assertCount(2, $result);
+
+        foreach ($result as $i => $response) {
+            $this->assertInstanceOf(CreateStreamedResponse::class, $response);
+            $this->assertSame(DataFixtures::COMPLETION_CREATE_STREAMED_RESPONSES[$i]['model'], $response->model);
+            $this->assertSame(
+                (new \DateTimeImmutable(DataFixtures::COMPLETION_CREATE_STREAMED_RESPONSES[$i]['created_at']))->getTimestamp(),
+                $response->createdAt,
+            );
+            $this->assertSame($i, $response->index);
+            $this->assertSame(DataFixtures::COMPLETION_CREATE_STREAMED_RESPONSES[$i]['response'], $response->delta);
+            $this->assertSame(DataFixtures::COMPLETION_CREATE_STREAMED_RESPONSES[$i]['done'], $response->done);
+        }
+    }
+
+    public function testCreateStreamedMissingModel(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $completion = $this->createInstance($this->transport->reveal());
+
+        $parameters = [
+            'prompt' => DataFixtures::COMPLETION_CREATE_REQUEST['prompt'],
+        ];
+
+        // @phpstan-ignore-next-line
+        \iterator_to_array($completion->createStreamed($parameters));
+    }
+
+    public function testCreateStreamedMissingPrompt(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $completion = $this->createInstance($this->transport->reveal());
+
+        $parameters = [
+            'model' => DataFixtures::COMPLETION_CREATE_REQUEST['model'],
+        ];
+
+        // @phpstan-ignore-next-line
+        \iterator_to_array($completion->createStreamed($parameters));
     }
 
     private function createInstance(TransportInterface $transport): CompletionInterface

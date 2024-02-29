@@ -16,6 +16,7 @@ namespace ModelflowAi\ApiClient\Transport;
 use ModelflowAi\ApiClient\Responses\MetaInformation;
 use ModelflowAi\ApiClient\Transport\Response\ObjectResponse;
 use ModelflowAi\ApiClient\Transport\Response\TextResponse;
+use Symfony\Contracts\HttpClient\ChunkInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
@@ -65,5 +66,27 @@ class SymfonyHttpTransporter implements TransportInterface
 
         // @phpstan-ignore-next-line
         return new ObjectResponse($response->toArray(), MetaInformation::from($response->getHeaders()));
+    }
+
+    public function requestStream(Payload $payload, ?callable $decoder = null): \Iterator
+    {
+        if (!$decoder) {
+            $decoder = fn (ChunkInterface $chunk) => [\json_decode($chunk->getContent(), true)];
+        }
+
+        $response = $this->request($payload);
+
+        // @phpstan-ignore-next-line
+        $metaInformation = MetaInformation::from($response->getHeaders());
+
+        foreach ($this->client->stream($response) as $chunk) {
+            if ($chunk->isFirst() || $chunk->isLast()) {
+                continue;
+            }
+
+            foreach ($decoder($chunk) as $data) {
+                yield new ObjectResponse($data, $metaInformation);
+            }
+        }
     }
 }
