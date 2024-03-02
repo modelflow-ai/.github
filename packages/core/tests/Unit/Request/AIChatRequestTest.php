@@ -46,6 +46,21 @@ class AIChatRequestTest extends TestCase
         $this->assertTrue($request->matches(FeatureCriteria::IMAGE_TO_TEXT));
     }
 
+    public function testConstructorWithStreamed(): void
+    {
+        $message = new AIChatMessage(
+            AIChatMessageRoleEnum::USER,
+            'Test 123',
+        );
+        $messages = new AIChatMessageCollection($message);
+        $criteria = new AIRequestCriteriaCollection();
+        $requestHandler = fn ($request) => null;
+
+        $request = new AIChatRequest($messages, $criteria, ['streamed' => true], $requestHandler);
+
+        $this->assertTrue($request->matches(FeatureCriteria::STREAM));
+    }
+
     public function testExecute(): void
     {
         $message1 = new AIChatMessage(AIChatMessageRoleEnum::USER, 'Test content 1');

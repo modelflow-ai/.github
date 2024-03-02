@@ -76,11 +76,6 @@
                 <!-- Chat messages -->
                 {% if chat|default %}
                 <div id="messages" {{ turbo_stream_listen('chat::' ~ chat.uuid) }} class="flex flex-col flex-1 overflow-y-auto p-4 space-y-4">
-                    {#
-                    The messages will be displayed here.
-                    "turbo_stream_listen()" automatically registers a Stimulus controller that subscribes to the "chat" topic as managed by the transport.
-                    All connected users will receive the new messages!
-                    #}
                     {% for message in chat.messages %}
                         {% include "chat/message.stream.html.twig" with {
                             content: message.content,

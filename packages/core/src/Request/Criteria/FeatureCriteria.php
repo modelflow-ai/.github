@@ -19,4 +19,5 @@ enum FeatureCriteria: string implements AiCriteriaInterface
 
     case IMAGE_TO_TEXT = 'image_to_text';
     case FUNCTIONS = 'functions';
+    case STREAM = 'stream';
 }

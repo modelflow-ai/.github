@@ -12,7 +12,9 @@ use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Request\Message\ImageBase64Part;
 use ModelflowAi\Core\Request\Message\TextPart;
 use ModelflowAi\Core\Response\AIChatResponse;
+use ModelflowAi\Core\Response\AIChatResponseStream;
 use ModelflowAi\Integration\Symfony\Criteria\ModelCriteria;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -62,24 +64,46 @@ class AddChatMessageHandler
             $messages[] = new AIChatMessage($chatMessage->getRole(), $parts);
         }
 
-        /** @var AIChatResponse $response */
+        /** @var AIChatResponseStream $response */
         $response = $this->aiRequestHandler->createChatRequest(
             ...$messages,
-        )->addCriteria(ModelCriteria::from($chat->getModel()))->build()->execute();
+        )
+            ->addCriteria(ModelCriteria::from($chat->getModel()))
+            ->streamed()
+            ->build()
+            ->execute();
 
+        $uuid = Uuid::uuid4()->toString();
+
+        foreach ($response->getMessageStream() as $index => $message) {
+            if (0 === $index) {
+                $this->hub->publish(new Update(
+                    'chat::'.$chat->getUuid(),
+                    $this->twig->render('chat/streamed-message-container.html.twig', [
+                        'uuid' => $uuid,
+                        'content' => $message->content,
+                        'role' => $message->role->value,
+                        'model' => $chat->getModel(),
+                    ]),
+                ));
+
+                continue;
+            }
+
+            $this->hub->publish(new Update(
+                'message::'.$uuid,
+                $this->twig->render('chat/streamed-message.html.twig', [
+                    'uuid' => $uuid,
+                    'content' => $message->content,
+                ]),
+            ));
+        }
+
+        $message = $response->getMessage();
         $chat->addMessage(
-            AIChatMessageRoleEnum::ASSISTANT,
-            $response->getMessage()->content,
+            $message->role,
+            $message->content,
         );
-
-        $this->hub->publish(new Update(
-            'chat::'.$chat->getUuid(),
-            $this->twig->render('chat/message.stream.html.twig', [
-                'content' => $response->getMessage()->content,
-                'role' => $response->getMessage()->role->value,
-                'model' => $chat->getModel(),
-            ]),
-        ));
         $this->repository->flush();
 
         if (null !== $chat->getTitle()) {

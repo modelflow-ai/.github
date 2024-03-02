@@ -19,8 +19,10 @@ use ModelflowAi\Core\Request\AIRequestInterface;
 use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\Core\Response\AIChatResponseMessage;
+use ModelflowAi\Core\Response\AIChatResponseStream;
 use ModelflowAi\Core\Response\AIResponseInterface;
 use ModelflowAi\Ollama\ClientInterface;
+use ModelflowAi\Ollama\Responses\Chat\CreateStreamedResponse;
 use Webmozart\Assert\Assert;
 
 final readonly class OllamaChatModelAdapter implements AIModelAdapterInterface
@@ -51,6 +53,22 @@ final readonly class OllamaChatModelAdapter implements AIModelAdapterInterface
             $attributes['format'] = $format;
         }
 
+        if ($request->getOption('streamed', false)) {
+            return $this->createStreamed($request, $attributes);
+        }
+
+        return $this->create($request, $attributes);
+    }
+
+    /**
+     * @param array{
+     *     model: string,
+     *     messages: array<array{role: "assistant"|"system"|"user", content: string}>,
+     *     format?: "json",
+     * } $attributes
+     */
+    protected function create(AIChatRequest $request, array $attributes): AIResponseInterface
+    {
         $response = $this->client->chat()->create($attributes);
 
         return new AIChatResponse(
@@ -60,6 +78,44 @@ final readonly class OllamaChatModelAdapter implements AIModelAdapterInterface
                 $response->message->content ?? '',
             ),
         );
+    }
+
+    /**
+     * @param array{
+     *     model: string,
+     *     messages: array<array{role: "assistant"|"system"|"user", content: string}>,
+     *     format?: "json",
+     * } $attributes
+     */
+    protected function createStreamed(AIChatRequest $request, array $attributes): AIResponseInterface
+    {
+        $responses = $this->client->chat()->createStreamed($attributes);
+
+        return new AIChatResponseStream(
+            $request,
+            $this->createStreamedMessages($responses),
+        );
+    }
+
+    /**
+     * @param \Iterator<int, CreateStreamedResponse> $responses
+     *
+     * @return \Iterator<int, AIChatResponseMessage>
+     */
+    protected function createStreamedMessages(\Iterator $responses): \Iterator
+    {
+        $role = null;
+
+        foreach ($responses as $response) {
+            if (!$role instanceof AIChatMessageRoleEnum) {
+                $role = AIChatMessageRoleEnum::from($response->message->role);
+            }
+
+            yield new AIChatResponseMessage(
+                $role,
+                $response->message->delta ?? '',
+            );
+        }
     }
 
     public function supports(AIRequestInterface $request): bool

@@ -17,7 +17,7 @@ use ModelflowAi\Embeddings\Adapter\Cache\CacheEmbeddingAdapter;
 use ModelflowAi\Embeddings\Formatter\EmbeddingFormatter;
 use ModelflowAi\Embeddings\Generator\EmbeddingGenerator;
 use ModelflowAi\Embeddings\Splitter\EmbeddingSplitter;
-use ModelflowAi\Embeddings\Store\Memory\FilesystemEmbeddingsStore;
+use ModelflowAi\Embeddings\Store\Filesystem\FilesystemEmbeddingsStore;
 use ModelflowAi\Ollama\Ollama;
 use ModelflowAi\OllamaAdapter\Embeddings\OllamaEmbeddingAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
