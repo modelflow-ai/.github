@@ -26,7 +26,8 @@ abstract class AIRequest implements AIRequestInterface
 
     /**
      * @param array{
-     *     format?: "json"|null
+     *     streamed?: boolean,
+     *     format?: "json"|null,
      * } $options
      */
     public function __construct(
@@ -38,7 +39,7 @@ abstract class AIRequest implements AIRequestInterface
     }
 
     /**
-     * @param "format" $key
+     * @param "format"|"streamed" $key
      */
     public function getOption(string $key, mixed $default = null): mixed
     {

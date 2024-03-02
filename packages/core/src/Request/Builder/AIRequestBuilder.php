@@ -48,6 +48,13 @@ abstract class AIRequestBuilder
         return $this;
     }
 
+    public function streamed(): self
+    {
+        $this->options['streamed'] = true;
+
+        return $this;
+    }
+
     /**
      * @param AiCriteriaInterface|AiCriteriaInterface[] $criteria
      */

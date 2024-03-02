@@ -35,6 +35,10 @@ class AIChatRequest extends AIRequest implements AIRequestInterface
             }
         }
 
+        if ($this->getOption('streamed', false)) {
+            $features[] = FeatureCriteria::STREAM;
+        }
+
         parent::__construct($criteria->withFeatures($features), $options, $requestHandler);
     }
 

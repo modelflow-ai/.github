@@ -20,9 +20,11 @@ use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
 use ModelflowAi\Core\Request\Message\AIChatMessage;
 use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Response\AIChatResponse;
+use ModelflowAi\Core\Response\AIChatResponseStream;
 use ModelflowAi\Ollama\ClientInterface;
 use ModelflowAi\Ollama\Resources\ChatInterface;
 use ModelflowAi\Ollama\Responses\Chat\CreateResponse;
+use ModelflowAi\Ollama\Responses\Chat\CreateStreamedResponse;
 use ModelflowAi\OllamaAdapter\Model\OllamaChatModelAdapter;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -114,5 +116,57 @@ final class OllamaChatModelAdapterTest extends TestCase
         $result = $adapter->handleRequest($request);
 
         $this->assertInstanceOf(AIChatResponse::class, $result);
+    }
+
+    public function testHandleRequestStreamed(): void
+    {
+        $chat = $this->prophesize(ChatInterface::class);
+        $client = $this->prophesize(ClientInterface::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->createStreamed([
+            'model' => 'llama2',
+            'format' => 'json',
+            'messages' => [
+                ['role' => 'system', 'content' => 'System message'],
+                ['role' => 'user', 'content' => 'User message'],
+                ['role' => 'assistant', 'content' => 'Assistant message'],
+            ],
+        ])->willReturn(new \ArrayIterator([
+            CreateStreamedResponse::from(0, [
+                'model' => 'llama2',
+                'created_at' => '2024-01-13T12:01:31.929209Z',
+                'message' => [
+                    'role' => 'assistant',
+                    'content' => 'Lorem',
+                ],
+                'done' => false,
+            ], MetaInformation::from([])),
+            CreateStreamedResponse::from(1, [
+                'model' => 'llama2',
+                'created_at' => '2024-01-13T12:01:31.929209Z',
+                'message' => [
+                    'role' => 'assistant',
+                    'content' => 'Ipsum',
+                ],
+                'done' => true,
+            ], MetaInformation::from([])),
+        ], ));
+
+        $request = new AIChatRequest(new AIChatMessageCollection(
+            new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'System message'),
+            new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
+            new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, 'Assistant message'),
+        ), new AIRequestCriteriaCollection(), ['format' => 'json', 'streamed' => true], fn () => null);
+
+        $adapter = new OllamaChatModelAdapter($client->reveal());
+        $result = $adapter->handleRequest($request);
+
+        $this->assertInstanceOf(AIChatResponseStream::class, $result);
+        $contents = ['Lorem', 'Ipsum'];
+        foreach ($result->getMessageStream() as $i => $response) {
+            $this->assertSame(AIChatMessageRoleEnum::ASSISTANT, $response->role);
+            $this->assertSame($contents[$i], $response->content);
+        }
     }
 }

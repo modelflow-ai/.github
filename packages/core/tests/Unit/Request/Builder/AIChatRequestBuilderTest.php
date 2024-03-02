@@ -35,6 +35,15 @@ class AIChatRequestBuilderTest extends TestCase
         $this->assertSame('json', $builder->build()->getOption('format'));
     }
 
+    public function testStreamed(): void
+    {
+        $builder = new AIChatRequestBuilder(fn () => null);
+
+        $builder->streamed();
+
+        $this->assertTrue($builder->build()->getOption('streamed'));
+    }
+
     public function testAddCriteria(): void
     {
         $builder = new AIChatRequestBuilder(fn () => null);
