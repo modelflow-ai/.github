@@ -19,8 +19,11 @@ use ModelflowAi\Core\Request\AIRequestInterface;
 use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\Core\Response\AIChatResponseMessage;
+use ModelflowAi\Core\Response\AIChatResponseStream;
 use ModelflowAi\Core\Response\AIResponseInterface;
 use OpenAI\Contracts\ClientContract;
+use OpenAI\Responses\Chat\CreateStreamedResponse;
+use OpenAI\Responses\StreamResponse;
 use Webmozart\Assert\Assert;
 
 final readonly class OpenaiChatModelAdapter implements AIModelAdapterInterface
@@ -39,16 +42,32 @@ final readonly class OpenaiChatModelAdapter implements AIModelAdapterInterface
         $format = $request->getOption('format');
         Assert::inArray($format, [null, 'json'], \sprintf('Invalid format "%s" given.', $format));
 
-        $responseFormat = null;
+        $parameters = [
+            'model' => $this->model,
+            'messages' => $request->getMessages()->toArray(),
+        ];
+
         if ('json' === $format) {
-            $responseFormat = ['type' => 'json_object'];
+            $parameters['response_format'] = ['type' => 'json_object'];
         }
 
-        $result = $this->client->chat()->create(\array_filter([
-            'model' => $this->model,
-            'response_format' => $responseFormat,
-            'messages' => $request->getMessages()->toArray(),
-        ]));
+        if ($request->getOption('streamed', false)) {
+            return $this->createStreamed($request, $parameters);
+        }
+
+        return $this->create($request, $parameters);
+    }
+
+    /**
+     * @param array{
+     *     model: string,
+     *     messages: array<array{role: "assistant"|"system"|"user", content: string}>,
+     *     response_format?: array{type: "json_object"},
+     * } $parameters
+     */
+    protected function create(AIChatRequest $request, array $parameters): AIResponseInterface
+    {
+        $result = $this->client->chat()->create($parameters);
 
         return new AIChatResponse(
             $request,
@@ -57,6 +76,45 @@ final readonly class OpenaiChatModelAdapter implements AIModelAdapterInterface
                 $result->choices[0]->message->content ?? '',
             ),
         );
+    }
+
+    /**
+     * @param array{
+     *     model: string,
+     *     messages: array<array{role: "assistant"|"system"|"user", content: string}>,
+     *     response_format?: array{type: "json_object"},
+     * } $attributes
+     */
+    protected function createStreamed(AIChatRequest $request, array $attributes): AIResponseInterface
+    {
+        $responses = $this->client->chat()->createStreamed($attributes);
+
+        return new AIChatResponseStream(
+            $request,
+            $this->createStreamedMessages($responses),
+        );
+    }
+
+    /**
+     * @param StreamResponse<CreateStreamedResponse> $responses
+     *
+     * @return \Iterator<int, AIChatResponseMessage>
+     */
+    protected function createStreamedMessages(StreamResponse $responses): \Iterator
+    {
+        $role = null;
+
+        /** @var CreateStreamedResponse $response */
+        foreach ($responses as $response) {
+            if (!$role instanceof AIChatMessageRoleEnum) {
+                $role = AIChatMessageRoleEnum::from($response->choices[0]->delta->role ?? 'assistant');
+            }
+
+            yield new AIChatResponseMessage(
+                $role,
+                $response->choices[0]->delta->content ?? '',
+            );
+        }
     }
 
     public function supports(AIRequestInterface $request): bool

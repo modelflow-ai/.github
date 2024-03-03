@@ -19,11 +19,14 @@ use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
 use ModelflowAi\Core\Request\Message\AIChatMessage;
 use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Response\AIChatResponse;
+use ModelflowAi\Core\Response\AIChatResponseStream;
 use ModelflowAi\OpenaiAdapter\Model\OpenaiChatModelAdapter;
 use OpenAI\Contracts\ClientContract;
 use OpenAI\Contracts\Resources\ChatContract;
 use OpenAI\Responses\Chat\CreateResponse;
+use OpenAI\Responses\Chat\CreateStreamedResponse;
 use OpenAI\Responses\Meta\MetaInformation;
+use OpenAI\Testing\ClientFake;
 use OpenAI\Testing\Responses\Fixtures\Chat\CreateResponseFixture;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -117,5 +120,31 @@ final class OpenaiChatModelAdapterTest extends TestCase
         $result = $adapter->handleRequest($request);
 
         $this->assertInstanceOf(AIChatResponse::class, $result);
+    }
+
+    public function testHandleRequestStreamed(): void
+    {
+        /** @var resource $resource */
+        $resource = \fopen(__DIR__ . '/stream.txt', 'r');
+
+        $client = new ClientFake([
+            CreateStreamedResponse::fake($resource),
+        ]);
+
+        $request = new AIChatRequest(new AIChatMessageCollection(
+            new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'System message'),
+            new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
+            new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, 'Assistant message'),
+        ), new AIRequestCriteriaCollection(), ['streamed' => true], fn () => null);
+
+        $adapter = new OpenaiChatModelAdapter($client);
+        $result = $adapter->handleRequest($request);
+
+        $this->assertInstanceOf(AIChatResponseStream::class, $result);
+        $contents = ['', 'Lorem', 'Ipsum', ''];
+        foreach ($result->getMessageStream() as $i => $response) {
+            $this->assertSame(AIChatMessageRoleEnum::ASSISTANT, $response->role);
+            $this->assertSame($contents[$i], $response->content);
+        }
     }
 }
