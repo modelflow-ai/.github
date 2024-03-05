@@ -28,10 +28,11 @@ $responses = $client->chat()->createStreamed([
         ['role' => 'user', 'content' => 'Hello world!'],
     ],
 ]);
+
 foreach ($responses as $index => $response) {
-    if($index === 0) {
-        echo $response->choices[0]->message->role . ': ';
+    if (0 === $index) {
+        echo $response->choices[0]->delta->role . ': ';
     }
 
-    echo $response->choices[0]->message->content;
+    echo $response->choices[0]->delta->content;
 }

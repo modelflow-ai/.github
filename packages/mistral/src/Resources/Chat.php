@@ -56,12 +56,12 @@ final readonly class Chat implements ChatInterface
 
             $lines = \explode(\PHP_EOL, $content);
             foreach ($lines as $line) {
-                if ('data:' !== \substr($line, 0, 5)) {
+                if (!\str_starts_with($line, 'data:')) {
                     continue;
                 }
 
-                $line = trim(\substr($line, 6));
-                if ($line === '[DONE]') {
+                $line = \trim(\substr($line, 6));
+                if ('[DONE]' === $line) {
                     continue;
                 }
 

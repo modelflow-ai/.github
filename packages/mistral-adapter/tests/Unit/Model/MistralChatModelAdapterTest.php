@@ -20,10 +20,12 @@ use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
 use ModelflowAi\Core\Request\Message\AIChatMessage;
 use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Response\AIChatResponse;
+use ModelflowAi\Core\Response\AIChatResponseStream;
 use ModelflowAi\Mistral\ClientInterface;
 use ModelflowAi\Mistral\Model;
 use ModelflowAi\Mistral\Resources\ChatInterface;
 use ModelflowAi\Mistral\Responses\Chat\CreateResponse;
+use ModelflowAi\Mistral\Responses\Chat\CreateStreamedResponse;
 use ModelflowAi\MistralAdapter\Model\MistralChatModelAdapter;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -166,5 +168,72 @@ final class MistralChatModelAdapterTest extends TestCase
         $this->assertInstanceOf(AIChatResponse::class, $result);
         $this->assertSame(AIChatMessageRoleEnum::ASSISTANT, $result->getMessage()->role);
         $this->assertSame('{"message": "Lorem Ipsum"}', $result->getMessage()->content);
+    }
+
+    public function testHandleRequestStreamed(): void
+    {
+        $chat = $this->prophesize(ChatInterface::class);
+        $client = $this->prophesize(ClientInterface::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->createStreamed([
+            'model' => 'mistral-tiny',
+            'messages' => [
+                ['role' => 'system', 'content' => 'System message'],
+                ['role' => 'user', 'content' => 'User message'],
+                ['role' => 'assistant', 'content' => 'Assistant message'],
+            ],
+        ])->willReturn(new \ArrayIterator([
+            CreateStreamedResponse::from(0, [
+                'id' => '123-123-123',
+                'model' => 'mistral-tiny',
+                'object' => 'chat.completion',
+                'created' => 1_702_256_327,
+                'choices' => [
+                    [
+                        'index' => 1,
+                        'delta' => [
+                            'role' => 'assistant',
+                            'content' => 'Lorem',
+                        ],
+                        'finish_reason' => null,
+                    ],
+                ],
+                'usage' => null,
+            ], MetaInformation::from([])),
+            CreateStreamedResponse::from(1, [
+                'id' => '123-123-123',
+                'model' => 'mistral-tiny',
+                'object' => 'chat.completion',
+                'created' => 1_702_256_327,
+                'choices' => [
+                    [
+                        'index' => 1,
+                        'delta' => [
+                            'role' => 'assistant',
+                            'content' => 'Ipsum',
+                        ],
+                        'finish_reason' => null,
+                    ],
+                ],
+                'usage' => null,
+            ], MetaInformation::from([])),
+        ], ));
+
+        $request = new AIChatRequest(new AIChatMessageCollection(
+            new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'System message'),
+            new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
+            new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, 'Assistant message'),
+        ), new AIRequestCriteriaCollection(), ['streamed' => true], fn () => null);
+
+        $adapter = new MistralChatModelAdapter($client->reveal());
+        $result = $adapter->handleRequest($request);
+
+        $this->assertInstanceOf(AIChatResponseStream::class, $result);
+        $contents = ['Lorem', 'Ipsum'];
+        foreach ($result->getMessageStream() as $i => $response) {
+            $this->assertSame(AIChatMessageRoleEnum::ASSISTANT, $response->role);
+            $this->assertSame($contents[$i], $response->content);
+        }
     }
 }

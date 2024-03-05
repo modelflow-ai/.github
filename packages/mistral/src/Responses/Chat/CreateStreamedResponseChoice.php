@@ -17,7 +17,7 @@ final readonly class CreateStreamedResponseChoice
 {
     private function __construct(
         public int $index,
-        public CreateStreamedResponseDelta $message,
+        public CreateStreamedResponseDelta $delta,
         public ?string $finishReason,
     ) {
     }
@@ -27,7 +27,7 @@ final readonly class CreateStreamedResponseChoice
      *     index: int,
      *     delta: array{
      *         role: string,
-     *         delta: ?string,
+     *         content: ?string,
      *     },
      *     finish_reason: string|null,
      * } $attributes

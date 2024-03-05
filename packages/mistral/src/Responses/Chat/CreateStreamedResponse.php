@@ -25,8 +25,8 @@ final readonly class CreateStreamedResponse
         public string $id,
         public string $object,
         public int $created,
-        public int $index,
         public string $model,
+        public int $index,
         public array $choices,
         public ?Usage $usage,
         public MetaInformation $meta,
@@ -47,7 +47,7 @@ final readonly class CreateStreamedResponse
      *         },
      *         finish_reason: string|null,
      *     }>,
-     *     usage: array{
+     *     usage?: array{
      *         prompt_tokens: int,
      *         completion_tokens: int|null,
      *         total_tokens: int,
@@ -67,7 +67,7 @@ final readonly class CreateStreamedResponse
             $attributes['model'],
             $index,
             $choices,
-            $attributes['usage'] ? Usage::from($attributes['usage']) : null,
+            ($attributes['usage'] ?? null) ? Usage::from($attributes['usage']) : null,
             $meta,
         );
     }

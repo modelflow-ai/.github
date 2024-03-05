@@ -23,6 +23,7 @@ use ModelflowAi\Mistral\Model;
 use ModelflowAi\Mistral\Resources\Chat;
 use ModelflowAi\Mistral\Resources\ChatInterface;
 use ModelflowAi\Mistral\Responses\Chat\CreateResponse;
+use ModelflowAi\Mistral\Responses\Chat\CreateStreamedResponse;
 use ModelflowAi\Mistral\Tests\DataFixtures;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -152,6 +153,68 @@ final class ChatTest extends TestCase
 
         // @phpstan-ignore-next-line
         $chat->create($parameters);
+    }
+
+    public function testCreateStreamed(): void
+    {
+        $responses = [];
+        foreach (DataFixtures::CHAT_CREATE_STREAMED_RESPONSES as $response) {
+            $responses[] = new ObjectResponse($response, MetaInformation::from([]));
+        }
+
+        $this->transport->requestStream(
+            Argument::that(fn (Payload $payload) => 'chat/completions' === $payload->resourceUri->uri
+                && Method::POST === $payload->method
+                && ContentType::JSON === $payload->contentType
+                && @\array_merge(DataFixtures::CHAT_CREATE_REQUEST, ['stream' => true]) === $payload->parameters),
+            Argument::any(),
+        )->willReturn(new \ArrayIterator($responses));
+
+        $chat = $this->createInstance($this->transport->reveal());
+
+        $result = \iterator_to_array($chat->createStreamed(DataFixtures::CHAT_CREATE_REQUEST));
+
+        $this->assertCount(2, $result);
+
+        foreach ($result as $i => $response) {
+            $this->assertInstanceOf(CreateStreamedResponse::class, $response);
+            $this->assertSame(DataFixtures::CHAT_CREATE_STREAMED_RESPONSES[$i]['id'], $response->id);
+            $this->assertSame(DataFixtures::CHAT_CREATE_STREAMED_RESPONSES[$i]['object'], $response->object);
+            $this->assertSame(DataFixtures::CHAT_CREATE_STREAMED_RESPONSES[$i]['created'], $response->created);
+            $this->assertSame(DataFixtures::CHAT_CREATE_STREAMED_RESPONSES[$i]['model'], $response->model);
+            $this->assertCount(\count(DataFixtures::CHAT_CREATE_STREAMED_RESPONSES[$i]['choices']), $response->choices);
+            $this->assertSame(DataFixtures::CHAT_CREATE_STREAMED_RESPONSES[$i]['choices'][0]['delta']['role'], $response->choices[0]->delta->role);
+            $this->assertSame(DataFixtures::CHAT_CREATE_STREAMED_RESPONSES[$i]['choices'][0]['delta']['content'], $response->choices[0]->delta->content);
+            $this->assertSame(DataFixtures::CHAT_CREATE_STREAMED_RESPONSES[$i]['choices'][0]['finish_reason'], $response->choices[0]->finishReason);
+        }
+    }
+
+    public function testCreateStreamedMissingModel(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $chat = $this->createInstance($this->transport->reveal());
+
+        $parameters = [
+            'messages' => DataFixtures::CHAT_CREATE_REQUEST['messages'],
+        ];
+
+        // @phpstan-ignore-next-line
+        \iterator_to_array($chat->createStreamed($parameters));
+    }
+
+    public function testCreateStreamedMissingMessages(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $chat = $this->createInstance($this->transport->reveal());
+
+        $parameters = [
+            'model' => DataFixtures::CHAT_CREATE_REQUEST['model'],
+        ];
+
+        // @phpstan-ignore-next-line
+        \iterator_to_array($chat->createStreamed($parameters));
     }
 
     private function createInstance(TransportInterface $transport): ChatInterface
