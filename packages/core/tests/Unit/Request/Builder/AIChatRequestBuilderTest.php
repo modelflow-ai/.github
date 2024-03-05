@@ -51,7 +51,7 @@ class AIChatRequestBuilderTest extends TestCase
         $builder->addCriteria(FeatureCriteria::IMAGE_TO_TEXT);
 
         $this->assertTrue($builder->build()->matches(FeatureCriteria::IMAGE_TO_TEXT));
-        $this->assertFalse($builder->build()->matches(FeatureCriteria::FUNCTIONS));
+        $this->assertFalse($builder->build()->matches(FeatureCriteria::TOOLS));
     }
 
     public function testAddCriteriaArray(): void
@@ -65,7 +65,7 @@ class AIChatRequestBuilderTest extends TestCase
 
         $this->assertTrue($builder->build()->matches(FeatureCriteria::IMAGE_TO_TEXT));
         $this->assertTrue($builder->build()->matches(CapabilityCriteria::SMART));
-        $this->assertFalse($builder->build()->matches(FeatureCriteria::FUNCTIONS));
+        $this->assertFalse($builder->build()->matches(FeatureCriteria::TOOLS));
     }
 
     public function testAddMessage(): void

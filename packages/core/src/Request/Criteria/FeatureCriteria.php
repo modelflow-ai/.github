@@ -18,6 +18,6 @@ enum FeatureCriteria: string implements AiCriteriaInterface
     use FlagCriteriaTrait;
 
     case IMAGE_TO_TEXT = 'image_to_text';
-    case FUNCTIONS = 'functions';
+    case TOOLS = 'tools';
     case STREAM = 'stream';
 }

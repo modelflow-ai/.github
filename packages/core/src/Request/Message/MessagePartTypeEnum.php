@@ -17,4 +17,6 @@ enum MessagePartTypeEnum: string
 {
     case TEXT = 'text';
     case BASE64_IMAGE = 'base64-image';
+    case TOOL_CALLS = 'tool-calls';
+    case TOOL_CALL = 'tool-call';
 }

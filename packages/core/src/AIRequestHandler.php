@@ -20,7 +20,11 @@ use ModelflowAi\Core\Request\AIRequestInterface;
 use ModelflowAi\Core\Request\Builder\AIChatRequestBuilder;
 use ModelflowAi\Core\Request\Builder\AICompletionRequestBuilder;
 use ModelflowAi\Core\Request\Message\AIChatMessage;
+use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
+use ModelflowAi\Core\Request\Message\ToolCallPart;
+use ModelflowAi\Core\Request\Message\ToolCallsPart;
 use ModelflowAi\Core\Response\AIChatResponse;
+use ModelflowAi\Core\Response\AIChatToolResponse;
 use ModelflowAi\Core\Response\AICompletionResponse;
 use ModelflowAi\Core\Response\AIResponseInterface;
 use Webmozart\Assert\Assert;
@@ -53,9 +57,37 @@ class AIRequestHandler implements AIRequestHandlerInterface
     {
         return AIChatRequestBuilder::create(function (AIChatRequest $request): AIChatResponse {
             $response = $this->handle($request);
+            if ($response instanceof AIChatToolResponse) {
+                $response = $this->handleTool($response);
+            }
+
             Assert::isInstanceOf($response, AIChatResponse::class);
 
             return $response;
         })->addMessages($messages);
+    }
+
+    public function handleTool(AIChatToolResponse $response): AIChatResponse
+    {
+        /** @var AIChatRequest $request */
+        $request = $response->getRequest();
+        $builder = $request->getBuilder();
+
+        $builder->addMessage(
+            new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, ToolCallsPart::create($response->getToolCalls())),
+        );
+
+        foreach ($response->getToolCalls() as $toolCall) {
+            $result = $request->getTools()[$toolCall->name](...$toolCall->arguments);
+            if (!is_string($result)) {
+                $result = json_encode($result);
+            }
+
+            $builder->addMessage(
+                new AIChatMessage(AIChatMessageRoleEnum::TOOL, new ToolCallPart($toolCall->id, $toolCall->name, $result)),
+            );
+        }
+
+        return $builder->build()->execute();
     }
 }

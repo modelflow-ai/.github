@@ -33,7 +33,7 @@ class FeatureCriteriaTest extends TestCase
     {
         $featureCriteria = FeatureCriteria::IMAGE_TO_TEXT;
 
-        $this->assertFalse($featureCriteria->matches(FeatureCriteria::FUNCTIONS));
+        $this->assertFalse($featureCriteria->matches(FeatureCriteria::TOOLS));
     }
 
     public function testMatchesReturnsTrueForADifferentCriteria(): void
