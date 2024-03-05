@@ -61,6 +61,9 @@ return static function (ContainerConfigurator $container): void {
             'mistral_medium' => [
                 'enabled' => true,
             ],
+            'mistral_large' => [
+                'enabled' => true,
+            ],
         ]);
     }
 

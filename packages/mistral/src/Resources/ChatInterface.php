@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ModelflowAi\Mistral\Resources;
 
 use ModelflowAi\Mistral\Responses\Chat\CreateResponse;
+use ModelflowAi\Mistral\Responses\Chat\CreateStreamedResponse;
 
 interface ChatInterface
 {
@@ -33,4 +34,23 @@ interface ChatInterface
      * } $parameters
      */
     public function create(array $parameters): CreateResponse;
+
+    /**
+     * @param array{
+     *     model: string,
+     *     messages: array<array{
+     *         role: "system"|"user"|"assistant",
+     *         content: string,
+     *     }>,
+     *     temperature?: float,
+     *     top_p?: float,
+     *     max_tokens?: int,
+     *     safe_mode?: boolean,
+     *     random_seed?: int,
+     *     response_format?: array{ type: "json_object" },
+     * } $parameters
+     *
+     * @return \Iterator<int, CreateStreamedResponse>
+     */
+    public function createStreamed(array $parameters): \Iterator;
 }

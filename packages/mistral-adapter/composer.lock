@@ -1007,12 +1007,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phar-io/manifest.git",
-                "reference": "67729272c564ab9f953c81f48db44e8b1cb1e1c3"
+                "reference": "e1da028f27c66d00b0a4a97ffb6b81192d88e4b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phar-io/manifest/zipball/67729272c564ab9f953c81f48db44e8b1cb1e1c3",
-                "reference": "67729272c564ab9f953c81f48db44e8b1cb1e1c3",
+                "url": "https://api.github.com/repos/phar-io/manifest/zipball/e1da028f27c66d00b0a4a97ffb6b81192d88e4b6",
+                "reference": "e1da028f27c66d00b0a4a97ffb6b81192d88e4b6",
                 "shasum": ""
             },
             "require": {
@@ -1067,7 +1067,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-06-01T14:19:47+00:00"
+            "time": "2024-03-03T11:51:16+00:00"
         },
         {
             "name": "phar-io/version",
@@ -2005,12 +2005,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "e174340c2a7261f3e3d3d674e99bc20cd15cb488"
+                "reference": "9fd51fddc1f3762f7530c0550121fd07d3db4ecf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/e174340c2a7261f3e3d3d674e99bc20cd15cb488",
-                "reference": "e174340c2a7261f3e3d3d674e99bc20cd15cb488",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/9fd51fddc1f3762f7530c0550121fd07d3db4ecf",
+                "reference": "9fd51fddc1f3762f7530c0550121fd07d3db4ecf",
                 "shasum": ""
             },
             "require": {
@@ -2098,7 +2098,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-02T12:50:24+00:00"
+            "time": "2024-03-03T08:11:40+00:00"
         },
         {
             "name": "rector/rector",

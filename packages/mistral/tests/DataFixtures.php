@@ -65,6 +65,46 @@ final class DataFixtures
         ],
     ];
 
+    public const CHAT_CREATE_STREAMED_RESPONSES = [
+        [
+            'id' => 'cmpl-e5cc70bb28c444948073e77776eb30ef',
+            'object' => 'chat.completion',
+            'created' => 1_702_256_327,
+            'model' => Model::TINY->value,
+            'choices' => [
+                [
+                    'index' => 1,
+                    'delta' => [
+                        'role' => 'assistant',
+                        'content' => 'Lorem',
+                    ],
+                    'finish_reason' => null,
+                ],
+            ],
+            'usage' => [
+                'prompt_tokens' => 312,
+                'completion_tokens' => 324,
+                'total_tokens' => 336,
+            ],
+        ],
+        [
+            'id' => 'cmpl-e5cc70bb28c444948073e77776eb30ef',
+            'object' => 'chat.completion',
+            'created' => 1_702_256_327,
+            'model' => Model::TINY->value,
+            'choices' => [
+                [
+                    'index' => 1,
+                    'delta' => [
+                        'role' => 'assistant',
+                        'content' => 'Ipsum',
+                    ],
+                    'finish_reason' => 'testFinishReason',
+                ],
+            ],
+        ],
+    ];
+
     public const EMBEDDINGS_CREATE_REQUEST = [
         'model' => Model::EMBED->value,
         'input' => [

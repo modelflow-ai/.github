@@ -18,6 +18,8 @@ use ModelflowAi\ApiClient\Transport\Payload;
 use ModelflowAi\ApiClient\Transport\TransportInterface;
 use ModelflowAi\Mistral\Model;
 use ModelflowAi\Mistral\Responses\Chat\CreateResponse;
+use ModelflowAi\Mistral\Responses\Chat\CreateStreamedResponse;
+use Symfony\Contracts\HttpClient\ChunkInterface;
 use Webmozart\Assert\Assert;
 
 final readonly class Chat implements ChatInterface
@@ -40,6 +42,37 @@ final readonly class Chat implements ChatInterface
 
         // @phpstan-ignore-next-line
         return CreateResponse::from($response->data, $response->meta);
+    }
+
+    public function createStreamed(array $parameters): \Iterator
+    {
+        $this->validateParameters($parameters);
+        $parameters['stream'] = true;
+
+        $payload = Payload::create('chat/completions', $parameters);
+
+        $decoder = function (ChunkInterface $chunk): \Iterator {
+            $content = $chunk->getContent();
+
+            $lines = \explode(\PHP_EOL, $content);
+            foreach ($lines as $line) {
+                if (!\str_starts_with($line, 'data:')) {
+                    continue;
+                }
+
+                $line = \trim(\substr($line, 6));
+                if ('[DONE]' === $line) {
+                    continue;
+                }
+
+                yield \json_decode($line, true);
+            }
+        };
+
+        foreach ($this->transport->requestStream($payload, $decoder) as $index => $response) {
+            // @phpstan-ignore-next-line
+            yield CreateStreamedResponse::from($index, $response->data, $response->meta);
+        }
     }
 
     /**
