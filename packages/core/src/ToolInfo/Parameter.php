@@ -1,6 +1,6 @@
 <?php
 
-namespace ModelflowAi\Core\Tool;
+namespace ModelflowAi\Core\ToolInfo;
 
 /**
  * Inspired by https://github.com/theodo-group/LLPhant/blob/4825d36/src/Chat/FunctionInfo/Parameter.php.

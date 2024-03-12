@@ -18,7 +18,7 @@ use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
 use ModelflowAi\Core\Request\Criteria\FeatureCriteria;
 use ModelflowAi\Core\Request\Message\ImageBase64Part;
 use ModelflowAi\Core\Response\AIChatResponse;
-use ModelflowAi\Core\Tool\ToolChoiceEnum;
+use ModelflowAi\Core\ToolInfo\ToolChoiceEnum;
 
 class AIChatRequest extends AIRequest implements AIRequestInterface
 {
@@ -45,7 +45,8 @@ class AIChatRequest extends AIRequest implements AIRequestInterface
         }
 
         if (0 < \count($this->tools) && $this->getOption('toolChoice', ToolChoiceEnum::AUTO) === ToolChoiceEnum::AUTO) {
-            $features[] = FeatureCriteria::TOOLS;
+            // FIXME does not work currently when more than one criteria of feature is there
+            // $features[] = FeatureCriteria::TOOLS;
         }
 
         parent::__construct($criteria->withFeatures($features), $options, $requestHandler);

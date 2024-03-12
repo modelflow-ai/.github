@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ModelflowAi\Core\Response;
 
 use ModelflowAi\Core\Request\AIRequestInterface;
+use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 
 readonly class AIChatResponseStream extends AIChatResponse implements AIResponseInterface
 {
@@ -26,6 +27,8 @@ readonly class AIChatResponseStream extends AIChatResponse implements AIResponse
         private AIRequestInterface $request,
         private \Iterator $messages,
     ) {
+        parent::__construct($request, new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, ''));
+
         $this->messageBuilder = new AIChatResponseStreamMessageBuilder();
     }
 

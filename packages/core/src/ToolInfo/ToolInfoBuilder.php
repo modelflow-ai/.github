@@ -1,15 +1,19 @@
 <?php
 
-namespace ModelflowAi\Core\Tool;
+namespace ModelflowAi\Core\ToolInfo;
 
 /**
  * Inspired by https://github.com/theodo-group/LLPhant/blob/4825d36/src/Chat/FunctionInfo/FunctionBuilder.php.
  */
-class FunctionBuilder
+class ToolInfoBuilder
 {
-    public static function buildFunctionInfo(callable $callable, string $name): ToolInfo
-    {
-        $reflection = new \ReflectionFunction($callable);
+    public static function buildToolInfo(
+        object $instance,
+        string $method,
+        string $name,
+        ToolTypeEnum $type = ToolTypeEnum::FUNCTION,
+    ): ToolInfo {
+        $reflection = new \ReflectionMethod(get_class($instance), $method);
         $params = $reflection->getParameters();
 
         $parameters = [];
@@ -32,11 +36,12 @@ class FunctionBuilder
         }
 
         $docComment = $reflection->getDocComment() ?: '';
+
         // Remove PHPDoc annotations and get only the description
         $functionDescription = preg_replace('/\s*\* @.*/', '', $docComment);
         $functionDescription = trim(str_replace(['/**', '*/', '*'], '', $functionDescription ?? ''));
 
-        return new ToolInfo(ToolTypeEnum::FUNCTION, $name, $functionDescription, $parameters, $requiredParameters);
+        return new ToolInfo($type, $name, $functionDescription, $parameters, $requiredParameters);
     }
 
     private static function getArrayType(string $doc, string $paramName): ?string

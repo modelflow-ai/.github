@@ -2,8 +2,8 @@
 
 namespace ModelflowAi\OpenaiAdapter\Tool;
 
-use ModelflowAi\Core\Tool\Parameter;
-use ModelflowAi\Core\Tool\ToolInfo;
+use ModelflowAi\Core\ToolInfo\Parameter;
+use ModelflowAi\Core\ToolInfo\ToolInfo;
 
 final class ToolFormatter
 {

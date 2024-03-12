@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Core\Response;
 
-use ModelflowAi\Core\Tool\ToolTypeEnum;
+use ModelflowAi\Core\ToolInfo\ToolTypeEnum;
 
 readonly class AIChatToolCall
 {

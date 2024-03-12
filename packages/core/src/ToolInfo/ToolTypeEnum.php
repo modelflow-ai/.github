@@ -1,6 +1,6 @@
 <?php
 
-namespace ModelflowAi\Core\Tool;
+namespace ModelflowAi\Core\ToolInfo;
 
 enum ToolTypeEnum: string
 {

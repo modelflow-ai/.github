@@ -23,7 +23,7 @@ use ModelflowAi\Core\Response\AIChatResponseStream;
 use ModelflowAi\Core\Response\AIChatToolCall;
 use ModelflowAi\Core\Response\AIChatToolResponse;
 use ModelflowAi\Core\Response\AIResponseInterface;
-use ModelflowAi\Core\Tool\ToolTypeEnum;
+use ModelflowAi\Core\ToolInfo\ToolTypeEnum;
 use ModelflowAi\OpenaiAdapter\Tool\ToolFormatter;
 use OpenAI\Contracts\ClientContract;
 use OpenAI\Responses\Chat\CreateStreamedResponse;
@@ -80,17 +80,21 @@ final readonly class OpenaiChatModelAdapter implements AIModelAdapterInterface
 
         $choice = $result->choices[0];
         if (0 < \count($choice->message->toolCalls)) {
-            return new AIChatToolResponse(
+            return new AIChatResponse(
                 $request,
-                \array_map(
-                    fn(CreateResponseToolCall $toolCall) => new AIChatToolCall(
-                        ToolTypeEnum::from($toolCall->type),
-                        $toolCall->id,
-                        $toolCall->function->name,
-                        json_decode($toolCall->function->arguments, true),
-                    ),
-                    $choice->message->toolCalls,
-                )
+                new AIChatResponseMessage(
+                    AIChatMessageRoleEnum::from($choice->message->role),
+                    $choice->message->content ?? '',
+                    \array_map(
+                        fn(CreateResponseToolCall $toolCall) => new AIChatToolCall(
+                            ToolTypeEnum::from($toolCall->type),
+                            $toolCall->id,
+                            $toolCall->function->name,
+                            json_decode($toolCall->function->arguments, true),
+                        ),
+                        $choice->message->toolCalls,
+                    )
+                ),
             );
         }
 
@@ -108,11 +112,14 @@ final readonly class OpenaiChatModelAdapter implements AIModelAdapterInterface
      *     model: string,
      *     messages: array<array{role: "assistant"|"system"|"user", content: string}>,
      *     response_format?: array{type: "json_object"},
-     * } $attributes
+     * } $parameters
      */
-    protected function createStreamed(AIChatRequest $request, array $attributes): AIResponseInterface
+    protected function createStreamed(AIChatRequest $request, array $parameters): AIResponseInterface
     {
-        $responses = $this->client->chat()->createStreamed($attributes);
+        $parameters['tools'] = ToolFormatter::formatTools($request->getToolInfos());
+        $parameters['tool_choice'] = $request->getOption('toolChoice');
+
+        $responses = $this->client->chat()->createStreamed($parameters);
 
         return new AIChatResponseStream(
             $request,
@@ -131,15 +138,78 @@ final readonly class OpenaiChatModelAdapter implements AIModelAdapterInterface
 
         /** @var CreateStreamedResponse $response */
         foreach ($responses as $response) {
-            if (!$role instanceof AIChatMessageRoleEnum) {
-                $role = AIChatMessageRoleEnum::from($response->choices[0]->delta->role ?? 'assistant');
+            $delta = $response->choices[0]->delta;
+
+            if (0 < \count($delta->toolCalls)) {
+                foreach ($this->determineToolCall($role, $responses, $response) as $toolCall) {
+                    yield new AIChatResponseMessage(
+                        $role,
+                        $delta->content ?? '',
+                        [$toolCall],
+                    );
+                }
+
+                break;
             }
 
-            yield new AIChatResponseMessage(
-                $role,
-                $response->choices[0]->delta->content ?? '',
-            );
+            if (!$role instanceof AIChatMessageRoleEnum) {
+                $role = AIChatMessageRoleEnum::from($delta->role ?? 'assistant');
+            }
+
+            if(null !== $delta->content){
+                yield new AIChatResponseMessage(
+                    $role,
+                    $delta->content ?? '',
+                );
+            }
         }
+    }
+
+    protected function determineToolCall(?AIChatMessageRoleEnum $role, StreamResponse $responses, CreateStreamedResponse $firstResponse): \Iterator
+    {
+        $message = [
+            'id' => $firstResponse->choices[0]->delta->toolCalls[0]->id,
+            'type' => ToolTypeEnum::from($firstResponse->choices[0]->delta->toolCalls[0]->type),
+            'function' => [
+                'name' => $firstResponse->choices[0]->delta->toolCalls[0]->function->name,
+                'arguments' => [
+                    $firstResponse->choices[0]->delta->toolCalls[0]->function->arguments,
+                ],
+            ]
+        ];
+
+        foreach ($responses as $response) {
+            $delta = $response->choices[0]->delta;
+
+            foreach ($delta->toolCalls as $toolCall) {
+                if ($toolCall->id !== null) {
+                    yield new AIChatToolCall(
+                        $message['type'],
+                        $message['id'],
+                        $message['function']['name'],
+                        json_decode(implode('', $message['function']['arguments']), true),
+                    );
+
+                    $message = [
+                        'id' => $toolCall->id,
+                        'type' => ToolTypeEnum::from($toolCall->type),
+                        'function' => [
+                            'name' => $toolCall->function->name,
+                            'arguments' => [],
+                        ]
+                    ];
+                }
+
+                $message['function']['arguments'][] = $toolCall->function->arguments;
+            }
+        }
+
+        yield new AIChatToolCall(
+            $message['type'],
+            $message['id'],
+            $message['function']['name'],
+            json_decode(implode('', $message['function']['arguments']), true),
+        );
     }
 
     public function supports(AIRequestInterface $request): bool

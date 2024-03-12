@@ -75,7 +75,7 @@ class ModelflowAiBundle extends AbstractBundle
             'provider' => 'openai',
             'model' => 'gpt3.5-turbo',
             'stream' => true,
-            'tools' => false,
+            'tools' => true,
             'image_to_text' => false,
             'criteria' => [
                 ModelCriteria::GPT3_5,
