@@ -69,7 +69,7 @@ final class MistralChatModelAdapterTest extends TestCase
 
         $request = new AIChatRequest(new AIChatMessageCollection(
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'some text'),
-        ), new AIRequestCriteriaCollection(), [], fn () => null);
+        ), new AIRequestCriteriaCollection(), [], [], [], fn () => null);
 
         $adapter = new MistralChatModelAdapter($client->reveal());
         $result = $adapter->handleRequest($request);
@@ -114,7 +114,7 @@ final class MistralChatModelAdapterTest extends TestCase
 
         $request = new AIChatRequest(new AIChatMessageCollection(
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'some text'),
-        ), new AIRequestCriteriaCollection(), ['format' => 'json'], fn () => null);
+        ), new AIRequestCriteriaCollection(), [], [], ['format' => 'json'], fn () => null);
 
         $adapter = new MistralChatModelAdapter($client->reveal());
         $result = $adapter->handleRequest($request);
@@ -160,7 +160,7 @@ final class MistralChatModelAdapterTest extends TestCase
 
         $request = new AIChatRequest(new AIChatMessageCollection(
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'some text'),
-        ), new AIRequestCriteriaCollection(), ['format' => 'json'], fn () => null);
+        ), new AIRequestCriteriaCollection(), [], [], ['format' => 'json'], fn () => null);
 
         $adapter = new MistralChatModelAdapter($client->reveal(), Model::LARGE);
         $result = $adapter->handleRequest($request);
@@ -224,7 +224,7 @@ final class MistralChatModelAdapterTest extends TestCase
             new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'System message'),
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
             new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, 'Assistant message'),
-        ), new AIRequestCriteriaCollection(), ['streamed' => true], fn () => null);
+        ), new AIRequestCriteriaCollection(), [], [], ['streamed' => true], fn () => null);
 
         $adapter = new MistralChatModelAdapter($client->reveal());
         $result = $adapter->handleRequest($request);

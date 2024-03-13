@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1088455e951ec5de8d12b7d248a67b78",
+    "content-hash": "ad92c753dc8e36b4686c127cf5688ba2",
     "packages": [
         {
             "name": "modelflow-ai/api-client",
@@ -12,7 +12,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../api-client",
-                "reference": "26be560030504f5e3cc188999255eeb54d2a3d18"
+                "reference": "46733f2fee6c439e5fae2680c17412abd394325b"
             },
             "require": {
                 "php": "^8.2",
@@ -26,7 +26,7 @@
                 "php-cs-fixer/shim": "^3.15",
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^1.10",
-                "phpstan/phpstan-phpunit": "^1.3",
+                "phpstan/phpstan-phpunit": "^1.3@stable",
                 "phpunit/phpunit": "^10.3",
                 "rector/rector": "^0.18.1"
             },
@@ -100,7 +100,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../core",
-                "reference": "20dcbf13fa9805308ad28806eacae92973fa0e36"
+                "reference": "11dced9a9fc1da63b356ca2fd257880d91079193"
             },
             "require": {
                 "php": "^8.2",
@@ -112,11 +112,11 @@
             "require-dev": {
                 "jangregor/phpstan-prophecy": "^1.0",
                 "php-cs-fixer/shim": "^3.15",
-                "phpspec/prophecy-phpunit": "^2.1",
+                "phpspec/prophecy-phpunit": "^2.1@stable",
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^1.10",
-                "phpstan/phpstan-phpunit": "^1.3",
-                "phpunit/phpunit": "^10.3",
+                "phpstan/phpstan-phpunit": "^1.3@stable",
+                "phpunit/phpunit": "^10.3@stable",
                 "rector/rector": "^0.18.1"
             },
             "type": "library",
@@ -195,7 +195,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../mistral",
-                "reference": "13860a4a935596e7c5e9da997aa67c546640de97"
+                "reference": "8ad610c2a7dc9dcc0007eb9647e5e899b303b38a"
             },
             "require": {
                 "modelflow-ai/api-client": "^0.1",
@@ -208,10 +208,10 @@
             "require-dev": {
                 "jangregor/phpstan-prophecy": "^1.0",
                 "php-cs-fixer/shim": "^3.15",
-                "phpspec/prophecy-phpunit": "^2.1",
+                "phpspec/prophecy-phpunit": "^2.1@stable",
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^1.10",
-                "phpstan/phpstan-phpunit": "^1.3",
+                "phpstan/phpstan-phpunit": "^1.3@stable",
                 "phpunit/phpunit": "^10.3",
                 "rector/rector": "^0.18.1",
                 "symfony/dotenv": "^6.4 || ^7.0"
@@ -1420,16 +1420,16 @@
         },
         {
             "name": "phpspec/prophecy-phpunit",
-            "version": "dev-master",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy-phpunit.git",
-                "reference": "50043b2e44518bebd624ea9c6f5ec5e05838c550"
+                "reference": "16e1247e139434bce0bac09848bc5c8d882940fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy-phpunit/zipball/50043b2e44518bebd624ea9c6f5ec5e05838c550",
-                "reference": "50043b2e44518bebd624ea9c6f5ec5e05838c550",
+                "url": "https://api.github.com/repos/phpspec/prophecy-phpunit/zipball/16e1247e139434bce0bac09848bc5c8d882940fc",
+                "reference": "16e1247e139434bce0bac09848bc5c8d882940fc",
                 "shasum": ""
             },
             "require": {
@@ -1437,7 +1437,6 @@
                 "phpspec/prophecy": "^1.18",
                 "phpunit/phpunit": "^9.1 || ^10.1 || ^11.0"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1467,9 +1466,9 @@
             ],
             "support": {
                 "issues": "https://github.com/phpspec/prophecy-phpunit/issues",
-                "source": "https://github.com/phpspec/prophecy-phpunit/tree/master"
+                "source": "https://github.com/phpspec/prophecy-phpunit/tree/v2.2.0"
             },
-            "time": "2024-03-13T13:15:21+00:00"
+            "time": "2024-03-01T08:33:58+00:00"
         },
         {
             "name": "phpstan/extension-installer",
@@ -1626,7 +1625,7 @@
         },
         {
             "name": "phpstan/phpstan-phpunit",
-            "version": "1.3.x-dev",
+            "version": "1.3.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-phpunit.git",
@@ -1672,7 +1671,7 @@
             "description": "PHPUnit extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-phpunit/issues",
-                "source": "https://github.com/phpstan/phpstan-phpunit/tree/1.3.x"
+                "source": "https://github.com/phpstan/phpstan-phpunit/tree/1.3.16"
             },
             "time": "2024-02-23T09:51:20+00:00"
         },
@@ -3133,6 +3132,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "phpstan/phpstan-phpunit": 0,
+        "phpspec/prophecy-phpunit": 0,
         "jangregor/phpstan-prophecy": 20
     },
     "prefer-stable": false,

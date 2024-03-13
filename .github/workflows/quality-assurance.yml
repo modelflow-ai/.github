@@ -96,7 +96,7 @@ jobs:
         uses: ./.github/workflows/test.yml
         with:
             directory: 'packages/tools'
-            docker: true
+            docker: false
 
     symfony-integration:
         name: Symfony Integration

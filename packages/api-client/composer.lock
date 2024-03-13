@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "602107d22d198df0b5d0e2173947b510",
+    "content-hash": "44378946df224e3d4074575142d5f026",
     "packages": [
         {
             "name": "psr/container",
@@ -825,7 +825,7 @@
         },
         {
             "name": "phpstan/phpstan-phpunit",
-            "version": "1.3.x-dev",
+            "version": "1.3.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-phpunit.git",
@@ -871,7 +871,7 @@
             "description": "PHPUnit extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-phpunit/issues",
-                "source": "https://github.com/phpstan/phpstan-phpunit/tree/1.3.x"
+                "source": "https://github.com/phpstan/phpstan-phpunit/tree/1.3.16"
             },
             "time": "2024-02-23T09:51:20+00:00"
         },
@@ -2331,7 +2331,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "phpstan/phpstan-phpunit": 0
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
