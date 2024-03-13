@@ -22,10 +22,8 @@ use ModelflowAi\Core\Request\Builder\AICompletionRequestBuilder;
 use ModelflowAi\Core\Request\Message\AIChatMessage;
 use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Request\Message\ToolCallPart;
-use ModelflowAi\Core\Request\Message\ToolCallsPart;
 use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\Core\Response\AIChatToolCall;
-use ModelflowAi\Core\Response\AIChatToolResponse;
 use ModelflowAi\Core\Response\AICompletionResponse;
 use ModelflowAi\Core\Response\AIResponseInterface;
 use Webmozart\Assert\Assert;
@@ -66,9 +64,14 @@ class AIRequestHandler implements AIRequestHandlerInterface
 
     public function handleTool(AIChatRequest $request, AIChatToolCall $toolCall): AIChatMessage
     {
-        $result = $request->getTools()[$toolCall->name](...$toolCall->arguments);
-        if (!is_string($result)) {
-            $result = json_encode($result);
+        try {
+            $tool = $request->getTools()[$toolCall->name];
+            $result = $tool[0]->{$tool[1]}(...$toolCall->arguments);
+            if (!\is_string($result)) {
+                $result = \json_encode($result, \JSON_THROW_ON_ERROR);
+            }
+        } catch (\Throwable $exception) {
+            $result = $exception->getMessage();
         }
 
         return new AIChatMessage(AIChatMessageRoleEnum::TOOL, new ToolCallPart($toolCall->id, $toolCall->name, $result));

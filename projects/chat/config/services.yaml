@@ -16,6 +16,9 @@ services:
                 scrape_web_page:
                     - '@ModelflowAi\Tools\WebScrapping\WebScrappingTool'
                     - 'getWebPageText'
+                google_search:
+                    - '@ModelflowAi\Tools\GoogleSearch\GoogleSearchTool'
+                    - 'search'
 
     _instanceof:
         Twig\Extension\AbstractExtension:
@@ -34,3 +37,7 @@ services:
     # please note that last definitions always *replace* previous ones
 
     ModelflowAi\Tools\WebScrapping\WebScrappingTool: ~
+    ModelflowAi\Tools\GoogleSearch\GoogleSearchTool:
+        arguments:
+            $googleCustomSearchEngineId: '%env(CUSTOM_SEARCH_ENGINE_ID)%'
+            $googleCustomSearchEngineApiKey: '%env(CUSTOM_SEARCH_API_KEY)%'

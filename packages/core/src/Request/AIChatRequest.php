@@ -13,17 +13,20 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Core\Request;
 
-use ModelflowAi\Core\Request\Builder\AIChatRequestBuilder;
 use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
 use ModelflowAi\Core\Request\Criteria\FeatureCriteria;
 use ModelflowAi\Core\Request\Message\ImageBase64Part;
 use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\Core\ToolInfo\ToolChoiceEnum;
+use ModelflowAi\Core\ToolInfo\ToolInfo;
 
 class AIChatRequest extends AIRequest implements AIRequestInterface
 {
+    /**
+     * @param array<string, array{0: object, 1: string}> $tools
+     * @param ToolInfo[] $toolInfos
+     */
     public function __construct(
-        private readonly AIChatRequestBuilder $builder,
         private readonly AIChatMessageCollection $messages,
         AIRequestCriteriaCollection $criteria,
         private readonly array $tools,
@@ -44,7 +47,7 @@ class AIChatRequest extends AIRequest implements AIRequestInterface
             $features[] = FeatureCriteria::STREAM;
         }
 
-        if (0 < \count($this->tools) && $this->getOption('toolChoice', ToolChoiceEnum::AUTO) === ToolChoiceEnum::AUTO) {
+        if ([] !== $this->tools && ToolChoiceEnum::AUTO === $this->getOption('toolChoice', ToolChoiceEnum::AUTO)) {
             // FIXME does not work currently when more than one criteria of feature is there
             // $features[] = FeatureCriteria::TOOLS;
         }
@@ -57,19 +60,25 @@ class AIChatRequest extends AIRequest implements AIRequestInterface
         return $this->messages;
     }
 
+    public function hasTools(): bool
+    {
+        return [] !== $this->tools;
+    }
+
+    /**
+     * @return array<string, array{0: object, 1: string}>
+     */
     public function getTools(): array
     {
         return $this->tools;
     }
 
+    /**
+     * @return ToolInfo[]
+     */
     public function getToolInfos(): array
     {
         return $this->toolInfos;
-    }
-
-    public function getBuilder(): AIChatRequestBuilder
-    {
-        return $this->builder;
     }
 
     public function execute(): AIChatResponse

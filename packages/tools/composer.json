@@ -32,7 +32,8 @@
     ],
     "require": {
         "php": "^8.2",
-        "modelflow-ai/core": "^0.1"
+        "modelflow-ai/core": "^0.1",
+        "symfony/http-client": "^6.4 || ^7.0"
     },
     "require-dev": {
         "php-cs-fixer/shim": "^3.15",

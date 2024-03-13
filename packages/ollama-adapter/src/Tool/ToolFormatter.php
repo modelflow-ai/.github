@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\OpenaiAdapter\Tool;
+namespace ModelflowAi\OllamaAdapter\Tool;
 
 use ModelflowAi\Core\ToolInfo\Parameter;
 use ModelflowAi\Core\ToolInfo\ToolInfo;

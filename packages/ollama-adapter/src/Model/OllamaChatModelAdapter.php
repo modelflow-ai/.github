@@ -23,6 +23,7 @@ use ModelflowAi\Core\Response\AIChatResponseStream;
 use ModelflowAi\Core\Response\AIResponseInterface;
 use ModelflowAi\Ollama\ClientInterface;
 use ModelflowAi\Ollama\Responses\Chat\CreateStreamedResponse;
+use ModelflowAi\OllamaAdapter\Tool\ToolFormatter;
 use Webmozart\Assert\Assert;
 
 final readonly class OllamaChatModelAdapter implements AIModelAdapterInterface

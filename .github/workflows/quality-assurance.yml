@@ -91,6 +91,13 @@ jobs:
             directory: 'packages/qdrant-embeddings-store'
             docker: true
 
+    tools:
+        name: Tools
+        uses: ./.github/workflows/test.yml
+        with:
+            directory: 'packages/tools'
+            docker: true
+
     symfony-integration:
         name: Symfony Integration
         uses: ./.github/workflows/test.yml

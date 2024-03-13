@@ -14,39 +14,30 @@ declare(strict_types=1);
 namespace App;
 
 use ModelflowAi\Core\AIRequestHandlerInterface;
+use ModelflowAi\Core\Request\Builder\AIChatRequestBuilder;
 use ModelflowAi\Core\Request\Message\AIChatMessage;
 use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Request\Message\ToolCallsPart;
 use ModelflowAi\Core\ToolInfo\ToolChoiceEnum;
 
+require_once __DIR__ . '/WeatherTool.php';
+
 /** @var AIRequestHandlerInterface $handler */
 $handler = require_once __DIR__ . '/bootstrap.php';
 
-class WeatherTool
-{
-    function getCurrentWeather(string $location, ?int $timestamp): array
-    {
-        return [
-            'location' => $location,
-            'timestamp' => $timestamp ?? time(),
-            'weather' => 'sunny',
-            'temperature' => 22.5,
-        ];
-    }
-}
-
+/** @var AIChatRequestBuilder $builder */
 $builder = $handler->createChatRequest()
     ->addUserMessage('How is the weather in hohenems?')
-    ->addCriteria(ProviderCriteria::OPENAI)
     ->tool('get_current_weather', new WeatherTool(), 'getCurrentWeather')
-    ->toolChoice(ToolChoiceEnum::AUTO);
+    ->toolChoice(ToolChoiceEnum::AUTO)
+    ->addCriteria(ProviderCriteria::OPENAI);
 
 $request = $builder->build();
 $response = $request->execute();
 
 do {
     $toolCalls = $response->getMessage()->toolCalls;
-    if ($toolCalls !== null && 0 < \count($toolCalls)) {
+    if (null !== $toolCalls && 0 < \count($toolCalls)) {
         $builder->addMessage(
             new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, ToolCallsPart::create($toolCalls)),
         );
@@ -59,6 +50,6 @@ do {
 
         $response = $builder->build()->execute();
     }
-} while ($toolCalls !== null && 0 < \count($toolCalls));
+} while (null !== $toolCalls && [] !== $toolCalls);
 
 echo $response->getMessage()->content;

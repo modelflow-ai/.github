@@ -22,13 +22,13 @@ abstract readonly class MessagePart
 
     /**
      * @param array{
-     *     role: "assistant"|"system"|"user",
+     *     role: "assistant"|"system"|"user"|"tool",
      *     content: string,
      *     images?: string[],
      * } $message
      *
      * @return array{
-     *     role: "assistant"|"system"|"user",
+     *     role: "assistant"|"system"|"user"|"tool",
      *     content: string,
      *     images?: string[],
      * }

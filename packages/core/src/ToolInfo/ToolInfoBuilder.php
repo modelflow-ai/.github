@@ -1,5 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of the Modelflow AI package.
+ *
+ * (c) Johannes Wachter <johannes@sulu.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace ModelflowAi\Core\ToolInfo;
 
 /**
@@ -13,7 +24,7 @@ class ToolInfoBuilder
         string $name,
         ToolTypeEnum $type = ToolTypeEnum::FUNCTION,
     ): ToolInfo {
-        $reflection = new \ReflectionMethod(get_class($instance), $method);
+        $reflection = new \ReflectionMethod($instance::class, $method);
         $params = $reflection->getParameters();
 
         $parameters = [];
@@ -25,12 +36,12 @@ class ToolInfoBuilder
 
             $newParameter = new Parameter($param->getName(), Types::mapPhpTypeToJsonSchemaType($reflectionType), '');
 
-            if ($newParameter->type === 'array') {
+            if ('array' === $newParameter->type) {
                 $newParameter->itemsOrProperties = self::getArrayType($reflection->getDocComment() ?: '', $param->getName());
             }
 
             $parameters[] = $newParameter;
-            if (! $param->isOptional()) {
+            if (!$param->isOptional()) {
                 $requiredParameters[] = $newParameter;
             }
         }
@@ -38,8 +49,8 @@ class ToolInfoBuilder
         $docComment = $reflection->getDocComment() ?: '';
 
         // Remove PHPDoc annotations and get only the description
-        $functionDescription = preg_replace('/\s*\* @.*/', '', $docComment);
-        $functionDescription = trim(str_replace(['/**', '*/', '*'], '', $functionDescription ?? ''));
+        $functionDescription = \preg_replace('/\s*\* @.*/', '', $docComment);
+        $functionDescription = \trim(\str_replace(['/**', '*/', '*'], '', $functionDescription ?? ''));
 
         return new ToolInfo($type, $name, $functionDescription, $parameters, $requiredParameters);
     }
@@ -47,10 +58,10 @@ class ToolInfoBuilder
     private static function getArrayType(string $doc, string $paramName): ?string
     {
         // Use a regex to find the parameter type
-        $pattern = "/@param\s+([a-zA-Z0-9_|\\\[\]]+)\s+\\$".$paramName.'/';
-        if (preg_match($pattern, $doc, $matches)) {
+        $pattern = "/@param\s+([a-zA-Z0-9_|\\\[\]]+)\s+\\$" . $paramName . '/';
+        if (\preg_match($pattern, $doc, $matches)) {
             // If the type is an array type (e.g., string[]), return the type without the brackets
-            return preg_replace('/\[\]$/', '', $matches[1]);
+            return \preg_replace('/\[\]$/', '', $matches[1]);
         }
 
         // If the parameter was not found, return null

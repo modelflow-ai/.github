@@ -13,13 +13,8 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Core\Request\Message;
 
-use ModelflowAi\Core\Response\AIChatToolCall;
-
 readonly class ToolCallPart extends MessagePart
 {
-    /**
-     * @param AIChatToolCall[] $tools
-     */
     public static function create(
         string $toolCallId,
         string $toolName,

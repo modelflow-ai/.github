@@ -123,7 +123,7 @@ class ModelflowAiBundle extends AbstractBundle
             'provider' => 'mistral',
             'model' => Model::LARGE->value,
             'stream' => true,
-            'tools' => true,
+            'tools' => false,
             'image_to_text' => false,
             'criteria' => [
                 ModelCriteria::MISTRAL_LARGE,
@@ -147,7 +147,7 @@ class ModelflowAiBundle extends AbstractBundle
             'provider' => 'ollama',
             'model' => 'nexusraven',
             'stream' => true,
-            'tools' => true,
+            'tools' => false,
             'image_to_text' => false,
             'criteria' => [
                 ModelCriteria::NEXUSRAVEN,

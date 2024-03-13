@@ -17,6 +17,9 @@ use ModelflowAi\Core\ToolInfo\ToolTypeEnum;
 
 readonly class AIChatToolCall
 {
+    /**
+     * @param array<string, mixed> $arguments
+     */
     public function __construct(
         public ToolTypeEnum $type,
         public string $id,

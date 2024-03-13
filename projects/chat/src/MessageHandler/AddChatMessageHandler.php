@@ -14,9 +14,7 @@ use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Request\Message\ImageBase64Part;
 use ModelflowAi\Core\Request\Message\TextPart;
 use ModelflowAi\Core\Request\Message\ToolCallsPart;
-use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\Core\Response\AIChatResponseStream;
-use ModelflowAi\Core\Response\AIChatToolResponseMessage;
 use ModelflowAi\Integration\Symfony\Criteria\ModelCriteria;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Mercure\HubInterface;
@@ -27,6 +25,9 @@ use Twig\Environment;
 #[AsMessageHandler]
 class AddChatMessageHandler
 {
+    /**
+     * @param array<string, array{0: object, 1: string}> $tools
+     */
     public function __construct(
         private ChatRepository $repository,
         private AIRequestHandlerInterface $aiRequestHandler,
@@ -47,7 +48,7 @@ class AddChatMessageHandler
 
         $this->hub->publish(
             new Update(
-                'chat::' . $chat->getUuid(),
+                'chat::'.$chat->getUuid(),
                 $this->twig->render('chat/message.stream.html.twig', [
                     'content' => $chatMessage->getContent(),
                     'role' => $chatMessage->getRole()->value,
@@ -70,14 +71,17 @@ class AddChatMessageHandler
             $messages[] = new AIChatMessage($chatMessage->getRole(), $parts);
         }
 
+        /** @var AIChatRequestBuilder $requestBuilder */
         $requestBuilder = $this->aiRequestHandler->createChatRequest(
             ...$messages,
         )
             ->addCriteria(ModelCriteria::from($chat->getModel()))
             ->streamed();
 
-        foreach ($this->tools as $name => $tool) {
-            $requestBuilder->tool($name, $tool[0], $tool[1]);
+        if ($message->enableTools) {
+            foreach ($this->tools as $name => $tool) {
+                $requestBuilder->tool($name, $tool[0], $tool[1]);
+            }
         }
 
         /** @var AIChatResponseStream $response */
@@ -97,18 +101,18 @@ class AddChatMessageHandler
             return;
         }
 
-        /** @var AIChatResponse $response */
-        $response = $this->aiRequestHandler->createChatRequest(
-            ...[
+        /*
+        $response = $this->aiRequestHandler->createChatRequest(...[
             ...$messages,
             new AIChatMessage(
                 AIChatMessageRoleEnum::SYSTEM,
-                'Having the conversation above. Please create a title for it! Response with the title only no prose, no "Tile: " and no quotes. Keep the original language!'),
-        ],
-        )->addCriteria(ModelCriteria::from(ChatController::DEFAULT_MODEL))->build()->execute();
+                'Having the conversation above. Please create a title for it! Response with the title only no prose, no "Tile: " and no quotes. Keep the original language!',
+            ),
+        ])->addCriteria(ModelCriteria::from(ChatController::DEFAULT_MODEL))->build()->execute();
 
         $chat->setTitle($response->getMessage()->content);
         $this->repository->flush();
+        */
     }
 
     private function handleResponses(Chat $chat, AIChatResponseStream $response, AIChatRequestBuilder $builder): AIChatResponseStream
@@ -117,7 +121,7 @@ class AddChatMessageHandler
 
         $responses = $response->getMessageStream();
         foreach ($responses as $index => $message) {
-            if ($message->toolCalls !== null && 0 < \count($message->toolCalls)) {
+            if (null !== $message->toolCalls && 0 < \count($message->toolCalls)) {
                 $toolCalls = $message->toolCalls;
                 $additionalMessages = [];
 
@@ -142,7 +146,7 @@ class AddChatMessageHandler
             if (0 === $index) {
                 $this->hub->publish(
                     new Update(
-                        'chat::' . $chat->getUuid(),
+                        'chat::'.$chat->getUuid(),
                         $this->twig->render('chat/streamed-message-container.html.twig', [
                             'uuid' => $uuid,
                             'content' => $message->content,
@@ -157,7 +161,7 @@ class AddChatMessageHandler
 
             $this->hub->publish(
                 new Update(
-                    'message::' . $uuid,
+                    'message::'.$uuid,
                     $this->twig->render('chat/streamed-message.html.twig', [
                         'uuid' => $uuid,
                         'content' => $message->content,
@@ -165,7 +169,7 @@ class AddChatMessageHandler
                 ),
             );
         }
-        
+
         return $response;
     }
 }

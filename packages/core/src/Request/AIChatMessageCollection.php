@@ -37,7 +37,7 @@ class AIChatMessageCollection extends \ArrayObject
 
     /**
      * @return array<array{
-     *     role: "assistant"|"system"|"user",
+     *     role: "assistant"|"system"|"user"|"tool",
      *     content: string,
      *     images?: string[],
      * }>

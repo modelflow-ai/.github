@@ -26,6 +26,9 @@ readonly class ToolCallsPart extends MessagePart
         return new self($tools);
     }
 
+    /**
+     * @param AIChatToolCall[] $tools
+     */
     public function __construct(
         public array $tools,
     ) {
@@ -34,14 +37,14 @@ readonly class ToolCallsPart extends MessagePart
 
     public function enhanceMessage(array $message): array
     {
-        $message['content'] = null;
-        $message['tool_calls'] = array_map(
+        $message['content'] = '';
+        $message['tool_calls'] = \array_map(
             fn (AIChatToolCall $tool) => [
                 'id' => $tool->id,
                 'type' => $tool->type->value,
                 'function' => [
                     'name' => $tool->name,
-                    'arguments' => json_encode($tool->arguments),
+                    'arguments' => \json_encode($tool->arguments),
                 ],
             ],
             $this->tools,
