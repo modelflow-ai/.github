@@ -65,7 +65,7 @@ final readonly class OpenaiChatModelAdapter implements AIModelAdapterInterface
     /**
      * @param array{
      *     model: string,
-     *     messages: array<array{role: "assistant"|"system"|"user", content: string}>,
+     *     messages: array<array{role: "assistant"|"system"|"user"|"tool", content: string}>,
      *     response_format?: array{type: "json_object"},
      * } $parameters
      */
@@ -90,7 +90,7 @@ final readonly class OpenaiChatModelAdapter implements AIModelAdapterInterface
                             ToolTypeEnum::from($toolCall->type),
                             $toolCall->id,
                             $toolCall->function->name,
-                            \json_decode($toolCall->function->arguments, true),
+                            $this->decodeArguments($toolCall->function->arguments),
                         ),
                         $choice->message->toolCalls,
                     ),
@@ -110,7 +110,10 @@ final readonly class OpenaiChatModelAdapter implements AIModelAdapterInterface
     /**
      * @param array{
      *     model: string,
-     *     messages: array<array{role: "assistant"|"system"|"user", content: string}>,
+     *     messages: array<array{
+     *         role: "assistant"|"system"|"user"|"tool",
+     *         content: string,
+     *     }>,
      *     response_format?: array{type: "json_object"},
      * } $parameters
      */
@@ -147,7 +150,7 @@ final readonly class OpenaiChatModelAdapter implements AIModelAdapterInterface
             }
 
             if (0 < \count($delta->toolCalls)) {
-                foreach ($this->determineToolCall($role, $responses, $response) as $toolCall) {
+                foreach ($this->determineToolCall($responses, $response) as $toolCall) {
                     yield new AIChatResponseMessage(
                         $role,
                         $delta->content ?? '',
@@ -161,17 +164,22 @@ final readonly class OpenaiChatModelAdapter implements AIModelAdapterInterface
             if (null !== $delta->content) {
                 yield new AIChatResponseMessage(
                     $role,
-                    $delta->content ?? '',
+                    $delta->content,
                 );
             }
         }
     }
 
-    protected function determineToolCall(?AIChatMessageRoleEnum $role, StreamResponse $responses, CreateStreamedResponse $firstResponse): \Iterator
+    /**
+     * @param StreamResponse<CreateStreamedResponse> $responses
+     *
+     * @return \Iterator<int, AIChatToolCall>
+     */
+    protected function determineToolCall(StreamResponse $responses, CreateStreamedResponse $firstResponse): \Iterator
     {
         $message = [
             'id' => $firstResponse->choices[0]->delta->toolCalls[0]->id,
-            'type' => ToolTypeEnum::from($firstResponse->choices[0]->delta->toolCalls[0]->type),
+            'type' => ToolTypeEnum::tryFrom($firstResponse->choices[0]->delta->toolCalls[0]->type ?? '') ?? ToolTypeEnum::FUNCTION,
             'function' => [
                 'name' => $firstResponse->choices[0]->delta->toolCalls[0]->function->name,
                 'arguments' => [
@@ -180,21 +188,28 @@ final readonly class OpenaiChatModelAdapter implements AIModelAdapterInterface
             ],
         ];
 
+        /** @var CreateStreamedResponse $response */
         foreach ($responses as $response) {
             $delta = $response->choices[0]->delta;
 
             foreach ($delta->toolCalls as $toolCall) {
                 if (null !== $toolCall->id) {
+                    Assert::inArray($message['type'], ToolTypeEnum::cases());
+                    Assert::notNull($message['id']);
+                    Assert::isArray($message['function']);
+                    Assert::notNull($message['function']['name']);
+                    Assert::notNull($message['function']['arguments']);
+
                     yield new AIChatToolCall(
                         $message['type'],
                         $message['id'],
                         $message['function']['name'],
-                        \json_decode(\implode('', $message['function']['arguments']), true),
+                        $this->decodeArguments(\implode('', $message['function']['arguments'])),
                     );
 
                     $message = [
                         'id' => $toolCall->id,
-                        'type' => ToolTypeEnum::from($toolCall->type),
+                        'type' => ToolTypeEnum::tryFrom($toolCall->type ?? '') ?? ToolTypeEnum::FUNCTION,
                         'function' => [
                             'name' => $toolCall->function->name,
                             'arguments' => [],
@@ -206,12 +221,29 @@ final readonly class OpenaiChatModelAdapter implements AIModelAdapterInterface
             }
         }
 
+        Assert::inArray($message['type'], ToolTypeEnum::cases());
+        Assert::notNull($message['id']);
+        Assert::isArray($message['function']);
+        Assert::notNull($message['function']['name']);
+        Assert::notNull($message['function']['arguments']);
+
         yield new AIChatToolCall(
             $message['type'],
             $message['id'],
             $message['function']['name'],
-            \json_decode(\implode('', $message['function']['arguments']), true),
+            $this->decodeArguments(\implode('', $message['function']['arguments'])),
         );
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    protected function decodeArguments(string $arguments): array
+    {
+        /** @var array<string, mixed> $result */
+        $result = \json_decode($arguments, true);
+
+        return $result;
     }
 
     public function supports(AIRequestInterface $request): bool

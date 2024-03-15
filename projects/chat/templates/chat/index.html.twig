@@ -100,7 +100,7 @@
                     {% endif %}
                     {{ form_row(form.message) }}
                     {% if feature_enabled(chatModel, 'tools') %}
-                        {% if chat.isToolsEnabled == true %}
+                        {% if chat.isToolsEnabled|default(true) == true %}
                             {{ form_row(form.enableTools, {attr: {checked: 'checked'}}) }}
                         {% else %}
                             {{ form_row(form.enableTools) }}

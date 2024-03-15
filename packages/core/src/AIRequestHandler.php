@@ -61,19 +61,4 @@ class AIRequestHandler implements AIRequestHandlerInterface
             return $response;
         })->addMessages($messages);
     }
-
-    public function handleTool(AIChatRequest $request, AIChatToolCall $toolCall): AIChatMessage
-    {
-        try {
-            $tool = $request->getTools()[$toolCall->name];
-            $result = $tool[0]->{$tool[1]}(...$toolCall->arguments);
-            if (!\is_string($result)) {
-                $result = \json_encode($result, \JSON_THROW_ON_ERROR);
-            }
-        } catch (\Throwable $exception) {
-            $result = $exception->getMessage();
-        }
-
-        return new AIChatMessage(AIChatMessageRoleEnum::TOOL, new ToolCallPart($toolCall->id, $toolCall->name, $result));
-    }
 }

@@ -24,13 +24,33 @@ abstract readonly class MessagePart
      * @param array{
      *     role: "assistant"|"system"|"user"|"tool",
      *     content: string,
+     *     tool_call_id?: string,
+     *     name?: string,
      *     images?: string[],
+     *     tool_calls?: array<array{
+     *         id: string,
+     *         type: "function",
+     *         function: array{
+     *             name: string,
+     *             arguments: string
+     *        },
+     *     }>,
      * } $message
      *
      * @return array{
      *     role: "assistant"|"system"|"user"|"tool",
      *     content: string,
+     *     tool_call_id?: string,
+     *     name?: string,
      *     images?: string[],
+     *     tool_calls?: array<array{
+     *         id: string,
+     *         type: "function",
+     *         function: array{
+     *             name: string,
+     *             arguments: string
+     *         },
+     *     }>,
      * }
      */
     abstract public function enhanceMessage(array $message): array;

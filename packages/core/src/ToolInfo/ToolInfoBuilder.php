@@ -30,11 +30,19 @@ class ToolInfoBuilder
         $parameters = [];
         $requiredParameters = [];
 
+        $docComment = $reflection->getDocComment() ?: '';
+
         foreach ($params as $param) {
             /** @var \ReflectionNamedType $reflectionType */
             $reflectionType = $param->getType();
 
-            $newParameter = new Parameter($param->getName(), Types::mapPhpTypeToJsonSchemaType($reflectionType), '');
+            \preg_match(\sprintf('/\* @param [^\$]* \$%s (?<description>.*)/', $param->getName()), $docComment, $matches);
+
+            $newParameter = new Parameter(
+                $param->getName(),
+                Types::mapPhpTypeToJsonSchemaType($reflectionType),
+                $matches['description'] ?? '',
+            );
 
             if ('array' === $newParameter->type) {
                 $newParameter->itemsOrProperties = self::getArrayType($reflection->getDocComment() ?: '', $param->getName());
@@ -45,8 +53,6 @@ class ToolInfoBuilder
                 $requiredParameters[] = $newParameter;
             }
         }
-
-        $docComment = $reflection->getDocComment() ?: '';
 
         // Remove PHPDoc annotations and get only the description
         $functionDescription = \preg_replace('/\s*\* @.*/', '', $docComment);

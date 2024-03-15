@@ -54,6 +54,33 @@ final class ToolFormatter
     }
 
     /**
+     * @param ToolInfo[] $tools
+     *
+     * @return array<array{
+     *     type: string,
+     *     function: array{
+     *        name: string,
+     *        description: string,
+     *        parameters: array{
+     *            type: string,
+     *            properties: array<string, mixed[]>,
+     *            required: string[],
+     *        },
+     *    },
+     * }>
+     */
+    public static function formatTools(array $tools): array
+    {
+        return \array_map(
+            fn (ToolInfo $tool) => [
+                'type' => $tool->type->value,
+                'function' => self::formatTool($tool),
+            ],
+            $tools,
+        );
+    }
+
+    /**
      * @throws \Exception
      *
      * @return array{
@@ -73,7 +100,7 @@ final class ToolFormatter
      *     format?: string,
      * }
      */
-    public static function formatParameter(Parameter $parameter): array
+    protected static function formatParameter(Parameter $parameter): array
     {
         $param = [
             'type' => $parameter->type,
@@ -132,21 +159,5 @@ final class ToolFormatter
         }
 
         return $param;
-    }
-
-    /**
-     * @param ToolInfo[] $tools
-     *
-     * @return mixed[]
-     */
-    public static function formatTools(array $tools): array
-    {
-        return \array_map(
-            fn (ToolInfo $tool) => [
-                'type' => $tool->type->value,
-                'function' => self::formatTool($tool),
-            ],
-            $tools,
-        );
     }
 }

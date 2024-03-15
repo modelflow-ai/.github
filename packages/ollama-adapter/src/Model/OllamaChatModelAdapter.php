@@ -23,7 +23,6 @@ use ModelflowAi\Core\Response\AIChatResponseStream;
 use ModelflowAi\Core\Response\AIResponseInterface;
 use ModelflowAi\Ollama\ClientInterface;
 use ModelflowAi\Ollama\Responses\Chat\CreateStreamedResponse;
-use ModelflowAi\OllamaAdapter\Tool\ToolFormatter;
 use Webmozart\Assert\Assert;
 
 final readonly class OllamaChatModelAdapter implements AIModelAdapterInterface
@@ -64,13 +63,16 @@ final readonly class OllamaChatModelAdapter implements AIModelAdapterInterface
     /**
      * @param array{
      *     model: string,
-     *     messages: array<array{role: "assistant"|"system"|"user", content: string}>,
+     *     messages: array<array{
+     *         role: "assistant"|"system"|"user"|"tool",
+     *         content: string,
+     *     }>,
      *     format?: "json",
-     * } $attributes
+     * } $parameters
      */
-    protected function create(AIChatRequest $request, array $attributes): AIResponseInterface
+    protected function create(AIChatRequest $request, array $parameters): AIResponseInterface
     {
-        $response = $this->client->chat()->create($attributes);
+        $response = $this->client->chat()->create($parameters);
 
         return new AIChatResponse(
             $request,
@@ -84,13 +86,16 @@ final readonly class OllamaChatModelAdapter implements AIModelAdapterInterface
     /**
      * @param array{
      *     model: string,
-     *     messages: array<array{role: "assistant"|"system"|"user", content: string}>,
+     *     messages: array<array{
+     *         role: "assistant"|"system"|"user"|"tool",
+     *         content: string,
+     *     }>,
      *     format?: "json",
-     * } $attributes
+     * } $parameters
      */
-    protected function createStreamed(AIChatRequest $request, array $attributes): AIResponseInterface
+    protected function createStreamed(AIChatRequest $request, array $parameters): AIResponseInterface
     {
-        $responses = $this->client->chat()->createStreamed($attributes);
+        $responses = $this->client->chat()->createStreamed($parameters);
 
         return new AIChatResponseStream(
             $request,

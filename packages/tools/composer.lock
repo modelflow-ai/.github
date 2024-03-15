@@ -1828,12 +1828,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "59ad5c9dcd83cd26af119c52b883da619a36634d"
+                "reference": "ecce542ef55e4b936d25f2cef8b9059fe18bcde7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/59ad5c9dcd83cd26af119c52b883da619a36634d",
-                "reference": "59ad5c9dcd83cd26af119c52b883da619a36634d",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ecce542ef55e4b936d25f2cef8b9059fe18bcde7",
+                "reference": "ecce542ef55e4b936d25f2cef8b9059fe18bcde7",
                 "shasum": ""
             },
             "require": {
@@ -1921,7 +1921,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-13T06:25:58+00:00"
+            "time": "2024-03-15T05:00:25+00:00"
         },
         {
             "name": "rector/rector",

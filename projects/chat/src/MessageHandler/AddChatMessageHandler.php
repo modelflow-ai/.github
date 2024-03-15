@@ -15,6 +15,7 @@ use ModelflowAi\Core\Request\Message\ImageBase64Part;
 use ModelflowAi\Core\Request\Message\TextPart;
 use ModelflowAi\Core\Request\Message\ToolCallsPart;
 use ModelflowAi\Core\Response\AIChatResponseStream;
+use ModelflowAi\Core\ToolInfo\ToolExecutorInterface;
 use ModelflowAi\Integration\Symfony\Criteria\ModelCriteria;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Mercure\HubInterface;
@@ -31,6 +32,7 @@ class AddChatMessageHandler
     public function __construct(
         private ChatRepository $repository,
         private AIRequestHandlerInterface $aiRequestHandler,
+        private ToolExecutorInterface $toolExecutor,
         private HubInterface $hub,
         private Environment $twig,
         private array $tools,
@@ -101,7 +103,6 @@ class AddChatMessageHandler
             return;
         }
 
-        /*
         $response = $this->aiRequestHandler->createChatRequest(...[
             ...$messages,
             new AIChatMessage(
@@ -112,7 +113,6 @@ class AddChatMessageHandler
 
         $chat->setTitle($response->getMessage()->content);
         $this->repository->flush();
-        */
     }
 
     private function handleResponses(Chat $chat, AIChatResponseStream $response, AIChatRequestBuilder $builder): AIChatResponseStream
@@ -127,7 +127,7 @@ class AddChatMessageHandler
 
                 foreach ($responses as $nextMessage) {
                     $toolCalls[] = $nextMessage->toolCalls[0];
-                    $additionalMessages[] = $this->aiRequestHandler->handleTool($builder->build(), $nextMessage->toolCalls[0]);
+                    $additionalMessages[] = $this->toolExecutor->execute($builder->build(), $nextMessage->toolCalls[0]);
                 }
 
                 $builder->addMessage(

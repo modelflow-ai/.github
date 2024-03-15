@@ -18,19 +18,19 @@ use ModelflowAi\Core\Response\AIChatToolCall;
 readonly class ToolCallsPart extends MessagePart
 {
     /**
-     * @param AIChatToolCall[] $tools
+     * @param AIChatToolCall[] $toolCalls
      */
     public static function create(
-        array $tools,
+        array $toolCalls,
     ): self {
-        return new self($tools);
+        return new self($toolCalls);
     }
 
     /**
-     * @param AIChatToolCall[] $tools
+     * @param AIChatToolCall[] $toolCalls
      */
     public function __construct(
-        public array $tools,
+        public array $toolCalls,
     ) {
         parent::__construct(MessagePartTypeEnum::TOOL_CALLS);
     }
@@ -44,10 +44,10 @@ readonly class ToolCallsPart extends MessagePart
                 'type' => $tool->type->value,
                 'function' => [
                     'name' => $tool->name,
-                    'arguments' => \json_encode($tool->arguments),
+                    'arguments' => (string) \json_encode($tool->arguments),
                 ],
             ],
-            $this->tools,
+            $this->toolCalls,
         );
 
         return $message;

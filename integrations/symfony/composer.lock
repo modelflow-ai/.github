@@ -567,12 +567,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "31c74a59d8bffdcec73adb43b398f6942f7dc26b"
+                "reference": "b66e3b8ac723816be3f9b9ba1e00cd8e19de417f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/31c74a59d8bffdcec73adb43b398f6942f7dc26b",
-                "reference": "31c74a59d8bffdcec73adb43b398f6942f7dc26b",
+                "url": "https://api.github.com/repos/symfony/console/zipball/b66e3b8ac723816be3f9b9ba1e00cd8e19de417f",
+                "reference": "b66e3b8ac723816be3f9b9ba1e00cd8e19de417f",
                 "shasum": ""
             },
             "require": {
@@ -652,7 +652,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-04T12:49:13+00:00"
+            "time": "2024-03-14T17:37:24+00:00"
         },
         {
             "name": "symfony/dependency-injection",
@@ -660,12 +660,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "d5936a3436727672e7784c31c5156f6a93fe5f8f"
+                "reference": "35bdc20219e41a0185625a4db685b36c7a5343e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/d5936a3436727672e7784c31c5156f6a93fe5f8f",
-                "reference": "d5936a3436727672e7784c31c5156f6a93fe5f8f",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/35bdc20219e41a0185625a4db685b36c7a5343e6",
+                "reference": "35bdc20219e41a0185625a4db685b36c7a5343e6",
                 "shasum": ""
             },
             "require": {
@@ -732,7 +732,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-23T16:03:28+00:00"
+            "time": "2024-03-13T17:03:20+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -808,12 +808,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/error-handler.git",
-                "reference": "dbaedce98fc05fb49280a179238f2985a3655bf2"
+                "reference": "dc5a929a9a77811bbeac20d9ab7f7c113d9395d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/error-handler/zipball/dbaedce98fc05fb49280a179238f2985a3655bf2",
-                "reference": "dbaedce98fc05fb49280a179238f2985a3655bf2",
+                "url": "https://api.github.com/repos/symfony/error-handler/zipball/dc5a929a9a77811bbeac20d9ab7f7c113d9395d9",
+                "reference": "dc5a929a9a77811bbeac20d9ab7f7c113d9395d9",
                 "shasum": ""
             },
             "require": {
@@ -875,7 +875,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-12T14:58:35+00:00"
+            "time": "2024-03-14T17:23:17+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -1314,12 +1314,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "5ec3fa3fc39bf1c5af91eb69cb3c3c619e515168"
+                "reference": "421d01f84bb8715e4aa5cd35276d63c986bd0c97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/5ec3fa3fc39bf1c5af91eb69cb3c3c619e515168",
-                "reference": "5ec3fa3fc39bf1c5af91eb69cb3c3c619e515168",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/421d01f84bb8715e4aa5cd35276d63c986bd0c97",
+                "reference": "421d01f84bb8715e4aa5cd35276d63c986bd0c97",
                 "shasum": ""
             },
             "require": {
@@ -1383,7 +1383,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-08T19:26:09+00:00"
+            "time": "2024-03-13T18:21:43+00:00"
         },
         {
             "name": "symfony/http-kernel",
@@ -1744,12 +1744,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "9773676c8a1bb1f8d4340a62efe641cf76eda7ec"
+                "reference": "e5e7ddb00b859dbdf5ad8f3bbe4cd29a3a37aa34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/9773676c8a1bb1f8d4340a62efe641cf76eda7ec",
-                "reference": "9773676c8a1bb1f8d4340a62efe641cf76eda7ec",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/e5e7ddb00b859dbdf5ad8f3bbe4cd29a3a37aa34",
+                "reference": "e5e7ddb00b859dbdf5ad8f3bbe4cd29a3a37aa34",
                 "shasum": ""
             },
             "require": {
@@ -1801,7 +1801,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.29.0"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/1.x"
             },
             "funding": [
                 {
@@ -1817,7 +1817,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-29T20:11:03+00:00"
+            "time": "2024-03-14T13:49:05+00:00"
         },
         {
             "name": "symfony/polyfill-php80",
@@ -1906,12 +1906,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php83.git",
-                "reference": "86fcae159633351e5fd145d1c47de6c528f8caff"
+                "reference": "4101e9edae47b36671a91857ab6cd359024faabd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php83/zipball/86fcae159633351e5fd145d1c47de6c528f8caff",
-                "reference": "86fcae159633351e5fd145d1c47de6c528f8caff",
+                "url": "https://api.github.com/repos/symfony/polyfill-php83/zipball/4101e9edae47b36671a91857ab6cd359024faabd",
+                "reference": "4101e9edae47b36671a91857ab6cd359024faabd",
                 "shasum": ""
             },
             "require": {
@@ -1960,7 +1960,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php83/tree/v1.29.0"
+                "source": "https://github.com/symfony/polyfill-php83/tree/1.x"
             },
             "funding": [
                 {
@@ -1976,7 +1976,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-29T20:11:03+00:00"
+            "time": "2024-03-14T13:49:05+00:00"
         },
         {
             "name": "symfony/routing",
@@ -4356,12 +4356,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "59ad5c9dcd83cd26af119c52b883da619a36634d"
+                "reference": "ecce542ef55e4b936d25f2cef8b9059fe18bcde7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/59ad5c9dcd83cd26af119c52b883da619a36634d",
-                "reference": "59ad5c9dcd83cd26af119c52b883da619a36634d",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ecce542ef55e4b936d25f2cef8b9059fe18bcde7",
+                "reference": "ecce542ef55e4b936d25f2cef8b9059fe18bcde7",
                 "shasum": ""
             },
             "require": {
@@ -4449,7 +4449,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-13T06:25:58+00:00"
+            "time": "2024-03-15T05:00:25+00:00"
         },
         {
             "name": "psr/http-client",
