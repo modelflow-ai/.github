@@ -13,6 +13,7 @@ final readonly class AddChatMessage
         public string $uuid,
         public string $content,
         public ?UploadedFile $file = null,
+        public bool $enableTools = false,
     ) {
         $this->role = AIChatMessageRoleEnum::USER;
     }

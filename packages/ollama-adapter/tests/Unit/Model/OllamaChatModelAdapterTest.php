@@ -66,7 +66,7 @@ final class OllamaChatModelAdapterTest extends TestCase
             new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'System message'),
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
             new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, 'Assistant message'),
-        ), new AIRequestCriteriaCollection(), [], fn () => null);
+        ), new AIRequestCriteriaCollection(), [], [], [], fn () => null);
 
         $adapter = new OllamaChatModelAdapter($client->reveal());
         $result = $adapter->handleRequest($request);
@@ -110,7 +110,7 @@ final class OllamaChatModelAdapterTest extends TestCase
             new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'System message'),
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
             new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, 'Assistant message'),
-        ), new AIRequestCriteriaCollection(), ['format' => 'json'], fn () => null);
+        ), new AIRequestCriteriaCollection(), [], [], ['format' => 'json'], fn () => null);
 
         $adapter = new OllamaChatModelAdapter($client->reveal());
         $result = $adapter->handleRequest($request);
@@ -157,7 +157,7 @@ final class OllamaChatModelAdapterTest extends TestCase
             new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'System message'),
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
             new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, 'Assistant message'),
-        ), new AIRequestCriteriaCollection(), ['format' => 'json', 'streamed' => true], fn () => null);
+        ), new AIRequestCriteriaCollection(), [], [], ['format' => 'json', 'streamed' => true], fn () => null);
 
         $adapter = new OllamaChatModelAdapter($client->reveal());
         $result = $adapter->handleRequest($request);

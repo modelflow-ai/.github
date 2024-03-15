@@ -20,12 +20,12 @@ class AdapterExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('image_to_text_enabled', [$this, 'hasImageToTextEnabled']),
+            new TwigFunction('feature_enabled', [$this, 'featureEnabled']),
         ];
     }
 
-    public function hasImageToTextEnabled(string $adapter): bool
+    public function featureEnabled(string $adapter, string $feature): bool
     {
-        return $this->adapters[$adapter]['image_to_text'];
+        return $this->adapters[$adapter][$feature];
     }
 }

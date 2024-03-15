@@ -17,9 +17,13 @@ use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 
 readonly class AIChatResponseMessage
 {
+    /**
+     * @param AIChatToolCall[]|null $toolCalls
+     */
     public function __construct(
         public AIChatMessageRoleEnum $role,
         public string $content,
+        public ?array $toolCalls = null,
     ) {
     }
 }

@@ -15,6 +15,8 @@ namespace ModelflowAi\Core\Tests\Unit\Response;
 
 use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Response\AIChatResponseMessage;
+use ModelflowAi\Core\Response\AIChatToolCall;
+use ModelflowAi\Core\ToolInfo\ToolTypeEnum;
 use PHPUnit\Framework\TestCase;
 
 class AIChatResponseMessageTest extends TestCase
@@ -31,5 +33,23 @@ class AIChatResponseMessageTest extends TestCase
         $message = new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Test content');
 
         $this->assertSame('Test content', $message->content);
+    }
+
+    public function testToolCalls(): void
+    {
+        $toolCalls = [
+            new AIChatToolCall(ToolTypeEnum::FUNCTION, '123-123-123', 'name', ['test' => 'test']),
+        ];
+
+        $message = new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Test content', $toolCalls);
+
+        $this->assertSame($toolCalls, $message->toolCalls);
+    }
+
+    public function testToolCallsNull(): void
+    {
+        $message = new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Test content', null);
+
+        $this->assertNull($message->toolCalls);
     }
 }

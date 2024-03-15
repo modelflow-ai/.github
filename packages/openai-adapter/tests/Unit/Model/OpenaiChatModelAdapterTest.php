@@ -20,6 +20,8 @@ use ModelflowAi\Core\Request\Message\AIChatMessage;
 use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\Core\Response\AIChatResponseStream;
+use ModelflowAi\Core\ToolInfo\ToolInfoBuilder;
+use ModelflowAi\Core\ToolInfo\ToolTypeEnum;
 use ModelflowAi\OpenaiAdapter\Model\OpenaiChatModelAdapter;
 use OpenAI\Contracts\ClientContract;
 use OpenAI\Contracts\Resources\ChatContract;
@@ -69,7 +71,7 @@ final class OpenaiChatModelAdapterTest extends TestCase
             new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'System message'),
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
             new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, 'Assistant message'),
-        ), new AIRequestCriteriaCollection(), [], fn () => null);
+        ), new AIRequestCriteriaCollection(), [], [], [], fn () => null);
 
         $adapter = new OpenaiChatModelAdapter($client->reveal());
         $result = $adapter->handleRequest($request);
@@ -114,7 +116,7 @@ final class OpenaiChatModelAdapterTest extends TestCase
             new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'System message'),
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
             new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, 'Assistant message'),
-        ), new AIRequestCriteriaCollection(), ['format' => 'json'], fn () => null);
+        ), new AIRequestCriteriaCollection(), [], [], ['format' => 'json'], fn () => null);
 
         $adapter = new OpenaiChatModelAdapter($client->reveal());
         $result = $adapter->handleRequest($request);
@@ -135,16 +137,122 @@ final class OpenaiChatModelAdapterTest extends TestCase
             new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'System message'),
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
             new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, 'Assistant message'),
-        ), new AIRequestCriteriaCollection(), ['streamed' => true], fn () => null);
+        ), new AIRequestCriteriaCollection(), [], [], ['streamed' => true], fn () => null);
 
         $adapter = new OpenaiChatModelAdapter($client);
         $result = $adapter->handleRequest($request);
 
         $this->assertInstanceOf(AIChatResponseStream::class, $result);
-        $contents = ['', 'Lorem', 'Ipsum', ''];
+        $contents = ['Lorem', 'Ipsum'];
         foreach ($result->getMessageStream() as $i => $response) {
             $this->assertSame(AIChatMessageRoleEnum::ASSISTANT, $response->role);
             $this->assertSame($contents[$i], $response->content);
         }
+    }
+
+    public function testHandleRequestWithTools(): void
+    {
+        $contents = (array) \json_decode((string) \file_get_contents(__DIR__ . '/tools.txt'), true);
+
+        $client = new ClientFake([
+            CreateResponse::fake($contents),
+        ]);
+
+        $request = new AIChatRequest(new AIChatMessageCollection(
+            new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'System message'),
+            new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
+            new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, 'Assistant message'),
+        ), new AIRequestCriteriaCollection(), [
+            'test' => [$this, 'toolMethod'],
+        ], [
+            ToolInfoBuilder::buildToolInfo($this, 'toolMethod', 'test'),
+        ], [], fn () => null);
+
+        $adapter = new OpenaiChatModelAdapter($client);
+        $result = $adapter->handleRequest($request);
+
+        $this->assertInstanceOf(AIChatResponse::class, $result);
+
+        $this->assertSame(AIChatMessageRoleEnum::ASSISTANT, $result->getMessage()->role);
+        $toolCalls = $result->getMessage()->toolCalls;
+
+        $this->assertNotNull($toolCalls);
+        $this->assertCount(2, $toolCalls);
+
+        $toolCall1 = $toolCalls[0];
+        $this->assertSame(ToolTypeEnum::FUNCTION, $toolCall1->type);
+        $this->assertSame('call_1Ue9UPErEy4dz56T3znEoBO1', $toolCall1->id);
+        $this->assertSame('test', $toolCall1->name);
+        $this->assertSame([
+            'required' => 'Test required 1',
+            'optional' => 'Test optional 1',
+        ], $toolCall1->arguments);
+
+        $toolCall2 = $toolCalls[1];
+        $this->assertSame(ToolTypeEnum::FUNCTION, $toolCall2->type);
+        $this->assertSame('call_1Ue9UPErEy4dz56T3znEoBO2', $toolCall2->id);
+        $this->assertSame('test', $toolCall2->name);
+        $this->assertSame([
+            'required' => 'Test required 2',
+            'optional' => 'Test optional 2',
+        ], $toolCall2->arguments);
+    }
+
+    public function testHandleRequestStreamedWithTools(): void
+    {
+        /** @var resource $resource */
+        $resource = \fopen(__DIR__ . '/tools-stream.txt', 'r');
+
+        $client = new ClientFake([
+            CreateStreamedResponse::fake($resource),
+        ]);
+
+        $request = new AIChatRequest(new AIChatMessageCollection(
+            new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'System message'),
+            new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
+            new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, 'Assistant message'),
+        ), new AIRequestCriteriaCollection(), [
+            'test' => [$this, 'toolMethod'],
+        ], [
+            ToolInfoBuilder::buildToolInfo($this, 'toolMethod', 'test'),
+        ], ['streamed' => true], fn () => null);
+
+        $adapter = new OpenaiChatModelAdapter($client);
+        $result = $adapter->handleRequest($request);
+
+        $this->assertInstanceOf(AIChatResponseStream::class, $result);
+        $contents = [
+            [
+                'id' => 'call_1Ue9UPErEy4dz56T3znEoBO1',
+                'name' => 'test',
+                'arguments' => [
+                    'required' => 'Test required 1',
+                    'optional' => 'Test optional 1',
+                ],
+            ],
+        ];
+        foreach ($result->getMessageStream() as $i => $response) {
+            $this->assertSame(AIChatMessageRoleEnum::ASSISTANT, $result->getMessage()->role);
+            $this->assertNotNull($response->toolCalls);
+            $this->assertCount(1, $response->toolCalls);
+
+            $toolCall = $response->toolCalls[0] ?? null;
+            $this->assertNotNull($toolCall);
+            $this->assertSame(ToolTypeEnum::FUNCTION, $toolCall->type);
+            $this->assertSame($contents[$i]['id'], $toolCall->id);
+            $this->assertSame($contents[$i]['name'], $toolCall->name);
+            $this->assertSame($contents[$i]['arguments'], $toolCall->arguments);
+        }
+    }
+
+    /**
+     * This is a description.
+     *
+     * @param string $required this is a required parameter
+     * @param string $optional this is an optional parameter
+     */
+    public function toolMethod(string $required, string $optional = ''): string
+    {
+        return $required . $optional;
     }
 }

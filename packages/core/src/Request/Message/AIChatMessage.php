@@ -41,8 +41,10 @@ readonly class AIChatMessage
 
     /**
      * @return array{
-     *     role: "assistant"|"system"|"user",
+     *     role: "assistant"|"system"|"user"|"tool",
      *     content: string,
+     *     tool_call_id?: string,
+     *     name?: string,
      *     images?: string[],
      * }
      */

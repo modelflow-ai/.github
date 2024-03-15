@@ -63,7 +63,7 @@ final readonly class MistralChatModelAdapter implements AIModelAdapterInterface
     /**
      * @param array{
      *     model: string,
-     *     messages: array<array{role: "assistant"|"system"|"user", content: string}>,
+     *     messages: array<array{role: "assistant"|"system"|"user"|"tool", content: string}>,
      *     response_format?: array{ type: "json_object" },
      * } $parameters
      */
@@ -83,7 +83,7 @@ final readonly class MistralChatModelAdapter implements AIModelAdapterInterface
     /**
      * @param array{
      *     model: string,
-     *     messages: array<array{role: "assistant"|"system"|"user", content: string}>,
+     *     messages: array<array{role: "assistant"|"system"|"user"|"tool", content: string}>,
      *     response_format?: array{ type: "json_object" },
      * } $parameters
      */

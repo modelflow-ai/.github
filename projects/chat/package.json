@@ -24,5 +24,8 @@
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress"
+    },
+    "dependencies": {
+        "showdown": "^2.1.0"
     }
 }

@@ -17,12 +17,20 @@ use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
 use ModelflowAi\Core\Request\Criteria\FeatureCriteria;
 use ModelflowAi\Core\Request\Message\ImageBase64Part;
 use ModelflowAi\Core\Response\AIChatResponse;
+use ModelflowAi\Core\ToolInfo\ToolChoiceEnum;
+use ModelflowAi\Core\ToolInfo\ToolInfo;
 
 class AIChatRequest extends AIRequest implements AIRequestInterface
 {
+    /**
+     * @param array<string, array{0: object, 1: string}> $tools
+     * @param ToolInfo[] $toolInfos
+     */
     public function __construct(
         private readonly AIChatMessageCollection $messages,
         AIRequestCriteriaCollection $criteria,
+        private readonly array $tools,
+        private readonly array $toolInfos,
         array $options,
         callable $requestHandler,
     ) {
@@ -39,12 +47,38 @@ class AIChatRequest extends AIRequest implements AIRequestInterface
             $features[] = FeatureCriteria::STREAM;
         }
 
+        if ([] !== $this->tools && ToolChoiceEnum::AUTO === $this->getOption('toolChoice', ToolChoiceEnum::AUTO)) {
+            // FIXME does not work currently when more than one criteria of feature is there
+            // $features[] = FeatureCriteria::TOOLS;
+        }
+
         parent::__construct($criteria->withFeatures($features), $options, $requestHandler);
     }
 
     public function getMessages(): AIChatMessageCollection
     {
         return $this->messages;
+    }
+
+    public function hasTools(): bool
+    {
+        return [] !== $this->tools;
+    }
+
+    /**
+     * @return array<string, array{0: object, 1: string}>
+     */
+    public function getTools(): array
+    {
+        return $this->tools;
+    }
+
+    /**
+     * @return ToolInfo[]
+     */
+    public function getToolInfos(): array
+    {
+        return $this->toolInfos;
     }
 
     public function execute(): AIChatResponse

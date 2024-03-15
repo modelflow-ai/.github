@@ -26,6 +26,9 @@ class Chat
     #[ORM\Column(length: 255, nullable: false)]
     private string $model;
 
+    #[ORM\Column(nullable: false)]
+    private bool $toolsEnabled;
+
     #[ORM\Column]
     private \DateTimeImmutable $lastUsedAt;
 
@@ -73,6 +76,18 @@ class Chat
     public function setModel(string $model): self
     {
         $this->model = $model;
+
+        return $this;
+    }
+
+    public function isToolsEnabled(): bool
+    {
+        return $this->toolsEnabled;
+    }
+
+    public function setToolsEnabled(bool $toolsEnabled): self
+    {
+        $this->toolsEnabled = $toolsEnabled;
 
         return $this;
     }

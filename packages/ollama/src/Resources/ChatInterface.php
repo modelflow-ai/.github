@@ -22,7 +22,7 @@ interface ChatInterface
      * @param array{
      *     model: string,
      *     messages: array<array{
-     *         role: "system"|"user"|"assistant",
+     *         role: "system"|"user"|"assistant"|"tool",
      *         content: string,
      *         files?: string[],
      *     }>,
@@ -37,7 +37,7 @@ interface ChatInterface
      * @param array{
      *     model: string,
      *     messages: array<array{
-     *         role: "system"|"user"|"assistant",
+     *         role: "system"|"user"|"assistant"|"tool",
      *         content: string,
      *         files?: string[],
      *     }>,

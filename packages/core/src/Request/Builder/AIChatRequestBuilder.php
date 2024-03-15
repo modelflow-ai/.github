@@ -18,6 +18,8 @@ use ModelflowAi\Core\Request\AIChatRequest;
 use ModelflowAi\Core\Request\Message\AIChatMessage;
 use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Request\Message\MessagePart;
+use ModelflowAi\Core\ToolInfo\ToolChoiceEnum;
+use ModelflowAi\Core\ToolInfo\ToolInfoBuilder;
 
 class AIChatRequestBuilder extends AIRequestBuilder
 {
@@ -25,6 +27,11 @@ class AIChatRequestBuilder extends AIRequestBuilder
      * @var AIChatMessage[]
      */
     protected array $messages = [];
+
+    /**
+     * @var array<string, array{0: object, 1: string}>
+     */
+    protected array $tools = [];
 
     public static function create(callable $requestHandler): self
     {
@@ -80,11 +87,33 @@ class AIChatRequestBuilder extends AIRequestBuilder
         return $this;
     }
 
+    public function toolChoice(ToolChoiceEnum $toolChoice): self
+    {
+        $this->options['toolChoice'] = $toolChoice;
+
+        return $this;
+    }
+
+    public function tool(string $name, object $instance, ?string $method = null): self
+    {
+        $this->tools[$name] = [$instance, $method ?? $name];
+
+        return $this;
+    }
+
     public function build(): AIChatRequest
     {
+        $toolInfos = \array_map(
+            fn (string $name, array $tool) => ToolInfoBuilder::buildToolInfo($tool[0], $tool[1], $name),
+            \array_keys($this->tools),
+            $this->tools,
+        );
+
         return new AIChatRequest(
             new AIChatMessageCollection(...$this->messages),
             $this->criteria,
+            $this->tools,
+            $toolInfos,
             $this->options,
             $this->requestHandler,
         );

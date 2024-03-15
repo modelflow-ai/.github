@@ -20,8 +20,12 @@ use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\Core\Response\AIChatResponseMessage;
 use ModelflowAi\Core\Response\AIChatResponseStream;
+use ModelflowAi\Core\Response\AIChatToolCall;
 use ModelflowAi\Core\Response\AIResponseInterface;
+use ModelflowAi\Core\ToolInfo\ToolTypeEnum;
+use ModelflowAi\OpenaiAdapter\Tool\ToolFormatter;
 use OpenAI\Contracts\ClientContract;
+use OpenAI\Responses\Chat\CreateResponseToolCall;
 use OpenAI\Responses\Chat\CreateStreamedResponse;
 use OpenAI\Responses\StreamResponse;
 use Webmozart\Assert\Assert;
@@ -61,19 +65,44 @@ final readonly class OpenaiChatModelAdapter implements AIModelAdapterInterface
     /**
      * @param array{
      *     model: string,
-     *     messages: array<array{role: "assistant"|"system"|"user", content: string}>,
+     *     messages: array<array{role: "assistant"|"system"|"user"|"tool", content: string}>,
      *     response_format?: array{type: "json_object"},
      * } $parameters
      */
     protected function create(AIChatRequest $request, array $parameters): AIResponseInterface
     {
+        if ($request->hasTools()) {
+            $parameters['tools'] = ToolFormatter::formatTools($request->getToolInfos());
+            $parameters['tool_choice'] = $request->getOption('toolChoice');
+        }
+
         $result = $this->client->chat()->create($parameters);
+
+        $choice = $result->choices[0];
+        if (0 < \count($choice->message->toolCalls)) {
+            return new AIChatResponse(
+                $request,
+                new AIChatResponseMessage(
+                    AIChatMessageRoleEnum::from($choice->message->role),
+                    $choice->message->content ?? '',
+                    \array_map(
+                        fn (CreateResponseToolCall $toolCall) => new AIChatToolCall(
+                            ToolTypeEnum::from($toolCall->type),
+                            $toolCall->id,
+                            $toolCall->function->name,
+                            $this->decodeArguments($toolCall->function->arguments),
+                        ),
+                        $choice->message->toolCalls,
+                    ),
+                ),
+            );
+        }
 
         return new AIChatResponse(
             $request,
             new AIChatResponseMessage(
-                AIChatMessageRoleEnum::from($result->choices[0]->message->role),
-                $result->choices[0]->message->content ?? '',
+                AIChatMessageRoleEnum::from($choice->message->role),
+                $choice->message->content ?? '',
             ),
         );
     }
@@ -81,13 +110,21 @@ final readonly class OpenaiChatModelAdapter implements AIModelAdapterInterface
     /**
      * @param array{
      *     model: string,
-     *     messages: array<array{role: "assistant"|"system"|"user", content: string}>,
+     *     messages: array<array{
+     *         role: "assistant"|"system"|"user"|"tool",
+     *         content: string,
+     *     }>,
      *     response_format?: array{type: "json_object"},
-     * } $attributes
+     * } $parameters
      */
-    protected function createStreamed(AIChatRequest $request, array $attributes): AIResponseInterface
+    protected function createStreamed(AIChatRequest $request, array $parameters): AIResponseInterface
     {
-        $responses = $this->client->chat()->createStreamed($attributes);
+        if ($request->hasTools()) {
+            $parameters['tools'] = ToolFormatter::formatTools($request->getToolInfos());
+            $parameters['tool_choice'] = $request->getOption('toolChoice');
+        }
+
+        $responses = $this->client->chat()->createStreamed($parameters);
 
         return new AIChatResponseStream(
             $request,
@@ -106,15 +143,107 @@ final readonly class OpenaiChatModelAdapter implements AIModelAdapterInterface
 
         /** @var CreateStreamedResponse $response */
         foreach ($responses as $response) {
+            $delta = $response->choices[0]->delta;
+
             if (!$role instanceof AIChatMessageRoleEnum) {
-                $role = AIChatMessageRoleEnum::from($response->choices[0]->delta->role ?? 'assistant');
+                $role = AIChatMessageRoleEnum::from($delta->role ?? 'assistant');
             }
 
-            yield new AIChatResponseMessage(
-                $role,
-                $response->choices[0]->delta->content ?? '',
-            );
+            if (0 < \count($delta->toolCalls)) {
+                foreach ($this->determineToolCall($responses, $response) as $toolCall) {
+                    yield new AIChatResponseMessage(
+                        $role,
+                        $delta->content ?? '',
+                        [$toolCall],
+                    );
+                }
+
+                break;
+            }
+
+            if (null !== $delta->content) {
+                yield new AIChatResponseMessage(
+                    $role,
+                    $delta->content,
+                );
+            }
         }
+    }
+
+    /**
+     * @param StreamResponse<CreateStreamedResponse> $responses
+     *
+     * @return \Iterator<int, AIChatToolCall>
+     */
+    protected function determineToolCall(StreamResponse $responses, CreateStreamedResponse $firstResponse): \Iterator
+    {
+        $message = [
+            'id' => $firstResponse->choices[0]->delta->toolCalls[0]->id,
+            'type' => ToolTypeEnum::tryFrom($firstResponse->choices[0]->delta->toolCalls[0]->type ?? '') ?? ToolTypeEnum::FUNCTION,
+            'function' => [
+                'name' => $firstResponse->choices[0]->delta->toolCalls[0]->function->name,
+                'arguments' => [
+                    $firstResponse->choices[0]->delta->toolCalls[0]->function->arguments,
+                ],
+            ],
+        ];
+
+        /** @var CreateStreamedResponse $response */
+        foreach ($responses as $response) {
+            $delta = $response->choices[0]->delta;
+
+            foreach ($delta->toolCalls as $toolCall) {
+                if (null !== $toolCall->id) {
+                    Assert::inArray($message['type'], ToolTypeEnum::cases());
+                    Assert::notNull($message['id']);
+                    Assert::isArray($message['function']);
+                    Assert::notNull($message['function']['name']);
+                    Assert::notNull($message['function']['arguments']);
+
+                    yield new AIChatToolCall(
+                        $message['type'],
+                        $message['id'],
+                        $message['function']['name'],
+                        $this->decodeArguments(\implode('', $message['function']['arguments'])),
+                    );
+
+                    $message = [
+                        'id' => $toolCall->id,
+                        'type' => ToolTypeEnum::tryFrom($toolCall->type ?? '') ?? ToolTypeEnum::FUNCTION,
+                        'function' => [
+                            'name' => $toolCall->function->name,
+                            'arguments' => [],
+                        ],
+                    ];
+                }
+
+                $message['function']['arguments'][] = $toolCall->function->arguments;
+            }
+        }
+
+        Assert::inArray($message['type'], ToolTypeEnum::cases());
+        Assert::notNull($message['id']);
+        Assert::isArray($message['function']);
+        Assert::notNull($message['function']['name']);
+        Assert::notNull($message['function']['arguments']);
+
+        yield new AIChatToolCall(
+            $message['type'],
+            $message['id'],
+            $message['function']['name'],
+            $this->decodeArguments(\implode('', $message['function']['arguments'])),
+        );
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    protected function decodeArguments(string $arguments): array
+    {
+        /** @var array<string, mixed> $result */
+        $result = \json_decode($arguments, true);
+
+        return $result;
     }
 
     public function supports(AIRequestInterface $request): bool
