@@ -13,24 +13,35 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Core\Tests\Unit\ToolInfo;
 
+use ModelflowAi\Core\Request\AIChatMessageCollection;
+use ModelflowAi\Core\Request\AIChatRequest;
+use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
 use ModelflowAi\Core\Request\Message\AIChatMessage;
 use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Response\AIChatToolCall;
+use ModelflowAi\Core\ToolInfo\ToolExecutor;
+use ModelflowAi\Core\ToolInfo\ToolInfoBuilder;
 use ModelflowAi\Core\ToolInfo\ToolTypeEnum;
 use PHPUnit\Framework\TestCase;
 
 class ToolExecutorTest extends TestCase
 {
-
-
     public function testHandleTool(): void
     {
-        $chatRequest = $this->aiRequestHandler->createChatRequest(
-            new AIChatMessage(AIChatMessageRoleEnum::USER, 'Test content'),
-        )->tool('test', $this, 'toolMethod')->build();
+        $messages = new AIChatMessageCollection();
+        $criteria = new AIRequestCriteriaCollection();
+        $requestHandler = fn ($request) => null;
 
-        $result = $this->aiRequestHandler->handleTool(
-            $chatRequest,
+        $request = new AIChatRequest($messages, $criteria, [
+            'test' => [$this, 'toolMethod'],
+        ], [
+            ToolInfoBuilder::buildToolInfo($this, 'toolMethod', 'test'),
+        ], [], $requestHandler);
+
+        $executor = new ToolExecutor();
+
+        $result = $executor->execute(
+            $request,
             new AIChatToolCall(ToolTypeEnum::FUNCTION, '123-123-123', 'test', ['test' => 'Test content']),
         );
 
