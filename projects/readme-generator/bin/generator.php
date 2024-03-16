@@ -22,7 +22,7 @@ use Twig\TwigFilter;
 
 $twig = new Environment(new FilesystemLoader(\dirname(__DIR__) . '/templates'));
 $twig->addFilter(new TwigFilter('break_text', function ($string, $length = 120) {
-    $pattern = '/(.{1,' . $length . '})( +|$)\n?/';
+    $pattern = '/(.{1,' . $length . '})([ \n]{1}|$)/';
     $replacement = '$1' . \PHP_EOL;
 
     return \preg_replace($pattern, $replacement, (string) $string);
