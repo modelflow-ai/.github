@@ -4,11 +4,17 @@ Ollama is a PHP package that provides an easy-to-use client for the ollama API.
 
 ## Installation
 
-Use the package manager [composer](https://getcomposer.org/) to install Ollama.
+To install the Ollama package, you need to have PHP 8.2 or higher and Composer installed on your machine. Then, you can
+add the package to your project by running the following command:
 
 ```bash
-composer require modelflowai/ollama
+composer require modelflow-ai/ollama
 ```
+
+## Examples
+
+Here are some examples of how you can use the Mistral package in your PHP applications. You can find more detailed
+examples in the [examples directory](examples).
 
 ## Usage
 
@@ -63,10 +69,10 @@ to manage and interact with their AI models directly from the Ollama package.
 
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
+Contributions are welcome. Please open an issue or submit a pull request in the main repository
+at [https://github.com/modelflow-ai/modelflow-ai](https://github.com/modelflow-ai/modelflow-ai).
 
 ## License
 
-This package is available under the [MIT license](LICENSE).
+This project is licensed under the MIT License. For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.

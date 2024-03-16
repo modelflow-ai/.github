@@ -111,8 +111,8 @@ composer test
 
 ## Contributing
 
-Contributions are welcome. If you encounter any problems or have any suggestions, please open an issue directly in this
-repository. You can also submit a pull request if you have made changes that you would like to share.
+Contributions are welcome. Please open an issue or submit a pull request in the main repository
+at [https://github.com/modelflow-ai/modelflow-ai](https://github.com/modelflow-ai/modelflow-ai).
 
 ## License
 

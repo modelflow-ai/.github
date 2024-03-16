@@ -1,3 +1,5 @@
 title: Api-Client
 description: The ModelflowAI API Client serves as a foundational package, designed to be utilized by other API clients
     such as Mistral and Ollama. It provides a robust base, facilitating seamless integration and interaction with these clients.
+shortDescription: A basic API client.
+independent: true

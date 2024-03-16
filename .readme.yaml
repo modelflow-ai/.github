@@ -1,0 +1,8 @@
+title: Modelflow AI
+description: Modelflow AI is a comprehensive AI package that integrates various AI models and embeddings into a unified
+    interface. It is written in PHP and uses Composer for dependency management.
+installation: To install Modelflow AI you have to install each part separately. See the readme of the specific package
+    or integration for installation instructions.
+contribution: Contributions are welcome. Please open an issue to discuss your idea or submit a pull request.
+license: This project is licensed under the MIT License. For the full copyright and license information, please view the
+  [LICENSE](LICENSE) file that was distributed with this source code.

@@ -1,5 +1,6 @@
 title: Mistral Adapter
 description: The adapter integrates Mistral AI models into Modelflow  AI.
+shortDescription: The adapter for the Mistral API client.
 usage: |
     First, initialize the client:
 

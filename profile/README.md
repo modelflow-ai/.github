@@ -8,18 +8,21 @@ is written in PHP and uses Composer for dependency management.
 This repository consists of several packages, each residing in its own directory under the `packages/` directory:
 
 - **Core**: The core functionalities of Modelflow AI. [More Info](https://github.com/modelflow-ai/core)
+- **Elasticsearch Embeddings Store**: This package stores embeddings in Elasticsearch. [More Info](https://github.com/modelflow-ai/elasticsearch-embeddings-store)
 - **Embeddings**: Handles the embeddings for the AI models. [More Info](https://github.com/modelflow-ai/embeddings)
 - **Experts**: It provides a set of tools for so called experts comparable to OpenAI GPTs or OpenGPTs. [More Info](https://github.com/modelflow-ai/experts)
-- **MistralAdapter**: The adapter for the Mistral API client. [More Info](https://github.com/modelflow-ai/mistral-adapter)
-- **OllamaAdapter**: The adapter for the Ollama API client. [More Info](https://github.com/modelflow-ai/ollama-adapter)
-- **OpenAIAdapter**: The adapter for integrating OpenAI models. [More Info](https://github.com/modelflow-ai/openai-adapter)
-- **PromptTemplate**: Provides templates for AI prompts. [More Info](https://github.com/modelflow-ai/prompt-template)
+- **Mistral Adapter**: The adapter for the Mistral API client. [More Info](https://github.com/modelflow-ai/mistral-adapter)
+- **Ollama Adapter**: The adapter for the Ollama API client. [More Info](https://github.com/modelflow-ai/ollama-adapter)
+- **OpenAI Adapter**: The adapter for integrating OpenAI models. [More Info](https://github.com/modelflow-ai/openai-adapter)
+- **Prompt Template**: Provides templates for AI prompts. [More Info](https://github.com/modelflow-ai/prompt-template)
+- **Qdrant Embeddings Store**: This package stores embeddings in Qdrant. [More Info](https://github.com/modelflow-ai/qdrant-embeddings-store)
+- **Tools**: Contains tools to extend models in a Modelflow AI Request. [More Info](https://github.com/modelflow-ai/tools)
 
 Independent packages:
 
-- **Api Client**: A basic API client. [More Info](https://github.com/modelflow-ai/api-client)
-- **Mistral**: An API client for the Mistral AI model. [More Info](https://github.com/modelflow-ai/mistral)
-- **Ollama**: An API client for the Ollama AI model. [More Info](https://github.com/modelflow-ai/ollama)
+- **Api-Client**: A basic API client. [More Info](https://github.com/modelflow-ai/api-client)
+- **Mistral**: A comprehensive API client for Mistral AI. [More Info](https://github.com/modelflow-ai/mistral)
+- **Ollama**: A comprehensive API client for Ollama. [More Info](https://github.com/modelflow-ai/ollama)
 
 ## Integrations
 

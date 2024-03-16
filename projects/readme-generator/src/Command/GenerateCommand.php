@@ -39,11 +39,13 @@ class GenerateCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Generating readme files');
 
-        $packagePaths = \glob(\dirname(__DIR__, 4) . '/*/*');
+        $rootPath = \dirname(__DIR__, 4);
+        $packagePaths = \glob($rootPath . '/*/*');
         if (false === $packagePaths) {
             throw new \RuntimeException('Could not find any package.');
         }
 
+        $packages = [];
         foreach ($packagePaths as $packagePath) {
             if (!\is_file($packagePath . '/.readme.yaml')) {
                 continue;
@@ -70,7 +72,37 @@ class GenerateCommand extends Command
             \file_put_contents($packagePath . '/README.md', $content);
 
             $io->success('Readme generated');
+
+            $packages[] = $config;
         }
+
+        $io->section('Public Readme');
+
+        /** @var array{
+         *     title: string,
+         *     description: string,
+         * } $config
+         */
+        $config = Yaml::parse((string) \file_get_contents($rootPath . '/.readme.yaml'));
+        $config['packages'] = $packages;
+        $content = $this->twig->render('public-readme.md.twig', $config);
+        \file_put_contents($rootPath . '/README.md', $content);
+
+        $io->success('Readme generated');
+
+        $io->section('Profile Readme');
+
+        /** @var array{
+         *     title: string,
+         *     description: string,
+         * } $config
+         */
+        $config = Yaml::parse((string) \file_get_contents($rootPath . '/.readme.yaml'));
+        $config['packages'] = $packages;
+        $content = $this->twig->render('profile.md.twig', $config);
+        \file_put_contents($rootPath . '/profile/README.md', $content);
+
+        $io->success('Readme generated');
 
         return self::SUCCESS;
     }
