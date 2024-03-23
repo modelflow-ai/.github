@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\OpenaiAdapter\Tests\Unit\Tool;
+namespace ModelflowAi\MistralAdapter\Tests\Unit\Tool;
 
 use ModelflowAi\Core\ToolInfo\ToolInfoBuilder;
-use ModelflowAi\OpenaiAdapter\Tool\ToolFormatter;
+use ModelflowAi\MistralAdapter\Tool\ToolFormatter;
 use PHPUnit\Framework\TestCase;
 
 class ToolFormatterTest extends TestCase

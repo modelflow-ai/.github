@@ -17,13 +17,13 @@ use ModelflowAi\Core\AIRequestHandlerInterface;
 use ModelflowAi\Core\Request\Criteria\CapabilityCriteria;
 use ModelflowAi\Core\Request\Message\AIChatMessage;
 use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
-use ModelflowAi\Core\Response\AIChatResponse;
+use ModelflowAi\Core\Response\AIChatResponseStream;
 use ModelflowAi\PromptTemplate\ChatPromptTemplate;
 
 /** @var AIRequestHandlerInterface $handler */
 $handler = require_once __DIR__ . '/bootstrap.php';
 
-/** @var AIChatResponse $response */
+/** @var AIChatResponseStream $response */
 $response = $handler->createChatRequest(
     ...ChatPromptTemplate::create(
         new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'You are an {feeling} bot'),
@@ -31,7 +31,14 @@ $response = $handler->createChatRequest(
     )->format(['where' => 'world', 'feeling' => 'angry']),
 )
     ->addCriteria(CapabilityCriteria::BASIC)
+    ->streamed()
     ->build()
     ->execute();
 
-echo \sprintf('%s: %s', $response->getMessage()->role->value, $response->getMessage()->content);
+foreach ($response->getMessageStream() as $index => $message) {
+    if (0 === $index) {
+        echo $message->role->value . ': ';
+    }
+
+    echo $message->content;
+}

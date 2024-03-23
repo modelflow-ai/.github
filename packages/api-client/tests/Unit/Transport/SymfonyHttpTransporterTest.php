@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ModelflowAi\ApiClient\Tests\Unit\Transport;
 
+use ModelflowAi\ApiClient\Exceptions\TransportException;
 use ModelflowAi\ApiClient\Tests\DataFixtures;
 use ModelflowAi\ApiClient\Transport\Payload;
 use ModelflowAi\ApiClient\Transport\Response\ObjectResponse;
@@ -20,6 +21,7 @@ use ModelflowAi\ApiClient\Transport\Response\TextResponse;
 use ModelflowAi\ApiClient\Transport\SymfonyHttpTransporter;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\JsonMockResponse;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
@@ -37,12 +39,20 @@ final class SymfonyHttpTransporterTest extends TestCase
         $this->assertSame('Test text', $response->text);
     }
 
+    public function testRequestText400(): void
+    {
+        $this->expectException(TransportException::class);
+
+        $transporter = $this->createInstance(new MockResponse('Failure reason ...', ['http_code' => 400]));
+
+        $payload = Payload::create('chat/completions', DataFixtures::CHAT_CREATE_REQUEST);
+
+        $transporter->requestText($payload);
+    }
+
     public function testRequestObject(): void
     {
-        $transporter = $this->createInstance(new MockResponse(
-            (string) \json_encode(DataFixtures::CHAT_CREATE_RESPONSE),
-            ['http_code' => 200],
-        ));
+        $transporter = $this->createInstance(new JsonMockResponse(DataFixtures::CHAT_CREATE_RESPONSE, ['http_code' => 200]));
 
         $payload = Payload::create('chat/completions', DataFixtures::CHAT_CREATE_REQUEST);
 
@@ -50,6 +60,19 @@ final class SymfonyHttpTransporterTest extends TestCase
 
         $this->assertInstanceOf(ObjectResponse::class, $response);
         $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE, $response->data);
+    }
+
+    public function testRequestObject400(): void
+    {
+        $this->expectException(TransportException::class);
+
+        $transporter = $this->createInstance(new JsonMockResponse([
+            'reason' => 'Failure reason ...',
+        ], ['http_code' => 400]));
+
+        $payload = Payload::create('chat/completions', DataFixtures::CHAT_CREATE_REQUEST);
+
+        $transporter->requestObject($payload);
     }
 
     public function testRequestStream(): void

@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace ModelflowAi\ApiClient\Transport;
 
+use ModelflowAi\ApiClient\Exceptions\TransportException;
 use ModelflowAi\ApiClient\Responses\MetaInformation;
 use ModelflowAi\ApiClient\Transport\Response\ObjectResponse;
 use ModelflowAi\ApiClient\Transport\Response\TextResponse;
+use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Contracts\HttpClient\ChunkInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -56,16 +58,24 @@ class SymfonyHttpTransporter implements TransportInterface
     {
         $response = $this->request($payload);
 
-        // @phpstan-ignore-next-line
-        return new TextResponse($response->getContent(), MetaInformation::from($response->getHeaders()));
+        try {
+            // @phpstan-ignore-next-line
+            return new TextResponse($response->getContent(), MetaInformation::from($response->getHeaders()));
+        } catch (ClientException $exception) {
+            throw new TransportException($exception->getResponse(), $exception->getCode(), $exception);
+        }
     }
 
     public function requestObject(Payload $payload): ObjectResponse
     {
         $response = $this->request($payload);
 
-        // @phpstan-ignore-next-line
-        return new ObjectResponse($response->toArray(), MetaInformation::from($response->getHeaders()));
+        try {
+            // @phpstan-ignore-next-line
+            return new ObjectResponse($response->toArray(), MetaInformation::from($response->getHeaders()));
+        } catch (ClientException $exception) {
+            throw new TransportException($exception->getResponse(), $exception->getCode(), $exception);
+        }
     }
 
     public function requestStream(Payload $payload, ?callable $decoder = null): \Iterator

@@ -15,9 +15,13 @@ namespace ModelflowAi\Mistral\Responses\Chat;
 
 final readonly class CreateStreamedResponseDelta
 {
+    /**
+     * @param CreateStreamedResponseToolCall[] $toolCalls
+     */
     private function __construct(
         public ?string $role,
         public ?string $content,
+        public array $toolCalls,
     ) {
     }
 
@@ -25,13 +29,27 @@ final readonly class CreateStreamedResponseDelta
      * @param array{
      *     role?: string|null,
      *     content?: string|null,
+     *     tool_calls?: array<array{
+     *         id?: string,
+     *         type?: string,
+     *         function: array{
+     *             name: string,
+     *             arguments: string,
+     *         },
+     *     }>,
      * } $attributes
      */
     public static function from(array $attributes): self
     {
+        $toolCalls = \array_map(fn (array $result, int $index): CreateStreamedResponseToolCall => CreateStreamedResponseToolCall::from(
+            $index,
+            $result,
+        ), $attributes['tool_calls'] ?? [], \array_keys($attributes['tool_calls'] ?? []));
+
         return new self(
             $attributes['role'] ?? null,
             $attributes['content'] ?? null,
+            $toolCalls,
         );
     }
 }
