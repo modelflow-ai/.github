@@ -20,10 +20,14 @@ use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\Core\Response\AIChatResponseMessage;
 use ModelflowAi\Core\Response\AIChatResponseStream;
+use ModelflowAi\Core\Response\AIChatToolCall;
 use ModelflowAi\Core\Response\AIResponseInterface;
+use ModelflowAi\Core\ToolInfo\ToolTypeEnum;
 use ModelflowAi\Mistral\ClientInterface;
 use ModelflowAi\Mistral\Model;
+use ModelflowAi\Mistral\Responses\Chat\CreateResponseToolCall;
 use ModelflowAi\Mistral\Responses\Chat\CreateStreamedResponse;
+use ModelflowAi\MistralAdapter\Tool\ToolFormatter;
 use Webmozart\Assert\Assert;
 
 final readonly class MistralChatModelAdapter implements AIModelAdapterInterface
@@ -53,6 +57,15 @@ final readonly class MistralChatModelAdapter implements AIModelAdapterInterface
             }
         }
 
+        if ($request->hasTools()) {
+            $parameters['tools'] = ToolFormatter::formatTools($request->getToolInfos());
+            $toolChoice = $request->getOption('toolChoice');
+            if (null !== $toolChoice) {
+                Assert::string($toolChoice);
+                $parameters['tool_choice'] = $toolChoice;
+            }
+        }
+
         if ($request->getOption('streamed', false)) {
             return $this->createStreamed($request, $parameters);
         }
@@ -63,19 +76,57 @@ final readonly class MistralChatModelAdapter implements AIModelAdapterInterface
     /**
      * @param array{
      *     model: string,
-     *     messages: array<array{role: "assistant"|"system"|"user"|"tool", content: string}>,
-     *     response_format?: array{ type: "json_object" },
+     *     messages: array<array{
+     *         role: "assistant"|"system"|"user"|"tool",
+     *         content: string,
+     *     }>,
+     *     response_format?: array{
+     *         type: "json_object",
+     *     },
+     *     tools?: array<array{
+     *         type: string,
+     *         function: array{
+     *             name: string,
+     *             description: string,
+     *             parameters: array{
+     *                 type: string,
+     *                 properties: array<string, mixed[]>,
+     *                 required: string[],
+     *             },
+     *         },
+     *     }>,
+     *     tool_choice?: string,
      * } $parameters
      */
     protected function create(AIChatRequest $request, array $parameters): AIChatResponse
     {
         $result = $this->client->chat()->create($parameters);
 
+        $choice = $result->choices[0];
+        if (0 < \count($choice->message->toolCalls)) {
+            return new AIChatResponse(
+                $request,
+                new AIChatResponseMessage(
+                    AIChatMessageRoleEnum::from($choice->message->role),
+                    $choice->message->content ?? '',
+                    \array_map(
+                        fn (CreateResponseToolCall $toolCall) => new AIChatToolCall(
+                            ToolTypeEnum::from($toolCall->type),
+                            $toolCall->id,
+                            $toolCall->function->name,
+                            $this->decodeArguments($toolCall->function->arguments),
+                        ),
+                        $choice->message->toolCalls,
+                    ),
+                ),
+            );
+        }
+
         return new AIChatResponse(
             $request,
             new AIChatResponseMessage(
-                AIChatMessageRoleEnum::from($result->choices[0]->message->role),
-                $result->choices[0]->message->content ?? '',
+                AIChatMessageRoleEnum::from($choice->message->role),
+                $choice->message->content ?? '',
             ),
         );
     }
@@ -83,8 +134,26 @@ final readonly class MistralChatModelAdapter implements AIModelAdapterInterface
     /**
      * @param array{
      *     model: string,
-     *     messages: array<array{role: "assistant"|"system"|"user"|"tool", content: string}>,
-     *     response_format?: array{ type: "json_object" },
+     *     messages: array<array{
+     *         role: "assistant"|"system"|"user"|"tool",
+     *         content: string,
+     *     }>,
+     *     response_format?: array{
+     *         type: "json_object",
+     *     },
+     *     tools?: array<array{
+     *         type: string,
+     *         function: array{
+     *             name: string,
+     *             description: string,
+     *             parameters: array{
+     *                 type: string,
+     *                 properties: array<string, mixed[]>,
+     *                 required: string[],
+     *             },
+     *         },
+     *     }>,
+     *     tool_choice?: string,
      * } $parameters
      */
     protected function createStreamed(AIChatRequest $request, array $parameters): AIChatResponse
@@ -107,19 +176,60 @@ final readonly class MistralChatModelAdapter implements AIModelAdapterInterface
         $role = null;
 
         foreach ($responses as $response) {
+            $delta = $response->choices[0]->delta;
+
             if (!$role instanceof AIChatMessageRoleEnum) {
-                $role = AIChatMessageRoleEnum::from($response->choices[0]->delta->role ?? 'assistant');
+                $role = AIChatMessageRoleEnum::from($delta->role ?? 'assistant');
+            }
+
+            if (0 < \count($delta->toolCalls)) {
+                foreach ($this->determineToolCall($response) as $toolCall) {
+                    yield new AIChatResponseMessage(
+                        $role,
+                        $delta->content ?? '',
+                        [$toolCall],
+                    );
+                }
+
+                break;
             }
 
             yield new AIChatResponseMessage(
                 $role,
-                $response->choices[0]->delta->content ?? '',
+                $delta->content ?? '',
             );
         }
     }
 
     public function supports(AIRequestInterface $request): bool
     {
-        return $request instanceof AIChatRequest;
+        return $request instanceof AIChatRequest
+            && (!$request->hasTools() || $this->model->toolsSupported());
+    }
+
+    /**
+     * @return \Iterator<int, AIChatToolCall>
+     */
+    protected function determineToolCall(CreateStreamedResponse $response): \Iterator
+    {
+        foreach ($response->choices[0]->delta->toolCalls as $toolCall) {
+            yield new AIChatToolCall(
+                ToolTypeEnum::from($toolCall->type),
+                $toolCall->id,
+                $toolCall->function->name,
+                $this->decodeArguments($toolCall->function->arguments),
+            );
+        }
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    protected function decodeArguments(string $arguments): array
+    {
+        /** @var array<string, mixed> $result */
+        $result = \json_decode($arguments, true);
+
+        return $result;
     }
 }

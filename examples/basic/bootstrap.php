@@ -37,7 +37,7 @@ $adapter = [];
 $mistralApiKey = $_ENV['MISTRAL_API_KEY'];
 if ($mistralApiKey) {
     $mistralClient = Mistral::client($mistralApiKey);
-    $mistralChatAdapter = new MistralChatModelAdapter($mistralClient, Model::MEDIUM);
+    $mistralChatAdapter = new MistralChatModelAdapter($mistralClient, Model::LARGE);
 
     $adapter[] = new DecisionRule($mistralChatAdapter, [ProviderCriteria::MISTRAL, PrivacyCriteria::MEDIUM]);
 }

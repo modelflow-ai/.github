@@ -40,4 +40,31 @@ final class CreateResponseTest extends TestCase
         $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE['usage']['total_tokens'], $instance->usage->totalTokens);
         $this->assertInstanceOf(MetaInformation::class, $instance->meta);
     }
+
+    public function testFromWithTools(): void
+    {
+        $instance = CreateResponse::from(DataFixtures::CHAT_CREATE_RESPONSE_WITH_TOOLS, MetaInformation::from([]));
+
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE_WITH_TOOLS['id'], $instance->id);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE_WITH_TOOLS['object'], $instance->object);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE_WITH_TOOLS['created'], $instance->created);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE_WITH_TOOLS['model'], $instance->model);
+        $this->assertCount(\count(DataFixtures::CHAT_CREATE_RESPONSE_WITH_TOOLS['choices']), $instance->choices);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE_WITH_TOOLS['choices'][0]['message']['role'], $instance->choices[0]->message->role);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE_WITH_TOOLS['choices'][0]['message']['content'], $instance->choices[0]->message->content);
+        $this->assertCount(\count(DataFixtures::CHAT_CREATE_RESPONSE_WITH_TOOLS['choices'][0]['message']['tool_calls']), $instance->choices[0]->message->toolCalls);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE_WITH_TOOLS['choices'][0]['message']['tool_calls'][0]['id'], $instance->choices[0]->message->toolCalls[0]->id);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE_WITH_TOOLS['choices'][0]['message']['tool_calls'][0]['type'], $instance->choices[0]->message->toolCalls[0]->type);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE_WITH_TOOLS['choices'][0]['message']['tool_calls'][0]['function']['name'], $instance->choices[0]->message->toolCalls[0]->function->name);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE_WITH_TOOLS['choices'][0]['message']['tool_calls'][0]['function']['arguments'], $instance->choices[0]->message->toolCalls[0]->function->arguments);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE_WITH_TOOLS['choices'][0]['message']['tool_calls'][1]['id'], $instance->choices[0]->message->toolCalls[1]->id);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE_WITH_TOOLS['choices'][0]['message']['tool_calls'][1]['type'], $instance->choices[0]->message->toolCalls[1]->type);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE_WITH_TOOLS['choices'][0]['message']['tool_calls'][1]['function']['name'], $instance->choices[0]->message->toolCalls[1]->function->name);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE_WITH_TOOLS['choices'][0]['message']['tool_calls'][1]['function']['arguments'], $instance->choices[0]->message->toolCalls[1]->function->arguments);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE_WITH_TOOLS['choices'][0]['finish_reason'], $instance->choices[0]->finishReason);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE_WITH_TOOLS['usage']['prompt_tokens'], $instance->usage->promptTokens);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE_WITH_TOOLS['usage']['completion_tokens'], $instance->usage->completionTokens);
+        $this->assertSame(DataFixtures::CHAT_CREATE_RESPONSE_WITH_TOOLS['usage']['total_tokens'], $instance->usage->totalTokens);
+        $this->assertInstanceOf(MetaInformation::class, $instance->meta);
+    }
 }

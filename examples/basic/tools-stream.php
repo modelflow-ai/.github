@@ -31,10 +31,10 @@ $toolExecutor = new ToolExecutor();
 
 /** @var AIChatRequestBuilder $builder */
 $builder = $handler->createChatRequest()
-    ->addUserMessage('How is the weather in hohenems?')
+    ->addUserMessage('How is the weather in hohenems and vienna?')
     ->tool('get_current_weather', new WeatherTool(), 'getCurrentWeather')
     ->toolChoice(ToolChoiceEnum::AUTO)
-    ->addCriteria(ProviderCriteria::OPENAI)
+    ->addCriteria(ProviderCriteria::MISTRAL)
     ->streamed();
 
 $request = $builder->build();

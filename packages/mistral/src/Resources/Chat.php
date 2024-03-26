@@ -88,9 +88,38 @@ final readonly class Chat implements ChatInterface
         foreach ($parameters['messages'] as $message) {
             Assert::keyExists($message, 'role');
             Assert::string($message['role']);
-            Assert::inArray($message['role'], ['system', 'user', 'assistant']);
+            Assert::inArray($message['role'], ['system', 'user', 'assistant', 'tool']);
             Assert::keyExists($message, 'content');
             Assert::string($message['content']);
+        }
+
+        if (!Model::from($parameters['model'])->toolsSupported()) {
+            Assert::keyNotExists($parameters, 'tools');
+            Assert::keyNotExists($parameters, 'tool_choice');
+        } else {
+            if (isset($parameters['tool_choice'])) {
+                Assert::string($parameters['tool_choice']);
+                Assert::inArray($parameters['tool_choice'], ['auto', 'none']);
+            }
+            if (isset($parameters['tools'])) {
+                Assert::isArray($parameters['tools']);
+                foreach ($parameters['tools'] as $tool) {
+                    Assert::keyExists($tool, 'type');
+                    Assert::inArray($tool['type'], ['function']);
+                    Assert::keyExists($tool, 'function');
+                    Assert::isArray($tool['function']);
+                    Assert::keyExists($tool['function'], 'name');
+                    Assert::string($tool['function']['name']);
+
+                    if (isset($tool['function']['description'])) {
+                        Assert::string($tool['function']['description']);
+                    }
+
+                    if (isset($tool['function']['parameters'])) {
+                        Assert::isArray($tool['function']['parameters']);
+                    }
+                }
+            }
         }
 
         if (isset($parameters['temperature'])) {

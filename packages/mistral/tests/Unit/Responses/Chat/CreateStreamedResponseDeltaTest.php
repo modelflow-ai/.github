@@ -29,4 +29,20 @@ final class CreateStreamedResponseDeltaTest extends TestCase
         $this->assertSame($attributes['role'], $message->role);
         $this->assertSame($attributes['content'], $message->content);
     }
+
+    public function testFromWithTools(): void
+    {
+        $attributes = DataFixtures::CHAT_CREATE_STREAMED_RESPONSES_WITH_TOOLS[0]['choices'][0]['delta'];
+
+        $message = CreateStreamedResponseDelta::from($attributes);
+
+        $this->assertInstanceOf(CreateStreamedResponseDelta::class, $message);
+        $this->assertSame($attributes['role'], $message->role);
+        $this->assertSame($attributes['content'], $message->content);
+        $this->assertCount(\count($attributes['tool_calls']), $message->toolCalls);
+        $this->assertSame($attributes['tool_calls'][0]['id'], $message->toolCalls[0]->id);
+        $this->assertSame($attributes['tool_calls'][0]['type'], $message->toolCalls[0]->type);
+        $this->assertSame($attributes['tool_calls'][0]['function']['name'], $message->toolCalls[0]->function->name);
+        $this->assertSame($attributes['tool_calls'][0]['function']['arguments'], $message->toolCalls[0]->function->arguments);
+    }
 }

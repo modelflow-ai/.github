@@ -55,6 +55,15 @@ final readonly class OpenaiChatModelAdapter implements AIModelAdapterInterface
             $parameters['response_format'] = ['type' => 'json_object'];
         }
 
+        if ($request->hasTools()) {
+            $parameters['tools'] = ToolFormatter::formatTools($request->getToolInfos());
+            $toolChoice = $request->getOption('toolChoice');
+            if (null !== $toolChoice) {
+                Assert::string($toolChoice);
+                $parameters['tool_choice'] = $toolChoice;
+            }
+        }
+
         if ($request->getOption('streamed', false)) {
             return $this->createStreamed($request, $parameters);
         }
@@ -65,17 +74,30 @@ final readonly class OpenaiChatModelAdapter implements AIModelAdapterInterface
     /**
      * @param array{
      *     model: string,
-     *     messages: array<array{role: "assistant"|"system"|"user"|"tool", content: string}>,
-     *     response_format?: array{type: "json_object"},
+     *     messages: array<array{
+     *         role: "assistant"|"system"|"user"|"tool",
+     *         content: string,
+     *     }>,
+     *     response_format?: array{
+     *         type: "json_object",
+     *     },
+     *     tools?: array<array{
+     *         type: string,
+     *         function: array{
+     *             name: string,
+     *             description: string,
+     *             parameters: array{
+     *                 type: string,
+     *                 properties: array<string, mixed[]>,
+     *                 required: string[],
+     *            },
+     *         },
+     *     }>,
+     *     tool_choice?: string,
      * } $parameters
      */
     protected function create(AIChatRequest $request, array $parameters): AIResponseInterface
     {
-        if ($request->hasTools()) {
-            $parameters['tools'] = ToolFormatter::formatTools($request->getToolInfos());
-            $parameters['tool_choice'] = $request->getOption('toolChoice');
-        }
-
         $result = $this->client->chat()->create($parameters);
 
         $choice = $result->choices[0];
@@ -114,16 +136,26 @@ final readonly class OpenaiChatModelAdapter implements AIModelAdapterInterface
      *         role: "assistant"|"system"|"user"|"tool",
      *         content: string,
      *     }>,
-     *     response_format?: array{type: "json_object"},
+     *     response_format?: array{
+     *         type: "json_object",
+     *     },
+     *     tools?: array<array{
+     *         type: string,
+     *         function: array{
+     *             name: string,
+     *             description: string,
+     *             parameters: array{
+     *                 type: string,
+     *                 properties: array<string, mixed[]>,
+     *                 required: string[],
+     *            },
+     *         },
+     *     }>,
+     *      tool_choice?: string,
      * } $parameters
      */
     protected function createStreamed(AIChatRequest $request, array $parameters): AIResponseInterface
     {
-        if ($request->hasTools()) {
-            $parameters['tools'] = ToolFormatter::formatTools($request->getToolInfos());
-            $parameters['tool_choice'] = $request->getOption('toolChoice');
-        }
-
         $responses = $this->client->chat()->createStreamed($parameters);
 
         return new AIChatResponseStream(

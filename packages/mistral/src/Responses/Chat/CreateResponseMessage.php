@@ -15,9 +15,13 @@ namespace ModelflowAi\Mistral\Responses\Chat;
 
 final readonly class CreateResponseMessage
 {
+    /**
+     * @param CreateResponseToolCall[] $toolCalls
+     */
     private function __construct(
         public string $role,
         public ?string $content,
+        public array $toolCalls,
     ) {
     }
 
@@ -25,13 +29,27 @@ final readonly class CreateResponseMessage
      * @param array{
      *     role: string,
      *     content: ?string,
+     *     tool_calls?: array<array{
+     *         id: string,
+     *         type: string,
+     *         function: array{
+     *             name: string,
+     *             arguments: string,
+     *         },
+     *     }>
      * } $attributes
      */
     public static function from(array $attributes): self
     {
+        $toolCalls = \array_map(fn (array $result, int $index): CreateResponseToolCall => CreateResponseToolCall::from(
+            $index,
+            $result,
+        ), $attributes['tool_calls'] ?? [], \array_keys($attributes['tool_calls'] ?? []));
+
         return new self(
             $attributes['role'],
             $attributes['content'] ?? null,
+            $toolCalls,
         );
     }
 }

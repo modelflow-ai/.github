@@ -230,6 +230,14 @@ final class OpenaiChatModelAdapterTest extends TestCase
                     'optional' => 'Test optional 1',
                 ],
             ],
+            [
+                'id' => 'call_1Ue9UPErEy4dz56T3znEoBO2',
+                'name' => 'test',
+                'arguments' => [
+                    'required' => 'Test required 2',
+                    'optional' => 'Test optional 2',
+                ],
+            ],
         ];
         foreach ($result->getMessageStream() as $i => $response) {
             $this->assertSame(AIChatMessageRoleEnum::ASSISTANT, $result->getMessage()->role);

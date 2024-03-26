@@ -25,4 +25,9 @@ enum Model: string
     {
         return self::LARGE === $this;
     }
+
+    public function toolsSupported(): bool
+    {
+        return self::LARGE === $this;
+    }
 }
