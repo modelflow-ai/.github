@@ -203,7 +203,8 @@ final readonly class MistralChatModelAdapter implements AIModelAdapterInterface
 
     public function supports(AIRequestInterface $request): bool
     {
-        return $request instanceof AIChatRequest;
+        return $request instanceof AIChatRequest
+            && (!$request->hasTools() || $this->model->toolsSupported());
     }
 
     /**

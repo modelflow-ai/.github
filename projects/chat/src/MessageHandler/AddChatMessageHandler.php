@@ -14,6 +14,7 @@ use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Core\Request\Message\ImageBase64Part;
 use ModelflowAi\Core\Request\Message\TextPart;
 use ModelflowAi\Core\Request\Message\ToolCallsPart;
+use ModelflowAi\Core\Response\AIChatResponse;
 use ModelflowAi\Core\Response\AIChatResponseStream;
 use ModelflowAi\Core\ToolInfo\ToolExecutorInterface;
 use ModelflowAi\Integration\Symfony\Criteria\ModelCriteria;
@@ -103,6 +104,7 @@ class AddChatMessageHandler
             return;
         }
 
+        /** @var AIChatResponse $response */
         $response = $this->aiRequestHandler->createChatRequest(...[
             ...$messages,
             new AIChatMessage(

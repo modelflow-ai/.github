@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9b51770da142fb6373782102dc530ad8",
+    "content-hash": "d5fe712b2965d5ba7b412e8c8fb11f11",
     "packages": [
         {
             "name": "psr/container",
@@ -547,16 +547,16 @@
         },
         {
             "name": "jangregor/phpstan-prophecy",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Jan0707/phpstan-prophecy.git",
-                "reference": "dfa3e2682799b4ca43738c2cb19bb5a826ffc92e"
+                "reference": "2bc7ca9460395690c6bf7332bdfb2f25d5cae8e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Jan0707/phpstan-prophecy/zipball/dfa3e2682799b4ca43738c2cb19bb5a826ffc92e",
-                "reference": "dfa3e2682799b4ca43738c2cb19bb5a826ffc92e",
+                "url": "https://api.github.com/repos/Jan0707/phpstan-prophecy/zipball/2bc7ca9460395690c6bf7332bdfb2f25d5cae8e0",
+                "reference": "2bc7ca9460395690c6bf7332bdfb2f25d5cae8e0",
                 "shasum": ""
             },
             "require": {
@@ -574,7 +574,6 @@
                 "phpspec/prophecy": "^1.7.0",
                 "phpunit/phpunit": "^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0"
             },
-            "default-branch": true,
             "type": "phpstan-extension",
             "extra": {
                 "phpstan": {
@@ -601,9 +600,15 @@
             "description": "Provides a phpstan/phpstan extension for phpspec/prophecy",
             "support": {
                 "issues": "https://github.com/Jan0707/phpstan-prophecy/issues",
-                "source": "https://github.com/Jan0707/phpstan-prophecy/tree/master"
+                "source": "https://github.com/Jan0707/phpstan-prophecy/tree/1.0.0"
             },
-            "time": "2024-03-13T08:18:10+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/localheinz",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-11-08T16:37:47+00:00"
         },
         {
             "name": "myclabs/deep-copy",

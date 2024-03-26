@@ -36,7 +36,7 @@
         "phpunit/phpunit": "^10.3",
         "rector/rector": "^0.18.1",
         "phpspec/prophecy-phpunit": "^2.0@dev",
-        "jangregor/phpstan-prophecy": "dev-master"
+        "jangregor/phpstan-prophecy": "^1.0"
     },
     "conflict": {
         "phpstan/phpstan": "^1.10.55"

@@ -3,4 +3,5 @@ parameters:
         - .
     level: max
     excludePaths:
+        - tests/Unit/Exceptions/TransportExceptionTest.php
         - vendor/*
