@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\ApiClient\Transport\Enums;
+require_once \dirname(__DIR__) . '/vendor/autoload.php';
 
-enum ContentType: string
-{
-    case JSON = 'application/json';
+use ModelflowAi\Stability\Stability;
+use Symfony\Component\Dotenv\Dotenv;
 
-    case MULTIPART = 'multipart/form-data';
-}
+(new Dotenv())->bootEnv(__DIR__ . '/.env');
+
+return Stability::client($_ENV['STABILITY_API_KEY']);

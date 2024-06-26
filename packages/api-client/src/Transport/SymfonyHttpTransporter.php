@@ -15,7 +15,9 @@ namespace ModelflowAi\ApiClient\Transport;
 
 use ModelflowAi\ApiClient\Exceptions\TransportException;
 use ModelflowAi\ApiClient\Responses\MetaInformation;
+use ModelflowAi\ApiClient\Transport\Enums\ContentType;
 use ModelflowAi\ApiClient\Transport\Response\ObjectResponse;
+use ModelflowAi\ApiClient\Transport\Response\RawResponse;
 use ModelflowAi\ApiClient\Transport\Response\TextResponse;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Contracts\HttpClient\ChunkInterface;
@@ -42,15 +44,24 @@ class SymfonyHttpTransporter implements TransportInterface
 
     private function request(Payload $payload): ResponseInterface
     {
+        $options = [
+            'headers' => [
+                'Content-Type' => $payload->contentType->value,
+            ],
+        ];
+
+        if(ContentType::JSON === $payload->contentType) {
+            $options['json'] = $payload->parameters;
+        }
+
+        if(ContentType::MULTIPART === $payload->contentType) {
+            $options['body'] = $payload->parameters;
+        }
+
         return $this->client->request(
             $payload->method->value,
             $payload->resourceUri->__toString(),
-            [
-                'headers' => [
-                    'Content-Type' => $payload->contentType->value,
-                ],
-                'json' => $payload->parameters,
-            ],
+            $options,
         );
     }
 
@@ -102,5 +113,21 @@ class SymfonyHttpTransporter implements TransportInterface
                 yield new ObjectResponse($data, $metaInformation);
             }
         }
+    }
+
+    public function requestRaw(Payload $payload): RawResponse
+    {
+        $response = $this->request($payload);
+
+        try {
+            // @phpstan-ignore-next-line
+            $metaInformation = MetaInformation::from($response->getHeaders());
+        } catch (ClientException $exception) {
+            throw new TransportException($exception->getResponse(), $exception->getCode(), $exception);
+        }
+
+        $resource = $response->toStream();
+
+        return new RawResponse($resource, $metaInformation);
     }
 }

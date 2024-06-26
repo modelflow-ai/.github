@@ -33,10 +33,13 @@ readonly class Payload
     /**
      * @param array<string, mixed> $parameters
      */
-    public static function create(string $resource, array $parameters): self
-    {
+    public static function create(
+        string $resource,
+        array $parameters,
+        ContentType $contentType = ContentType::JSON,
+    ): self {
         return new self(
-            contentType: ContentType::JSON,
+            contentType: $contentType,
             method: Method::POST,
             resourceUri: ResourceUri::get($resource),
             parameters: $parameters,

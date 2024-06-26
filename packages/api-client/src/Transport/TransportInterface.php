@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ModelflowAi\ApiClient\Transport;
 
 use ModelflowAi\ApiClient\Transport\Response\ObjectResponse;
+use ModelflowAi\ApiClient\Transport\Response\RawResponse;
 use ModelflowAi\ApiClient\Transport\Response\TextResponse;
 
 interface TransportInterface
@@ -23,4 +24,6 @@ interface TransportInterface
     public function requestObject(Payload $payload): ObjectResponse;
 
     public function requestStream(Payload $payload, ?callable $decoder = null): \Iterator;
+
+    public function requestRaw(Payload $payload): RawResponse;
 }
