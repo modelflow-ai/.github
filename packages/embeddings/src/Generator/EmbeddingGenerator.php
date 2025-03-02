@@ -27,6 +27,11 @@ class EmbeddingGenerator implements EmbeddingGeneratorInterface
     ) {
     }
 
+    public function embedText(string $text): array
+    {
+        return $this->embeddingAdapter->embedText($text);
+    }
+
     public function generateEmbedding(EmbeddingInterface $embedding, ?callable $headerGenerator = null): array
     {
         $result = [];
