@@ -27,7 +27,7 @@
     ],
     "require": {
         "php": "^8.2",
-        "modelflow-ai/decision-tree": "^0.3",
+        "modelflow-ai/decision-tree": "^0.4",
         "webmozart/assert": "^1.11"
     },
     "require-dev": {

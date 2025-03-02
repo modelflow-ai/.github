@@ -4,19 +4,19 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7578aca71f6d49ee70f10f3cfc3567f5",
+    "content-hash": "24b8f9edd241209aad8139f81bcd975c",
     "packages": [
         {
             "name": "modelflow-ai/chat",
-            "version": "0.3.x-dev",
+            "version": "0.4.x-dev",
             "dist": {
                 "type": "path",
                 "url": "./../chat",
-                "reference": "a6666a75c551dd9643d3b01094570ac2de2b5275"
+                "reference": "811ffa98fa92a6a9a90db90219d609538916c4be"
             },
             "require": {
                 "ext-fileinfo": "*",
-                "modelflow-ai/decision-tree": "^0.3",
+                "modelflow-ai/decision-tree": "^0.4",
                 "php": "^8.2",
                 "symfony/deprecation-contracts": "^3",
                 "webmozart/assert": "^1.11"
@@ -24,7 +24,7 @@
             "require-dev": {
                 "asapo/remove-vendor-plugin": "^0.1",
                 "jangregor/phpstan-prophecy": "^1.0",
-                "modelflow-ai/prompt-template": "^0.3",
+                "modelflow-ai/prompt-template": "^0.4",
                 "php-cs-fixer/shim": "^3.15",
                 "phpspec/prophecy-phpunit": "^2.1@stable",
                 "phpstan/extension-installer": "^1.2",
@@ -120,7 +120,7 @@
         },
         {
             "name": "modelflow-ai/decision-tree",
-            "version": "0.3.x-dev",
+            "version": "0.4.x-dev",
             "dist": {
                 "type": "path",
                 "url": "./../decision-tree",
@@ -386,12 +386,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "4764e040f8743e92b86c36f488f32d0265dd1dae"
+                "reference": "024473a478be9df5fdaca2c793f2232fe788e414"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/4764e040f8743e92b86c36f488f32d0265dd1dae",
-                "reference": "4764e040f8743e92b86c36f488f32d0265dd1dae",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/024473a478be9df5fdaca2c793f2232fe788e414",
+                "reference": "024473a478be9df5fdaca2c793f2232fe788e414",
                 "shasum": ""
             },
             "require": {
@@ -431,7 +431,7 @@
             ],
             "support": {
                 "issues": "https://github.com/myclabs/DeepCopy/issues",
-                "source": "https://github.com/myclabs/DeepCopy/tree/1.x"
+                "source": "https://github.com/myclabs/DeepCopy/tree/1.13.0"
             },
             "funding": [
                 {
@@ -439,7 +439,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-11-26T13:04:49+00:00"
+            "time": "2025-02-12T12:17:51+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -620,16 +620,16 @@
         },
         {
             "name": "php-cs-fixer/shim",
-            "version": "v3.68.3",
+            "version": "v3.70.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/shim.git",
-                "reference": "125e3d3b018ef753a9533d1712891e3c6067f0e4"
+                "reference": "fadb65a74cb619227d81013260548290bb8fedd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/shim/zipball/125e3d3b018ef753a9533d1712891e3c6067f0e4",
-                "reference": "125e3d3b018ef753a9533d1712891e3c6067f0e4",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/shim/zipball/fadb65a74cb619227d81013260548290bb8fedd9",
+                "reference": "fadb65a74cb619227d81013260548290bb8fedd9",
                 "shasum": ""
             },
             "require": {
@@ -666,9 +666,9 @@
             "description": "A tool to automatically fix PHP code style",
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/shim/issues",
-                "source": "https://github.com/PHP-CS-Fixer/shim/tree/v3.68.3"
+                "source": "https://github.com/PHP-CS-Fixer/shim/tree/v3.70.1"
             },
-            "time": "2025-01-27T16:38:03+00:00"
+            "time": "2025-03-01T22:06:08+00:00"
         },
         {
             "name": "phpstan/extension-installer",
@@ -838,12 +838,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "d98175c41a42ed4988f97e48b243cbad69de8aff"
+                "reference": "89e694721a7721fccf4cc665dd3d75049984e97a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/d98175c41a42ed4988f97e48b243cbad69de8aff",
-                "reference": "d98175c41a42ed4988f97e48b243cbad69de8aff",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/89e694721a7721fccf4cc665dd3d75049984e97a",
+                "reference": "89e694721a7721fccf4cc665dd3d75049984e97a",
                 "shasum": ""
             },
             "require": {
@@ -908,7 +908,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-01-01T10:02:44+00:00"
+            "time": "2025-02-08T08:52:03+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -1161,12 +1161,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "be5aa22d7ef91920e527fbca23481ea5cad54a35"
+                "reference": "2cdeaae81d79043a10a171c2dc6e31a73f2f7739"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/be5aa22d7ef91920e527fbca23481ea5cad54a35",
-                "reference": "be5aa22d7ef91920e527fbca23481ea5cad54a35",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2cdeaae81d79043a10a171c2dc6e31a73f2f7739",
+                "reference": "2cdeaae81d79043a10a171c2dc6e31a73f2f7739",
                 "shasum": ""
             },
             "require": {
@@ -1176,7 +1176,7 @@
                 "ext-mbstring": "*",
                 "ext-xml": "*",
                 "ext-xmlwriter": "*",
-                "myclabs/deep-copy": "^1.12.1",
+                "myclabs/deep-copy": "^1.13.0",
                 "phar-io/manifest": "^2.0.4",
                 "phar-io/version": "^3.2.1",
                 "php": ">=8.1",
@@ -1254,7 +1254,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-01-30T07:07:58+00:00"
+            "time": "2025-02-26T14:44:25+00:00"
         },
         {
             "name": "rector/rector",

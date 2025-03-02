@@ -27,12 +27,12 @@
     "require": {
         "php": "^8.2",
         "hkulekci/qdrant": "^0.5",
-        "modelflow-ai/embeddings": "^0.3",
+        "modelflow-ai/embeddings": "^0.4",
         "nyholm/psr7": "^1.8@dev"
     },
     "require-dev": {
-        "modelflow-ai/ollama": "^0.3",
-        "modelflow-ai/ollama-adapter": "^0.3",
+        "modelflow-ai/ollama": "^0.4",
+        "modelflow-ai/ollama-adapter": "^0.4",
         "php-cs-fixer/shim": "^3.15",
         "phpstan/extension-installer": "^1.2",
         "phpstan/phpstan": "^1.10, <1.10.55",

@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f54a4e3cae472f324063e0af710aa62c",
+    "content-hash": "0375c8486318e16ca1f3dd8355b332cf",
     "packages": [
         {
             "name": "brick/math",
-            "version": "0.12.1",
+            "version": "0.12.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brick/math.git",
-                "reference": "f510c0a40911935b77b86859eb5223d58d660df1"
+                "reference": "866551da34e9a618e64a819ee1e01c20d8a588ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/f510c0a40911935b77b86859eb5223d58d660df1",
-                "reference": "f510c0a40911935b77b86859eb5223d58d660df1",
+                "url": "https://api.github.com/repos/brick/math/zipball/866551da34e9a618e64a819ee1e01c20d8a588ba",
+                "reference": "866551da34e9a618e64a819ee1e01c20d8a588ba",
                 "shasum": ""
             },
             "require": {
@@ -26,7 +26,7 @@
             "require-dev": {
                 "php-coveralls/php-coveralls": "^2.2",
                 "phpunit/phpunit": "^10.1",
-                "vimeo/psalm": "5.16.0"
+                "vimeo/psalm": "6.8.8"
             },
             "type": "library",
             "autoload": {
@@ -56,7 +56,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brick/math/issues",
-                "source": "https://github.com/brick/math/tree/0.12.1"
+                "source": "https://github.com/brick/math/tree/0.12.3"
             },
             "funding": [
                 {
@@ -64,7 +64,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-11-29T23:19:16+00:00"
+            "time": "2025-02-28T13:11:00+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -1132,16 +1132,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "2.20.1",
+            "version": "2.20.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "e3cabade99ebccc6ba078884c1c5f250866a494e"
+                "reference": "19912de9270fa6abb3d25a1a37784af6b818d534"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/e3cabade99ebccc6ba078884c1c5f250866a494e",
-                "reference": "e3cabade99ebccc6ba078884c1c5f250866a494e",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/19912de9270fa6abb3d25a1a37784af6b818d534",
+                "reference": "19912de9270fa6abb3d25a1a37784af6b818d534",
                 "shasum": ""
             },
             "require": {
@@ -1228,9 +1228,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/orm/issues",
-                "source": "https://github.com/doctrine/orm/tree/2.20.1"
+                "source": "https://github.com/doctrine/orm/tree/2.20.2"
             },
-            "time": "2024-12-19T06:48:36+00:00"
+            "time": "2025-02-04T19:17:01+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -1521,14 +1521,14 @@
         },
         {
             "name": "modelflow-ai/anthropic",
-            "version": "0.3.x-dev",
+            "version": "0.4.x-dev",
             "dist": {
                 "type": "path",
                 "url": "./../../packages/anthropic",
-                "reference": "ac9b00a040e6a63cee6c471ae2739138c43d36f0"
+                "reference": "ec9c73c2a24514302027538fe29249392d14ccbc"
             },
             "require": {
-                "modelflow-ai/api-client": "^0.3",
+                "modelflow-ai/api-client": "^0.4",
                 "php": "^8.2",
                 "webmozart/assert": "^1.11"
             },
@@ -1620,21 +1620,21 @@
         },
         {
             "name": "modelflow-ai/anthropic-adapter",
-            "version": "0.3.x-dev",
+            "version": "0.4.x-dev",
             "dist": {
                 "type": "path",
                 "url": "./../../packages/anthropic-adapter",
-                "reference": "d7f6c378dceeaaab1f55e7899b3bb11b37e5cabc"
+                "reference": "78cdde98697ea6144609aadabea3073a2ab21c1d"
             },
             "require": {
-                "modelflow-ai/anthropic": "^0.3",
+                "modelflow-ai/anthropic": "^0.4",
                 "php": "^8.2"
             },
             "require-dev": {
                 "asapo/remove-vendor-plugin": "^0.1",
                 "jangregor/phpstan-prophecy": "^1.0",
-                "modelflow-ai/chat": "^0.3",
-                "modelflow-ai/prompt-template": "^0.3",
+                "modelflow-ai/chat": "^0.4",
+                "modelflow-ai/prompt-template": "^0.4",
                 "php-cs-fixer/shim": "^3.15",
                 "phpspec/prophecy-phpunit": "^2.1@stable",
                 "phpstan/extension-installer": "^1.2",
@@ -1719,7 +1719,7 @@
         },
         {
             "name": "modelflow-ai/api-client",
-            "version": "0.3.x-dev",
+            "version": "0.4.x-dev",
             "dist": {
                 "type": "path",
                 "url": "./../../packages/api-client",
@@ -1815,15 +1815,15 @@
         },
         {
             "name": "modelflow-ai/chat",
-            "version": "0.3.x-dev",
+            "version": "0.4.x-dev",
             "dist": {
                 "type": "path",
                 "url": "./../../packages/chat",
-                "reference": "a6666a75c551dd9643d3b01094570ac2de2b5275"
+                "reference": "811ffa98fa92a6a9a90db90219d609538916c4be"
             },
             "require": {
                 "ext-fileinfo": "*",
-                "modelflow-ai/decision-tree": "^0.3",
+                "modelflow-ai/decision-tree": "^0.4",
                 "php": "^8.2",
                 "symfony/deprecation-contracts": "^3",
                 "webmozart/assert": "^1.11"
@@ -1831,7 +1831,7 @@
             "require-dev": {
                 "asapo/remove-vendor-plugin": "^0.1",
                 "jangregor/phpstan-prophecy": "^1.0",
-                "modelflow-ai/prompt-template": "^0.3",
+                "modelflow-ai/prompt-template": "^0.4",
                 "php-cs-fixer/shim": "^3.15",
                 "phpspec/prophecy-phpunit": "^2.1@stable",
                 "phpstan/extension-installer": "^1.2",
@@ -1927,7 +1927,7 @@
         },
         {
             "name": "modelflow-ai/decision-tree",
-            "version": "0.3.x-dev",
+            "version": "0.4.x-dev",
             "dist": {
                 "type": "path",
                 "url": "./../../packages/decision-tree",
@@ -2021,11 +2021,11 @@
         },
         {
             "name": "modelflow-ai/fireworksai-adapter",
-            "version": "0.3.x-dev",
+            "version": "0.4.x-dev",
             "dist": {
                 "type": "path",
                 "url": "./../../packages/fireworksai-adapter",
-                "reference": "a5da8c94b791f038f35675048975892b904cbc92"
+                "reference": "08c668ef6d67f9757176ed0fab74c729e3d11e60"
             },
             "require": {
                 "nyholm/psr7": "^1.8",
@@ -2036,11 +2036,11 @@
             "require-dev": {
                 "asapo/remove-vendor-plugin": "^0.1",
                 "jangregor/phpstan-prophecy": "^1.0",
-                "modelflow-ai/chat": "^0.3",
-                "modelflow-ai/completion": "^0.3",
-                "modelflow-ai/embeddings": "^0.3",
-                "modelflow-ai/image": "^0.3",
-                "modelflow-ai/prompt-template": "^0.3",
+                "modelflow-ai/chat": "^0.4",
+                "modelflow-ai/completion": "^0.4",
+                "modelflow-ai/embeddings": "^0.4",
+                "modelflow-ai/image": "^0.4",
+                "modelflow-ai/prompt-template": "^0.4",
                 "php-cs-fixer/shim": "^3.15",
                 "phpspec/prophecy": "^1.0@dev",
                 "phpspec/prophecy-phpunit": "^2.1@stable",
@@ -2134,11 +2134,11 @@
         },
         {
             "name": "modelflow-ai/google-gemini-adapter",
-            "version": "0.3.x-dev",
+            "version": "0.4.x-dev",
             "dist": {
                 "type": "path",
                 "url": "./../../packages/google-gemini-adapter",
-                "reference": "01eafd1bf8fb793522fba14297b84d036ff450b5"
+                "reference": "522e684fb1d1ef46e88a493f02d643c609de441c"
             },
             "require": {
                 "google-gemini-php/client": "^1.0.14",
@@ -2151,8 +2151,8 @@
             "require-dev": {
                 "asapo/remove-vendor-plugin": "^0.1",
                 "jangregor/phpstan-prophecy": "^1.0",
-                "modelflow-ai/chat": "^0.3",
-                "modelflow-ai/prompt-template": "^0.3",
+                "modelflow-ai/chat": "^0.4",
+                "modelflow-ai/prompt-template": "^0.4",
                 "php-cs-fixer/shim": "^3.15",
                 "phpspec/prophecy-phpunit": "^2.1@stable",
                 "phpstan/extension-installer": "^1.2",
@@ -2238,14 +2238,14 @@
         },
         {
             "name": "modelflow-ai/image",
-            "version": "0.3.x-dev",
+            "version": "0.4.x-dev",
             "dist": {
                 "type": "path",
                 "url": "./../../packages/image",
-                "reference": "ee3b88e50457435e0f1adf9746add3d680b8b112"
+                "reference": "cbee4ef8778ce63428cbdd7365490c9c0dc0d24c"
             },
             "require": {
-                "modelflow-ai/decision-tree": "^0.3",
+                "modelflow-ai/decision-tree": "^0.4",
                 "php": "^8.2",
                 "webmozart/assert": "^1.11"
             },
@@ -2341,14 +2341,14 @@
         },
         {
             "name": "modelflow-ai/mistral",
-            "version": "0.3.x-dev",
+            "version": "0.4.x-dev",
             "dist": {
                 "type": "path",
                 "url": "./../../packages/mistral",
-                "reference": "94aca330a5c7ffffb4dac3c7e8262fbb6d878418"
+                "reference": "7b55f06a46bba1f5c67214d8e472a3fd43490eb8"
             },
             "require": {
-                "modelflow-ai/api-client": "^0.3",
+                "modelflow-ai/api-client": "^0.4",
                 "php": "^8.2",
                 "webmozart/assert": "^1.11"
             },
@@ -2440,22 +2440,22 @@
         },
         {
             "name": "modelflow-ai/mistral-adapter",
-            "version": "0.3.x-dev",
+            "version": "0.4.x-dev",
             "dist": {
                 "type": "path",
                 "url": "./../../packages/mistral-adapter",
-                "reference": "1c46dcf7af69ae60b0970e2804b842b2a661002b"
+                "reference": "24eb0c952535588ea13f368ab582a28d33481338"
             },
             "require": {
-                "modelflow-ai/mistral": "^0.3",
+                "modelflow-ai/mistral": "^0.4",
                 "php": "^8.2"
             },
             "require-dev": {
                 "asapo/remove-vendor-plugin": "^0.1",
                 "jangregor/phpstan-prophecy": "^1.0",
-                "modelflow-ai/chat": "^0.3",
-                "modelflow-ai/embeddings": "^0.3",
-                "modelflow-ai/prompt-template": "^0.3",
+                "modelflow-ai/chat": "^0.4",
+                "modelflow-ai/embeddings": "^0.4",
+                "modelflow-ai/prompt-template": "^0.4",
                 "php-cs-fixer/shim": "^3.15",
                 "phpspec/prophecy-phpunit": "^2.1@stable",
                 "phpstan/extension-installer": "^1.2",
@@ -2543,14 +2543,14 @@
         },
         {
             "name": "modelflow-ai/ollama",
-            "version": "0.3.x-dev",
+            "version": "0.4.x-dev",
             "dist": {
                 "type": "path",
                 "url": "./../../packages/ollama",
-                "reference": "7643443e150d35d309e59853d58aa3a474388213"
+                "reference": "f4dee146aa5a4b73c61cc17d568c721d37a36619"
             },
             "require": {
-                "modelflow-ai/api-client": "^0.3",
+                "modelflow-ai/api-client": "^0.4",
                 "php": "^8.2",
                 "webmozart/assert": "^1.11"
             },
@@ -2641,24 +2641,24 @@
         },
         {
             "name": "modelflow-ai/ollama-adapter",
-            "version": "0.3.x-dev",
+            "version": "0.4.x-dev",
             "dist": {
                 "type": "path",
                 "url": "./../../packages/ollama-adapter",
-                "reference": "45ac589f3295ea124a475ca58276f88ad1903005"
+                "reference": "f66c3b78a81d038a447018ea21ca90bbafee4549"
             },
             "require": {
-                "modelflow-ai/ollama": "^0.3",
+                "modelflow-ai/ollama": "^0.4",
                 "php": "^8.2",
                 "webmozart/assert": "^1.11"
             },
             "require-dev": {
                 "asapo/remove-vendor-plugin": "^0.1",
                 "jangregor/phpstan-prophecy": "^1.0",
-                "modelflow-ai/chat": "^0.3",
-                "modelflow-ai/completion": "^0.3",
-                "modelflow-ai/embeddings": "^0.3",
-                "modelflow-ai/prompt-template": "^0.3",
+                "modelflow-ai/chat": "^0.4",
+                "modelflow-ai/completion": "^0.4",
+                "modelflow-ai/embeddings": "^0.4",
+                "modelflow-ai/prompt-template": "^0.4",
                 "php-cs-fixer/shim": "^3.15",
                 "phpspec/prophecy-phpunit": "^2.1@stable",
                 "phpstan/extension-installer": "^1.2",
@@ -2747,11 +2747,11 @@
         },
         {
             "name": "modelflow-ai/openai-adapter",
-            "version": "0.3.x-dev",
+            "version": "0.4.x-dev",
             "dist": {
                 "type": "path",
                 "url": "./../../packages/openai-adapter",
-                "reference": "a69f2bd7e90ae36493ae1c18118ace6fe6ecfdf4"
+                "reference": "72155176ec69159811daf9fcd0d25fbc508fe4b9"
             },
             "require": {
                 "nyholm/psr7": "^1.8",
@@ -2762,10 +2762,10 @@
             "require-dev": {
                 "asapo/remove-vendor-plugin": "^0.1",
                 "jangregor/phpstan-prophecy": "^1.0",
-                "modelflow-ai/chat": "^0.3",
-                "modelflow-ai/embeddings": "^0.3",
-                "modelflow-ai/image": "^0.3",
-                "modelflow-ai/prompt-template": "^0.3",
+                "modelflow-ai/chat": "^0.4",
+                "modelflow-ai/embeddings": "^0.4",
+                "modelflow-ai/image": "^0.4",
+                "modelflow-ai/prompt-template": "^0.4",
                 "php-cs-fixer/shim": "^3.15",
                 "phpspec/prophecy": "^1.0@dev",
                 "phpspec/prophecy-phpunit": "^2.1@stable",
@@ -2858,11 +2858,11 @@
         },
         {
             "name": "modelflow-ai/symfony-bundle",
-            "version": "0.3.x-dev",
+            "version": "0.4.x-dev",
             "dist": {
                 "type": "path",
                 "url": "./../../integrations/symfony",
-                "reference": "412bbad604be2f2e8a1f5215f810539af1efbb2e"
+                "reference": "8ddff845db31fa50d55bb921de0e57f273573410"
             },
             "require": {
                 "php": "^8.2",
@@ -2874,18 +2874,18 @@
             },
             "require-dev": {
                 "asapo/remove-vendor-plugin": "^0.1",
-                "modelflow-ai/anthropic-adapter": "^0.3",
-                "modelflow-ai/chat": "^0.3",
-                "modelflow-ai/completion": "^0.3",
-                "modelflow-ai/embeddings": "^0.3",
-                "modelflow-ai/experts": "^0.3",
-                "modelflow-ai/fireworksai-adapter": "^0.3",
-                "modelflow-ai/google-gemini-adapter": "^0.3",
-                "modelflow-ai/image": "^0.3",
-                "modelflow-ai/mistral-adapter": "^0.3",
-                "modelflow-ai/ollama-adapter": "^0.3",
-                "modelflow-ai/openai-adapter": "^0.3",
-                "modelflow-ai/prompt-template": "^0.3",
+                "modelflow-ai/anthropic-adapter": "^0.4",
+                "modelflow-ai/chat": "^0.4",
+                "modelflow-ai/completion": "^0.4",
+                "modelflow-ai/embeddings": "^0.4",
+                "modelflow-ai/experts": "^0.4",
+                "modelflow-ai/fireworksai-adapter": "^0.4",
+                "modelflow-ai/google-gemini-adapter": "^0.4",
+                "modelflow-ai/image": "^0.4",
+                "modelflow-ai/mistral-adapter": "^0.4",
+                "modelflow-ai/ollama-adapter": "^0.4",
+                "modelflow-ai/openai-adapter": "^0.4",
+                "modelflow-ai/prompt-template": "^0.4",
                 "php-cs-fixer/shim": "^3.15",
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^1.10, <1.10.55",
@@ -2994,7 +2994,7 @@
         },
         {
             "name": "modelflow-ai/tools",
-            "version": "0.3.x-dev",
+            "version": "0.4.x-dev",
             "dist": {
                 "type": "path",
                 "url": "./../../packages/tools",
@@ -3866,16 +3866,16 @@
         },
         {
             "name": "ramsey/collection",
-            "version": "2.0.0",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/collection.git",
-                "reference": "a4b48764bfbb8f3a6a4d1aeb1a35bb5e9ecac4a5"
+                "reference": "3c5990b8a5e0b79cd1cf11c2dc1229e58e93f109"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/collection/zipball/a4b48764bfbb8f3a6a4d1aeb1a35bb5e9ecac4a5",
-                "reference": "a4b48764bfbb8f3a6a4d1aeb1a35bb5e9ecac4a5",
+                "url": "https://api.github.com/repos/ramsey/collection/zipball/3c5990b8a5e0b79cd1cf11c2dc1229e58e93f109",
+                "reference": "3c5990b8a5e0b79cd1cf11c2dc1229e58e93f109",
                 "shasum": ""
             },
             "require": {
@@ -3883,25 +3883,22 @@
             },
             "require-dev": {
                 "captainhook/plugin-composer": "^5.3",
-                "ergebnis/composer-normalize": "^2.28.3",
-                "fakerphp/faker": "^1.21",
+                "ergebnis/composer-normalize": "^2.45",
+                "fakerphp/faker": "^1.24",
                 "hamcrest/hamcrest-php": "^2.0",
-                "jangregor/phpstan-prophecy": "^1.0",
-                "mockery/mockery": "^1.5",
+                "jangregor/phpstan-prophecy": "^2.1",
+                "mockery/mockery": "^1.6",
                 "php-parallel-lint/php-console-highlighter": "^1.0",
-                "php-parallel-lint/php-parallel-lint": "^1.3",
-                "phpcsstandards/phpcsutils": "^1.0.0-rc1",
-                "phpspec/prophecy-phpunit": "^2.0",
-                "phpstan/extension-installer": "^1.2",
-                "phpstan/phpstan": "^1.9",
-                "phpstan/phpstan-mockery": "^1.1",
-                "phpstan/phpstan-phpunit": "^1.3",
-                "phpunit/phpunit": "^9.5",
-                "psalm/plugin-mockery": "^1.1",
-                "psalm/plugin-phpunit": "^0.18.4",
-                "ramsey/coding-standard": "^2.0.3",
-                "ramsey/conventional-commits": "^1.3",
-                "vimeo/psalm": "^5.4"
+                "php-parallel-lint/php-parallel-lint": "^1.4",
+                "phpspec/prophecy-phpunit": "^2.3",
+                "phpstan/extension-installer": "^1.4",
+                "phpstan/phpstan": "^2.1",
+                "phpstan/phpstan-mockery": "^2.0",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "phpunit/phpunit": "^10.5",
+                "ramsey/coding-standard": "^2.3",
+                "ramsey/conventional-commits": "^1.6",
+                "roave/security-advisories": "dev-latest"
             },
             "type": "library",
             "extra": {
@@ -3939,19 +3936,9 @@
             ],
             "support": {
                 "issues": "https://github.com/ramsey/collection/issues",
-                "source": "https://github.com/ramsey/collection/tree/2.0.0"
+                "source": "https://github.com/ramsey/collection/tree/2.1.0"
             },
-            "funding": [
-                {
-                    "url": "https://github.com/ramsey",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/ramsey/collection",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2022-12-31T21:50:55+00:00"
+            "time": "2025-03-02T04:48:29+00:00"
         },
         {
             "name": "ramsey/uuid",
@@ -7255,16 +7242,16 @@
         },
         {
             "name": "symfony/stimulus-bundle",
-            "version": "v2.22.1",
+            "version": "v2.23.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/stimulus-bundle.git",
-                "reference": "e13034d428354023c82a1db108d40fdf6cec2d36"
+                "reference": "254f4e05cbaa349d4ae68b9b2e6a22995e0887f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/stimulus-bundle/zipball/e13034d428354023c82a1db108d40fdf6cec2d36",
-                "reference": "e13034d428354023c82a1db108d40fdf6cec2d36",
+                "url": "https://api.github.com/repos/symfony/stimulus-bundle/zipball/254f4e05cbaa349d4ae68b9b2e6a22995e0887f9",
+                "reference": "254f4e05cbaa349d4ae68b9b2e6a22995e0887f9",
                 "shasum": ""
             },
             "require": {
@@ -7304,7 +7291,7 @@
                 "symfony-ux"
             ],
             "support": {
-                "source": "https://github.com/symfony/stimulus-bundle/tree/v2.22.1"
+                "source": "https://github.com/symfony/stimulus-bundle/tree/v2.23.0"
             },
             "funding": [
                 {
@@ -7320,7 +7307,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-06T14:30:33+00:00"
+            "time": "2025-01-16T21:55:09+00:00"
         },
         {
             "name": "symfony/stopwatch",
@@ -7816,16 +7803,16 @@
         },
         {
             "name": "symfony/ux-turbo",
-            "version": "v2.22.1",
+            "version": "v2.23.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-turbo.git",
-                "reference": "97718ea4bca26f0db843c3c0de338d6900c5a002"
+                "reference": "db96cf04d70a8c820671ce55530e8bf641ada33f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-turbo/zipball/97718ea4bca26f0db843c3c0de338d6900c5a002",
-                "reference": "97718ea4bca26f0db843c3c0de338d6900c5a002",
+                "url": "https://api.github.com/repos/symfony/ux-turbo/zipball/db96cf04d70a8c820671ce55530e8bf641ada33f",
+                "reference": "db96cf04d70a8c820671ce55530e8bf641ada33f",
                 "shasum": ""
             },
             "require": {
@@ -7894,7 +7881,7 @@
                 "turbo-stream"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-turbo/tree/v2.22.1"
+                "source": "https://github.com/symfony/ux-turbo/tree/v2.23.0"
             },
             "funding": [
                 {
@@ -7910,7 +7897,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-05T14:25:02+00:00"
+            "time": "2025-02-06T08:47:30+00:00"
         },
         {
             "name": "symfony/var-dumper",
@@ -8299,20 +8286,20 @@
         },
         {
             "name": "twig/extra-bundle",
-            "version": "v3.19.0",
+            "version": "v3.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/twig-extra-bundle.git",
-                "reference": "9746573ca4bc1cd03a767a183faadaf84e0c31fa"
+                "reference": "9df5e1dbb6a68c0665ae5603f6f2c20815647876"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/twig-extra-bundle/zipball/9746573ca4bc1cd03a767a183faadaf84e0c31fa",
-                "reference": "9746573ca4bc1cd03a767a183faadaf84e0c31fa",
+                "url": "https://api.github.com/repos/twigphp/twig-extra-bundle/zipball/9df5e1dbb6a68c0665ae5603f6f2c20815647876",
+                "reference": "9df5e1dbb6a68c0665ae5603f6f2c20815647876",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0.2",
+                "php": ">=8.1.0",
                 "symfony/framework-bundle": "^5.4|^6.4|^7.0",
                 "symfony/twig-bundle": "^5.4|^6.4|^7.0",
                 "twig/twig": "^3.2|^4.0"
@@ -8357,7 +8344,7 @@
                 "twig"
             ],
             "support": {
-                "source": "https://github.com/twigphp/twig-extra-bundle/tree/v3.19.0"
+                "source": "https://github.com/twigphp/twig-extra-bundle/tree/v3.20.0"
             },
             "funding": [
                 {
@@ -8369,28 +8356,27 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-26T19:22:23+00:00"
+            "time": "2025-02-08T09:47:15+00:00"
         },
         {
             "name": "twig/twig",
-            "version": "v3.19.0",
+            "version": "v3.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "d4f8c2b86374f08efc859323dbcd95c590f7124e"
+                "reference": "3468920399451a384bef53cf7996965f7cd40183"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/d4f8c2b86374f08efc859323dbcd95c590f7124e",
-                "reference": "d4f8c2b86374f08efc859323dbcd95c590f7124e",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/3468920399451a384bef53cf7996965f7cd40183",
+                "reference": "3468920399451a384bef53cf7996965f7cd40183",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0.2",
+                "php": ">=8.1.0",
                 "symfony/deprecation-contracts": "^2.5|^3",
                 "symfony/polyfill-ctype": "^1.8",
-                "symfony/polyfill-mbstring": "^1.3",
-                "symfony/polyfill-php81": "^1.29"
+                "symfony/polyfill-mbstring": "^1.3"
             },
             "require-dev": {
                 "phpstan/phpstan": "^2.0",
@@ -8437,7 +8423,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.19.0"
+                "source": "https://github.com/twigphp/Twig/tree/v3.20.0"
             },
             "funding": [
                 {
@@ -8449,7 +8435,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-01-29T07:06:14+00:00"
+            "time": "2025-02-13T08:34:43+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -8656,16 +8642,16 @@
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.12.1",
+            "version": "1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "123267b2c49fbf30d78a7b2d333f6be754b94845"
+                "reference": "024473a478be9df5fdaca2c793f2232fe788e414"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/123267b2c49fbf30d78a7b2d333f6be754b94845",
-                "reference": "123267b2c49fbf30d78a7b2d333f6be754b94845",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/024473a478be9df5fdaca2c793f2232fe788e414",
+                "reference": "024473a478be9df5fdaca2c793f2232fe788e414",
                 "shasum": ""
             },
             "require": {
@@ -8704,7 +8690,7 @@
             ],
             "support": {
                 "issues": "https://github.com/myclabs/DeepCopy/issues",
-                "source": "https://github.com/myclabs/DeepCopy/tree/1.12.1"
+                "source": "https://github.com/myclabs/DeepCopy/tree/1.13.0"
             },
             "funding": [
                 {
@@ -8712,7 +8698,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-11-08T17:47:46+00:00"
+            "time": "2025-02-12T12:17:51+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -8892,16 +8878,16 @@
         },
         {
             "name": "php-cs-fixer/shim",
-            "version": "v3.68.3",
+            "version": "v3.70.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/shim.git",
-                "reference": "125e3d3b018ef753a9533d1712891e3c6067f0e4"
+                "reference": "fadb65a74cb619227d81013260548290bb8fedd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/shim/zipball/125e3d3b018ef753a9533d1712891e3c6067f0e4",
-                "reference": "125e3d3b018ef753a9533d1712891e3c6067f0e4",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/shim/zipball/fadb65a74cb619227d81013260548290bb8fedd9",
+                "reference": "fadb65a74cb619227d81013260548290bb8fedd9",
                 "shasum": ""
             },
             "require": {
@@ -8938,9 +8924,9 @@
             "description": "A tool to automatically fix PHP code style",
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/shim/issues",
-                "source": "https://github.com/PHP-CS-Fixer/shim/tree/v3.68.3"
+                "source": "https://github.com/PHP-CS-Fixer/shim/tree/v3.70.1"
             },
-            "time": "2025-01-27T16:38:03+00:00"
+            "time": "2025-03-01T22:06:08+00:00"
         },
         {
             "name": "phpstan/extension-installer",
@@ -9427,16 +9413,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.5.43",
+            "version": "10.5.45",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "fb117a8772c14fdc41acb1ded0de44de0c9091f9"
+                "reference": "bd68a781d8e30348bc297449f5234b3458267ae8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/fb117a8772c14fdc41acb1ded0de44de0c9091f9",
-                "reference": "fb117a8772c14fdc41acb1ded0de44de0c9091f9",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/bd68a781d8e30348bc297449f5234b3458267ae8",
+                "reference": "bd68a781d8e30348bc297449f5234b3458267ae8",
                 "shasum": ""
             },
             "require": {
@@ -9508,7 +9494,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.43"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.45"
             },
             "funding": [
                 {
@@ -9524,7 +9510,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-01-29T13:59:45+00:00"
+            "time": "2025-02-06T16:08:12+00:00"
         },
         {
             "name": "rector/rector",
