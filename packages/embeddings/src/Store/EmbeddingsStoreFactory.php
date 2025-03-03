@@ -33,7 +33,9 @@ class EmbeddingsStoreFactory implements EmbeddingsStoreFactoryInterface
             }
         }
 
-        throw new \InvalidArgumentException('No store supports the given DSN.');
+        throw new \InvalidArgumentException(
+            \sprintf('No store supports the given DSN with scheme "%s".', $dsn->scheme),
+        );
     }
 
     public function supports(Dsn $dsn): bool

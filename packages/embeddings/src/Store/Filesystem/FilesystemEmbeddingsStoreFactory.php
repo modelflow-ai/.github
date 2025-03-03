@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ModelflowAi\Embeddings\Store\Filesystem;
 
 use ModelflowAi\Embeddings\Store\Dsn\Dsn;
+use ModelflowAi\Embeddings\Store\Dsn\InvalidDsnException;
 use ModelflowAi\Embeddings\Store\EmbeddingsStoreFactoryInterface;
 use ModelflowAi\Embeddings\Store\EmbeddingsStoreInterface;
 
@@ -23,7 +24,16 @@ class FilesystemEmbeddingsStoreFactory implements EmbeddingsStoreFactoryInterfac
     {
         $path = $dsn->path;
         if (!\is_string($path)) {
-            throw new \InvalidArgumentException('The path must be a string.');
+            throw new InvalidDsnException('The path must be a string for file scheme DSNs.');
+        }
+
+        $directory = \dirname($path);
+        if (!\is_dir($directory)) {
+            throw new \InvalidArgumentException(\sprintf('The directory "%s" does not exist.', $directory)); // @codeCoverageIgnore
+        }
+
+        if (!\is_writable($directory)) {
+            throw new \InvalidArgumentException(\sprintf('The directory "%s" is not writable.', $directory)); // @codeCoverageIgnore
         }
 
         return new FilesystemEmbeddingsStore($path);

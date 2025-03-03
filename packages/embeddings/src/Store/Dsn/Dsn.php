@@ -16,7 +16,7 @@ namespace ModelflowAi\Embeddings\Store\Dsn;
 final readonly class Dsn
 {
     /**
-     * @param array<string|int, string|string[]> $options
+     * @param array<string|int, bool|int|string|string[]> $options
      */
     public function __construct(
         public string $scheme,
@@ -32,6 +32,10 @@ final readonly class Dsn
 
     public static function fromString(#[\SensitiveParameter] string $dsn): self
     {
+        if ('memory://' === $dsn) {
+            return new self('memory', null);
+        }
+
         // Special handling for file:// URLs
         if (\str_starts_with($dsn, 'file://')) {
             $path = \substr($dsn, 7);
@@ -57,16 +61,11 @@ final readonly class Dsn
             throw new \InvalidArgumentException('The DSN must contain a scheme.');
         }
 
-        // Host is not required for file:// URLs
-        if (!isset($params['host']) && 'file' !== $params['scheme']) {
-            throw new \InvalidArgumentException('The DSN must contain a host.');
-        }
-
         $user = isset($params['user']) && '' !== $params['user'] ? \rawurldecode($params['user']) : null;
         $password = isset($params['pass']) && '' !== $params['pass'] ? \rawurldecode($params['pass']) : null;
         $port = isset($params['port']) ? (int) $params['port'] : null;
         $path = isset($params['path']) && '' !== $params['path'] ? \ltrim($params['path'], '/') : null;
-        $host = $params['host'] ?? '';
+        $host = $params['host'] ?? null;
 
         $options = [];
         if (isset($params['query'])) {

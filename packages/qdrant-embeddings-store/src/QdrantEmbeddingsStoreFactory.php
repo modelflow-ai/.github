@@ -19,6 +19,7 @@ use ModelflowAi\Embeddings\Store\EmbeddingsStoreInterface;
 use Qdrant\Config;
 use Qdrant\Http\GuzzleClient;
 use Qdrant\Qdrant;
+use Webmozart\Assert\Assert;
 
 class QdrantEmbeddingsStoreFactory implements EmbeddingsStoreFactoryInterface
 {
@@ -30,7 +31,12 @@ class QdrantEmbeddingsStoreFactory implements EmbeddingsStoreFactoryInterface
             (new Config($scheme . '://' . $dsn->host, $dsn->port ?? 6333))->setApiKey($dsn->user ?? ''),
         ));
 
-        return new QdrantEmbeddingsStore($client, $dsn->path ?? 'default');
+        /** @var int<1, max> $chunkSize */
+        $chunkSize = $dsn->getOption('chunk_size', 600);
+        Assert::integer($chunkSize, 'The chunk size must be an integer.');
+        Assert::greaterThan($chunkSize, 0, 'The chunk size must be greater than 0.');
+
+        return new QdrantEmbeddingsStore($client, $dsn->path ?? 'default', $chunkSize);
     }
 
     public function supports(Dsn $dsn): bool

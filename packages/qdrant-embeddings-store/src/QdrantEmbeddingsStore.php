@@ -28,9 +28,13 @@ use Qdrant\Qdrant;
 
 class QdrantEmbeddingsStore implements EmbeddingsStoreInterface
 {
+    /**
+     * @param int<1, max> $chunkSize
+     */
     public function __construct(
         private readonly Qdrant $client,
         private readonly string $collectionName,
+        private readonly int $chunkSize = 600,
     ) {
     }
 
@@ -92,7 +96,7 @@ class QdrantEmbeddingsStore implements EmbeddingsStoreInterface
             $this->createCollection(\count($embeddings[0]->getVector()));
         }
 
-        $chunks = \array_chunk($embeddings, 600);
+        $chunks = \array_chunk($embeddings, $this->chunkSize);
         foreach ($chunks as $chunk) {
             $points = new PointsStruct();
 

@@ -15,6 +15,9 @@ namespace ModelflowAi\Embeddings\Algorithm;
 
 final class DistanceL2Utils
 {
+    /**
+     * @codeCoverageIgnore
+     */
     private function __construct()
     {
     }

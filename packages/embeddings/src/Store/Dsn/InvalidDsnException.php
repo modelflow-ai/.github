@@ -11,16 +11,8 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\Embeddings;
+namespace ModelflowAi\Embeddings\Store\Dsn;
 
-/**
- * @internal
- *
- * @codeCoverageIgnore
- */
-final class EmbeddingsPackage
+class InvalidDsnException extends \Exception
 {
-    private function __construct()
-    {
-    }
 }
