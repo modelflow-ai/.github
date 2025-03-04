@@ -16,6 +16,7 @@ namespace ModelflowAi\Experts;
 use ModelflowAi\Chat\Request\Message\AIChatMessage;
 use ModelflowAi\Chat\Request\Message\MessagePart;
 use ModelflowAi\Chat\Response\AIChatResponse;
+use ModelflowAi\Chat\Response\AIChatResponseStream;
 
 interface ThreadInterface
 {
@@ -27,6 +28,8 @@ interface ThreadInterface
     public function addMetadata(array $metadata): self;
 
     public function run(): AIChatResponse;
+
+    public function runStreamed(): AIChatResponseStream;
 
     public function addMessage(AIChatMessage $message): self;
 

@@ -16,11 +16,13 @@ namespace ModelflowAi\Experts\Tests\Unit;
 use ModelflowAi\Chat\AIChatRequestHandlerInterface;
 use ModelflowAi\Chat\Request\AIChatRequest;
 use ModelflowAi\Chat\Request\Builder\AIChatRequestBuilder;
+use ModelflowAi\Chat\Request\Builder\AIChatStreamedRequestBuilder;
 use ModelflowAi\Chat\Request\Message\AIChatMessage;
 use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Chat\Request\ResponseFormat\JsonSchemaResponseFormat;
 use ModelflowAi\Chat\Response\AIChatResponse;
 use ModelflowAi\Chat\Response\AIChatResponseMessage;
+use ModelflowAi\Chat\Response\AIChatResponseStream;
 use ModelflowAi\Chat\Response\Usage;
 use ModelflowAi\DecisionTree\Criteria\CapabilityCriteria;
 use ModelflowAi\Experts\Expert;
@@ -68,6 +70,29 @@ class ThreadTest extends TestCase
         $this->assertInstanceOf(AIChatRequest::class, $request);
         $this->assertCount(1, $request->getMessages());
         $this->assertSame(['role' => 'system', 'content' => 'instructions'], $request->getMessages()[0]?->toArray());
+    }
+
+    public function testRunStreamed(): void
+    {
+        $expert = new Expert(
+            'name',
+            'description',
+            'instructions',
+            [CapabilityCriteria::SMART],
+        );
+
+        $thread = new Thread($this->requestHandler->reveal(), $expert);
+
+        $this->requestHandler->createStreamedRequest()
+            ->willReturn(new AIChatStreamedRequestBuilder(fn (AIChatRequest $request) => new AIChatResponseStream(
+                $request,
+                new \ArrayIterator([
+                    new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Test message'),
+                ]),
+            )));
+
+        $result = $thread->runStreamed();
+        $this->assertInstanceOf(AIChatResponseStream::class, $result);
     }
 
     public function testRunWithMetadata(): void
