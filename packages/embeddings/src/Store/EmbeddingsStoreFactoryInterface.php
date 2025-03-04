@@ -11,16 +11,13 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\Embeddings;
+namespace ModelflowAi\Embeddings\Store;
 
-/**
- * @internal
- *
- * @codeCoverageIgnore
- */
-final class EmbeddingsPackage
+use ModelflowAi\Embeddings\Store\Dsn\Dsn;
+
+interface EmbeddingsStoreFactoryInterface
 {
-    private function __construct()
-    {
-    }
+    public function create(Dsn $dsn): EmbeddingsStoreInterface;
+
+    public function supports(Dsn $dsn): bool;
 }

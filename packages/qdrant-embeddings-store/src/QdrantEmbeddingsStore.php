@@ -28,9 +28,13 @@ use Qdrant\Qdrant;
 
 class QdrantEmbeddingsStore implements EmbeddingsStoreInterface
 {
+    /**
+     * @param int<1, max> $chunkSize
+     */
     public function __construct(
         private readonly Qdrant $client,
         private readonly string $collectionName,
+        private readonly int $chunkSize = 600,
     ) {
     }
 
@@ -80,8 +84,6 @@ class QdrantEmbeddingsStore implements EmbeddingsStoreInterface
 
     public function addDocuments(array $embeddings): void
     {
-        $points = new PointsStruct();
-
         if ([] === $embeddings) {
             return;
         }
@@ -94,11 +96,16 @@ class QdrantEmbeddingsStore implements EmbeddingsStoreInterface
             $this->createCollection(\count($embeddings[0]->getVector()));
         }
 
-        foreach ($embeddings as $embedding) {
-            $this->createPointFromDocument($points, $embedding);
-        }
+        $chunks = \array_chunk($embeddings, $this->chunkSize);
+        foreach ($chunks as $chunk) {
+            $points = new PointsStruct();
 
-        $this->client->collections($this->collectionName)->points()->upsert($points);
+            foreach ($chunk as $embedding) {
+                $this->createPointFromDocument($points, $embedding);
+            }
+
+            $this->client->collections($this->collectionName)->points()->upsert($points);
+        }
     }
 
     public function similaritySearch(array $vector, int $k = 4, array $additionalArguments = []): array
