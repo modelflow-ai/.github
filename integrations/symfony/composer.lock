@@ -5655,12 +5655,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "cbc4bbd82bac3847f70fd754d9ade01180d8f711"
+                "reference": "0077cb24fdb858cc0e7a79bbd082e330c81c5019"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/cbc4bbd82bac3847f70fd754d9ade01180d8f711",
-                "reference": "cbc4bbd82bac3847f70fd754d9ade01180d8f711",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0077cb24fdb858cc0e7a79bbd082e330c81c5019",
+                "reference": "0077cb24fdb858cc0e7a79bbd082e330c81c5019",
                 "shasum": ""
             },
             "require": {
@@ -5748,7 +5748,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-03-04T07:24:51+00:00"
+            "time": "2025-03-04T12:49:36+00:00"
         },
         {
             "name": "psr/http-client",

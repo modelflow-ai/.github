@@ -38,7 +38,7 @@ class EmbeddingGenerator implements EmbeddingGeneratorInterface
         foreach ($this->embeddingSplitter->splitEmbedding($embedding) as $splitEmbedding) {
             $result[] = $newEmbedding = $this->embeddingFormatter->formatEmbedding(
                 $splitEmbedding,
-                $headerGenerator ? $headerGenerator($embedding) : '',
+                $headerGenerator ? $headerGenerator($splitEmbedding) : '',
             );
             $newEmbedding->setVector($this->embeddingAdapter->embedText($newEmbedding->getContent()));
         }

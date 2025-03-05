@@ -26,11 +26,9 @@ final readonly class OpenaiEmbeddingsAdapterFactory implements EmbeddingsAdapter
 
     public function createEmbeddingAdapter(array $options): EmbeddingAdapterInterface
     {
-        $model = \str_replace('gpt', 'gpt-', $options['model']);
-
         return new OpenaiEmbeddingAdapter(
             $this->client,
-            $model,
+            $options['model'],
         );
     }
 }

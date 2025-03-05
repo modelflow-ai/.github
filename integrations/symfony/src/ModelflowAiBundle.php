@@ -30,6 +30,7 @@ use ModelflowAi\Embeddings\EmbeddingsPackage;
 use ModelflowAi\Embeddings\Formatter\EmbeddingFormatter;
 use ModelflowAi\Embeddings\Generator\EmbeddingGenerator;
 use ModelflowAi\Embeddings\Splitter\EmbeddingSplitter;
+use ModelflowAi\Embeddings\Store\Dsn\Dsn;
 use ModelflowAi\Embeddings\Store\EmbeddingsStoreInterface;
 use ModelflowAi\Experts\Expert;
 use ModelflowAi\FireworksAiAdapter\FireworksAiAdapterPackage;
@@ -972,8 +973,6 @@ class ModelflowAiBundle extends AbstractBundle
         $adapters = \array_filter($config['adapters'] ?? [], fn (array $adapter) => $adapter['enabled']);
         $providers = \array_filter($providers, fn (array $provider) => $provider['enabled']);
 
-        $generators = $config['embeddings']['generators'] ?? [];
-
         $chatAdapters = [];
         $completionAdapters = [];
         $imageAdapters = [];
@@ -1002,7 +1001,18 @@ class ModelflowAiBundle extends AbstractBundle
             }
         }
 
-        foreach ($generators as $generator) {
+        $embeddingsGenerators = $config['embeddings']['generators'] ?? [];
+        $embeddingsStores = $config['embeddings']['stores'] ?? [];
+
+        if ([] !== \array_merge($embeddingsGenerators, $embeddingsStores) && !\class_exists(EmbeddingsPackage::class)) {
+            throw new \Exception('Embeddings package is enabled but the package is not installed. Please install it with composer require modelflow-ai/embeddings');
+        }
+
+        if (\class_exists(EmbeddingsPackage::class)) {
+            $container->import(\dirname(__DIR__) . '/config/embeddings.php');
+        }
+
+        foreach ($embeddingsGenerators as $generator) {
             $configFiles[] = $generator['provider'] . '/common.php';
             $configFiles[] = $generator['provider'] . '/embeddings.php';
         }
@@ -1017,10 +1027,6 @@ class ModelflowAiBundle extends AbstractBundle
 
         if ([] !== $imageAdapters && !\class_exists(ImagePackage::class)) {
             $imageAdapters = [];
-        }
-
-        if (\count($generators) > 0 && !\class_exists(EmbeddingsPackage::class)) {
-            throw new \Exception('Embeddings package is enabled but the package is not installed. Please install it with composer require modelflow-ai/embeddings');
         }
 
         $container->parameters()
@@ -1168,9 +1174,7 @@ class ModelflowAiBundle extends AbstractBundle
                 ->tag(self::TAG_IMAGE_DECISION_TREE_RULE);
         }
 
-        $container->import(\dirname(__DIR__) . '/config/embeddings.php');
-
-        foreach ($generators as $key => $embedding) {
+        foreach ($embeddingsGenerators as $key => $embedding) {
             $prefix = 'modelflow_ai.embeddings.' . $key;
             $adapterId = $prefix . '.adapter';
             $container->services()
@@ -1218,12 +1222,18 @@ class ModelflowAiBundle extends AbstractBundle
         }
 
         foreach ($config['embeddings']['stores'] ?? [] as $key => $store) {
+            $prefix = 'modelflow_ai.embeddings.' . $key;
             $container->services()
-                ->set('modelflow_ai.embeddings.store.' . $key, EmbeddingsStoreInterface::class)
-                ->factory([service('modelflow_ai.embeddings_store_factory'), 'create'])
+                ->set($prefix . '.dsn', Dsn::class)
+                ->factory([Dsn::class, 'fromString'])
                 ->args([
                     $store['dsn'],
                 ]);
+
+            $container->services()
+                ->set($prefix . '.generator', EmbeddingsStoreInterface::class)
+                ->factory([service('modelflow_ai.embeddings_store_factory'), 'create'])
+                ->arg('$dsn', service($prefix . '.dsn'));
         }
 
         $experts = $config['experts'] ?? [];
