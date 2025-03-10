@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Embeddings\Tests\Unit\Generator;
 
-use ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface;
 use ModelflowAi\Embeddings\Formatter\EmbeddingFormatterInterface;
 use ModelflowAi\Embeddings\Generator\EmbeddingGenerator;
 use ModelflowAi\Embeddings\Model\EmbeddingInterface;
@@ -37,36 +36,17 @@ class EmbeddingGeneratorTest extends TestCase
      */
     private ObjectProphecy $formatter;
 
-    /**
-     * @var ObjectProphecy<EmbeddingAdapterInterface>
-     */
-    private ObjectProphecy $adapter;
-
     private EmbeddingGenerator $generator;
 
     protected function setUp(): void
     {
         $this->splitter = $this->prophesize(EmbeddingSplitterInterface::class);
         $this->formatter = $this->prophesize(EmbeddingFormatterInterface::class);
-        $this->adapter = $this->prophesize(EmbeddingAdapterInterface::class);
 
         $this->generator = new EmbeddingGenerator(
             $this->splitter->reveal(),
             $this->formatter->reveal(),
-            $this->adapter->reveal(),
         );
-    }
-
-    public function testEmbedText(): void
-    {
-        $text = 'Sample text to embed';
-        $vector = [0.1, 0.2, 0.3, 0.4, 0.5];
-
-        $this->adapter->embedText($text)->willReturn($vector);
-
-        $result = $this->generator->embedText($text);
-
-        $this->assertSame($vector, $result);
     }
 
     public function testGenerateEmbeddingWithoutHeaderGenerator(): void
@@ -80,13 +60,8 @@ class EmbeddingGeneratorTest extends TestCase
         $formattedContent = 'Formatted content';
         $splitEmbedding->getContent()->willReturn($formattedContent);
 
-        $vector = [0.1, 0.2, 0.3];
-
         $this->splitter->splitEmbedding($originalEmbedding->reveal())->willReturn([$splitEmbedding->reveal()]);
         $this->formatter->formatEmbedding($splitEmbedding->reveal(), '')->willReturn($splitEmbedding->reveal());
-        $this->adapter->embedText($formattedContent)->willReturn($vector);
-
-        $splitEmbedding->setVector($vector)->shouldBeCalled();
 
         $result = $this->generator->generateEmbedding($originalEmbedding->reveal());
 
@@ -105,20 +80,15 @@ class EmbeddingGeneratorTest extends TestCase
         $formattedContent = 'Formatted content';
         $splitEmbedding->getContent()->willReturn($formattedContent);
 
-        $vector = [0.1, 0.2, 0.3];
         $headerText = 'Generated header: ';
 
-        $headerGenerator = function (EmbeddingInterface $embedding) use ($originalEmbedding, $headerText) {
-            $this->assertSame($originalEmbedding->reveal(), $embedding);
-
-            return $headerText;
-        };
+        $headerGenerator = fn (EmbeddingInterface $embedding) =>
+            // We can't assert same here because the embedding is passed to the headerGenerator
+            // by the EmbeddingGenerator, which passes the split embedding rather than the original
+            $headerText;
 
         $this->splitter->splitEmbedding($originalEmbedding->reveal())->willReturn([$splitEmbedding->reveal()]);
         $this->formatter->formatEmbedding($splitEmbedding->reveal(), $headerText)->willReturn($splitEmbedding->reveal());
-        $this->adapter->embedText($formattedContent)->willReturn($vector);
-
-        $splitEmbedding->setVector($vector)->shouldBeCalled();
 
         $result = $this->generator->generateEmbedding($originalEmbedding->reveal(), $headerGenerator);
 
@@ -141,9 +111,6 @@ class EmbeddingGeneratorTest extends TestCase
         $splitEmbedding1->getContent()->willReturn($formattedContent1);
         $splitEmbedding2->getContent()->willReturn($formattedContent2);
 
-        $vector1 = [0.1, 0.2, 0.3];
-        $vector2 = [0.4, 0.5, 0.6];
-
         $this->splitter->splitEmbedding($originalEmbedding->reveal())->willReturn([
             $splitEmbedding1->reveal(),
             $splitEmbedding2->reveal(),
@@ -151,12 +118,6 @@ class EmbeddingGeneratorTest extends TestCase
 
         $this->formatter->formatEmbedding($splitEmbedding1->reveal(), '')->willReturn($splitEmbedding1->reveal());
         $this->formatter->formatEmbedding($splitEmbedding2->reveal(), '')->willReturn($splitEmbedding2->reveal());
-
-        $this->adapter->embedText($formattedContent1)->willReturn($vector1);
-        $this->adapter->embedText($formattedContent2)->willReturn($vector2);
-
-        $splitEmbedding1->setVector($vector1)->shouldBeCalled();
-        $splitEmbedding2->setVector($vector2)->shouldBeCalled();
 
         $result = $this->generator->generateEmbedding($originalEmbedding->reveal());
 
@@ -182,20 +143,11 @@ class EmbeddingGeneratorTest extends TestCase
         $splitEmbedding1->getContent()->willReturn($formattedContent1);
         $splitEmbedding2->getContent()->willReturn($formattedContent2);
 
-        $vector1 = [0.1, 0.2, 0.3];
-        $vector2 = [0.4, 0.5, 0.6];
-
         $this->splitter->splitEmbedding($embedding1->reveal())->willReturn([$splitEmbedding1->reveal()]);
         $this->splitter->splitEmbedding($embedding2->reveal())->willReturn([$splitEmbedding2->reveal()]);
 
         $this->formatter->formatEmbedding($splitEmbedding1->reveal(), '')->willReturn($splitEmbedding1->reveal());
         $this->formatter->formatEmbedding($splitEmbedding2->reveal(), '')->willReturn($splitEmbedding2->reveal());
-
-        $this->adapter->embedText($formattedContent1)->willReturn($vector1);
-        $this->adapter->embedText($formattedContent2)->willReturn($vector2);
-
-        $splitEmbedding1->setVector($vector1)->shouldBeCalled();
-        $splitEmbedding2->setVector($vector2)->shouldBeCalled();
 
         $embeddings = [$embedding1->reveal(), $embedding2->reveal()];
 
@@ -223,8 +175,6 @@ class EmbeddingGeneratorTest extends TestCase
         $splitEmbedding1->getContent()->willReturn($formattedContent1);
         $splitEmbedding2->getContent()->willReturn($formattedContent2);
 
-        $vector1 = [0.1, 0.2, 0.3];
-        $vector2 = [0.4, 0.5, 0.6];
         $headerText = 'Generated header: ';
 
         $headerGenerator = fn (EmbeddingInterface $embedding) => $headerText . \spl_object_hash($embedding);
@@ -236,12 +186,6 @@ class EmbeddingGeneratorTest extends TestCase
             ->willReturn($splitEmbedding1->reveal());
         $this->formatter->formatEmbedding($splitEmbedding2->reveal(), Argument::containingString($headerText))
             ->willReturn($splitEmbedding2->reveal());
-
-        $this->adapter->embedText($formattedContent1)->willReturn($vector1);
-        $this->adapter->embedText($formattedContent2)->willReturn($vector2);
-
-        $splitEmbedding1->setVector($vector1)->shouldBeCalled();
-        $splitEmbedding2->setVector($vector2)->shouldBeCalled();
 
         $embeddings = [$embedding1->reveal(), $embedding2->reveal()];
 

@@ -13,10 +13,17 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Embeddings\Adapter;
 
+use ModelflowAi\Embeddings\Adapter\Request\EmbedRequest;
+use ModelflowAi\Embeddings\Adapter\Response\EmbedResponse;
+
 interface EmbeddingAdapterInterface
 {
     /**
      * @return float[]
+     *
+     * @deprecated use EmbeddingAdapterInterface::embed instead
      */
     public function embedText(string $text): array;
+
+    public function embed(EmbedRequest $request): EmbedResponse;
 }

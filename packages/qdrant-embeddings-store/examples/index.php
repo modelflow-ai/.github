@@ -14,8 +14,11 @@ declare(strict_types=1);
 namespace App;
 
 use ModelflowAi\Embeddings\Adapter\Cache\CacheEmbeddingAdapter;
+use ModelflowAi\Embeddings\EmbeddingsRequestHandler;
 use ModelflowAi\Embeddings\Formatter\EmbeddingFormatter;
 use ModelflowAi\Embeddings\Generator\EmbeddingGenerator;
+use ModelflowAi\Embeddings\Handler\EmbeddingsSimilarityHandler;
+use ModelflowAi\Embeddings\Handler\EmbeddingsStoreHandler;
 use ModelflowAi\Embeddings\Splitter\EmbeddingSplitter;
 use ModelflowAi\Embeddings\Store\Qdrant\QdrantEmbeddingsStore;
 use ModelflowAi\Ollama\Ollama;
@@ -33,25 +36,56 @@ $client = Ollama::client();
 $embeddingSplitter = new EmbeddingSplitter(500);
 $embeddingFormatter = new EmbeddingFormatter();
 $embeddingAdapter = new CacheEmbeddingAdapter(
-    new OllamaEmbeddingAdapter($client),
+    new OllamaEmbeddingAdapter($client, 'all-minilm'),
     new FilesystemAdapter('ollama', 0, __DIR__ . '/var/cache'),
 );
-$embeddingGenerator = new EmbeddingGenerator($embeddingSplitter, $embeddingFormatter, $embeddingAdapter);
+$embeddingGenerator = new EmbeddingGenerator($embeddingSplitter, $embeddingFormatter);
 
 $client = new Qdrant(new GuzzleClient(new Config('http://localhost', 6333)));
 $store = new QdrantEmbeddingsStore($client, 'books');
 
-$input = [
+$embeddingClass = ExampleEmbedding::class;
+$embeddingKey = 'example-store';
+
+$storeHandler = new EmbeddingsStoreHandler(
+    [$embeddingKey => $embeddingGenerator],
+    [$embeddingKey => $store],
+    [$embeddingKey => $embeddingAdapter],
+    [$embeddingClass => $embeddingKey],
+);
+
+$similarityHandler = new EmbeddingsSimilarityHandler(
+    [$embeddingKey => $store],
+    [$embeddingKey => $embeddingAdapter],
+);
+
+$embeddingsRequestHandler = new EmbeddingsRequestHandler(
+    $storeHandler,
+    $similarityHandler,
+);
+
+$embeddings = [
     new ExampleEmbedding(\file_get_contents(__DIR__ . '/var/books/schildbuerger.txt') ?: '', 'schildbuerger.txt'),
     new ExampleEmbedding(\file_get_contents(__DIR__ . '/var/books/nibelungenlied.txt') ?: '', 'nibelungenlied.txt'),
 ];
-$output = $embeddingGenerator->generateEmbeddings($input);
 
-$store->addDocuments($output);
+$storeResponse = $embeddingsRequestHandler
+    ->createStoreRequest(...$embeddings)
+    ->execute();
 
-$vector = $embeddingAdapter->embedText('Welches Tier hat die Wittwe?');
-$result = $store->similaritySearch($vector, 4, ['fileName' => 'schildbuerger.txt']);
+echo 'Store Response Usage: ' . $storeResponse->getUsage()->getPromptTokens() . ' prompt tokens / ' .
+    $storeResponse->getUsage()->getTotalTokens() . " total tokens\n\n";
 
-foreach ($result as $item) {
+$similarityResponse = $embeddingsRequestHandler
+    ->createSimilarityRequest('Welches Tier hat die Wittwe?', $embeddingKey)
+    ->withLimit(4)
+    ->withAdditionalFilter(['fileName' => 'schildbuerger.txt'])
+    ->execute();
+
+echo 'Similarity Response Usage: ' .
+    $similarityResponse->getUsage()->getPromptTokens() .
+    " prompt tokens\n\n";
+
+foreach ($similarityResponse->getEmbeddings() as $item) {
     echo $item->getContent() . \PHP_EOL . \PHP_EOL;
 }

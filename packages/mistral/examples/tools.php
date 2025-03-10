@@ -77,6 +77,8 @@ $messages[] = [
     'content' => '',
     'tool_calls' => \array_map(
         fn (CreateResponseToolCall $toolCall): array => [
+            'type' => 'function',
+            'id' => $toolCall->id,
             'function' => [
                 'name' => $toolCall->function->name,
                 'arguments' => $toolCall->function->arguments,
@@ -97,6 +99,7 @@ foreach ($response->choices[0]->message->toolCalls as $toolCall) {
 
     $messages[] = [
         'role' => 'tool',
+        'tool_call_id' => $toolCall->id,
         'name' => $toolCall->function->name,
         'content' => (string) \json_encode($result),
     ];

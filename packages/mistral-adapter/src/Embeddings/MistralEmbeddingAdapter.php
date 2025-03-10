@@ -13,25 +13,37 @@ declare(strict_types=1);
 
 namespace ModelflowAi\MistralAdapter\Embeddings;
 
+use ModelflowAi\Embeddings\Adapter\DeprecatedEmbedTextTrait;
 use ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface;
+use ModelflowAi\Embeddings\Adapter\Request\EmbedRequest;
+use ModelflowAi\Embeddings\Adapter\Response\EmbedResponse;
+use ModelflowAi\Embeddings\Usage\EmbeddingUsage;
 use ModelflowAi\Mistral\ClientInterface;
 use ModelflowAi\Mistral\Model;
 
 final readonly class MistralEmbeddingAdapter implements EmbeddingAdapterInterface
 {
+    use DeprecatedEmbedTextTrait;
+
     public function __construct(
         private ClientInterface $client,
         private string $model = Model::EMBED->value,
     ) {
     }
 
-    public function embedText(string $text): array
+    public function embed(EmbedRequest $request): EmbedResponse
     {
         $response = $this->client->embeddings()->create([
             'model' => $this->model,
-            'input' => [$text],
+            'input' => [$request->getText()],
         ]);
 
-        return $response->data[0]->embedding;
+        return new EmbedResponse(
+            $response->data[0]->embedding,
+            new EmbeddingUsage(
+                $response->usage->promptTokens,
+                $response->usage->totalTokens,
+            ),
+        );
     }
 }
