@@ -8,7 +8,7 @@ services:
         publish_allowed_origins *
         cors_allowed_origins *
     ports:
-      - "80:80"
+      - "8080:80"
 ###< symfony/mercure-bundle ###
 
 ###> doctrine/doctrine-bundle ###

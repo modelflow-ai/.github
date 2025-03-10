@@ -2862,7 +2862,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../integrations/symfony",
-                "reference": "8ddff845db31fa50d55bb921de0e57f273573410"
+                "reference": "41646409504c37d220c6bd8ad13a32c53b22969e"
             },
             "require": {
                 "php": "^8.2",
@@ -2886,6 +2886,7 @@
                 "modelflow-ai/ollama-adapter": "^0.4",
                 "modelflow-ai/openai-adapter": "^0.4",
                 "modelflow-ai/prompt-template": "^0.4",
+                "modelflow-ai/qdrant-embeddings-store": "^0.4",
                 "php-cs-fixer/shim": "^3.15",
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^1.10, <1.10.55",
@@ -2907,7 +2908,8 @@
                 "modelflow-ai/image": "Library to generate and manipulate images.",
                 "modelflow-ai/mistral-adapter": "Adapter to interact with mistral models.",
                 "modelflow-ai/ollama-adapter": "Adapter to interact with ollama models.",
-                "modelflow-ai/openai-adapter": "Adapter to interact with openai models."
+                "modelflow-ai/openai-adapter": "Adapter to interact with openai models.",
+                "modelflow-ai/qdrant-embeddings-store": "Integration with Qdrant vector database for storing embeddings."
             },
             "type": "symfony-bundle",
             "extra": {
@@ -5205,16 +5207,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v2.4.7",
+            "version": "v2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "92f4fba342161ff36072bd3b8e0b3c6c23160402"
+                "reference": "8ce1acd9842abe0e9b4c4a0bd3f259859516c018"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/92f4fba342161ff36072bd3b8e0b3c6c23160402",
-                "reference": "92f4fba342161ff36072bd3b8e0b3c6c23160402",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/8ce1acd9842abe0e9b4c4a0bd3f259859516c018",
+                "reference": "8ce1acd9842abe0e9b4c4a0bd3f259859516c018",
                 "shasum": ""
             },
             "require": {
@@ -5253,7 +5255,7 @@
             "description": "Composer plugin for Symfony",
             "support": {
                 "issues": "https://github.com/symfony/flex/issues",
-                "source": "https://github.com/symfony/flex/tree/v2.4.7"
+                "source": "https://github.com/symfony/flex/tree/v2.5.0"
             },
             "funding": [
                 {
@@ -5269,7 +5271,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-10-07T08:51:54+00:00"
+            "time": "2025-03-03T07:50:46+00:00"
         },
         {
             "name": "symfony/form",
@@ -8878,16 +8880,16 @@
         },
         {
             "name": "php-cs-fixer/shim",
-            "version": "v3.70.1",
+            "version": "v3.71.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/shim.git",
-                "reference": "fadb65a74cb619227d81013260548290bb8fedd9"
+                "reference": "bbc2a38cc7b89727def47025dd8e03e1e3e46d82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/shim/zipball/fadb65a74cb619227d81013260548290bb8fedd9",
-                "reference": "fadb65a74cb619227d81013260548290bb8fedd9",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/shim/zipball/bbc2a38cc7b89727def47025dd8e03e1e3e46d82",
+                "reference": "bbc2a38cc7b89727def47025dd8e03e1e3e46d82",
                 "shasum": ""
             },
             "require": {
@@ -8924,9 +8926,9 @@
             "description": "A tool to automatically fix PHP code style",
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/shim/issues",
-                "source": "https://github.com/PHP-CS-Fixer/shim/tree/v3.70.1"
+                "source": "https://github.com/PHP-CS-Fixer/shim/tree/v3.71.0"
             },
-            "time": "2025-03-01T22:06:08+00:00"
+            "time": "2025-03-07T23:07:16+00:00"
         },
         {
             "name": "phpstan/extension-installer",

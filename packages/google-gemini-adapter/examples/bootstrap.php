@@ -15,7 +15,6 @@ namespace App;
 
 require_once \dirname(__DIR__) . '/vendor/autoload.php';
 
-use Gemini\Enums\ModelType;
 use Http\Discovery\Psr18ClientDiscovery;
 use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;
 use ModelflowAi\Chat\AIChatRequestHandler;
@@ -45,11 +44,9 @@ $googleGeminiClient = \Gemini::factory()
     ->withStreamHandler(fn (RequestInterface $request): ResponseInterface => $client->sendRequest($request))
     ->make();
 
-$adapterPro = new GoogleGeminiChatAdapter($googleGeminiClient, ModelType::GEMINI_PRO->value);
-$adapterProVision = new GoogleGeminiChatAdapter($googleGeminiClient, ModelType::GEMINI_FLASH->value);
+$flashAdapter = new GoogleGeminiChatAdapter($googleGeminiClient, 'models/gemini-2.0-flash');
 
-$adapters[] = new DecisionRule($adapterPro, [FeatureCriteria::STREAM]);
-$adapters[] = new DecisionRule($adapterProVision, [FeatureCriteria::STREAM, FeatureCriteria::IMAGE_TO_TEXT]);
+$adapters[] = new DecisionRule($flashAdapter, [FeatureCriteria::STREAM, FeatureCriteria::IMAGE_TO_TEXT]);
 
 /** @var DecisionTreeInterface<AIChatRequest, AIChatAdapterInterface> $decisionTree */
 $decisionTree = new DecisionTree($adapters);

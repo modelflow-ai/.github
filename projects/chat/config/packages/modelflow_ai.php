@@ -163,10 +163,7 @@ return static function (ContainerConfigurator $container): void {
         ];
 
         $adapters = array_merge($adapters, [
-            'gemini_1_5_pro' => [
-                'enabled' => true,
-            ],
-            'gemini_1_5_flash' => [
+            'gemini_2_0_flash' => [
                 'enabled' => true,
             ],
         ]);
