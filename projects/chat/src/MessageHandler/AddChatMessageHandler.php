@@ -74,11 +74,9 @@ class AddChatMessageHandler
         }
 
         /** @var AIChatRequestBuilder $requestBuilder */
-        $requestBuilder = $this->aiRequestHandler->createRequest(
+        $requestBuilder = $this->aiRequestHandler->createStreamedRequest(
             ...$messages,
-        )
-            ->addCriteria(ModelCriteria::from($chat->getModel()))
-            ->streamed();
+        )->addCriteria(ModelCriteria::from($chat->getModel()));
 
         if ($message->enableTools) {
             foreach ($this->tools as $name => $tool) {
@@ -87,8 +85,7 @@ class AddChatMessageHandler
         }
 
         /** @var AIChatResponseStream $response */
-        $response = $requestBuilder->build()
-            ->execute();
+        $response = $requestBuilder->execute();
 
         $response = $this->handleResponses($chat, $response, $requestBuilder);
 
@@ -109,7 +106,7 @@ class AddChatMessageHandler
                 AIChatMessageRoleEnum::SYSTEM,
                 'Having the conversation above. Please create a title for it! Response with the title only no prose, no "Tile: " and no quotes. Keep the original language!',
             ),
-        ])->addCriteria(ModelCriteria::from(ChatController::DEFAULT_MODEL))->build()->execute();
+        ])->addCriteria(ModelCriteria::from(ChatController::DEFAULT_MODEL))->execute();
 
         $chat->setTitle($response->getMessage()->content);
         $this->repository->flush();
