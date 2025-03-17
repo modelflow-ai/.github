@@ -146,4 +146,21 @@ class EmbeddingsSimilarityRequestTest extends TestCase
         $this->assertTrue($called);
         $this->assertSame($mockResponse, $response);
     }
+
+    public function testExecuteWrongReturn(): void
+    {
+        $this->expectException(\RuntimeException::class);
+
+        $mockResponse = new \stdClass();
+
+        $execute = fn (EmbeddingsSimilarityRequest $request) => $mockResponse;
+
+        $request = new EmbeddingsSimilarityRequest(
+            $execute,
+            'test content',
+            'test_key',
+        );
+
+        $request->execute();
+    }
 }

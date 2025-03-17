@@ -148,4 +148,24 @@ class EmbeddingsStoreRequestTest extends TestCase
         $this->assertTrue($called);
         $this->assertSame($mockResponse, $response);
     }
+
+    public function testExecuteWrongReturn(): void
+    {
+        $this->expectException(\RuntimeException::class);
+
+        $mockResponse = new \stdClass();
+
+        $execute = fn (EmbeddingsStoreRequest $request) => $mockResponse;
+
+        $embeddings = [
+            $this->prophesize(EmbeddingInterface::class)->reveal(),
+        ];
+
+        $request = new EmbeddingsStoreRequest(
+            $execute,
+            $embeddings,
+        );
+
+        $request->execute();
+    }
 }

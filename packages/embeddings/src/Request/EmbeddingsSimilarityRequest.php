@@ -18,7 +18,7 @@ use ModelflowAi\Embeddings\Response\EmbeddingsSimilarityResponse;
 final class EmbeddingsSimilarityRequest
 {
     /**
-     * @param callable $execute Function that takes (string $content, string $embeddingClass, int $limit, array $filter) and returns EmbeddingsSimilarityResponse
+     * @param callable $execute Function that takes (self $request) and returns EmbeddingsSimilarityResponse
      * @param array<string, scalar> $additionalFilter
      */
     public function __construct(
@@ -65,21 +65,33 @@ final class EmbeddingsSimilarityRequest
     }
 
     /**
-     * @param array<string, scalar> $identifierFilter
+     * @param array<string, scalar> $additionalFilter
      */
-    public function withAdditionalFilter(array $identifierFilter): self
+    public function withAdditionalFilter(array $additionalFilter): self
     {
         return new self(
             $this->execute,
             $this->content,
             $this->key,
             $this->limit,
-            $identifierFilter,
+            $additionalFilter,
         );
     }
 
     public function execute(): EmbeddingsSimilarityResponse
     {
-        return ($this->execute)($this);
+        $response = ($this->execute)($this);
+
+        if (!$response instanceof EmbeddingsSimilarityResponse) {
+            throw new \RuntimeException(
+                \sprintf(
+                    'The execute callable must return an instance of %s, got %s.',
+                    EmbeddingsSimilarityResponse::class,
+                    \get_debug_type($response),
+                ),
+            );
+        }
+
+        return $response;
     }
 }

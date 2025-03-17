@@ -4483,12 +4483,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/framework-bundle.git",
-                "reference": "52b51ab8ac5a9f41893b678d94bd83ab11c0e65e"
+                "reference": "320d587e5d961d219b4d8aa749b2fa4194e18169"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/framework-bundle/zipball/52b51ab8ac5a9f41893b678d94bd83ab11c0e65e",
-                "reference": "52b51ab8ac5a9f41893b678d94bd83ab11c0e65e",
+                "url": "https://api.github.com/repos/symfony/framework-bundle/zipball/320d587e5d961d219b4d8aa749b2fa4194e18169",
+                "reference": "320d587e5d961d219b4d8aa749b2fa4194e18169",
                 "shasum": ""
             },
             "require": {
@@ -4533,7 +4533,7 @@
                 "symfony/security-csrf": "<7.2",
                 "symfony/serializer": "<7.1",
                 "symfony/stopwatch": "<6.4",
-                "symfony/translation": "<6.4.3",
+                "symfony/translation": "<7.3",
                 "symfony/twig-bridge": "<6.4",
                 "symfony/twig-bundle": "<6.4",
                 "symfony/validator": "<6.4",
@@ -4574,7 +4574,7 @@
                 "symfony/serializer": "^7.1",
                 "symfony/stopwatch": "^6.4|^7.0",
                 "symfony/string": "^6.4|^7.0",
-                "symfony/translation": "^6.4.3|^7.0",
+                "symfony/translation": "^7.3",
                 "symfony/twig-bundle": "^6.4|^7.0",
                 "symfony/type-info": "^7.1",
                 "symfony/uid": "^6.4|^7.0",
@@ -4627,7 +4627,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-03-06T16:54:56+00:00"
+            "time": "2025-03-10T22:51:52+00:00"
         },
         {
             "name": "symfony/http-client",
@@ -6233,12 +6233,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/instantiator.git",
-                "reference": "8ec66b1425f6506905f6880a8c7cd85ba8537b00"
+                "reference": "32877dd24a4a2b324698e07b2d3285fb44e627c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/8ec66b1425f6506905f6880a8c7cd85ba8537b00",
-                "reference": "8ec66b1425f6506905f6880a8c7cd85ba8537b00",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/32877dd24a4a2b324698e07b2d3285fb44e627c6",
+                "reference": "32877dd24a4a2b324698e07b2d3285fb44e627c6",
                 "shasum": ""
             },
             "require": {
@@ -6295,7 +6295,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-02-11T07:45:10+00:00"
+            "time": "2025-03-10T23:43:28+00:00"
         },
         {
             "name": "myclabs/deep-copy",

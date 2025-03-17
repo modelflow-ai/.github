@@ -54,6 +54,18 @@ final class EmbeddingsStoreRequest
 
     public function execute(): EmbeddingsStoreResponse
     {
-        return ($this->execute)($this);
+        $response = ($this->execute)($this);
+
+        if (!$response instanceof EmbeddingsStoreResponse) {
+            throw new \RuntimeException(
+                \sprintf(
+                    'The execute callable must return an instance of %s, got %s.',
+                    EmbeddingsStoreResponse::class,
+                    \get_debug_type($response),
+                ),
+            );
+        }
+
+        return $response;
     }
 }

@@ -685,12 +685,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/instantiator.git",
-                "reference": "8ec66b1425f6506905f6880a8c7cd85ba8537b00"
+                "reference": "32877dd24a4a2b324698e07b2d3285fb44e627c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/8ec66b1425f6506905f6880a8c7cd85ba8537b00",
-                "reference": "8ec66b1425f6506905f6880a8c7cd85ba8537b00",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/32877dd24a4a2b324698e07b2d3285fb44e627c6",
+                "reference": "32877dd24a4a2b324698e07b2d3285fb44e627c6",
                 "shasum": ""
             },
             "require": {
@@ -747,7 +747,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-02-11T07:45:10+00:00"
+            "time": "2025-03-10T23:43:28+00:00"
         },
         {
             "name": "jangregor/phpstan-prophecy",

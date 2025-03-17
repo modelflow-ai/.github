@@ -15,6 +15,8 @@ namespace ModelflowAi\MistralAdapter;
 
 /**
  * @internal
+ *
+ * @codeCoverageIgnore
  */
 final class MistralAdapterPackage
 {

@@ -146,24 +146,40 @@ class EmbeddingsStoreHandlerTest extends TestCase
     public function testHandleWithInvalidStoreKey(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('No adapter configured for key "test_key".');
+        $this->expectExceptionMessage('No store configured for key "test_key".');
 
         $key = 'test_key';
+        $vector = [0.1, 0.2, 0.3];
+        $headerGenerator = fn () => ['header' => 'value'];
+
+        $embedding = new TestEmbedding('test-id', 'test content');
+        $generatedEmbedding = new TestEmbedding('test-id', 'processed content');
+
         $generator = $this->prophesize(EmbeddingGeneratorInterface::class);
+        $adapter = $this->prophesize(EmbeddingAdapterInterface::class);
+
+        $generator->generateEmbedding($embedding, $headerGenerator)->willReturn([$generatedEmbedding]);
+
+        $embedResponse = new EmbedResponse($vector, new EmbeddingUsage(10, 20));
+        $adapter->embed(Argument::any())->willReturn($embedResponse);
 
         $handler = new EmbeddingsStoreHandler(
             [$key => $generator->reveal()],
             [],
-            [],
+            [$key => $adapter->reveal()],
             [TestEmbedding::class => $key],
         );
 
         $request = new EmbeddingsStoreRequest(
             function () {},
-            [new TestEmbedding('test-id', 'test content')],
+            [$embedding],
+            $headerGenerator,
         );
 
-        $handler->handle($request);
+        $response = $handler->handle($request);
+
+        $this->assertCount(1, $response->getEmbeddings());
+        $this->assertSame($generatedEmbedding, $response->getEmbeddings()[0]);
     }
 
     public function testHandleWithInvalidAdapterKey(): void
