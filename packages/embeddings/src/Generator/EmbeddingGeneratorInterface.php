@@ -18,11 +18,6 @@ use ModelflowAi\Embeddings\Model\EmbeddingInterface;
 interface EmbeddingGeneratorInterface
 {
     /**
-     * @return float[]
-     */
-    public function embedText(string $text): array;
-
-    /**
      * @return EmbeddingInterface[]
      */
     public function generateEmbedding(EmbeddingInterface $embedding, ?callable $headerGenerator = null): array;

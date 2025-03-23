@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace ModelflowAi\Embeddings\Adapter\Fake;
 
 use ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface;
+use ModelflowAi\Embeddings\Adapter\Request\EmbedRequest;
+use ModelflowAi\Embeddings\Adapter\Response\EmbedResponse;
+use ModelflowAi\Embeddings\Usage\EmbeddingUsage;
 
 class FakeAdapter implements EmbeddingAdapterInterface
 {
@@ -32,5 +35,16 @@ class FakeAdapter implements EmbeddingAdapterInterface
         }
 
         return $this->embeddings[$text];
+    }
+
+    public function embed(EmbedRequest $request): EmbedResponse
+    {
+        $text = $request->getText();
+        $vector = $this->embedText($text);
+
+        return new EmbedResponse(
+            $vector,
+            new EmbeddingUsage(\strlen($text)),
+        );
     }
 }

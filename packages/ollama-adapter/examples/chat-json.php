@@ -26,6 +26,7 @@ $response = $handler->createRequest(
     ...ChatPromptTemplate::create(
         new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'You are an {feeling} bot'),
         new AIChatMessage(AIChatMessageRoleEnum::USER, 'Hello {where}!'),
+        new AIChatMessage(AIChatMessageRoleEnum::USER, 'Respond with your feeling in a json containing the key "feeling"'),
     )->format(['where' => 'world', 'feeling' => 'angry']),
 )
     ->addCriteria(PrivacyCriteria::HIGH)

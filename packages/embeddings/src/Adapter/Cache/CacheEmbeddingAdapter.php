@@ -13,32 +13,55 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Embeddings\Adapter\Cache;
 
+use ModelflowAi\Embeddings\Adapter\DeprecatedEmbedTextTrait;
 use ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface;
+use ModelflowAi\Embeddings\Adapter\Request\EmbedRequest;
+use ModelflowAi\Embeddings\Adapter\Response\EmbedResponse;
+use ModelflowAi\Embeddings\Usage\EmbeddingUsage;
 use Psr\Cache\CacheItemPoolInterface;
 
-class CacheEmbeddingAdapter implements EmbeddingAdapterInterface
+final readonly class CacheEmbeddingAdapter implements EmbeddingAdapterInterface
 {
+    use DeprecatedEmbedTextTrait;
+
     public function __construct(
-        private readonly EmbeddingAdapterInterface $adapter,
-        private readonly CacheItemPoolInterface $cacheItemPool,
+        private EmbeddingAdapterInterface $adapter,
+        private CacheItemPoolInterface $cacheItemPool,
     ) {
     }
 
-    public function embedText(string $text): array
+    public function embed(EmbedRequest $request): EmbedResponse
     {
+        $text = $request->getText();
         $hash = \hash('sha256', $text);
         $cacheItem = $this->cacheItemPool->getItem($hash);
-        if ($cacheItem->isHit()) {
-            /** @var float[] $result */
-            $result = $cacheItem->get();
 
-            return $result;
+        if ($cacheItem->isHit()) {
+            /** @var array{vector: float[], usage: array{promptTokens: int, totalTokens: int}} $cachedData */
+            $cachedData = $cacheItem->get();
+            $usage = new EmbeddingUsage(
+                $cachedData['usage']['promptTokens'],
+                $cachedData['usage']['totalTokens'],
+            );
+
+            return new EmbedResponse($cachedData['vector'], $usage);
         }
 
-        $result = $this->adapter->embedText($text);
-        $cacheItem->set($result);
+        $response = $this->adapter->embed($request);
+        $vector = $response->getVector();
+        $usage = $response->getUsage();
+
+        $cacheData = [
+            'vector' => $vector,
+            'usage' => [
+                'promptTokens' => $usage->getPromptTokens(),
+                'totalTokens' => $usage->getTotalTokens(),
+            ],
+        ];
+
+        $cacheItem->set($cacheData);
         $this->cacheItemPool->save($cacheItem);
 
-        return $result;
+        return $response;
     }
 }

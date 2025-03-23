@@ -18,7 +18,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $client = Ollama::client();
 
 $stream = $client->completion()->createStreamed([
-    'model' => 'llama2',
+    'model' => 'llama3.2',
     'prompt' => 'Hello world!',
 ]);
 

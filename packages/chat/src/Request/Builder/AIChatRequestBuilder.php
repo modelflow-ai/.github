@@ -227,6 +227,11 @@ class AIChatRequestBuilder
     {
         trigger_deprecation('modelflow-ai/chat', '0.3.0', 'Use AIChatRequestBuilder::execute instead.');
 
+        return $this->doBuild();
+    }
+
+    private function doBuild(): AIChatRequest
+    {
         $toolChoice = $this->options['toolChoice'] ?? ToolChoiceEnum::AUTO;
         $responseFormat = $this->options['responseFormat'] ?? null;
         $streamed = $this->options['streamed'] ?? false;
@@ -263,6 +268,6 @@ class AIChatRequestBuilder
 
     public function execute(): AIChatResponse
     {
-        return $this->build()->execute();
+        return $this->doBuild()->execute();
     }
 }

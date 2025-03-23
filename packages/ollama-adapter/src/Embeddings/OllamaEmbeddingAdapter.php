@@ -13,24 +13,36 @@ declare(strict_types=1);
 
 namespace ModelflowAi\OllamaAdapter\Embeddings;
 
+use ModelflowAi\Embeddings\Adapter\DeprecatedEmbedTextTrait;
 use ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface;
+use ModelflowAi\Embeddings\Adapter\Request\EmbedRequest;
+use ModelflowAi\Embeddings\Adapter\Response\EmbedResponse;
+use ModelflowAi\Embeddings\Usage\EmbeddingUsage;
 use ModelflowAi\Ollama\ClientInterface;
 
 final readonly class OllamaEmbeddingAdapter implements EmbeddingAdapterInterface
 {
+    use DeprecatedEmbedTextTrait;
+
     public function __construct(
         private ClientInterface $client,
-        private string $model = 'llama2',
+        private string $model = 'all-minilm',
     ) {
     }
 
-    public function embedText(string $text): array
+    public function embed(EmbedRequest $request): EmbedResponse
     {
         $response = $this->client->embeddings()->create([
             'model' => $this->model,
-            'prompt' => $text,
+            'prompt' => $request->getText(),
         ]);
 
-        return $response->embedding;
+        return new EmbedResponse(
+            $response->embedding,
+            new EmbeddingUsage(
+                $response->usage->promptTokens,
+                $response->usage->totalTokens,
+            ),
+        );
     }
 }

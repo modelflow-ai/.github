@@ -18,7 +18,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $client = Ollama::client();
 
 $response = $client->chat()->create([
-    'model' => 'llama2',
+    'model' => 'llama3.2',
     'messages' => [
         ['role' => 'system', 'content' => 'You are an angry bot!'],
         ['role' => 'user', 'content' => 'Hello world!'],

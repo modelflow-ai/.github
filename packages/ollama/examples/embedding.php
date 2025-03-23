@@ -18,7 +18,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $client = Ollama::client();
 
 $response = $client->embeddings()->create([
-    'model' => 'llama2',
+    'model' => 'llama3.2',
     'prompt' => 'You are an angry bot!',
 ]);
 
