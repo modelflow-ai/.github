@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Chat\Request;
 
+use ModelflowAi\Chat\Request\Message\AIChatMessage;
 use ModelflowAi\Chat\Request\Message\ImageBase64Part;
 use ModelflowAi\Chat\Request\ResponseFormat\ResponseFormatInterface;
-use ModelflowAi\Chat\Response\AIChatResponse;
+use ModelflowAi\Chat\Response\AIChatResponseInterface;
 use ModelflowAi\Chat\ToolInfo\ToolChoiceEnum;
 use ModelflowAi\Chat\ToolInfo\ToolInfo;
 use ModelflowAi\DecisionTree\Behaviour\CriteriaBehaviour;
@@ -44,7 +45,7 @@ class AIChatRequest implements CriteriaBehaviour
      * @param array<string, mixed> $metadata
      */
     public function __construct(
-        private readonly AIChatMessageCollection $messages,
+        private AIChatMessageCollection $messages,
         CriteriaCollection $criteria,
         private readonly array $tools,
         private readonly array $toolInfos,
@@ -160,8 +161,16 @@ class AIChatRequest implements CriteriaBehaviour
         return false;
     }
 
-    public function execute(): AIChatResponse
+    public function execute(): AIChatResponseInterface
     {
         return \call_user_func($this->requestHandler, $this);
+    }
+
+    public function withMessage(AIChatMessage $message): static
+    {
+        $clone = clone $this;
+        $clone->messages = new AIChatMessageCollection(...[...$this->messages, $message]);
+
+        return $clone;
     }
 }

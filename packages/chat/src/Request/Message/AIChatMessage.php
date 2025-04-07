@@ -17,6 +17,24 @@ use Webmozart\Assert\Assert;
 
 readonly class AIChatMessage
 {
+    public static function createUserMessage(
+        string|MessagePart $content,
+    ): self {
+        return new self(AIChatMessageRoleEnum::USER, $content);
+    }
+
+    public static function createAssistantMessage(
+        string|MessagePart $content,
+    ): self {
+        return new self(AIChatMessageRoleEnum::ASSISTANT, $content);
+    }
+
+    public static function createSystemMessage(
+        string|MessagePart $content,
+    ): self {
+        return new self(AIChatMessageRoleEnum::SYSTEM, $content);
+    }
+
     /**
      * @var MessagePart[]
      */

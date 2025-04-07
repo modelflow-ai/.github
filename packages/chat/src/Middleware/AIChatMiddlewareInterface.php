@@ -11,13 +11,16 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\Chat\Adapter;
+namespace ModelflowAi\Chat\Middleware;
 
+use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;
 use ModelflowAi\Chat\Request\AIChatRequest;
 use ModelflowAi\Chat\Response\AIChatResponseInterface;
-use ModelflowAi\DecisionTree\Behaviour\SupportsBehaviour;
 
-interface AIChatAdapterInterface extends SupportsBehaviour
+interface AIChatMiddlewareInterface
 {
-    public function handleRequest(AIChatRequest $request): AIChatResponseInterface;
+    /**
+     * Process the request and optionally modify it before continuing to the next middleware.
+     */
+    public function process(AIChatRequest $request, ?AIChatAdapterInterface $adapter, callable $next): AIChatResponseInterface;
 }

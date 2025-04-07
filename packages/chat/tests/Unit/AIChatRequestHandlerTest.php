@@ -25,6 +25,7 @@ use ModelflowAi\Chat\Request\ResponseFormat\JsonSchemaResponseFormat;
 use ModelflowAi\Chat\Request\ResponseFormat\ResponseFormatInterface;
 use ModelflowAi\Chat\Request\ResponseFormat\SupportsResponseFormatInterface;
 use ModelflowAi\Chat\Response\AIChatResponse;
+use ModelflowAi\Chat\Response\AIChatResponseInterface;
 use ModelflowAi\Chat\Response\AIChatResponseMessage;
 use ModelflowAi\Chat\Response\AIChatResponseStream;
 use ModelflowAi\Chat\Response\Usage;
@@ -116,7 +117,11 @@ class AIChatRequestHandlerTest extends TestCase
         $mockAdapter
             ->method('handleRequest')
             ->willReturnCallback(
-                fn (AIChatRequest $request) => new AIChatResponse($request, new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'No format'), null),
+                fn (AIChatRequest $request) => new AIChatResponse(
+                    $request,
+                    new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'No format'),
+                    null,
+                ),
             );
 
         $handler = new AIChatRequestHandler($mockDecisionTree);
@@ -148,7 +153,7 @@ class AIChatRequestHandlerTest extends TestCase
             ) {
             }
 
-            public function handleRequest(AIChatRequest $request): AIChatResponse
+            public function handleRequest(AIChatRequest $request): AIChatResponseInterface
             {
                 return $this->wrapped->handleRequest($request);
             }
@@ -172,7 +177,11 @@ class AIChatRequestHandlerTest extends TestCase
         $mockAdapter
             ->method('handleRequest')
             ->willReturnCallback(
-                fn (AIChatRequest $request) => new AIChatResponse($request, new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Supported'), null),
+                fn (AIChatRequest $request) => new AIChatResponse(
+                    $request,
+                    new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Supported'),
+                    null,
+                ),
             );
 
         $handler = new AIChatRequestHandler($mockDecisionTree);
@@ -216,7 +225,7 @@ class AIChatRequestHandlerTest extends TestCase
             ) {
             }
 
-            public function handleRequest(AIChatRequest $request): AIChatResponse
+            public function handleRequest(AIChatRequest $request): AIChatResponseInterface
             {
                 return $this->wrapped->handleRequest($request);
             }
@@ -241,7 +250,11 @@ class AIChatRequestHandlerTest extends TestCase
         $mockAdapter
             ->method('handleRequest')
             ->willReturnCallback(
-                fn (AIChatRequest $request) => new AIChatResponse($request, new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Not supported'), null),
+                fn (AIChatRequest $request) => new AIChatResponse(
+                    $request,
+                    new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Not supported'),
+                    null,
+                ),
             );
 
         $handler = new AIChatRequestHandler($mockDecisionTree);
@@ -298,7 +311,7 @@ class AIChatRequestHandlerTest extends TestCase
             ) {
             }
 
-            public function handleRequest(AIChatRequest $request): AIChatResponse
+            public function handleRequest(AIChatRequest $request): AIChatResponseInterface
             {
                 return $this->wrapped->handleRequest($request);
             }
@@ -317,7 +330,11 @@ class AIChatRequestHandlerTest extends TestCase
         $mockAdapter
             ->method('handleRequest')
             ->willReturnCallback(
-                fn (AIChatRequest $request) => new AIChatResponse($request, new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Not supported'), null),
+                fn (AIChatRequest $request) => new AIChatResponse(
+                    $request,
+                    new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Not supported'),
+                    null,
+                ),
             );
 
         $handler = new AIChatRequestHandler($mockDecisionTree);

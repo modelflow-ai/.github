@@ -15,6 +15,7 @@ namespace ModelflowAi\OpenaiAdapter\Chat;
 
 use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;
 use ModelflowAi\Chat\Request\AIChatRequest;
+use ModelflowAi\Chat\Request\AIChatStreamedRequest;
 use ModelflowAi\Chat\Request\Message\AIChatMessage;
 use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Chat\Request\Message\ImageBase64Part;
@@ -147,7 +148,7 @@ final readonly class OpenaiChatAdapter implements AIChatAdapterInterface, Suppor
             $parameters['tool_choice'] = $toolChoice->value;
         }
 
-        if ($request->isStreamed()) {
+        if ($request instanceof AIChatStreamedRequest) {
             return $this->createStreamed($request, $parameters);
         }
 
@@ -335,7 +336,7 @@ final readonly class OpenaiChatAdapter implements AIChatAdapterInterface, Suppor
      *      temperature?: float,
      * } $parameters
      */
-    protected function createStreamed(AIChatRequest $request, array $parameters): AIChatResponse
+    protected function createStreamed(AIChatStreamedRequest $request, array $parameters): AIChatResponse
     {
         $parameters['stream_options'] = ['include_usage' => true];
 

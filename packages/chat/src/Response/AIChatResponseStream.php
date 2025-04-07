@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Chat\Response;
 
-use ModelflowAi\Chat\Request\AIChatRequest;
+use ModelflowAi\Chat\Request\AIChatStreamedRequest;
 use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
 
-readonly class AIChatResponseStream extends AIChatResponse
+readonly class AIChatResponseStream extends AIChatResponse implements AIChatResponseStreamInterface
 {
     private AIChatResponseStreamMessageBuilder $messageBuilder;
 
@@ -24,21 +24,22 @@ readonly class AIChatResponseStream extends AIChatResponse
      * @param \Iterator<int, AIChatResponseMessage> $messages
      */
     public function __construct(
-        private AIChatRequest $request,
+        private AIChatStreamedRequest $request,
         private \Iterator $messages,
+        ?Usage $usage = null,
         private array $metadata = [],
     ) {
         parent::__construct(
             $request,
             new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, ''),
-            null,
+            $usage,
             $this->metadata,
         );
 
         $this->messageBuilder = new AIChatResponseStreamMessageBuilder();
     }
 
-    public function getRequest(): AIChatRequest
+    public function getRequest(): AIChatStreamedRequest
     {
         return $this->request;
     }
@@ -48,9 +49,6 @@ readonly class AIChatResponseStream extends AIChatResponse
         return $this->messageBuilder->getMessage();
     }
 
-    /**
-     * @return \Iterator<int, AIChatResponseMessage>
-     */
     public function getMessageStream(): \Iterator
     {
         foreach ($this->messages as $message) {

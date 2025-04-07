@@ -17,6 +17,7 @@ require_once \dirname(__DIR__) . '/vendor/autoload.php';
 
 use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;
 use ModelflowAi\Chat\AIChatRequestHandler;
+use ModelflowAi\Chat\Middleware\Tools\ToolExecutionMiddleware;
 use ModelflowAi\Chat\Request\AIChatRequest;
 use ModelflowAi\DecisionTree\Criteria\CapabilityCriteria;
 use ModelflowAi\DecisionTree\DecisionRule;
@@ -51,4 +52,6 @@ $adapter[] = new DecisionRule($tinyAdapter, [CapabilityCriteria::BASIC]);
 /** @var DecisionTreeInterface<AIChatRequest, AIChatAdapterInterface> $decisionTree */
 $decisionTree = new DecisionTree($adapter);
 
-return new AIChatRequestHandler($decisionTree);
+return new AIChatRequestHandler($decisionTree, [
+    new ToolExecutionMiddleware(),
+]);

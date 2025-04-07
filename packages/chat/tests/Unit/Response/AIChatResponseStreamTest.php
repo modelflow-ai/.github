@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Chat\Tests\Unit\Response;
 
-use ModelflowAi\Chat\Request\AIChatRequest;
+use ModelflowAi\Chat\Request\AIChatStreamedRequest;
 use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Chat\Response\AIChatResponseMessage;
 use ModelflowAi\Chat\Response\AIChatResponseStream;
@@ -26,7 +26,7 @@ class AIChatResponseStreamTest extends TestCase
 
     public function testGetMessage(): void
     {
-        $request = $this->prophesize(AIChatRequest::class);
+        $request = $this->prophesize(AIChatStreamedRequest::class);
 
         $response = new AIChatResponseStream($request->reveal(), new \ArrayIterator([
             new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Lorem'),
@@ -44,7 +44,7 @@ class AIChatResponseStreamTest extends TestCase
 
     public function testGetUsage(): void
     {
-        $request = $this->prophesize(AIChatRequest::class);
+        $request = $this->prophesize(AIChatStreamedRequest::class);
 
         $response = new AIChatResponseStream($request->reveal(), new \ArrayIterator([
             new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Lorem'),
@@ -56,7 +56,7 @@ class AIChatResponseStreamTest extends TestCase
 
     public function testGetMetadata(): void
     {
-        $request = $this->prophesize(AIChatRequest::class);
+        $request = $this->prophesize(AIChatStreamedRequest::class);
 
         $response = new AIChatResponseStream($request->reveal(), new \ArrayIterator([
             new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Lorem'),
@@ -68,7 +68,7 @@ class AIChatResponseStreamTest extends TestCase
 
     public function testGetRequest(): void
     {
-        $request = $this->prophesize(AIChatRequest::class);
+        $request = $this->prophesize(AIChatStreamedRequest::class);
 
         $response = new AIChatResponseStream($request->reveal(), new \ArrayIterator([
             new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Lorem'),

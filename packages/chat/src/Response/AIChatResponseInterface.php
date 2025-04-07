@@ -11,13 +11,20 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\Chat\Adapter;
+namespace ModelflowAi\Chat\Response;
 
 use ModelflowAi\Chat\Request\AIChatRequest;
-use ModelflowAi\Chat\Response\AIChatResponseInterface;
-use ModelflowAi\DecisionTree\Behaviour\SupportsBehaviour;
 
-interface AIChatAdapterInterface extends SupportsBehaviour
+interface AIChatResponseInterface
 {
-    public function handleRequest(AIChatRequest $request): AIChatResponseInterface;
+    public function getRequest(): AIChatRequest;
+
+    public function getMessage(): AIChatResponseMessage;
+
+    public function getUsage(): ?Usage;
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getMetadata(): array;
 }

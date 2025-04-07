@@ -14,50 +14,49 @@ declare(strict_types=1);
 namespace ModelflowAi\Chat;
 
 use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;
+use ModelflowAi\Chat\Middleware\Adapter\AdapterDecisionMiddleware;
+use ModelflowAi\Chat\Middleware\Adapter\AdapterExecutionMiddleware;
+use ModelflowAi\Chat\Middleware\AIChatMiddlewareInterface;
+use ModelflowAi\Chat\Middleware\AIChatMiddlewareStack;
+use ModelflowAi\Chat\Middleware\ResponseFormat\ResponseFormatMiddleware;
 use ModelflowAi\Chat\Request\AIChatRequest;
 use ModelflowAi\Chat\Request\Builder\AIChatRequestBuilder;
 use ModelflowAi\Chat\Request\Builder\AIChatStreamedRequestBuilder;
 use ModelflowAi\Chat\Request\Message\AIChatMessage;
-use ModelflowAi\Chat\Request\ResponseFormat\ResponseFormatInterface;
-use ModelflowAi\Chat\Request\ResponseFormat\SupportsResponseFormatInterface;
-use ModelflowAi\Chat\Response\AIChatResponse;
-use ModelflowAi\Chat\Response\AIChatResponseStream;
+use ModelflowAi\Chat\Response\AIChatResponseInterface;
+use ModelflowAi\Chat\Response\AIChatResponseStreamInterface;
 use ModelflowAi\DecisionTree\DecisionTreeInterface;
 use Webmozart\Assert\Assert;
 
-final readonly class AIChatRequestHandler implements AIChatRequestHandlerInterface
+final class AIChatRequestHandler implements AIChatRequestHandlerInterface
 {
+    private readonly AIChatMiddlewareStack $middlewareStack;
+
     /**
      * @param DecisionTreeInterface<AIChatRequest, AIChatAdapterInterface> $decisionTree
+     * @param AIChatMiddlewareInterface[] $middleware Optional middleware to add
      */
     public function __construct(
-        private DecisionTreeInterface $decisionTree,
+        DecisionTreeInterface $decisionTree,
+        iterable $middleware = [],
     ) {
-    }
+        $this->middlewareStack = new AIChatMiddlewareStack();
 
-    private function handle(AIChatRequest $request): AIChatResponse
-    {
-        $adapter = $this->decisionTree->determineAdapter($request);
+        $this->middlewareStack->add(new AdapterDecisionMiddleware($decisionTree));
+        $this->middlewareStack->add(new ResponseFormatMiddleware());
 
-        $responseFormat = $request->getResponseFormat();
-        if ($responseFormat instanceof ResponseFormatInterface) {
-            Assert::isInstanceOf($responseFormat, ResponseFormatInterface::class);
-
-            if (!$adapter instanceof SupportsResponseFormatInterface
-                || !$adapter->supportsResponseFormat($responseFormat)
-            ) {
-                $request->getMessages()->addResponseFormat($responseFormat);
-            }
+        foreach ($middleware as $m) {
+            $this->middlewareStack->add($m);
         }
 
-        return $adapter->handleRequest($request);
+        $this->middlewareStack->add(new AdapterExecutionMiddleware());
     }
 
     public function createRequest(AIChatMessage ...$messages): AIChatRequestBuilder
     {
-        return AIChatRequestBuilder::create(function (AIChatRequest $request): AIChatResponse {
-            $response = $this->handle($request);
-            Assert::isInstanceOf($response, AIChatResponse::class);
+        return AIChatRequestBuilder::create(function (AIChatRequest $request): AIChatResponseInterface {
+            $response = $this->middlewareStack->handle($request);
+            Assert::isInstanceOf($response, AIChatResponseInterface::class);
 
             return $response;
         })->addMessages($messages);
@@ -65,9 +64,9 @@ final readonly class AIChatRequestHandler implements AIChatRequestHandlerInterfa
 
     public function createStreamedRequest(AIChatMessage ...$messages): AIChatStreamedRequestBuilder
     {
-        return AIChatStreamedRequestBuilder::create(function (AIChatRequest $request): AIChatResponseStream {
-            $response = $this->handle($request);
-            Assert::isInstanceOf($response, AIChatResponseStream::class);
+        return AIChatStreamedRequestBuilder::create(function (AIChatRequest $request): AIChatResponseStreamInterface {
+            $response = $this->middlewareStack->handle($request);
+            Assert::isInstanceOf($response, AIChatResponseStreamInterface::class);
 
             return $response;
         })->addMessages($messages);

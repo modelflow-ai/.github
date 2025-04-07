@@ -15,6 +15,7 @@ namespace ModelflowAi\FireworksAiAdapter\Chat;
 
 use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;
 use ModelflowAi\Chat\Request\AIChatRequest;
+use ModelflowAi\Chat\Request\AIChatStreamedRequest;
 use ModelflowAi\Chat\Request\Message\AIChatMessage;
 use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Chat\Request\Message\ImageBase64Part;
@@ -123,7 +124,7 @@ final readonly class FireworksAiChatAdapter implements AIChatAdapterInterface
             $parameters['temperature'] = $temperature;
         }
 
-        if ($request->isStreamed()) {
+        if ($request instanceof AIChatStreamedRequest) {
             return $this->createStreamed($request, $parameters);
         }
 
@@ -255,7 +256,7 @@ final readonly class FireworksAiChatAdapter implements AIChatAdapterInterface
      *     temperature?: float,
      * } $parameters
      */
-    protected function createStreamed(AIChatRequest $request, array $parameters): AIChatResponse
+    protected function createStreamed(AIChatStreamedRequest $request, array $parameters): AIChatResponse
     {
         $responses = $this->client->chat()->createStreamed($parameters);
 

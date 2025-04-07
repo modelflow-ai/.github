@@ -15,7 +15,7 @@ namespace ModelflowAi\Chat\Response;
 
 use ModelflowAi\Chat\Request\AIChatRequest;
 
-readonly class AIChatResponse
+readonly class AIChatResponse implements AIChatResponseInterface
 {
     /**
      * @param array<string, mixed> $metadata
@@ -43,9 +43,6 @@ readonly class AIChatResponse
         return $this->usage;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     public function getMetadata(): array
     {
         return $this->metadata;

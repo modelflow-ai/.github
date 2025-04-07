@@ -32,3 +32,7 @@ $response = $handler->createRequest(
     ->execute();
 
 echo \sprintf('%s: %s', $response->getMessage()->role->value, $response->getMessage()->content);
+
+// Output usage
+echo "\n\n";
+echo 'Usage: ' . ($response->getUsage()?->totalTokens ?? 0) . ' tokens';

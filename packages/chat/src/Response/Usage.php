@@ -21,4 +21,18 @@ final class Usage
         public int $totalTokens,
     ) {
     }
+
+    public function add(?self $nextUsage): self
+    {
+        if (!$nextUsage instanceof self) {
+            return $this;
+        }
+
+        $clone = clone $this;
+        $clone->inputTokens += $nextUsage->inputTokens;
+        $clone->outputTokens += $nextUsage->outputTokens;
+        $clone->totalTokens += $nextUsage->totalTokens;
+
+        return $clone;
+    }
 }

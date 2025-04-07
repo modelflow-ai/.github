@@ -18,6 +18,7 @@ use ModelflowAi\Anthropic\Resources\MessagesInterface;
 use ModelflowAi\Anthropic\Responses\Messages\CreateStreamedResponse;
 use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;
 use ModelflowAi\Chat\Request\AIChatRequest;
+use ModelflowAi\Chat\Request\AIChatStreamedRequest;
 use ModelflowAi\Chat\Request\Message\AIChatMessage;
 use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Chat\Request\Message\ImageBase64Part;
@@ -116,7 +117,7 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface
             ];
         }
 
-        if ($request->isStreamed()) {
+        if ($request instanceof AIChatStreamedRequest) {
             return $this->createStreamed($request, $parameters);
         }
 
@@ -152,7 +153,7 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface
     /**
      * @param Parameters $parameters
      */
-    protected function createStreamed(AIChatRequest $request, array $parameters): AIChatResponse
+    protected function createStreamed(AIChatStreamedRequest $request, array $parameters): AIChatResponse
     {
         $responses = $this->client->messages()->createStreamed($parameters);
 

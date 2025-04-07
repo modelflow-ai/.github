@@ -12,11 +12,7 @@ declare(strict_types=1);
  */
 
 use ModelflowAi\Chat\AIChatRequestHandlerInterface;
-use ModelflowAi\Chat\Request\Message\AIChatMessage;
-use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
-use ModelflowAi\Chat\Request\Message\ToolCallsPart;
 use ModelflowAi\Chat\ToolInfo\ToolChoiceEnum;
-use ModelflowAi\Chat\ToolInfo\ToolExecutor;
 use ModelflowAi\DecisionTree\Criteria\CapabilityCriteria;
 
 require_once __DIR__ . '/WeatherTool.php';
@@ -24,31 +20,16 @@ require_once __DIR__ . '/WeatherTool.php';
 /** @var AIChatRequestHandlerInterface $handler */
 $handler = require_once __DIR__ . '/bootstrap.php';
 
-$toolExecutor = new ToolExecutor();
-
-$builder = $handler->createRequest()
+$response = $handler->createRequest()
     ->addUserMessage('How is the weather in hohenems and vienna?')
     ->tool('get_current_weather', new WeatherTool(), 'getCurrentWeather')
     ->toolChoice(ToolChoiceEnum::AUTO)
-    ->addCriteria(CapabilityCriteria::BASIC);
+    ->addCriteria(CapabilityCriteria::BASIC)
+    ->execute();
 
-$response = $builder->execute();
-
-do {
-    $toolCalls = $response->getMessage()->toolCalls;
-    if (null !== $toolCalls && 0 < \count($toolCalls)) {
-        $builder->addMessage(
-            new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, ToolCallsPart::create($toolCalls)),
-        );
-
-        foreach ($toolCalls as $toolCall) {
-            $builder->addMessage(
-                $toolExecutor->execute($response->getRequest(), $toolCall),
-            );
-        }
-
-        $response = $builder->build()->execute();
-    }
-} while (null !== $toolCalls && [] !== $toolCalls);
-
+// Simply output the final response
 echo $response->getMessage()->content;
+
+// Output usage
+echo "\n\n";
+echo 'Usage: ' . ($response->getUsage()?->totalTokens ?? 0) . ' tokens';
