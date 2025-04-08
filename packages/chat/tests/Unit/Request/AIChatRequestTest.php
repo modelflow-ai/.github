@@ -213,6 +213,42 @@ class AIChatRequestTest extends TestCase
         $this->assertTrue($request->hasTools());
     }
 
+    public function testIsStreamed(): void
+    {
+        $request = new AIChatRequest(
+            new AIChatMessageCollection(),
+            new CriteriaCollection(),
+            [],
+            [],
+            [],
+            fn ($request) => null,
+        );
+
+        $this->assertFalse($request->isStreamed());
+    }
+
+    public function testWithMessage(): void
+    {
+        $message1 = new AIChatMessage(AIChatMessageRoleEnum::USER, 'Test content 1');
+        $message2 = new AIChatMessage(AIChatMessageRoleEnum::USER, 'Test content 2');
+        $criteriaCollection = new CriteriaCollection();
+
+        $requestHandler = fn ($request) => null;
+        $request = new AIChatRequest(
+            new AIChatMessageCollection($message1),
+            $criteriaCollection,
+            [],
+            [],
+            [],
+            $requestHandler,
+        );
+
+        $newRequest = $request->withMessage($message2);
+
+        $this->assertNotSame($request, $newRequest);
+        $this->assertCount(2, $newRequest->getMessages());
+    }
+
     public function toolMethod(string $test): string
     {
         return $test;

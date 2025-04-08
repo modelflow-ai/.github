@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace ModelflowAi\Chat\Request;
 
 use ModelflowAi\Chat\Request\ResponseFormat\ResponseFormatInterface;
-use ModelflowAi\Chat\Response\AIChatResponseStream;
+use ModelflowAi\Chat\Response\AIChatResponseStreamInterface;
 use ModelflowAi\Chat\ToolInfo\ToolChoiceEnum;
 use ModelflowAi\Chat\ToolInfo\ToolInfo;
 use ModelflowAi\DecisionTree\Criteria\CriteriaCollection;
@@ -65,9 +65,9 @@ class AIChatStreamedRequest extends AIChatRequest
         return true;
     }
 
-    public function execute(): AIChatResponseStream
+    public function execute(): AIChatResponseStreamInterface
     {
-        /** @var AIChatResponseStream $response */
+        /** @var AIChatResponseStreamInterface $response */
         $response = \call_user_func($this->requestHandler, $this);
 
         return $response;

@@ -15,7 +15,9 @@ namespace ModelflowAi\Chat\Adapter\Fake;
 
 use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;
 use ModelflowAi\Chat\Request\AIChatRequest;
+use ModelflowAi\Chat\Request\AIChatStreamedRequest;
 use ModelflowAi\Chat\Response\AIChatResponse;
+use ModelflowAi\Chat\Response\AIChatResponseInterface;
 use ModelflowAi\Chat\Response\AIChatResponseMessage;
 use ModelflowAi\Chat\Response\AIChatResponseStream;
 use ModelflowAi\Chat\Response\Usage;
@@ -24,35 +26,36 @@ use Webmozart\Assert\Assert;
 class FakeChatAdapter implements AIChatAdapterInterface
 {
     /**
-     * @var array<AIChatResponseMessage|AIChatResponseMessage[]>
+     * @var array<array{0: AIChatResponseMessage|AIChatResponseMessage[], 1: Usage|null}>
      */
     private array $messages = [];
 
     /**
      * @param AIChatResponseMessage|AIChatResponseMessage[] $message
      */
-    public function addMessage(AIChatResponseMessage|array $message): void
+    public function addMessage(AIChatResponseMessage|array $message, ?Usage $usage = null): void
     {
-        $this->messages[] = $message;
+        $this->messages[] = [$message, $usage];
     }
 
-    public function handleRequest(AIChatRequest $request): AIChatResponse
+    public function handleRequest(AIChatRequest $request): AIChatResponseInterface
     {
         /** @var AIChatResponseMessage|AIChatResponseMessage[] $message */
-        $message = \array_shift($this->messages);
+        /** @var Usage|null $usage */
+        [$message, $usage] = \array_shift($this->messages); // @phpstan-ignore-line
         Assert::notNull($message);
 
-        if ($request->isStreamed()) {
+        if ($request instanceof AIChatStreamedRequest) {
             if (!\is_array($message)) {
                 $message = [$message];
             }
 
-            return new AIChatResponseStream($request, $this->stream($message));
+            return new AIChatResponseStream($request, $this->stream($message), $usage);
         }
 
         Assert::isInstanceOf($message, AIChatResponseMessage::class);
 
-        return new AIChatResponse($request, $message, new Usage(0, 0, 0));
+        return new AIChatResponse($request, $message, $usage ?? new Usage(0, 0, 0));
     }
 
     public function supports(object $request): bool

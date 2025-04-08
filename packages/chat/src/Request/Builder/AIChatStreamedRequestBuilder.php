@@ -15,7 +15,7 @@ namespace ModelflowAi\Chat\Request\Builder;
 
 use ModelflowAi\Chat\Request\AIChatMessageCollection;
 use ModelflowAi\Chat\Request\AIChatStreamedRequest;
-use ModelflowAi\Chat\Response\AIChatResponseStream;
+use ModelflowAi\Chat\Response\AIChatResponseStreamInterface;
 use ModelflowAi\Chat\ToolInfo\ToolChoiceEnum;
 
 class AIChatStreamedRequestBuilder extends AIChatRequestBuilder
@@ -51,7 +51,7 @@ class AIChatStreamedRequestBuilder extends AIChatRequestBuilder
         );
     }
 
-    public function execute(): AIChatResponseStream
+    public function execute(): AIChatResponseStreamInterface
     {
         return $this->doBuild()->execute();
     }

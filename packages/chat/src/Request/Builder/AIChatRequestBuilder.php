@@ -22,7 +22,7 @@ use ModelflowAi\Chat\Request\Message\MessagePart;
 use ModelflowAi\Chat\Request\ResponseFormat\JsonResponseFormat;
 use ModelflowAi\Chat\Request\ResponseFormat\JsonSchemaResponseFormat;
 use ModelflowAi\Chat\Request\ResponseFormat\ResponseFormatInterface;
-use ModelflowAi\Chat\Response\AIChatResponse;
+use ModelflowAi\Chat\Response\AIChatResponseInterface;
 use ModelflowAi\Chat\ToolInfo\ToolChoiceEnum;
 use ModelflowAi\Chat\ToolInfo\ToolInfo;
 use ModelflowAi\Chat\ToolInfo\ToolInfoBuilder;
@@ -266,7 +266,7 @@ class AIChatRequestBuilder
         );
     }
 
-    public function execute(): AIChatResponse
+    public function execute(): AIChatResponseInterface
     {
         return $this->doBuild()->execute();
     }

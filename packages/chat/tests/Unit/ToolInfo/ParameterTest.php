@@ -59,4 +59,18 @@ class ParameterTest extends TestCase
 
         $this->assertSame('TEST', $message->itemsOrProperties);
     }
+
+    public function testToArray(): void
+    {
+        $message = new Parameter('name', 'string', 'Test description', ['t1', 't2'], 'json', 'TEST');
+
+        $this->assertSame([
+            'name' => 'name',
+            'type' => 'string',
+            'description' => 'Test description',
+            'enum' => ['t1', 't2'],
+            'format' => 'json',
+            'itemsOrProperties' => 'TEST',
+        ], $message->toArray());
+    }
 }

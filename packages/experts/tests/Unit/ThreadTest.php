@@ -15,6 +15,7 @@ namespace ModelflowAi\Experts\Tests\Unit;
 
 use ModelflowAi\Chat\AIChatRequestHandlerInterface;
 use ModelflowAi\Chat\Request\AIChatRequest;
+use ModelflowAi\Chat\Request\AIChatStreamedRequest;
 use ModelflowAi\Chat\Request\Builder\AIChatRequestBuilder;
 use ModelflowAi\Chat\Request\Builder\AIChatStreamedRequestBuilder;
 use ModelflowAi\Chat\Request\Message\AIChatMessage;
@@ -84,7 +85,7 @@ class ThreadTest extends TestCase
         $thread = new Thread($this->requestHandler->reveal(), $expert);
 
         $this->requestHandler->createStreamedRequest()
-            ->willReturn(new AIChatStreamedRequestBuilder(fn (AIChatRequest $request) => new AIChatResponseStream(
+            ->willReturn(new AIChatStreamedRequestBuilder(fn (AIChatStreamedRequest $request) => new AIChatResponseStream(
                 $request,
                 new \ArrayIterator([
                     new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Test message'),

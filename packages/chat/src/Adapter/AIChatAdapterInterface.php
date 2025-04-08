@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace ModelflowAi\Chat\Adapter;
 
 use ModelflowAi\Chat\Request\AIChatRequest;
-use ModelflowAi\Chat\Response\AIChatResponse;
+use ModelflowAi\Chat\Response\AIChatResponseInterface;
 use ModelflowAi\DecisionTree\Behaviour\SupportsBehaviour;
 
 interface AIChatAdapterInterface extends SupportsBehaviour
 {
-    public function handleRequest(AIChatRequest $request): AIChatResponse;
+    public function handleRequest(AIChatRequest $request): AIChatResponseInterface;
 }

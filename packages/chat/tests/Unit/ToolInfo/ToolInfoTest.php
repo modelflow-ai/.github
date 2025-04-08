@@ -64,4 +64,48 @@ class ToolInfoTest extends TestCase
 
         $this->assertSame([$parameters[0]], $message->requiredParameters);
     }
+
+    public function testToArray(): void
+    {
+        $parameters = [
+            new Parameter('name1', 'string', 'Test description'),
+            new Parameter('name2', 'string', 'Test description'),
+        ];
+
+        $message = new ToolInfo(ToolTypeEnum::FUNCTION, 'name', 'description', $parameters, [$parameters[0]]);
+
+        $this->assertSame([
+            'type' => ToolTypeEnum::FUNCTION->value,
+            'name' => 'name',
+            'description' => 'description',
+            'parameters' => [
+                [
+                    'name' => 'name1',
+                    'type' => 'string',
+                    'description' => 'Test description',
+                    'enum' => [],
+                    'format' => null,
+                    'itemsOrProperties' => null,
+                ],
+                [
+                    'name' => 'name2',
+                    'type' => 'string',
+                    'description' => 'Test description',
+                    'enum' => [],
+                    'format' => null,
+                    'itemsOrProperties' => null,
+                ],
+            ],
+            'requiredParameters' => [
+                [
+                    'name' => 'name1',
+                    'type' => 'string',
+                    'description' => 'Test description',
+                    'enum' => [],
+                    'format' => null,
+                    'itemsOrProperties' => null,
+                ],
+            ],
+        ], $message->toArray());
+    }
 }

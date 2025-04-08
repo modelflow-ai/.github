@@ -15,6 +15,7 @@ namespace ModelflowAi\OllamaAdapter\Chat;
 
 use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;
 use ModelflowAi\Chat\Request\AIChatRequest;
+use ModelflowAi\Chat\Request\AIChatStreamedRequest;
 use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Chat\Response\AIChatResponse;
 use ModelflowAi\Chat\Response\AIChatResponseMessage;
@@ -56,7 +57,7 @@ final readonly class OllamaChatAdapter implements AIChatAdapterInterface
             $attributes['options']['temperature'] = $temperature;
         }
 
-        if ($request->isStreamed()) {
+        if ($request instanceof AIChatStreamedRequest) {
             return $this->createStreamed($request, $attributes);
         }
 
@@ -109,7 +110,7 @@ final readonly class OllamaChatAdapter implements AIChatAdapterInterface
      *     },
      * } $parameters
      */
-    protected function createStreamed(AIChatRequest $request, array $parameters): AIChatResponse
+    protected function createStreamed(AIChatStreamedRequest $request, array $parameters): AIChatResponse
     {
         $responses = $this->client->chat()->createStreamed($parameters);
 

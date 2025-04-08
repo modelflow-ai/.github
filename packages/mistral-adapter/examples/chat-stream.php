@@ -38,3 +38,7 @@ foreach ($response->getMessageStream() as $index => $message) {
 
     echo $message->content;
 }
+
+// Output usage
+echo "\n\n";
+echo 'Usage: ' . ($response->getUsage()?->totalTokens ?? 0) . ' tokens';

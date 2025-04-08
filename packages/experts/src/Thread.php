@@ -19,8 +19,8 @@ use ModelflowAi\Chat\Request\Message\AIChatMessage;
 use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Chat\Request\Message\MessagePart;
 use ModelflowAi\Chat\Request\ResponseFormat\JsonSchemaResponseFormat;
-use ModelflowAi\Chat\Response\AIChatResponse;
-use ModelflowAi\Chat\Response\AIChatResponseStream;
+use ModelflowAi\Chat\Response\AIChatResponseInterface;
+use ModelflowAi\Chat\Response\AIChatResponseStreamInterface;
 
 class Thread implements ThreadInterface
 {
@@ -91,7 +91,7 @@ class Thread implements ThreadInterface
         return $this;
     }
 
-    public function run(): AIChatResponse
+    public function run(): AIChatResponseInterface
     {
         $builder = $this->requestHandler->createRequest();
         $this->build($builder);
@@ -99,7 +99,7 @@ class Thread implements ThreadInterface
         return $builder->execute();
     }
 
-    public function runStreamed(): AIChatResponseStream
+    public function runStreamed(): AIChatResponseStreamInterface
     {
         $builder = $this->requestHandler->createStreamedRequest();
         $this->build($builder);

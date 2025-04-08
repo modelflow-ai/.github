@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector;
 use Rector\Config\RectorConfig;
+use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\Php81\Rector\Array_\FirstClassCallableRector;
 
 return static function (RectorConfig $rectorConfig): void {
@@ -23,10 +24,18 @@ return static function (RectorConfig $rectorConfig): void {
         CallableThisArrayToAnonymousFunctionRector::class => [
             __DIR__ . '/tests/Unit/ToolInfo/ToolExecutorTest.php',
             __DIR__ . '/tests/Unit/Request/AIChatRequestTest.php',
+            __DIR__ . '/tests/Unit/Middleware/Tools/ToolStreamResponseDecoratorTest.php',
+            __DIR__ . '/tests/Unit/Middleware/Tools/ToolResponseDecoratorTest.php',
         ],
         FirstClassCallableRector::class => [
             __DIR__ . '/tests/Unit/ToolInfo/ToolExecutorTest.php',
             __DIR__ . '/tests/Unit/Request/AIChatRequestTest.php',
+            __DIR__ . '/tests/Unit/Middleware/Tools/ToolStreamResponseDecoratorTest.php',
+            __DIR__ . '/tests/Unit/Middleware/Tools/ToolResponseDecoratorTest.php',
+        ],
+        ClosureToArrowFunctionRector::class => [
+            __DIR__ . '/tests/Unit/Middleware/Tools/ToolStreamResponseDecoratorTest.php',
+            __DIR__ . '/tests/Unit/Middleware/Tools/ToolResponseDecoratorTest.php',
         ],
     ]);
 };

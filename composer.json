@@ -41,8 +41,14 @@
         "modelflow-ai/core": "*"
     },
     "scripts": {
-        "post-install-cmd": "@php vendor/bin/mono run composer install",
-        "post-update-cmd": "@php vendor/bin/mono run composer update",
+        "post-install-cmd": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php vendor/bin/mono run composer install"
+        ],
+        "post-update-cmd": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php vendor/bin/mono run composer update"
+        ],
         "fix": [
             "Composer\\Config::disableProcessTimeout",
             "@php vendor/bin/mono run composer fix"
