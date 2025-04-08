@@ -57,8 +57,44 @@ class ToolExecutorTest extends TestCase
         ], $array);
     }
 
+    public function testHandleToolWithException(): void
+    {
+        $messages = new AIChatMessageCollection();
+        $criteria = new CriteriaCollection();
+        $requestHandler = fn ($request) => null;
+
+        $request = new AIChatRequest($messages, $criteria, [
+            'test' => [$this, 'toolMethodWithException'],
+        ], [
+            ToolInfoBuilder::buildToolInfo($this, 'toolMethodWithException', 'test'),
+        ], [], $requestHandler);
+
+        $executor = new ToolExecutor();
+
+        $result = $executor->execute(
+            $request,
+            new AIChatToolCall(ToolTypeEnum::FUNCTION, '123-123-123', 'test', ['test' => 'Test content']),
+        );
+
+        $this->assertInstanceOf(AIChatMessage::class, $result);
+        $this->assertSame(AIChatMessageRoleEnum::TOOL, $result->role);
+
+        $array = $result->toArray();
+        $this->assertSame([
+            'role' => AIChatMessageRoleEnum::TOOL->value,
+            'content' => 'Test exception',
+            'tool_call_id' => '123-123-123',
+            'name' => 'test',
+        ], $array);
+    }
+
     public function toolMethod(string $test): string
     {
         return $test;
+    }
+
+    public function toolMethodWithException(string $test): string
+    {
+        throw new \RuntimeException('Test exception');
     }
 }

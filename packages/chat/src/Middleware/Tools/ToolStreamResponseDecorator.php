@@ -42,7 +42,7 @@ final class ToolStreamResponseDecorator implements AIChatResponseStreamInterface
         private int $executionCount = 0,
     ) {
         $this->nextMiddleware = $nextMiddleware;
-        $this->usage = $originalStream->getUsage() ?? new Usage(0, 0, 0);
+        $this->usage = $originalStream->getUsage() ?? Usage::empty();
     }
 
     public function getMessageStream(): \Iterator

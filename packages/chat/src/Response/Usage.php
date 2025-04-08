@@ -15,6 +15,11 @@ namespace ModelflowAi\Chat\Response;
 
 final class Usage
 {
+    public static function empty(): self
+    {
+        return new self(0, 0, 0);
+    }
+
     public function __construct(
         public int $inputTokens,
         public int $outputTokens,
@@ -22,6 +27,14 @@ final class Usage
     ) {
     }
 
+    /**
+     * Combines this usage with another usage object by adding their token counts.
+     * Returns the current instance unchanged if the provided usage is null or invalid.
+     *
+     * @param self|null $nextUsage The usage to add to this one
+     *
+     * @return self A new Usage instance with combined token counts
+     */
     public function add(?self $nextUsage): self
     {
         if (!$nextUsage instanceof self) {
