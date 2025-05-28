@@ -20,28 +20,26 @@ use ModelflowAi\Embeddings\Generator\EmbeddingGenerator;
 use ModelflowAi\Embeddings\Handler\EmbeddingsSimilarityHandler;
 use ModelflowAi\Embeddings\Handler\EmbeddingsStoreHandler;
 use ModelflowAi\Embeddings\Splitter\EmbeddingSplitter;
-use ModelflowAi\Embeddings\Store\Filesystem\FilesystemEmbeddingsStore;
-use ModelflowAi\FireworksAiAdapter\Embeddings\FireworksAiEmbeddingAdapter;
+use ModelflowAi\Embeddings\Store\Memory\MemoryEmbeddingsStore;
+use ModelflowAi\OpenaiAdapter\Embeddings\OpenaiEmbeddingAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
-$fireworksAiClient = require_once \dirname(__DIR__) . '/bootstrap.php';
+$openaiClient = require_once \dirname(__DIR__) . '/bootstrap.php';
 require_once __DIR__ . '/ExampleEmbedding.php';
 
 $embeddingSplitter = new EmbeddingSplitter(500);
 $embeddingFormatter = new EmbeddingFormatter();
 $embeddingAdapter = new CacheEmbeddingAdapter(
-    new FireworksAiEmbeddingAdapter($fireworksAiClient),
-    new FilesystemAdapter('fireworksai', 0, __DIR__ . '/var/cache'),
+    new OpenaiEmbeddingAdapter($openaiClient),
+    new FilesystemAdapter('openai', 0, __DIR__ . '/var/cache'),
 );
 $embeddingGenerator = new EmbeddingGenerator($embeddingSplitter, $embeddingFormatter);
 
-if (\file_exists(__DIR__ . '/var/embeddings.txt')) {
-    \unlink(__DIR__ . '/var/embeddings.txt');
-}
-$store = new FilesystemEmbeddingsStore(__DIR__ . '/var/embeddings.txt');
+// Use memory store for this example
+$store = new MemoryEmbeddingsStore();
 
 $embeddingClass = ExampleEmbedding::class;
-$embeddingKey = 'example-store';
+$embeddingKey = 'openai-example-store';
 
 $storeHandler = new EmbeddingsStoreHandler(
     [$embeddingKey => $embeddingGenerator],
@@ -79,7 +77,7 @@ $storeResponse = $embeddingsRequestHandler
     ->createStoreRequest(...$embeddings)
     ->execute();
 
-echo "=== FireworksAI Embeddings Example ===\n\n";
+echo "=== OpenAI Embeddings Example ===\n\n";
 
 // Store embeddings
 echo "1. Storing embeddings...\n";

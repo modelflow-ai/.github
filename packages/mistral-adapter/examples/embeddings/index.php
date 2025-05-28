@@ -20,29 +20,32 @@ use ModelflowAi\Embeddings\Generator\EmbeddingGenerator;
 use ModelflowAi\Embeddings\Handler\EmbeddingsSimilarityHandler;
 use ModelflowAi\Embeddings\Handler\EmbeddingsStoreHandler;
 use ModelflowAi\Embeddings\Splitter\EmbeddingSplitter;
-use ModelflowAi\Embeddings\Store\Filesystem\FilesystemEmbeddingsStore;
-use ModelflowAi\FireworksAiAdapter\Embeddings\FireworksAiEmbeddingAdapter;
+use ModelflowAi\Embeddings\Store\Memory\MemoryEmbeddingsStore;
+use ModelflowAi\Mistral\Model;
+use ModelflowAi\MistralAdapter\Embeddings\MistralEmbeddingAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
-$fireworksAiClient = require_once \dirname(__DIR__) . '/bootstrap.php';
+$mistralClient = require_once \dirname(__DIR__) . '/bootstrap.php';
 require_once __DIR__ . '/ExampleEmbedding.php';
 
-$embeddingSplitter = new EmbeddingSplitter(500);
-$embeddingFormatter = new EmbeddingFormatter();
+// Initialize Mistral client and embedding adapter
 $embeddingAdapter = new CacheEmbeddingAdapter(
-    new FireworksAiEmbeddingAdapter($fireworksAiClient),
-    new FilesystemAdapter('fireworksai', 0, __DIR__ . '/var/cache'),
+    new MistralEmbeddingAdapter($mistralClient, Model::EMBED->value),
+    new FilesystemAdapter('mistral', 0, __DIR__ . '/var/cache'),
 );
+
+// Set up embedding components
+$embeddingSplitter = new EmbeddingSplitter(500); // Split text into chunks of 500 characters
+$embeddingFormatter = new EmbeddingFormatter();
 $embeddingGenerator = new EmbeddingGenerator($embeddingSplitter, $embeddingFormatter);
 
-if (\file_exists(__DIR__ . '/var/embeddings.txt')) {
-    \unlink(__DIR__ . '/var/embeddings.txt');
-}
-$store = new FilesystemEmbeddingsStore(__DIR__ . '/var/embeddings.txt');
+// Use memory store for this example (you can also use FilesystemEmbeddingsStore or other stores)
+$store = new MemoryEmbeddingsStore();
 
 $embeddingClass = ExampleEmbedding::class;
-$embeddingKey = 'example-store';
+$embeddingKey = 'mistral-example-store';
 
+// Set up handlers
 $storeHandler = new EmbeddingsStoreHandler(
     [$embeddingKey => $embeddingGenerator],
     [$embeddingKey => $store],
@@ -55,6 +58,7 @@ $similarityHandler = new EmbeddingsSimilarityHandler(
     [$embeddingKey => $embeddingAdapter],
 );
 
+// Initialize the main request handler
 $embeddingsRequestHandler = new EmbeddingsRequestHandler(
     $storeHandler,
     $similarityHandler,
@@ -75,14 +79,14 @@ foreach ($documents as $index => $content) {
     $embeddings[] = new ExampleEmbedding($content, "document_{$index}.txt", $index < 2 ? 'technology' : 'science');
 }
 
+echo "=== Mistral Embeddings Example ===\n\n";
+
+// Store embeddings
+echo "1. Storing embeddings...\n";
 $storeResponse = $embeddingsRequestHandler
     ->createStoreRequest(...$embeddings)
     ->execute();
 
-echo "=== FireworksAI Embeddings Example ===\n\n";
-
-// Store embeddings
-echo "1. Storing embeddings...\n";
 echo "   Store Response Usage: {$storeResponse->getUsage()->getPromptTokens()} prompt tokens / " .
      "{$storeResponse->getUsage()->getTotalTokens()} total tokens\n\n";
 
