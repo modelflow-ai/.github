@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Anthropic;
 
+use ModelflowAi\Anthropic\Resources\Embeddings;
+use ModelflowAi\Anthropic\Resources\EmbeddingsInterface;
 use ModelflowAi\Anthropic\Resources\Messages;
 use ModelflowAi\Anthropic\Resources\MessagesInterface;
 use ModelflowAi\ApiClient\Transport\TransportInterface;
@@ -34,5 +36,15 @@ final readonly class Client implements ClientInterface
     public function messages(): MessagesInterface
     {
         return new Messages($this->transport);
+    }
+
+    /**
+     * Generate embeddings using Voyage AI (Anthropic's recommended embeddings provider).
+     *
+     * @see https://docs.anthropic.com/en/docs/build-with-claude/embeddings
+     */
+    public function embeddings(): EmbeddingsInterface
+    {
+        return new Embeddings($this->transport);
     }
 }

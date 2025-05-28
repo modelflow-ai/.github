@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Anthropic;
 
+use ModelflowAi\Anthropic\Resources\EmbeddingsInterface;
 use ModelflowAi\Anthropic\Resources\MessagesInterface;
 
 interface ClientInterface
@@ -25,4 +26,11 @@ interface ClientInterface
      * @see https://docs.anthropic.com/claude/reference/messages_post
      */
     public function messages(): MessagesInterface;
+
+    /**
+     * Generate embeddings using Voyage AI (Anthropic's recommended embeddings provider).
+     *
+     * @see https://docs.anthropic.com/en/docs/build-with-claude/embeddings
+     */
+    public function embeddings(): EmbeddingsInterface;
 }
