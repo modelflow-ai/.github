@@ -12,14 +12,14 @@ declare(strict_types=1);
  */
 
 use ModelflowAi\Embeddings\Adapter\Request\EmbedRequest;
-use ModelflowAi\OpenaiAdapter\Embeddings\OpenaiEmbeddingAdapter;
+use ModelflowAi\OllamaAdapter\Embeddings\OllamaEmbeddingAdapter;
 
-$openaiClient = require_once \dirname(__DIR__) . '/bootstrap.php';
+$ollamaClient = require_once \dirname(__DIR__) . '/bootstrap.php';
 
-echo "=== Simple OpenAI Embeddings Example ===\n\n";
+echo "=== Simple Ollama Embeddings Example ===\n\n";
 
-// Initialize embedding adapter
-$embeddingAdapter = new OpenaiEmbeddingAdapter($openaiClient);
+// Initialize Ollama client and embedding adapter
+$embeddingAdapter = new OllamaEmbeddingAdapter($ollamaClient, 'all-minilm');
 
 // Sample texts to embed
 $texts = [

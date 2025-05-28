@@ -13,30 +13,20 @@ declare(strict_types=1);
 
 namespace App;
 
-require_once \dirname(__DIR__, 2) . '/vendor/autoload.php';
-
 use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;
 use ModelflowAi\Chat\AIChatRequestHandler;
+use ModelflowAi\Chat\Middleware\Tools\ToolExecutionMiddleware;
 use ModelflowAi\Chat\Request\AIChatRequest;
 use ModelflowAi\DecisionTree\Criteria\CapabilityCriteria;
 use ModelflowAi\DecisionTree\DecisionRule;
 use ModelflowAi\DecisionTree\DecisionTree;
 use ModelflowAi\DecisionTree\DecisionTreeInterface;
-use ModelflowAi\Mistral\Mistral;
 use ModelflowAi\Mistral\Model;
 use ModelflowAi\MistralAdapter\Chat\MistralChatAdapter;
-use Symfony\Component\Dotenv\Dotenv;
 
-(new Dotenv())->bootEnv(\dirname(__DIR__) . '/.env');
+$mistralClient = require_once \dirname(__DIR__) . '/bootstrap.php';
 
 $adapter = [];
-
-$mistralApiKey = $_ENV['MISTRAL_API_KEY'];
-if (!$mistralApiKey) {
-    throw new \RuntimeException('Mistral API key is required');
-}
-
-$mistralClient = Mistral::client($mistralApiKey);
 
 $largeAdapter = new MistralChatAdapter($mistralClient, Model::LARGE->value);
 $mediumAdapter = new MistralChatAdapter($mistralClient, Model::MEDIUM->value);
@@ -51,4 +41,6 @@ $adapter[] = new DecisionRule($tinyAdapter, [CapabilityCriteria::BASIC]);
 /** @var DecisionTreeInterface<AIChatRequest, AIChatAdapterInterface> $decisionTree */
 $decisionTree = new DecisionTree($adapter);
 
-return new AIChatRequestHandler($decisionTree);
+return new AIChatRequestHandler($decisionTree, [
+    new ToolExecutionMiddleware(),
+]);

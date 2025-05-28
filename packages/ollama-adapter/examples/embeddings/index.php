@@ -15,7 +15,7 @@ namespace App;
 
 $embeddingsRequestHandler = require_once __DIR__ . '/bootstrap.php';
 
-$embeddingKey = 'fireworksai-example-store';
+$embeddingKey = 'ollama-example-store';
 
 // Sample data to embed
 $documents = [
@@ -36,7 +36,7 @@ $storeResponse = $embeddingsRequestHandler
     ->createStoreRequest(...$embeddings)
     ->execute();
 
-echo "=== FireworksAI Embeddings Example ===\n\n";
+echo "=== Ollama Embeddings Example ===\n\n";
 
 // Store embeddings
 echo "1. Storing embeddings...\n";

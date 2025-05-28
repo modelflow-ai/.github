@@ -34,19 +34,19 @@ echo "Generating embeddings for text samples...\n\n";
 foreach ($texts as $index => $text) {
     $displayIndex = $index + 1;
     echo "Text {$displayIndex}: {$text}\n";
-    
+
     // Create embed request
     $request = new EmbedRequest($text);
-    
+
     // Get embedding
     $response = $embeddingAdapter->embed($request);
-    
+
     // Display results
     $embedding = $response->getVector();
     $usage = $response->getUsage();
-    
-    echo "   📊 Embedding dimensions: " . \count($embedding) . "\n";
-    echo "   📈 First 5 values: [" . \implode(', ', \array_map('number_format', \array_slice($embedding, 0, 5), \array_fill(0, 5, 4))) . "]\n";
+
+    echo '   📊 Embedding dimensions: ' . \count($embedding) . "\n";
+    echo '   📈 First 5 values: [' . \implode(', ', \array_map('number_format', \array_slice($embedding, 0, 5), \array_fill(0, 5, 4))) . "]\n";
     echo "   🔢 Prompt tokens: {$usage->getPromptTokens()}\n";
     echo "   🔢 Total tokens: {$usage->getTotalTokens()}\n\n";
 }
@@ -67,8 +67,9 @@ $embedding2 = $response2->getVector();
 $dotProduct = 0;
 $magnitude1 = 0;
 $magnitude2 = 0;
+$counter = \count($embedding1);
 
-for ($i = 0; $i < \count($embedding1); $i++) {
+for ($i = 0; $i < $counter; ++$i) {
     $dotProduct += $embedding1[$i] * $embedding2[$i];
     $magnitude1 += $embedding1[$i] ** 2;
     $magnitude2 += $embedding2[$i] ** 2;
@@ -79,6 +80,6 @@ $magnitude2 = \sqrt($magnitude2);
 
 $similarity = $dotProduct / ($magnitude1 * $magnitude2);
 
-echo "📊 Cosine similarity: " . \number_format($similarity, 4) . "\n\n";
+echo '📊 Cosine similarity: ' . \number_format($similarity, 4) . "\n\n";
 
 echo "=== Example completed successfully! ===\n";

@@ -94,7 +94,7 @@ $queries = [
 
 foreach ($queries as $query) {
     echo "2. Searching for: \"$query\"\n";
-    
+
     $similarityResponse = $embeddingsRequestHandler
         ->createSimilarityRequest($query, $embeddingKey)
         ->withLimit(2) // Get top 2 most similar results
@@ -105,13 +105,14 @@ foreach ($queries as $query) {
     echo "   Similarity Search Usage: {$similarityResponse->getUsage()->getPromptTokens()} prompt tokens\n";
     echo "   Found {$count} similar documents:\n\n";
 
+    /** @var ExampleEmbedding $item */
     foreach ($similarityResponse->getEmbeddings() as $item) {
         echo "   📄 Document: {$item->getFileName()}\n";
-        echo "   📝 Content: " . \substr($item->getContent(), 0, 100) . "...\n";
+        echo '   📝 Content: ' . \substr($item->getContent(), 0, 100) . "...\n";
         echo "\n";
     }
-    
-    echo "   " . \str_repeat('-', 80) . "\n\n";
+
+    echo '   ' . \str_repeat('-', 80) . "\n\n";
 }
 
 // Demonstrate filtering by category
@@ -125,9 +126,10 @@ $filteredResponse = $embeddingsRequestHandler
 $count = \count($filteredResponse->getEmbeddings());
 echo "   Found {$count} documents in 'technology' category:\n\n";
 
+/** @var ExampleEmbedding $item */
 foreach ($filteredResponse->getEmbeddings() as $item) {
     echo "   📄 Document: {$item->getFileName()}\n";
-    echo "   📝 Content: " . \substr($item->getContent(), 0, 100) . "...\n";
+    echo '   📝 Content: ' . \substr($item->getContent(), 0, 100) . "...\n";
 }
 
 echo "=== Example completed successfully! ===\n";

@@ -11,22 +11,26 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-$fireworksAiClient = require_once \dirname(__DIR__) . '/bootstrap.php';
+namespace App;
 
 use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;
 use ModelflowAi\Chat\AIChatRequestHandler;
 use ModelflowAi\Chat\Request\AIChatRequest;
-use ModelflowAi\DecisionTree\Criteria\CapabilityCriteria;
+use ModelflowAi\DecisionTree\Criteria\PrivacyCriteria;
 use ModelflowAi\DecisionTree\DecisionRule;
 use ModelflowAi\DecisionTree\DecisionTree;
 use ModelflowAi\DecisionTree\DecisionTreeInterface;
-use ModelflowAi\FireworksAiAdapter\Chat\FireworksAiChatAdapter;
+use ModelflowAi\OllamaAdapter\Chat\OllamaChatAdapter;
+
+$client = require_once \dirname(__DIR__) . '/bootstrap.php';
 
 $adapter = [];
 
-$llama3Adapter = new FireworksAiChatAdapter($fireworksAiClient, 'accounts/fireworks/models/llama-v3p1-8b-instruct');
+$llama2Adapter = new OllamaChatAdapter($client, 'llama3.2');
 
-$adapter[] = new DecisionRule($llama3Adapter, [CapabilityCriteria::BASIC]);
+/** @var DecisionRule<AIChatRequest, AIChatAdapterInterface> $rule */
+$rule = new DecisionRule($llama2Adapter, [PrivacyCriteria::HIGH]);
+$adapter[] = $rule;
 
 /** @var DecisionTreeInterface<AIChatRequest, AIChatAdapterInterface> $decisionTree */
 $decisionTree = new DecisionTree($adapter);

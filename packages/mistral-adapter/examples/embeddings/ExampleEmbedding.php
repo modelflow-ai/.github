@@ -20,11 +20,8 @@ class ExampleEmbedding implements EmbeddingInterface
 {
     use EmbeddingTrait;
 
-    /**
-     * @param array<string, mixed> $metadata
-     */
     public function __construct(
-        string $content, 
+        string $content,
         private readonly string $fileName,
         public readonly ?string $category = null,
     ) {

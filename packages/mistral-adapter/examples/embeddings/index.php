@@ -13,56 +13,9 @@ declare(strict_types=1);
 
 namespace App;
 
-use ModelflowAi\Embeddings\Adapter\Cache\CacheEmbeddingAdapter;
-use ModelflowAi\Embeddings\EmbeddingsRequestHandler;
-use ModelflowAi\Embeddings\Formatter\EmbeddingFormatter;
-use ModelflowAi\Embeddings\Generator\EmbeddingGenerator;
-use ModelflowAi\Embeddings\Handler\EmbeddingsSimilarityHandler;
-use ModelflowAi\Embeddings\Handler\EmbeddingsStoreHandler;
-use ModelflowAi\Embeddings\Splitter\EmbeddingSplitter;
-use ModelflowAi\Embeddings\Store\Memory\MemoryEmbeddingsStore;
-use ModelflowAi\Mistral\Model;
-use ModelflowAi\MistralAdapter\Embeddings\MistralEmbeddingAdapter;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+$embeddingsRequestHandler = require_once __DIR__ . '/bootstrap.php';
 
-$mistralClient = require_once \dirname(__DIR__) . '/bootstrap.php';
-require_once __DIR__ . '/ExampleEmbedding.php';
-
-// Initialize Mistral client and embedding adapter
-$embeddingAdapter = new CacheEmbeddingAdapter(
-    new MistralEmbeddingAdapter($mistralClient, Model::EMBED->value),
-    new FilesystemAdapter('mistral', 0, __DIR__ . '/var/cache'),
-);
-
-// Set up embedding components
-$embeddingSplitter = new EmbeddingSplitter(500); // Split text into chunks of 500 characters
-$embeddingFormatter = new EmbeddingFormatter();
-$embeddingGenerator = new EmbeddingGenerator($embeddingSplitter, $embeddingFormatter);
-
-// Use memory store for this example (you can also use FilesystemEmbeddingsStore or other stores)
-$store = new MemoryEmbeddingsStore();
-
-$embeddingClass = ExampleEmbedding::class;
 $embeddingKey = 'mistral-example-store';
-
-// Set up handlers
-$storeHandler = new EmbeddingsStoreHandler(
-    [$embeddingKey => $embeddingGenerator],
-    [$embeddingKey => $store],
-    [$embeddingKey => $embeddingAdapter],
-    [$embeddingClass => $embeddingKey],
-);
-
-$similarityHandler = new EmbeddingsSimilarityHandler(
-    [$embeddingKey => $store],
-    [$embeddingKey => $embeddingAdapter],
-);
-
-// Initialize the main request handler
-$embeddingsRequestHandler = new EmbeddingsRequestHandler(
-    $storeHandler,
-    $similarityHandler,
-);
 
 // Sample data to embed
 $documents = [
@@ -100,7 +53,7 @@ $queries = [
 
 foreach ($queries as $query) {
     echo "2. Searching for: \"$query\"\n";
-    
+
     $similarityResponse = $embeddingsRequestHandler
         ->createSimilarityRequest($query, $embeddingKey)
         ->withLimit(2) // Get top 2 most similar results
@@ -113,11 +66,11 @@ foreach ($queries as $query) {
 
     foreach ($similarityResponse->getEmbeddings() as $item) {
         echo "   📄 Document: {$item->getFileName()}\n";
-        echo "   📝 Content: " . \substr($item->getContent(), 0, 100) . "...\n";
+        echo '   📝 Content: ' . \substr((string) $item->getContent(), 0, 100) . "...\n";
         echo "\n";
     }
-    
-    echo "   " . \str_repeat('-', 80) . "\n\n";
+
+    echo '   ' . \str_repeat('-', 80) . "\n\n";
 }
 
 // Demonstrate filtering by category
@@ -133,7 +86,7 @@ echo "   Found {$count} documents in 'technology' category:\n\n";
 
 foreach ($filteredResponse->getEmbeddings() as $item) {
     echo "   📄 Document: {$item->getFileName()}\n";
-    echo "   📝 Content: " . \substr($item->getContent(), 0, 100) . "...\n";
+    echo '   📝 Content: ' . \substr((string) $item->getContent(), 0, 100) . "...\n";
 }
 
 echo "=== Example completed successfully! ===\n";
