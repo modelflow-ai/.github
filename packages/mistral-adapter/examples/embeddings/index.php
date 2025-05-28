@@ -15,7 +15,7 @@ namespace App;
 
 $embeddingsRequestHandler = require_once __DIR__ . '/bootstrap.php';
 
-$embeddingKey = 'fireworksai-example-store';
+$embeddingKey = 'mistral-example-store';
 
 // Sample data to embed
 $documents = [
@@ -32,14 +32,14 @@ foreach ($documents as $index => $content) {
     $embeddings[] = new ExampleEmbedding($content, "document_{$index}.txt", $index < 2 ? 'technology' : 'science');
 }
 
+echo "=== Mistral Embeddings Example ===\n\n";
+
+// Store embeddings
+echo "1. Storing embeddings...\n";
 $storeResponse = $embeddingsRequestHandler
     ->createStoreRequest(...$embeddings)
     ->execute();
 
-echo "=== FireworksAI Embeddings Example ===\n\n";
-
-// Store embeddings
-echo "1. Storing embeddings...\n";
 echo "   Store Response Usage: {$storeResponse->getUsage()->getPromptTokens()} prompt tokens / " .
      "{$storeResponse->getUsage()->getTotalTokens()} total tokens\n\n";
 

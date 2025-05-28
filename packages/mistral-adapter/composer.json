@@ -41,7 +41,8 @@
         "phpspec/prophecy-phpunit": "^2.1@stable",
         "jangregor/phpstan-prophecy": "^1.0",
         "symfony/dotenv": "7.1.x-dev",
-        "asapo/remove-vendor-plugin": "^0.1"
+        "asapo/remove-vendor-plugin": "^0.1",
+        "symfony/cache": "7.4.x-dev"
     },
     "suggest": {
         "modelflow-ai/embeddings": "To use the embeddings."

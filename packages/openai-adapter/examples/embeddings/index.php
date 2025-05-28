@@ -13,9 +13,50 @@ declare(strict_types=1);
 
 namespace App;
 
-$embeddingsRequestHandler = require_once __DIR__ . '/bootstrap.php';
+use ModelflowAi\Embeddings\Adapter\Cache\CacheEmbeddingAdapter;
+use ModelflowAi\Embeddings\EmbeddingsRequestHandler;
+use ModelflowAi\Embeddings\Formatter\EmbeddingFormatter;
+use ModelflowAi\Embeddings\Generator\EmbeddingGenerator;
+use ModelflowAi\Embeddings\Handler\EmbeddingsSimilarityHandler;
+use ModelflowAi\Embeddings\Handler\EmbeddingsStoreHandler;
+use ModelflowAi\Embeddings\Splitter\EmbeddingSplitter;
+use ModelflowAi\Embeddings\Store\Memory\MemoryEmbeddingsStore;
+use ModelflowAi\OpenaiAdapter\Embeddings\OpenaiEmbeddingAdapter;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
-$embeddingKey = 'fireworksai-example-store';
+$openaiClient = require_once \dirname(__DIR__) . '/bootstrap.php';
+require_once __DIR__ . '/ExampleEmbedding.php';
+
+$embeddingSplitter = new EmbeddingSplitter(500);
+$embeddingFormatter = new EmbeddingFormatter();
+$embeddingAdapter = new CacheEmbeddingAdapter(
+    new OpenaiEmbeddingAdapter($openaiClient),
+    new FilesystemAdapter('openai', 0, __DIR__ . '/var/cache'),
+);
+$embeddingGenerator = new EmbeddingGenerator($embeddingSplitter, $embeddingFormatter);
+
+// Use memory store for this example
+$store = new MemoryEmbeddingsStore();
+
+$embeddingClass = ExampleEmbedding::class;
+$embeddingKey = 'openai-example-store';
+
+$storeHandler = new EmbeddingsStoreHandler(
+    [$embeddingKey => $embeddingGenerator],
+    [$embeddingKey => $store],
+    [$embeddingKey => $embeddingAdapter],
+    [$embeddingClass => $embeddingKey],
+);
+
+$similarityHandler = new EmbeddingsSimilarityHandler(
+    [$embeddingKey => $store],
+    [$embeddingKey => $embeddingAdapter],
+);
+
+$embeddingsRequestHandler = new EmbeddingsRequestHandler(
+    $storeHandler,
+    $similarityHandler,
+);
 
 // Sample data to embed
 $documents = [
@@ -36,7 +77,7 @@ $storeResponse = $embeddingsRequestHandler
     ->createStoreRequest(...$embeddings)
     ->execute();
 
-echo "=== FireworksAI Embeddings Example ===\n\n";
+echo "=== OpenAI Embeddings Example ===\n\n";
 
 // Store embeddings
 echo "1. Storing embeddings...\n";
@@ -64,9 +105,10 @@ foreach ($queries as $query) {
     echo "   Similarity Search Usage: {$similarityResponse->getUsage()->getPromptTokens()} prompt tokens\n";
     echo "   Found {$count} similar documents:\n\n";
 
+    /** @var ExampleEmbedding $item */
     foreach ($similarityResponse->getEmbeddings() as $item) {
         echo "   📄 Document: {$item->getFileName()}\n";
-        echo '   📝 Content: ' . \substr((string) $item->getContent(), 0, 100) . "...\n";
+        echo '   📝 Content: ' . \substr($item->getContent(), 0, 100) . "...\n";
         echo "\n";
     }
 
@@ -84,9 +126,10 @@ $filteredResponse = $embeddingsRequestHandler
 $count = \count($filteredResponse->getEmbeddings());
 echo "   Found {$count} documents in 'technology' category:\n\n";
 
+/** @var ExampleEmbedding $item */
 foreach ($filteredResponse->getEmbeddings() as $item) {
     echo "   📄 Document: {$item->getFileName()}\n";
-    echo '   📝 Content: ' . \substr((string) $item->getContent(), 0, 100) . "...\n";
+    echo '   📝 Content: ' . \substr($item->getContent(), 0, 100) . "...\n";
 }
 
 echo "=== Example completed successfully! ===\n";

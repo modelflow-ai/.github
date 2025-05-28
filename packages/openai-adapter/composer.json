@@ -47,7 +47,8 @@
         "phpspec/prophecy-phpunit": "^2.1@stable",
         "symfony/dotenv": "^7.1",
         "symfony/console": "^7.1",
-        "asapo/remove-vendor-plugin": "^0.1"
+        "asapo/remove-vendor-plugin": "^0.1",
+        "symfony/cache": "7.4.x-dev"
     },
     "suggest": {
         "modelflow-ai/chat": "To use the chat-completion.",

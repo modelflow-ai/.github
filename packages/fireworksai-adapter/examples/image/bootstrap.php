@@ -11,8 +11,6 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-require_once \dirname(__DIR__, 2) . '/vendor/autoload.php';
-
 use ModelflowAi\DecisionTree\Criteria\CapabilityCriteria;
 use ModelflowAi\DecisionTree\DecisionRule;
 use ModelflowAi\DecisionTree\DecisionTree;
@@ -25,6 +23,9 @@ use ModelflowAi\Image\Request\AIImageRequest;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpClient\HttpClient;
 
+require_once \dirname(__DIR__, 2) . '/vendor/autoload.php';
+
+// Load environment for API key
 (new Dotenv())->bootEnv(\dirname(__DIR__) . '/.env');
 
 $fireworksaiApiKey = $_ENV['FIREWORKSAI_API_KEY'];
@@ -34,6 +35,7 @@ if (!$fireworksaiApiKey) {
 
 $adapter = [];
 
+// Note: Image generation uses HTTP client instead of the OpenAI-compatible client
 $httpClient = HttpClient::create([
     'headers' => [
         'Authorization' => 'Bearer ' . $fireworksaiApiKey,
