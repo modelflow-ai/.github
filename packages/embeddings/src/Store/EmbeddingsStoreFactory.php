@@ -25,8 +25,12 @@ class EmbeddingsStoreFactory implements EmbeddingsStoreFactoryInterface
     ) {
     }
 
-    public function create(Dsn $dsn): EmbeddingsStoreInterface
+    public function create(Dsn|string $dsn): EmbeddingsStoreInterface
     {
+        if (\is_string($dsn)) {
+            $dsn = Dsn::fromString($dsn);
+        }
+
         foreach ($this->factories as $factory) {
             if ($factory->supports($dsn)) {
                 return $factory->create($dsn);

@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace ModelflowAi\Experts;
 
 use ModelflowAi\Chat\AIChatRequestHandlerInterface;
+use ModelflowAi\Chat\Request\AIChatRequest;
+use ModelflowAi\Chat\Request\AIChatStreamedRequest;
 use ModelflowAi\Chat\Request\Builder\AIChatRequestBuilder;
 use ModelflowAi\Chat\Request\Message\AIChatMessage;
 use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
@@ -91,20 +93,30 @@ class Thread implements ThreadInterface
         return $this;
     }
 
-    public function run(): AIChatResponseInterface
+    public function buildRequest(): AIChatRequest
     {
         $builder = $this->requestHandler->createRequest();
         $this->build($builder);
 
-        return $builder->execute();
+        return $builder->build();
     }
 
-    public function runStreamed(): AIChatResponseStreamInterface
+    public function buildStreamedRequest(): AIChatStreamedRequest
     {
         $builder = $this->requestHandler->createStreamedRequest();
         $this->build($builder);
 
-        return $builder->execute();
+        return $builder->build();
+    }
+
+    public function run(): AIChatResponseInterface
+    {
+        return $this->buildRequest()->execute();
+    }
+
+    public function runStreamed(): AIChatResponseStreamInterface
+    {
+        return $this->buildStreamedRequest()->execute();
     }
 
     private function build(AIChatRequestBuilder $builder): AIChatRequestBuilder

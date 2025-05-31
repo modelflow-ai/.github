@@ -45,6 +45,7 @@ class MemoryEmbeddingsStore implements EmbeddingsStoreInterface
 
         foreach ($this->embeddings as $index => $embedding) {
             foreach ($additionalArguments as $key => $value) {
+                // TODO add support for arrays
                 if ($accessor->getValue($embedding, $key) !== $value) {
                     continue 2;
                 }

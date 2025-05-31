@@ -22,13 +22,15 @@ use ModelflowAi\Embeddings\Store\EmbeddingsStoreInterface;
 class EmbeddingsSimilarityHandler implements EmbeddingsSimilarityHandlerInterface
 {
     /**
-     * @param array<string, EmbeddingsStoreInterface> $embeddingStores
-     * @param array<string, EmbeddingAdapterInterface> $embeddingAdapters
+     * @param iterable<string, EmbeddingsStoreInterface> $embeddingStores
+     * @param iterable<string, EmbeddingAdapterInterface> $embeddingAdapters
      */
     public function __construct(
-        private readonly array $embeddingStores,
-        private readonly array $embeddingAdapters,
+        private iterable $embeddingStores,
+        private iterable $embeddingAdapters,
     ) {
+        $this->embeddingStores = $embeddingStores instanceof \Traversable ? \iterator_to_array($embeddingStores) : $embeddingStores;
+        $this->embeddingAdapters = $embeddingAdapters instanceof \Traversable ? \iterator_to_array($embeddingAdapters) : $embeddingAdapters;
     }
 
     public function handle(EmbeddingsSimilarityRequest $request): EmbeddingsSimilarityResponse

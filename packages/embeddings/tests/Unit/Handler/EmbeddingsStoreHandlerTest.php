@@ -205,6 +205,51 @@ class EmbeddingsStoreHandlerTest extends TestCase
 
         $handler->handle($request);
     }
+
+    public function testHandleWithTraversableIterables(): void
+    {
+        $key = 'test_key';
+        $vector = [0.1, 0.2, 0.3];
+
+        $embedding = new TestEmbedding('test-id', 'test content');
+        $generatedEmbedding = new TestEmbedding('test-id', 'processed content');
+
+        $generator = $this->prophesize(EmbeddingGeneratorInterface::class);
+        $store = $this->prophesize(EmbeddingsStoreInterface::class);
+        $adapter = $this->prophesize(EmbeddingAdapterInterface::class);
+
+        $generator->generateEmbedding($embedding, null)->willReturn([$generatedEmbedding]);
+
+        $embedResponse = new EmbedResponse($vector, new EmbeddingUsage(10, 20));
+        $adapter->embed(Argument::that(fn (EmbedRequest $request) => 'processed content' === $request->getText()))->willReturn($embedResponse);
+
+        $store->addDocuments([$generatedEmbedding])->shouldBeCalled();
+
+        // Test with traversable iterators (simulating tagged services)
+        $generatorsIterator = new \ArrayIterator([$key => $generator->reveal()]);
+        $storesIterator = new \ArrayIterator([$key => $store->reveal()]);
+        $adaptersIterator = new \ArrayIterator([$key => $adapter->reveal()]);
+
+        $handler = new EmbeddingsStoreHandler(
+            $generatorsIterator,
+            $storesIterator,
+            $adaptersIterator,
+            [TestEmbedding::class => $key],
+        );
+
+        $request = new EmbeddingsStoreRequest(
+            function () {},
+            [$embedding],
+        );
+
+        $response = $handler->handle($request);
+
+        $this->assertCount(1, $response->getEmbeddings());
+        $this->assertSame($generatedEmbedding, $response->getEmbeddings()[0]);
+        $this->assertSame($vector, $generatedEmbedding->getVector());
+        $this->assertSame(10, $response->getUsage()->getPromptTokens());
+        $this->assertSame(20, $response->getUsage()->getTotalTokens());
+    }
 }
 
 class TestEmbedding implements EmbeddingInterface

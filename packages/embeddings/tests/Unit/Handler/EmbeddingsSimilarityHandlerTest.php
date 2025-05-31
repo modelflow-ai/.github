@@ -109,4 +109,46 @@ class EmbeddingsSimilarityHandlerTest extends TestCase
 
         $handler->handle($request);
     }
+
+    public function testHandleWithTraversableStoresAndAdapters(): void
+    {
+        $key = 'test_key';
+        $content = 'test content';
+        $vector = [0.1, 0.2, 0.3];
+
+        $store = $this->prophesize(EmbeddingsStoreInterface::class);
+        $adapter = $this->prophesize(EmbeddingAdapterInterface::class);
+
+        $embedResponse = new EmbedResponse($vector, new EmbeddingUsage(10, 20));
+        $adapter->embed(Argument::that(fn (EmbedRequest $request) => $request->getText() === $content))->willReturn($embedResponse);
+
+        $similarEmbeddings = [
+            $this->prophesize(EmbeddingInterface::class)->reveal(),
+        ];
+
+        $store->similaritySearch($vector, 4, [])->willReturn($similarEmbeddings);
+
+        // Test with traversable iterators (simulating tagged services)
+        $storesIterator = new \ArrayIterator([$key => $store->reveal()]);
+        $adaptersIterator = new \ArrayIterator([$key => $adapter->reveal()]);
+
+        $handler = new EmbeddingsSimilarityHandler(
+            $storesIterator,
+            $adaptersIterator,
+        );
+
+        $request = new EmbeddingsSimilarityRequest(
+            function () {},
+            $content,
+            $key,
+            4,
+            [],
+        );
+
+        $response = $handler->handle($request);
+
+        $this->assertSame($similarEmbeddings, $response->getEmbeddings());
+        $this->assertSame(10, $response->getUsage()->getPromptTokens());
+        $this->assertSame(20, $response->getUsage()->getTotalTokens());
+    }
 }

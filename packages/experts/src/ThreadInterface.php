@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Experts;
 
+use ModelflowAi\Chat\Request\AIChatRequest;
+use ModelflowAi\Chat\Request\AIChatStreamedRequest;
 use ModelflowAi\Chat\Request\Message\AIChatMessage;
 use ModelflowAi\Chat\Request\Message\MessagePart;
 use ModelflowAi\Chat\Response\AIChatResponseInterface;
@@ -52,4 +54,8 @@ interface ThreadInterface
      * @param AIChatMessage[] $messages
      */
     public function addMessages(array $messages): self;
+
+    public function buildRequest(): AIChatRequest;
+
+    public function buildStreamedRequest(): AIChatStreamedRequest;
 }

@@ -25,17 +25,20 @@ use ModelflowAi\Embeddings\Usage\EmbeddingUsage;
 class EmbeddingsStoreHandler implements EmbeddingsStoreHandlerInterface
 {
     /**
-     * @param array<string, EmbeddingGeneratorInterface> $embeddingGenerators
-     * @param array<string, EmbeddingsStoreInterface> $embeddingStores
-     * @param array<string, EmbeddingAdapterInterface> $embeddingAdapters
+     * @param iterable<string, EmbeddingGeneratorInterface> $embeddingGenerators
+     * @param iterable<string, EmbeddingsStoreInterface> $embeddingStores
+     * @param iterable<string, EmbeddingAdapterInterface> $embeddingAdapters
      * @param array<class-string<EmbeddingInterface>, string> $embeddingClassMapping Mapping from embedding class to store/generator/adapter key
      */
     public function __construct(
-        private readonly array $embeddingGenerators,
-        private readonly array $embeddingStores,
-        private readonly array $embeddingAdapters,
-        private readonly array $embeddingClassMapping,
+        private iterable $embeddingGenerators,
+        private iterable $embeddingStores,
+        private iterable $embeddingAdapters,
+        private array $embeddingClassMapping,
     ) {
+        $this->embeddingGenerators = $embeddingGenerators instanceof \Traversable ? \iterator_to_array($embeddingGenerators) : $embeddingGenerators;
+        $this->embeddingStores = $embeddingStores instanceof \Traversable ? \iterator_to_array($embeddingStores) : $embeddingStores;
+        $this->embeddingAdapters = $embeddingAdapters instanceof \Traversable ? \iterator_to_array($embeddingAdapters) : $embeddingAdapters;
     }
 
     public function handle(EmbeddingsStoreRequest $request): EmbeddingsStoreResponse

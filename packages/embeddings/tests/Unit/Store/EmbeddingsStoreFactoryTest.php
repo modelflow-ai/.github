@@ -151,4 +151,40 @@ class EmbeddingsStoreFactoryTest extends TestCase
 
         $factoryObj->create($dsn);
     }
+
+    public function testCreateWithStringDsn(): void
+    {
+        $dsnString = 'test://localhost';
+        $dsn = Dsn::fromString($dsnString);
+
+        /** @var ObjectProphecy|EmbeddingsStoreInterface $store */
+        $store = $this->prophesize(EmbeddingsStoreInterface::class);
+
+        /** @var ObjectProphecy<EmbeddingsStoreFactoryInterface> $supportedFactory */
+        $supportedFactory = $this->prophesize(EmbeddingsStoreFactoryInterface::class);
+        $supportedFactory->supports($dsn)->willReturn(true);
+        $supportedFactory->create($dsn)->willReturn($store->reveal());
+
+        $factory = new EmbeddingsStoreFactory([$supportedFactory->reveal()]);
+
+        $result = $factory->create($dsnString);
+
+        $this->assertSame($store->reveal(), $result);
+    }
+
+    public function testCreateWithStringDsnAndUnsupportedScheme(): void
+    {
+        $dsnString = 'unsupported://localhost';
+
+        /** @var ObjectProphecy<EmbeddingsStoreFactoryInterface> $factory */
+        $factory = $this->prophesize(EmbeddingsStoreFactoryInterface::class);
+        $factory->supports(\Prophecy\Argument::type(Dsn::class))->willReturn(false);
+
+        $factoryObj = new EmbeddingsStoreFactory([$factory->reveal()]);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('No store supports the given DSN with scheme "unsupported".');
+
+        $factoryObj->create($dsnString);
+    }
 }
