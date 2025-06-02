@@ -26,7 +26,7 @@ interface EmbeddingsStoreInterface
 
     /**
      * @param float[] $vector
-     * @param array<string, scalar> $additionalArguments
+     * @param array<string, mixed> $additionalArguments
      *
      * @return EmbeddingInterface[]
      */

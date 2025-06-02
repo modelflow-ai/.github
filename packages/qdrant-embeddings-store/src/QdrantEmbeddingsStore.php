@@ -16,6 +16,7 @@ namespace ModelflowAi\Embeddings\Store\Qdrant;
 use ModelflowAi\Embeddings\Model\EmbeddingInterface;
 use ModelflowAi\Embeddings\Store\EmbeddingsStoreInterface;
 use Qdrant\Exception\InvalidArgumentException;
+use Qdrant\Models\Filter\Condition\MatchAny;
 use Qdrant\Models\Filter\Condition\MatchString;
 use Qdrant\Models\Filter\Filter;
 use Qdrant\Models\PointsStruct;
@@ -114,7 +115,13 @@ class QdrantEmbeddingsStore implements EmbeddingsStoreInterface
         $filter = new Filter();
 
         foreach ($additionalArguments as $key => $value) {
-            $filter->addMust(new MatchString($key, (string) $value));
+            if (\is_string($value)) {
+                $filter->addMust(new MatchString($key, $value));
+            } elseif (\is_array($value)) {
+                $filter->addMust(new MatchAny($key, $value));
+            } else {
+                throw new \Exception('Unsupported filter value type');
+            }
         }
 
         $searchRequest = (new SearchRequest($vectorStruct))

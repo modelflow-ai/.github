@@ -52,8 +52,16 @@ class FilesystemEmbeddingsStore implements EmbeddingsStoreInterface
 
         foreach ($embeddings as $index => $embedding) {
             foreach ($additionalArguments as $key => $value) {
-                if ($accessor->getValue($embedding, $key) !== $value) {
-                    continue 2;
+                if (\is_string($value)) {
+                    if ($accessor->getValue($embedding, $key) !== $value) {
+                        continue 2;
+                    }
+                } elseif (\is_array($value)) {
+                    if (!\in_array($accessor->getValue($embedding, $key), $value, true)) {
+                        continue 2;
+                    }
+                } else {
+                    throw new \InvalidArgumentException('Unsupported filter value type. Expected string or array.');
                 }
             }
 

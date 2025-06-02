@@ -163,6 +163,80 @@ class QdrantEmbeddingsStoreTest extends TestCase
         $this->assertSame($uuid1, $result[0]->uuid);
         $this->assertSame($uuid2, $result[1]->uuid);
     }
+
+    public function testSimilaritySearchWithStringFilter(): void
+    {
+        $collectionName = \sprintf('%s_test', \microtime(true));
+        $store = new QdrantEmbeddingsStore($this->client, $collectionName);
+
+        $uuid1 = Uuid::uuid4()->toString();
+        $uuid2 = Uuid::uuid4()->toString();
+
+        $embedding1 = new TestEmbedding('Content about ancient secrets', $uuid1, 'category1');
+        $embedding2 = new TestEmbedding('Content about time travel', $uuid2, 'category2');
+
+        $this->embed($embedding1);
+        $this->embed($embedding2);
+
+        $store->addDocuments([$embedding1, $embedding2]);
+
+        $result = $store->similaritySearch(
+            $this->embeddingAdapter->embedText('searching'),
+            2,
+            ['category' => 'category1'],
+        );
+
+        $this->assertCount(1, $result);
+        $this->assertInstanceOf(TestEmbedding::class, $result[0]);
+        $this->assertSame($uuid1, $result[0]->uuid);
+    }
+
+    public function testSimilaritySearchWithArrayFilter(): void
+    {
+        $collectionName = \sprintf('%s_test', \microtime(true));
+        $store = new QdrantEmbeddingsStore($this->client, $collectionName);
+
+        $uuid1 = Uuid::uuid4()->toString();
+        $uuid2 = Uuid::uuid4()->toString();
+        $uuid3 = Uuid::uuid4()->toString();
+
+        $embedding1 = new TestEmbedding('Content about ancient secrets', $uuid1, 'category1');
+        $embedding2 = new TestEmbedding('Content about time travel', $uuid2, 'category2');
+        $embedding3 = new TestEmbedding('Content about magic', $uuid3, 'category3');
+
+        $this->embed($embedding1);
+        $this->embed($embedding2);
+        $this->embed($embedding3);
+
+        $store->addDocuments([$embedding1, $embedding2, $embedding3]);
+
+        $result = $store->similaritySearch(
+            $this->embeddingAdapter->embedText('searching'),
+            3,
+            ['category' => ['category1', 'category2']],
+        );
+
+        $this->assertCount(2, $result);
+        $resultUuids = \array_map(fn ($embedding) => $embedding->uuid, $result); // @phpstan-ignore-line
+        $this->assertContains($uuid1, $resultUuids);
+        $this->assertContains($uuid2, $resultUuids);
+        $this->assertNotContains($uuid3, $resultUuids);
+    }
+
+    public function testSimilaritySearchWithUnsupportedFilterType(): void
+    {
+        $collectionName = \sprintf('%s_test', \microtime(true));
+        $store = new QdrantEmbeddingsStore($this->client, $collectionName);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Unsupported filter value type');
+
+        $store->similaritySearch(
+            $this->embeddingAdapter->embedText('searching'),
+            2,
+            ['category' => new \stdClass()],
+        );
+    }
 }
 
 class TestEmbedding implements EmbeddingInterface
@@ -172,6 +246,7 @@ class TestEmbedding implements EmbeddingInterface
     public function __construct(
         string $content,
         public string $uuid,
+        public ?string $category = null,
     ) {
         $this->content = $content;
         $this->hash = $this->hash($uuid);

@@ -230,6 +230,38 @@ class MemoryEmbeddingsStoreTest extends TestCase
         // Should only return the available matching documents
         $this->assertCount(2, $results);
     }
+
+    public function testSimilaritySearchWithArrayFilter(): void
+    {
+        $embedding1 = new TestEmbedding('content1', [0.1, 0.1, 0.1], 'article');
+        $embedding2 = new TestEmbedding('content2', [0.2, 0.2, 0.2], 'blog');
+        $embedding3 = new TestEmbedding('content3', [0.3, 0.3, 0.3], 'news');
+        $embedding4 = new TestEmbedding('content4', [0.4, 0.4, 0.4], 'tutorial');
+
+        $this->store->addDocuments([$embedding1, $embedding2, $embedding3, $embedding4]);
+
+        // Search with array filter - should match article, blog, and news but not tutorial
+        $searchVector = [0.25, 0.25, 0.25];
+        $results = $this->store->similaritySearch($searchVector, 4, ['category' => ['article', 'blog', 'news']]);
+
+        $this->assertCount(3, $results);
+        $contents = [$results[0]->getContent(), $results[1]->getContent(), $results[2]->getContent()];
+        $this->assertContains($embedding1->getContent(), $contents);
+        $this->assertContains($embedding2->getContent(), $contents);
+        $this->assertContains($embedding3->getContent(), $contents);
+        $this->assertNotContains($embedding4->getContent(), $contents);
+    }
+
+    public function testSimilaritySearchWithUnsupportedFilterType(): void
+    {
+        $embedding1 = new TestEmbedding('content1', [0.1, 0.1, 0.1]);
+        $this->store->addDocument($embedding1);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Unsupported filter value type');
+
+        $this->store->similaritySearch([0.1, 0.1, 0.1], 1, ['category' => 123]);
+    }
 }
 
 class TestEmbedding implements EmbeddingInterface

@@ -246,4 +246,81 @@ class ThreadTest extends TestCase
         $this->assertSame(['role' => 'system', 'content' => 'instructions'], $request->getMessages()[0]?->toArray());
         $this->assertSame(['role' => 'user', 'content' => 'Context: {"key":"value"}'], $request->getMessages()[1]?->toArray());
     }
+
+    public function testBuildRequest(): void
+    {
+        $expert = new Expert(
+            'name',
+            'description',
+            'instructions',
+            [CapabilityCriteria::SMART],
+        );
+
+        $thread = new Thread($this->requestHandler->reveal(), $expert);
+
+        $this->requestHandler->createRequest()
+            ->willReturn(new AIChatRequestBuilder(fn (AIChatRequest $request) => new AIChatResponse(
+                $request,
+                new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Test message'),
+                new Usage(0, 0, 0),
+            )));
+
+        $request = $thread->buildRequest();
+        $this->assertInstanceOf(AIChatRequest::class, $request);
+        $this->assertCount(1, $request->getMessages());
+        $this->assertSame(['role' => 'system', 'content' => 'instructions'], $request->getMessages()[0]?->toArray());
+    }
+
+    public function testBuildStreamedRequest(): void
+    {
+        $expert = new Expert(
+            'name',
+            'description',
+            'instructions',
+            [CapabilityCriteria::SMART],
+        );
+
+        $thread = new Thread($this->requestHandler->reveal(), $expert);
+
+        $this->requestHandler->createStreamedRequest()
+            ->willReturn(new AIChatStreamedRequestBuilder(fn (AIChatStreamedRequest $request) => new AIChatResponseStream(
+                $request,
+                new \ArrayIterator([
+                    new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Test message'),
+                ]),
+            )));
+
+        $request = $thread->buildStreamedRequest();
+        $this->assertInstanceOf(AIChatStreamedRequest::class, $request);
+    }
+
+    public function testBuildRequestWithContextAndMetadata(): void
+    {
+        $expert = new Expert(
+            'name',
+            'description',
+            'instructions',
+            [CapabilityCriteria::SMART],
+        );
+
+        $thread = new Thread($this->requestHandler->reveal(), $expert);
+        $thread->addContext('key', 'value');
+        $thread->addMetadata(['metadata_key' => 'metadata_value']);
+        $thread->addUserMessage('Test message');
+
+        $this->requestHandler->createRequest()
+            ->willReturn(new AIChatRequestBuilder(fn (AIChatRequest $request) => new AIChatResponse(
+                $request,
+                new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Test message'),
+                new Usage(0, 0, 0),
+            )));
+
+        $request = $thread->buildRequest();
+        $this->assertInstanceOf(AIChatRequest::class, $request);
+        $this->assertCount(3, $request->getMessages());
+        $this->assertSame(['role' => 'system', 'content' => 'instructions'], $request->getMessages()[0]?->toArray());
+        $this->assertSame(['role' => 'user', 'content' => 'Context: {"key":"value"}'], $request->getMessages()[1]?->toArray());
+        $this->assertSame(['role' => 'user', 'content' => 'Test message'], $request->getMessages()[2]?->toArray());
+        $this->assertSame(['metadata_key' => 'metadata_value'], $request->getMetadata());
+    }
 }

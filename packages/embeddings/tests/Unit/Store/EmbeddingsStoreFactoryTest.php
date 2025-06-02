@@ -52,6 +52,33 @@ class EmbeddingsStoreFactoryTest extends TestCase
         $this->assertSame($store->reveal(), $result);
     }
 
+    public function testCreateWithSupportedDsnAsString(): void
+    {
+        $dsn = new Dsn('test', 'localhost');
+
+        /** @var ObjectProphecy|EmbeddingsStoreInterface $store */
+        $store = $this->prophesize(EmbeddingsStoreInterface::class);
+
+        /** @var ObjectProphecy<EmbeddingsStoreFactoryInterface> $supportedFactory */
+        $supportedFactory = $this->prophesize(EmbeddingsStoreFactoryInterface::class);
+        $supportedFactory->supports($dsn)->willReturn(true);
+        $supportedFactory->create($dsn)->willReturn($store->reveal());
+
+        /** @var ObjectProphecy<EmbeddingsStoreFactoryInterface> $unsupportedFactory */
+        $unsupportedFactory = $this->prophesize(EmbeddingsStoreFactoryInterface::class);
+        $unsupportedFactory->supports($dsn)->willReturn(false);
+        $unsupportedFactory->create($dsn)->shouldNotBeCalled();
+
+        $factory = new EmbeddingsStoreFactory([
+            $unsupportedFactory->reveal(),
+            $supportedFactory->reveal(),
+        ]);
+
+        $result = $factory->create('test://localhost');
+
+        $this->assertSame($store->reveal(), $result);
+    }
+
     public function testCreateWithUnsupportedDsn(): void
     {
         $dsn = new Dsn('unsupported', 'localhost');
@@ -93,6 +120,26 @@ class EmbeddingsStoreFactoryTest extends TestCase
         ]);
 
         $this->assertTrue($factory->supports($dsn));
+    }
+
+    public function testSupportsWithSupportedDsnAsString(): void
+    {
+        $dsn = new Dsn('test', 'localhost');
+
+        /** @var ObjectProphecy<EmbeddingsStoreFactoryInterface> $supportedFactory */
+        $supportedFactory = $this->prophesize(EmbeddingsStoreFactoryInterface::class);
+        $supportedFactory->supports($dsn)->willReturn(true);
+
+        /** @var ObjectProphecy<EmbeddingsStoreFactoryInterface> $unsupportedFactory */
+        $unsupportedFactory = $this->prophesize(EmbeddingsStoreFactoryInterface::class);
+        $unsupportedFactory->supports($dsn)->willReturn(false);
+
+        $factory = new EmbeddingsStoreFactory([
+            $unsupportedFactory->reveal(),
+            $supportedFactory->reveal(),
+        ]);
+
+        $this->assertTrue($factory->supports('test://localhost'));
     }
 
     public function testSupportsWithUnsupportedDsn(): void
@@ -150,5 +197,41 @@ class EmbeddingsStoreFactoryTest extends TestCase
         $this->expectExceptionMessage('No store supports the given DSN with scheme "test".');
 
         $factoryObj->create($dsn);
+    }
+
+    public function testCreateWithStringDsn(): void
+    {
+        $dsnString = 'test://localhost';
+        $dsn = Dsn::fromString($dsnString);
+
+        /** @var ObjectProphecy|EmbeddingsStoreInterface $store */
+        $store = $this->prophesize(EmbeddingsStoreInterface::class);
+
+        /** @var ObjectProphecy<EmbeddingsStoreFactoryInterface> $supportedFactory */
+        $supportedFactory = $this->prophesize(EmbeddingsStoreFactoryInterface::class);
+        $supportedFactory->supports($dsn)->willReturn(true);
+        $supportedFactory->create($dsn)->willReturn($store->reveal());
+
+        $factory = new EmbeddingsStoreFactory([$supportedFactory->reveal()]);
+
+        $result = $factory->create($dsnString);
+
+        $this->assertSame($store->reveal(), $result);
+    }
+
+    public function testCreateWithStringDsnAndUnsupportedScheme(): void
+    {
+        $dsnString = 'unsupported://localhost';
+
+        /** @var ObjectProphecy<EmbeddingsStoreFactoryInterface> $factory */
+        $factory = $this->prophesize(EmbeddingsStoreFactoryInterface::class);
+        $factory->supports(\Prophecy\Argument::type(Dsn::class))->willReturn(false);
+
+        $factoryObj = new EmbeddingsStoreFactory([$factory->reveal()]);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('No store supports the given DSN with scheme "unsupported".');
+
+        $factoryObj->create($dsnString);
     }
 }
