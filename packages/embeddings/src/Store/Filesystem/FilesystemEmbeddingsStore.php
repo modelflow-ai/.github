@@ -95,7 +95,7 @@ class FilesystemEmbeddingsStore implements EmbeddingsStoreInterface
         }
 
         /** @var EmbeddingInterface[] $result */
-        $result = \unserialize((string)\file_get_contents($this->filePath));
+        $result = \unserialize((string) \file_get_contents($this->filePath));
 
         return $result;
     }
