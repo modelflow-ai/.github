@@ -6,3 +6,7 @@
 /var
 tmp.jpeg
 .idea
+node_modules
+dist
+docs/.vitepress/cache
+tmp
