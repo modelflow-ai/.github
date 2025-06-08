@@ -1,6 +1,6 @@
 # Examples
 
-> **Placeholder Content** - This should contain practical, real-world examples and tutorials.
+> **🚧 Coming Soon** - This documentation is currently under development. The content below provides working code examples that demonstrate real usage patterns.
 
 ## What Should Be Here
 
@@ -13,9 +13,36 @@
 ### 2. Example Categories
 
 #### Quick Examples (Code Snippets)
-- Simple usage patterns for each capability
-- Common integration patterns
-- Utility functions and helpers
+
+**Simple Chat Example:**
+```php
+use ModelflowAi\Chat\AIChatRequestHandler;
+use ModelflowAi\OpenaiAdapter\Chat\OpenaiChatAdapter;
+
+$client = OpenAI::client($_ENV['OPENAI_API_KEY']);
+$adapter = new OpenaiChatAdapter($client, 'gpt-4o');
+$chatHandler = new AIChatRequestHandler(new DecisionTree([new DecisionRule($adapter)]));
+
+$response = $chatHandler->createRequest()
+    ->addSystemMessage('You are a helpful assistant.')
+    ->addUserMessage('Explain PHP in one sentence.')
+    ->execute();
+
+echo $response->getMessage()->content;
+```
+
+**Embeddings Search:**
+```php
+// Store documents
+$embeddingsHandler->createStoreRequest()
+    ->addContent('PHP is great for web development')
+    ->withKey('default')
+    ->execute();
+
+// Search
+$results = $embeddingsHandler->createSimilarityRequest('web programming', 'default')
+    ->execute();
+```
 
 #### Complete Applications
 - Full working applications

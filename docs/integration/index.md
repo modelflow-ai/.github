@@ -1,6 +1,6 @@
 # Integration
 
-> **Placeholder Content** - This should cover framework integration and setup options.
+> **🚧 Coming Soon** - This documentation is currently under development. The content below provides a preview of what will be covered in the complete version.
 
 ## What Should Be Here
 
@@ -12,10 +12,28 @@
 ### 2. Framework Integration
 
 #### Symfony Bundle
-- Complete Symfony Bundle documentation
-- Dependency injection setup
-- Configuration management
-- Service registration
+```yaml
+# config/packages/modelflow_ai.yaml
+modelflow_ai:
+    providers:
+        openai:
+            enabled: true
+            credentials:
+                api_key: '%env(OPENAI_API_KEY)%'
+        ollama:
+            enabled: true
+            url: '%env(OLLAMA_URL)%/'
+    
+    adapters:
+        gpt4o:
+            enabled: true
+            criteria:
+                - !php/const ModelflowAi\DecisionTree\Criteria\CapabilityCriteria::ADVANCED
+        llama3_2:
+            enabled: true
+            criteria:
+                - !php/const ModelflowAi\DecisionTree\Criteria\PrivacyCriteria::HIGH
+```
 
 #### Standalone Usage  
 - Manual setup without frameworks

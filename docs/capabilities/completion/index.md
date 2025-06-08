@@ -1,41 +1,82 @@
 # Completion
 
-> **Placeholder Content** - This should be the comprehensive Completion capability documentation.
+> **🚧 Coming Soon** - This documentation is currently under development. The content below provides a preview of what will be covered in the complete version.
 
-## What Should Be Here
+## Completion Overview
 
-### 1. Completion Overview
-- What is text completion
-- When to use Completion vs Chat
-- Single-turn vs multi-turn interactions
+Text completion is perfect for single-shot text generation tasks where you need to complete or continue a prompt without maintaining conversation context.
 
-### 2. Core Features
-- **Text Generation** - Complete or continue text
-- **Prompt-based** - Single prompt input
-- **Streaming** - Real-time text generation
-- **Parameter Control** - Temperature, max tokens, etc.
-- **Stop Sequences** - Control generation ending
+**When to use Completion:**
+- Single-shot text generation
+- Code completion and generation
+- Creative writing prompts
+- Template filling
+- Simple text transformations
 
-### 3. Quick Start
+**When to use Chat instead:**
+- Multi-turn conversations
+- Complex reasoning requiring context
+- Tool/function calling
+- Vision tasks
+
+## Core Features
+
+- **📝 Text Generation** - Complete or continue text from prompts
+- **⚡ Streaming** - Real-time text generation
+- **🎛️ Parameter Control** - Temperature, max tokens, stop sequences
+- **🔄 Provider Agnostic** - Works with multiple AI providers
+- **🚀 High Performance** - Optimized for single-turn generation
+
+## Quick Start
+
+### Installation
+```bash
+composer require modelflow-ai/completion modelflow-ai/ollama-adapter
+```
+
+### Basic Usage
 ```php
-// Simple completion example with correct API
-use ModelflowAi\Completion\AICompletionRequestHandlerInterface;
+use ModelflowAi\Completion\AICompletionRequestHandler;
+use ModelflowAi\DecisionTree\DecisionRule;
+use ModelflowAi\DecisionTree\DecisionTree;
+use ModelflowAi\Ollama\Ollama;
+use ModelflowAi\OllamaAdapter\Completion\OllamaCompletionAdapter;
 
-$response = $completionHandler->createRequest()
-    ->setPrompt('The future of artificial intelligence is')
-    ->setMaxTokens(100)
+// Setup
+$client = Ollama::client();
+$adapter = new OllamaCompletionAdapter($client, 'llama3.2');
+$completionHandler = new AICompletionRequestHandler(new DecisionTree([new DecisionRule($adapter)]));
+
+// Complete a prompt
+$response = $completionHandler->createRequest('The three most important programming principles are:')
+    ->build()
+    ->execute();
+
+echo $response->getContent();
+// Output: 1. Don't Repeat Yourself (DRY) - avoid code duplication
+// 2. Single Responsibility Principle - each function should have one purpose
+// 3. Keep It Simple, Stupid (KISS) - write clear, maintainable code
+```
+
+### With Parameters
+```php
+$response = $completionHandler->createRequest('Write a haiku about PHP:')
+    ->withMaxTokens(50)
+    ->withTemperature(0.7)
+    ->build()
     ->execute();
 
 echo $response->getContent();
 ```
 
-### 4. Supported Providers
-- OpenAI GPT (gpt-3.5-turbo-instruct)
-- Mistral AI (all models)
-- Fireworks.ai (various models)
-- Ollama (all local models)
+## Supported Providers
 
-Note: Some providers like Anthropic focus on chat rather than completion.
+| Provider | Completion | Streaming | Local |
+|----------|------------|-----------|-------|
+| **Ollama** | ✅ | ✅ | ✅ |
+| **Fireworks.ai** | ✅ | ✅ | ❌ |
+
+*Note: OpenAI, Anthropic, Google Gemini, and Mistral focus on chat capabilities rather than completion.*
 
 ### 5. Use Cases
 - **Code Generation** - Complete functions and snippets

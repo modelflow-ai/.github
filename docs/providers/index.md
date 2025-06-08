@@ -1,20 +1,19 @@
 # Providers Overview
 
-> **Placeholder Content** - This should be the comprehensive provider comparison and documentation.
+> **🚧 Coming Soon** - This documentation is currently under development. The content below provides a preview based on actual provider capabilities.
 
-## What Should Be Here
+## Provider Comparison
 
-### 1. Provider Comparison Table
 Complete table showing which providers support which capabilities:
 
 | Provider | Chat | Completion | Embeddings | Images | Streaming | Local |
 |----------|------|------------|------------|--------|-----------|-------|
-| OpenAI | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
-| Anthropic | ✅ | ❌ | ❌ | ❌ (Vision) | ✅ | ❌ |
-| Ollama | ✅ | ✅ | ✅ | ✅ (Vision) | ✅ | ✅ |
-| Google Gemini | ✅ | ❌ | ❌ | ✅ (Vision) | ✅ | ❌ |
-| Mistral AI | ✅ | ❌ | ✅ | ❌ | ✅ | ❌ |
-| Fireworks.ai | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
+| **OpenAI** | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ |
+| **Anthropic** | ✅ | ❌ | ❌ | ✅ (Vision) | ✅ | ❌ |
+| **Ollama** | ✅ | ✅ | ✅ | ✅ (Vision) | ✅ | ✅ |
+| **Google Gemini** | ✅ | ❌ | ❌ | ✅ (Vision) | ✅ | ❌ |
+| **Mistral AI** | ✅ | ❌ | ✅ | ❌ | ✅ | ❌ |
+| **Fireworks.ai** | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
 
 ### 2. Provider Selection Guide
 - **For Privacy** → Ollama (local models)

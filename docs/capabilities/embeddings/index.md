@@ -1,39 +1,103 @@
 # Embeddings
 
-> **Placeholder Content** - This should be the comprehensive Embeddings capability documentation.
+> **🚧 Coming Soon** - This documentation is currently under development. The content below provides a preview of what will be covered in the complete version.
 
-## What Should Be Here
+## Embeddings Overview
 
-### 1. Embeddings Overview
-- What are vector embeddings
-- How they capture semantic meaning
-- Why they're useful for AI applications
+Vector embeddings convert text into numerical vectors that capture semantic meaning, enabling powerful search, similarity, and recommendation systems.
 
-### 2. Core Features
-- **Text to Vector** - Convert text into numerical vectors
-- **Semantic Similarity** - Find related content
-- **Batch Processing** - Handle multiple texts efficiently
-- **Storage Integration** - Connect to vector databases
-- **Search & Retrieval** - Build search systems
+**What are embeddings:**
+- Numerical representations of text that preserve semantic meaning
+- Enable similarity comparisons between pieces of text
+- Foundation for RAG (Retrieval-Augmented Generation) systems
+- Power semantic search and recommendation engines
 
-### 3. Quick Start
-```php
-// Simple embeddings example with correct API
-use ModelflowAi\Embeddings\AIEmbeddingsRequestHandlerInterface;
+**Use cases:**
+- Semantic search engines
+- Document similarity and clustering
+- Retrieval-Augmented Generation (RAG)
+- Content recommendation systems
+- Duplicate content detection
 
-$response = $embeddingsHandler->createRequest()
-    ->addText('Modelflow AI is awesome')
-    ->execute();
+## Core Features
 
-$vector = $response->getEmbeddings()[0]->getVector();
-echo "Generated " . count($vector) . " dimensions";
+- **🔢 Text to Vector** - Convert text into numerical vectors
+- **🔍 Semantic Similarity** - Find related content based on meaning
+- **⚡ Batch Processing** - Handle multiple texts efficiently
+- **💾 Storage Integration** - Connect to vector databases (Qdrant, Elasticsearch)
+- **🔄 Provider Agnostic** - Works with multiple embedding providers
+
+## Quick Start
+
+### Installation
+```bash
+composer require modelflow-ai/embeddings modelflow-ai/openai-adapter
+# Optional: modelflow-ai/qdrant-embeddings-store
 ```
 
-### 4. Supported Providers
-- **OpenAI** - text-embedding-ada-002, text-embedding-3-small/large
-- **Mistral AI** - mistral-embed
-- **Fireworks.ai** - various embedding models
-- **Ollama** - local embedding models
+### Basic Usage
+```php
+use ModelflowAi\Embeddings\EmbeddingsRequestHandler;
+use ModelflowAi\Embeddings\Model\Embedding;
+use ModelflowAi\Embeddings\Handler\EmbeddingsStoreHandler;
+use ModelflowAi\Embeddings\Handler\EmbeddingsSimilarityHandler;
+use ModelflowAi\Embeddings\Generator\EmbeddingGenerator;
+use ModelflowAi\Embeddings\Splitter\EmbeddingSplitter;
+use ModelflowAi\Embeddings\Formatter\EmbeddingFormatter;
+use ModelflowAi\Embeddings\Store\Filesystem\FilesystemEmbeddingsStore;
+use ModelflowAi\OpenaiAdapter\Embeddings\OpenaiEmbeddingAdapter;
+
+// Setup
+$adapter = new OpenaiEmbeddingAdapter(
+    OpenAI::client($_ENV['OPENAI_API_KEY']), 
+    'text-embedding-3-small'
+);
+$store = new FilesystemEmbeddingsStore('/tmp/embeddings.txt');
+
+$generator = new EmbeddingGenerator(
+    new EmbeddingSplitter(500),
+    new EmbeddingFormatter()
+);
+
+$storeHandler = new EmbeddingsStoreHandler(
+    ['default' => $generator],
+    ['default' => $store],
+    ['default' => $adapter],
+    [Embedding::class => 'default']
+);
+
+$similarityHandler = new EmbeddingsSimilarityHandler(
+    ['default' => $store],
+    ['default' => $adapter]
+);
+
+$embeddingsHandler = new EmbeddingsRequestHandler($storeHandler, $similarityHandler);
+
+// Store documents
+$embeddingsHandler->createStoreRequest()
+    ->addContent('PHP is a popular web development language')
+    ->addContent('Python is great for data science and AI')
+    ->withKey('default')
+    ->execute();
+
+// Search for similar content
+$results = $embeddingsHandler->createSimilarityRequest('web programming languages', 'default')
+    ->withLimit(5)
+    ->execute();
+
+foreach ($results as $result) {
+    echo "Match: " . $result->getContent() . " (score: " . $result->getDistance() . ")\n";
+}
+```
+
+## Supported Providers
+
+| Provider | Embeddings | Models | Local |
+|----------|------------|--------|-------|
+| **OpenAI** | ✅ | text-embedding-3-small/large, ada-002 | ❌ |
+| **Mistral AI** | ✅ | mistral-embed | ❌ |
+| **Fireworks.ai** | ✅ | Various embedding models | ❌ |
+| **Ollama** | ✅ | Local embedding models | ✅ |
 
 ### 5. Storage Backends
 - **Qdrant** - Vector database

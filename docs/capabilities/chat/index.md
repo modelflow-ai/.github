@@ -1,41 +1,87 @@
 # Chat
 
-> **Placeholder Content** - This should be the comprehensive Chat capability documentation.
+> **🚧 Coming Soon** - This documentation is currently under development. The content below provides a preview of what will be covered in the complete version.
 
-## What Should Be Here
+## Chat Overview
 
-### 1. Chat Overview
-- What is the Chat capability
-- When to use Chat vs Completion
-- Key features and benefits
+Chat is Modelflow AI's conversational capability, designed for multi-turn conversations with context awareness. Use Chat for complex interactions where the AI needs to remember previous messages and maintain conversation state.
 
-### 2. Core Features
-- **Conversational AI** - Multi-turn conversations
-- **Streaming** - Real-time response streaming  
-- **Function Calling** - Tool integration and execution
-- **Multi-modal** - Text + images in conversations
-- **Provider Agnostic** - Works with any AI provider
+**When to use Chat:**
+- Building chatbots and virtual assistants
+- Multi-turn conversations requiring context
+- Complex reasoning tasks
+- Tool/function calling scenarios
+- Vision tasks (image analysis)
 
-### 3. Quick Start
-```php
-// Simple chat example with correct API
-use ModelflowAi\Chat\AIChatRequestHandlerInterface;
+**When to use Completion instead:**
+- Single-shot text generation
+- Simple text completion tasks
+- Template filling scenarios
 
-$response = $chatHandler->createRequest()
-    ->addUserMessage('Hello!')
-    ->execute();
+## Core Features
 
-echo $response->getMessage()->getContent();
+- **🗨️ Conversational AI** - Multi-turn conversations with context
+- **⚡ Streaming** - Real-time response streaming  
+- **🔧 Tool Calling** - Function execution and tool integration
+- **👁️ Vision** - Text + images in conversations (multimodal)
+- **🔄 Provider Agnostic** - Works with any AI provider
+- **🎯 Smart Routing** - Automatic provider selection based on criteria
+
+## Quick Start
+
+### Installation
+```bash
+composer require modelflow-ai/chat modelflow-ai/openai-adapter
 ```
 
-### 4. Supported Providers
-Table showing which providers support which chat features:
-- OpenAI GPT (streaming, functions, vision)
-- Anthropic Claude (streaming, functions, vision)
-- Google Gemini (streaming, functions, vision)
-- Mistral AI (streaming, functions)
-- Fireworks.ai (streaming, functions, vision)
-- Ollama (streaming, limited functions, vision)
+### Basic Usage
+```php
+use ModelflowAi\Chat\AIChatRequestHandler;
+use ModelflowAi\OpenaiAdapter\Chat\OpenaiChatAdapter;
+use ModelflowAi\DecisionTree\DecisionTree;
+use ModelflowAi\DecisionTree\DecisionRule;
+
+// Setup
+$client = OpenAI::client($_ENV['OPENAI_API_KEY']);
+$adapter = new OpenaiChatAdapter($client, 'gpt-4o');
+$chatHandler = new AIChatRequestHandler(new DecisionTree([new DecisionRule($adapter)]));
+
+// Simple conversation
+$response = $chatHandler->createRequest()
+    ->addSystemMessage('You are a helpful assistant.')
+    ->addUserMessage('What are the benefits of PHP?')
+    ->execute();
+
+echo $response->getMessage()->content;
+```
+
+### Streaming Responses
+```php
+$response = $chatHandler->createStreamedRequest()
+    ->addUserMessage('Write a short story about a robot')
+    ->execute();
+
+foreach ($response->getMessageStream() as $index => $message) {
+    if (0 === $index) {
+        echo $message->role->value . ': ';
+    }
+    echo $message->content;
+    flush();
+}
+```
+
+## Supported Providers
+
+| Provider | Chat | Streaming | Tools | Vision | Local |
+|----------|------|-----------|-------|--------|-------|
+| **OpenAI** | ✅ | ✅ | ✅ | ✅ | ❌ |
+| **Anthropic** | ✅ | ✅ | ✅ | ✅ | ❌ |
+| **Google Gemini** | ✅ | ✅ | ✅ | ✅ | ❌ |
+| **Mistral AI** | ✅ | ✅ | ✅ | ❌ | ❌ |
+| **Fireworks.ai** | ✅ | ✅ | ✅ | ✅ | ❌ |
+| **Ollama** | ✅ | ✅ | ⚠️ | ✅ | ✅ |
+
+*⚠️ Limited tool support*
 
 ### 5. Installation & Configuration
 - Package installation
