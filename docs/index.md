@@ -104,7 +104,7 @@ $adapter = new OpenaiChatAdapter($client, 'gpt-4o');
 ```php [Ollama Local]
 use ModelflowAi\OllamaAdapter\Chat\OllamaChatAdapter;
 
-$adapter = new OllamaChatAdapter($client, 'llama3.2');
+$adapter = new OllamaChatAdapter($client, 'llama4');
 ```
 
 ```php [Google Gemini]

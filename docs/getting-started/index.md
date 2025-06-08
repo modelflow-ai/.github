@@ -197,7 +197,7 @@ use ModelflowAi\OllamaAdapter\Completion\OllamaCompletionAdapter;
 
 // Create Fireworks.ai client and adapter
 $client = Ollama::client();
-$adapter = new OllamaCompletionAdapter($client, 'tinyllama');
+$adapter = new OllamaCompletionAdapter($client, 'llama4');
 
 // Create decision tree and handler
 $decisionTree = new DecisionTree([new DecisionRule($adapter)]);
@@ -279,7 +279,6 @@ use Symfony\Component\HttpClient\HttpClient;
 
 // Create OpenAI client and adapter
 $openaiClient = OpenAI::client($_ENV['OPENAI_API_KEY']);
-$httpClient = HttpClient::create();
 $adapter = new OpenAIImageGenerationAdapter($httpClient, $openaiClient, 'dall-e-3');
 
 // Create decision tree and handler
@@ -305,16 +304,16 @@ echo "Image saved as futuristic_city.png\n";
 
 ## Next Steps
 
-- **📦 [Installation](./installation)** - Detailed installation and setup guide
 - **🚀 [Quick Start](./quick-start)** - Working examples for all capabilities
+- **📦 [Installation](./installation)** - Detailed installation and setup guide
 - **🏗️ [Architecture](./architecture)** - Understanding how Modelflow AI works
 - **💡 [Core Concepts](./concepts)** - Key concepts and patterns
 
 ## Choose Your Path
 
-**New to AI development?** Start with [Installation](./installation) for a step-by-step setup guide.
-
 **Want to see code?** Jump to [Quick Start](./quick-start) for copy-pasteable examples.
+
+**Ready to install?** Head to [Installation](./installation) for a step-by-step setup guide.
 
 **Need specific capability?** Explore [Chat](/capabilities/chat/), [Completion](/capabilities/completion/), or [Embeddings](/capabilities/embeddings/).
 

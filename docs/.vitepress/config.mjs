@@ -1,6 +1,17 @@
-export default {
+import { withMermaid } from "vitepress-plugin-mermaid";
+
+export default withMermaid({
   title: 'Modelflow AI',
   description: 'Unified PHP AI Library - Connect to any AI provider with a single, elegant interface',
+  
+  // Optionally, you can pass MermaidConfig
+  mermaid: {
+    // refer https://mermaid.js.org/config/setup/modules/mermaidAPI.html#mermaidapi-configuration-defaults for options
+  },
+  // Optionally, you can pass MermaidPluginConfig
+  mermaidPlugin: {
+    class: "mermaid" // set additional css classes for parent container 
+  },
 
   themeConfig: {
     nav: [
@@ -26,8 +37,8 @@ export default {
           text: 'Getting Started',
           items: [
             { text: 'Overview', link: '/getting-started/' },
-            { text: 'Installation', link: '/getting-started/installation' },
             { text: 'Quick Start', link: '/getting-started/quick-start' },
+            { text: 'Installation', link: '/getting-started/installation' },
             { text: 'Architecture', link: '/getting-started/architecture' },
             { text: 'Core Concepts', link: '/getting-started/concepts' }
           ]
@@ -145,4 +156,4 @@ export default {
       copyright: 'Copyright © 2024 Modelflow AI'
     }
   }
-}
+});
