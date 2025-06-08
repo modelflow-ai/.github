@@ -3,6 +3,7 @@ import { withMermaid } from "vitepress-plugin-mermaid";
 export default withMermaid({
   title: 'Modelflow AI',
   description: 'Unified PHP AI Library - Connect to any AI provider with a single, elegant interface',
+  base: '/.github/',
   
   // Optionally, you can pass MermaidConfig
   mermaid: {
