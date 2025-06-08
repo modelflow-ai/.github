@@ -27,7 +27,12 @@ use ModelflowAi\PromptTemplate\ChatPromptTemplate;
 
 $adapter->addMessage(new AIChatResponseMessage(AIChatMessageRoleEnum::SYSTEM, 'LEAVE ME ALONE'));
 
-$response = $handler->createRequest()
+$response = $handler->createRequest(
+    ...ChatPromptTemplate::create(
+        new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'You are an {feeling} bot'),
+        new AIChatMessage(AIChatMessageRoleEnum::USER, 'Hello {where}!'),
+    )->format(['where' => 'world', 'feeling' => 'angry']),
+)
     ->addCriteria(PrivacyCriteria::HIGH)
     ->execute();
 
