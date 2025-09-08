@@ -1,10 +1,19 @@
 # Function Calling
 
-> **🚧 Coming Soon** - This documentation is currently under development. The content below provides a preview of what will be covered in the complete version.
+Function calling (also known as tool use) allows AI models to interact with external systems, APIs, and databases by calling PHP methods. Modelflow AI provides a robust system for defining, executing, and managing function calls within chat conversations.
+
+## Overview
+
+Function calling enables AI models to:
+- Access real-time data (weather, stock prices, news)
+- Interact with databases and APIs
+- Perform calculations and data processing
+- Execute actions (send emails, create tickets, update records)
+- Integrate with external services
 
 ## Tool Definition
 
-Tools are defined using PHPDoc comments to describe their functionality to AI models.
+Tools in Modelflow AI are PHP classes with methods that can be called by the AI. The system uses PHPDoc comments to generate function schemas that AI models understand.
 
 ### Simple Tool Example
 ```php
@@ -66,7 +75,7 @@ class DatabaseTool
 $response = $chatHandler->createRequest()
     ->addSystemMessage('You are a helpful assistant with access to weather data.')
     ->addUserMessage('What is the weather like in Paris?')
-    ->addTool(new WeatherTool())
+    ->tool('get_current_weather', new WeatherTool(), 'getCurrentWeather')
     ->execute();
 
 echo $response->getMessage()->content;
@@ -78,95 +87,45 @@ echo $response->getMessage()->content;
 ```php
 $response = $chatHandler->createRequest()
     ->addUserMessage('Check the weather in London and find users named John')
-    ->addTool(new WeatherTool())
-    ->addTool(new DatabaseTool())
+    ->tool('get_current_weather', new WeatherTool(), 'getCurrentWeather')
+    ->tool('search_users', new DatabaseTool(), 'searchUsers')
     ->execute();
 
 echo $response->getMessage()->content;
 ```
 
-### Tool with Criteria
-```php
-use ModelflowAi\DecisionTree\Criteria\FeatureCriteria;
-
-$response = $chatHandler->createRequest()
-    ->addUserMessage('Calculate 15% tip on $85.50')
-    ->addTool(new CalculatorTool())
-    ->withCriteria(FeatureCriteria::TOOLS) // Ensure a model with tool support
-    ->execute();
-```
-
-## Advanced Tool Usage
-
-### Conditional Tool Execution
-```php
-class ConditionalTool
-{
-    /**
-     * Send an email notification
-     * 
-     * Only use this tool if the user explicitly asks to send an email or notification.
-     * Do not use for general information requests.
-     * 
-     * @param string $to Email recipient
-     * @param string $subject Email subject
-     * @param string $message Email content
-     * 
-     * @return array{sent: bool, message_id: string|null}
-     */
-    public function sendEmail(string $to, string $subject, string $message): array
-    {
-        // Email sending logic
-        return ['sent' => true, 'message_id' => 'msg_123'];
-    }
-}
-```
-
-### Tool Error Handling
-```php
-class RobustTool
-{
-    /**
-     * Get stock price for a symbol
-     * 
-     * @param string $symbol Stock symbol (e.g., AAPL, GOOGL)
-     * 
-     * @return array{symbol: string, price: float|null, error: string|null}
-     */
-    public function getStockPrice(string $symbol): array
-    {
-        try {
-            // API call to get stock price
-            $price = $this->stockApi->getPrice($symbol);
-            return [
-                'symbol' => $symbol,
-                'price' => $price,
-                'error' => null
-            ];
-        } catch (\Exception $e) {
-            return [
-                'symbol' => $symbol,
-                'price' => null,
-                'error' => 'Could not fetch price: ' . $e->getMessage()
-            ];
-        }
-    }
-}
-```
-
-## Tool Best Practices
+## Best Practices
 
 ### PHPDoc Guidelines
-- **Clear descriptions** - Explain what the tool does
-- **Usage guidelines** - When to use the tool
-- **Parameter documentation** - Describe each parameter
-- **Return type documentation** - Document return structure
-- **Examples** - Provide usage examples in comments
+- **Clear Descriptions**: Write concise but complete descriptions of what the tool does
+- **Usage Instructions**: Include when and why to use the tool in the description
+- **Parameter Documentation**: Document each parameter with type and constraints
+- **Return Type Documentation**: Clearly document the structure of return values
+- **Examples**: Include usage examples in the PHPDoc comments
 
 ### Error Handling
-- **Graceful failures** - Return error information instead of throwing
-- **Validation** - Validate input parameters
-- **Logging** - Log tool usage for debugging
-- **Rate limiting** - Respect external API limits
+- **Graceful Failures**: Return error information instead of throwing exceptions
+- **Input Validation**: Validate all input parameters before processing
+- **Detailed Logging**: Log all tool usage for debugging and monitoring
+- **Rate Limiting**: Implement and respect rate limits for external APIs
+- **Timeout Handling**: Set appropriate timeouts for external calls
 
-*Complete documentation coming soon...*
+### Security Considerations
+- **Permission Checks**: Implement proper authorization for sensitive operations
+- **Input Sanitization**: Sanitize all user inputs to prevent injection attacks
+- **API Key Management**: Never expose API keys in tool responses
+- **Audit Logging**: Log all tool executions for security auditing
+- **Data Privacy**: Ensure tools comply with data protection regulations
+
+### Performance Optimization
+- **Caching**: Cache frequently requested data when appropriate
+- **Batch Operations**: Support batch operations to reduce API calls
+- **Async Execution**: Use async operations for I/O-bound tasks
+- **Connection Pooling**: Reuse connections for database and API calls
+- **Result Pagination**: Implement pagination for large result sets
+
+## Next Steps
+
+- Explore [Conversations](conversations.md) for multi-turn tool interactions
+- Learn about [Streaming](streaming.md) with tool calls
+- Review [Basic Usage](basic-usage.md) for foundational concepts

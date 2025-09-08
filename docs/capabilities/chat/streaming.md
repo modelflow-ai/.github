@@ -1,104 +1,89 @@
 # Streaming
 
-> **🚧 Coming Soon** - This documentation is currently under development. The content below provides a preview of what will be covered in the complete version.
+Streaming provides real-time AI responses as they're generated, improving user experience and handling long outputs efficiently.
 
-## Streaming Responses
+## Basic Usage
 
-Get responses as they're generated for better user experience.
-
-### Basic Streaming
 ```php
 $response = $chatHandler->createStreamedRequest()
     ->addUserMessage('Write a short story about AI')
     ->execute();
 
-foreach ($response->getMessageStream() as $index => $message) {
-    if (0 === $index) {
-        echo $message->role->value . ': ';
-    }
-    echo $message->content;
-    flush(); // Send to browser immediately
-}
-```
-
-### Streaming with System Message
-```php
-$response = $chatHandler->createStreamedRequest()
-    ->addSystemMessage('You are a creative writer')
-    ->addUserMessage('Write a haiku about programming')
-    ->execute();
-
-foreach ($response->getMessageStream() as $index => $message) {
-    echo $message->content;
+foreach ($response->getMessageStream() as $chunk) {
+    echo $chunk->content;
     flush();
 }
 ```
 
-## Web Browser Streaming
+## Web Integration
 
 ### Server-Sent Events (SSE)
+
 ```php
-// In your controller
 header('Content-Type: text/event-stream');
 header('Cache-Control: no-cache');
-header('Connection: keep-alive');
 
 $response = $chatHandler->createStreamedRequest()
     ->addUserMessage($_POST['message'])
     ->execute();
 
-foreach ($response->getMessageStream() as $index => $message) {
-    echo "data: " . json_encode([
-        'content' => $message->content,
-        'done' => false
-    ]) . "\n\n";
+foreach ($response->getMessageStream() as $chunk) {
+    echo "data: " . json_encode(['content' => $chunk->content]) . "\n\n";
     flush();
 }
 
-echo "data: " . json_encode(['done' => true]) . "\n\n";
-flush();
+echo "data: [DONE]\n\n";
 ```
 
 ### JavaScript Client
+
 ```javascript
 const eventSource = new EventSource('/chat/stream');
 
 eventSource.onmessage = function(event) {
-    const data = JSON.parse(event.data);
-    
-    if (data.done) {
+    if (event.data === '[DONE]') {
         eventSource.close();
         return;
     }
     
+    const data = JSON.parse(event.data);
     document.getElementById('response').innerHTML += data.content;
 };
 ```
 
-## Streaming with Tool Calls
+## Streaming with Tools
 
-### Function Calling in Streams
 ```php
 $response = $chatHandler->createStreamedRequest()
     ->addUserMessage('What is the weather in Paris?')
-    ->addTool(new WeatherTool())
+    ->tool('get_weather', new WeatherTool(), 'getCurrentWeather')
     ->execute();
 
-foreach ($response->getMessageStream() as $index => $message) {
-    if ($message->role === AIChatMessageRoleEnum::ASSISTANT) {
-        echo $message->content;
-    } elseif ($message->role === AIChatMessageRoleEnum::TOOL) {
-        echo "[Tool executed: " . $message->toolName . "]";
-    }
+foreach ($response->getMessageStream() as $chunk) {
+    echo $chunk->content;
     flush();
 }
 ```
 
-## Performance Considerations
+## Error Handling
 
-- **Buffer management** - Use `flush()` to send data immediately
-- **Connection handling** - Properly close SSE connections
-- **Error handling** - Handle network interruptions gracefully
-- **Rate limiting** - Consider API rate limits for streaming
+```php
+try {
+    $response = $chatHandler->createStreamedRequest()
+        ->addUserMessage('Generate a long story')
+        ->execute();
+    
+    foreach ($response->getMessageStream() as $chunk) {
+        echo $chunk->content;
+        flush();
+    }
+} catch (Exception $e) {
+    echo "Stream error: " . $e->getMessage();
+}
+```
 
-*Complete documentation coming soon...*
+## Next Steps
+
+- Learn [Basic Usage](basic-usage.md) for non-streaming requests
+- Explore [Function Calling](function-calling.md) with streaming
+- Manage [Conversations](conversations.md) with streaming context
