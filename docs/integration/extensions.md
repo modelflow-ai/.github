@@ -2,25 +2,6 @@
 
 > **🚧 Coming Soon** - This documentation is currently under development. The content below provides a preview of what will be covered in the complete version.
 
-## Decision Tree Package
-
-### Installation
-```bash
-composer require modelflow-ai/decision-tree
-```
-
-### Usage
-```php
-use ModelflowAi\DecisionTree\DecisionTree;
-use ModelflowAi\DecisionTree\DecisionRule;
-use ModelflowAi\DecisionTree\Criteria\CapabilityCriteria;
-
-$decisionTree = new DecisionTree([
-    new DecisionRule($gpt4Adapter, [CapabilityCriteria::ADVANCED]),
-    new DecisionRule($llamaAdapter, [CapabilityCriteria::BASIC])
-]);
-```
-
 ## Experts Package
 
 ### Installation

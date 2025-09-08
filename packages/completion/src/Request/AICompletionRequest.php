@@ -26,7 +26,7 @@ class AICompletionRequest implements CriteriaBehaviour
 
     /**
      * @param array{
-     *     streamed?: boolean,
+     *     streamed?: bool,
      *     format?: "json"|null,
      * } $options
      */

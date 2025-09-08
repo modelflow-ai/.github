@@ -20,7 +20,6 @@ use ModelflowAi\Chat\Adapter\Fake\FakeChatAdapter;
 use ModelflowAi\Chat\AIChatRequestHandler;
 use ModelflowAi\Chat\Middleware\Tools\ToolExecutionMiddleware;
 use ModelflowAi\Chat\Request\AIChatRequest;
-use ModelflowAi\DecisionTree\Criteria\PrivacyCriteria;
 use ModelflowAi\DecisionTree\DecisionRule;
 use ModelflowAi\DecisionTree\DecisionTree;
 use ModelflowAi\DecisionTree\DecisionTreeInterface;
@@ -33,7 +32,7 @@ $adapter = [];
 $fakeAdapter = new FakeChatAdapter();
 
 /** @var DecisionRule<AIChatRequest, AIChatAdapterInterface> $rule */
-$rule = new DecisionRule($fakeAdapter, [PrivacyCriteria::HIGH]);
+$rule = new DecisionRule($fakeAdapter);
 $adapter[] = $rule;
 
 /** @var DecisionTreeInterface<AIChatRequest, AIChatAdapterInterface> $decisionTree */

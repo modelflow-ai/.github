@@ -1,13 +1,11 @@
 # Conversations
 
-> **🚧 Coming Soon** - This documentation is currently under development. The content below provides a preview of what will be covered in the complete version.
+Multi-turn conversations allow AI models to maintain context across multiple exchanges, enabling natural dialogue and complex interactions.
 
-## Multi-turn Conversations
+## Basic Usage
 
-Chat models maintain context across multiple messages, enabling natural conversations.
-
-### Basic Conversation
 ```php
+// Multi-turn conversation
 $response = $chatHandler->createRequest()
     ->addSystemMessage('You are a helpful programming tutor.')
     ->addUserMessage('What is a PHP array?')
@@ -18,31 +16,29 @@ $response = $chatHandler->createRequest()
 echo $response->getMessage()->content;
 ```
 
-### Building Conversation History
-```php
-$conversation = [];
-
-// First exchange
-$conversation[] = AIChatMessage::createSystemMessage('You are a helpful assistant.');
-$conversation[] = AIChatMessage::createUserMessage('Hello!');
-
-$response = $chatHandler->createRequest()
-    ->setMessages($conversation)
-    ->execute();
-
-$conversation[] = $response->getMessage();
-
-// Second exchange
-$conversation[] = AIChatMessage::createUserMessage('What can you help me with?');
-
-$response = $chatHandler->createRequest()
-    ->setMessages($conversation)
-    ->execute();
-```
-
 ## Conversation Management
 
-### Session-based Conversations
+### Simple Session
+
+```php
+$response = $chatHandler->createRequest(...$messages)
+    ->addSystemMessage('You are a helpful assistant.')
+    ->addUserMessage('Hello!')
+    ->execute();
+
+$messages = $response->getRequest()->getMessages();
+$messages[] = $response->getMessage();
+
+// Continue conversation
+$response = $chatHandler->createRequest(...$messages)
+    ->addUserMessage('What can you help me with?')
+    ->execute();
+
+$messages = $response->getRequest()->getMessages();
+```
+
+### Conversation Class
+
 ```php
 class ConversationSession
 {
@@ -50,53 +46,42 @@ class ConversationSession
     
     public function __construct(
         private AIChatRequestHandlerInterface $chatHandler,
-        private string $systemPrompt = 'You are a helpful assistant.'
+        string $systemPrompt = 'You are a helpful assistant.'
     ) {
-        $this->messages[] = AIChatMessage::createSystemMessage($this->systemPrompt);
+        $this->messages[] = AIChatMessage::create(
+            AIChatMessageRoleEnum::SYSTEM, 
+            $systemPrompt
+        );
     }
     
     public function sendMessage(string $userMessage): string
     {
-        $this->messages[] = AIChatMessage::createUserMessage($userMessage);
-        
-        $response = $this->chatHandler->createRequest()
-            ->setMessages($this->messages)
+        $response = $this->chatHandler->createRequest(...$this->messages)
+            ->addUserMessage($userMessage)
             ->execute();
-            
-        $this->messages[] = $response->getMessage();
         
-        return $response->getMessage()->content;
-    }
-    
-    public function getHistory(): array
-    {
-        return $this->messages;
+        $result = $response->getMessage()->content;
+        $this->messages = $response->getRequest()->getMessages();
+        
+        return $result;
     }
     
     public function reset(): void
     {
-        $this->messages = [
-            AIChatMessage::createSystemMessage($this->systemPrompt)
-        ];
+        $this->messages = [$this->messages[0]]; // Keep only system message
     }
 }
-```
 
-### Usage
-```php
+// Usage
 $session = new ConversationSession($chatHandler, 'You are a PHP expert.');
-
 echo $session->sendMessage('What is dependency injection?');
 echo $session->sendMessage('Can you show me an example?');
-echo $session->sendMessage('How does this relate to containers?');
-
-// Get full conversation history
-$history = $session->getHistory();
 ```
 
-## Advanced Conversation Patterns
+## Context Management
 
-### Conversation with Context Limits
+### Token Limits
+
 ```php
 class ManagedConversation
 {
@@ -105,126 +90,114 @@ class ManagedConversation
     
     public function __construct(
         private AIChatRequestHandlerInterface $chatHandler,
-        int $maxMessages = 20
+        int $maxMessages = 10
     ) {
         $this->maxMessages = $maxMessages;
     }
     
     public function addMessage(string $userMessage): string
-    {
-        $this->messages[] = AIChatMessage::createUserMessage($userMessage);
-        
-        // Trim conversation if too long
-        if (count($this->messages) > $this->maxMessages) {
-            // Keep system message and recent messages
-            $systemMessage = $this->messages[0];
-            $recentMessages = array_slice($this->messages, -($this->maxMessages - 1));
-            $this->messages = array_merge([$systemMessage], $recentMessages);
+    {   
+        // Keep only recent messages
+        if (count($this->messages) >= $this->maxMessages) {
+            array_shift($this->messages); // Remove oldest
         }
         
-        $response = $this->chatHandler->createRequest()
-            ->setMessages($this->messages)
-            ->execute();
-            
+        $request = $this->chatHandler->createRequest(...$this->messages)
+            ->addUserMessage($userMessage);
+        
+        $response = $request->execute();
         $this->messages[] = $response->getMessage();
         
-        return $response->getMessage()->content;
+        $result = $response->getMessage()->content;
+        $this->messages = $response->getRequest()->getMessages();
+
+        return $result;
     }
 }
 ```
 
-### Conversation with Memory
+### Persistent Storage
+
 ```php
-class ConversationWithMemory
+class PersistentConversation
 {
-    private array $currentContext = [];
-    private array $longTermMemory = [];
-    
     public function __construct(
-        private AIChatRequestHandlerInterface $chatHandler
+        private AIChatRequestHandlerInterface $chatHandler,
+        private PDO $pdo,
+        private string $conversationId
     ) {}
     
-    public function chat(string $message): string
+    public function sendMessage(string $userMessage): string
     {
-        // Add relevant memory to context
-        $contextMessages = $this->buildContextWithMemory($message);
+        // Get conversation history
+        $messages = $this->getMessages(10); // Last 10 messages
         
-        $response = $this->chatHandler->createRequest()
-            ->setMessages($contextMessages)
+        $response = $this->chatHandler->createRequest(...$messages)
+            ->addUserMessage($userMessage)
             ->execute();
-            
-        // Store important information in memory
-        $this->updateMemory($message, $response->getMessage()->content);
+        
+        // Save all messages from the final request
+        $this->saveMessages($response->getRequest()->getMessages());
         
         return $response->getMessage()->content;
     }
     
-    private function buildContextWithMemory(string $currentMessage): array
+    private function saveMessages(array $messages): void
     {
-        $messages = [
-            AIChatMessage::createSystemMessage('You are a helpful assistant with memory.')
-        ];
+        // Clear existing messages for this conversation
+        $stmt = $this->pdo->prepare("DELETE FROM messages WHERE conversation_id = ?");
+        $stmt->execute([$this->conversationId]);
         
-        // Add relevant memory
-        $relevantMemory = $this->findRelevantMemory($currentMessage);
-        if (!empty($relevantMemory)) {
-            $memoryContext = "Previous context: " . implode(', ', $relevantMemory);
-            $messages[] = AIChatMessage::createSystemMessage($memoryContext);
+        // Save all messages
+        $stmt = $this->pdo->prepare("
+            INSERT INTO messages (conversation_id, role, content, created_at)
+            VALUES (?, ?, ?, NOW())
+        ");
+        
+        foreach ($messages as $message) {
+            $stmt->execute([
+                $this->conversationId, 
+                $message->role->value, 
+                $message->content
+            ]);
         }
+    }
+    
+    private function getMessages(int $limit = 10): array
+    {
+        $stmt = $this->pdo->prepare("
+            SELECT role, content FROM messages
+            WHERE conversation_id = ?
+            ORDER BY created_at ASC
+            LIMIT ?
+        ");
         
-        // Add recent conversation
-        $messages = array_merge($messages, $this->currentContext);
-        $messages[] = AIChatMessage::createUserMessage($currentMessage);
+        $stmt->execute([$this->conversationId, $limit]);
+        
+        $messages = [];
+        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $messages[] = AIChatMessage::create(
+                AIChatMessageRoleEnum::from($row['role']),
+                $row['content']
+            );
+        }
         
         return $messages;
     }
-    
-    private function findRelevantMemory(string $message): array
-    {
-        // Simple keyword matching (in production, use embeddings)
-        $relevant = [];
-        foreach ($this->longTermMemory as $memory) {
-            if (str_contains(strtolower($memory), strtolower($message))) {
-                $relevant[] = $memory;
-            }
-        }
-        return array_slice($relevant, 0, 3); // Limit to 3 relevant memories
-    }
-    
-    private function updateMemory(string $userMessage, string $assistantResponse): void
-    {
-        // Store important exchanges in long-term memory
-        if (strlen($userMessage) > 20) { // Only store substantial messages
-            $this->longTermMemory[] = "User asked: $userMessage, Assistant: $assistantResponse";
-        }
-        
-        // Update current context
-        $this->currentContext[] = AIChatMessage::createUserMessage($userMessage);
-        $this->currentContext[] = AIChatMessage::createAssistantMessage($assistantResponse);
-        
-        // Keep only recent messages in current context
-        if (count($this->currentContext) > 10) {
-            $this->currentContext = array_slice($this->currentContext, -10);
-        }
-    }
 }
 ```
 
+
 ## Best Practices
 
-### Context Management
-- **Token limits** - Monitor conversation length to stay within model limits
-- **Message relevance** - Remove old messages that are no longer relevant
-- **System messages** - Use system messages to maintain consistent behavior
+- **Context Management**: Keep conversations under 10 messages for optimal performance
+- **Token Limits**: Monitor message length to avoid exceeding model limits
+- **System Messages**: Use consistent system prompts for reliable behavior
+- **Storage**: Persist conversations to database or cache for session continuity
+- **Security**: Encrypt stored conversations and implement proper access controls
 
-### Performance
-- **Message chunking** - Split very long conversations
-- **Caching** - Cache conversation state in databases or sessions
-- **Compression** - Summarize old conversation parts
+## Next Steps
 
-### User Experience
-- **Conversation persistence** - Store conversations across sessions
-- **Context indicators** - Show users what context is being used
-- **Reset options** - Allow users to start fresh conversations
-
-*Complete documentation coming soon...*
+- Learn [Basic Usage](basic-usage.md) for foundational concepts
+- Implement [Function Calling](function-calling.md) in conversations
+- Use [Streaming](streaming.md) for real-time conversations

@@ -54,7 +54,8 @@ export default withMermaid({
             { text: 'Basic Usage', link: '/capabilities/chat/basic-usage' },
             { text: 'Streaming', link: '/capabilities/chat/streaming' },
             { text: 'Function Calling', link: '/capabilities/chat/function-calling' },
-            { text: 'Conversations', link: '/capabilities/chat/conversations' }
+            { text: 'Conversations', link: '/capabilities/chat/conversations' },
+            { text: 'Customization', link: '/capabilities/chat/customization' },
           ]
         }
       ],
@@ -111,23 +112,10 @@ export default withMermaid({
       ],
       
       '/integration/': [
-        {
-          text: 'Integration',
-          items: [
-            { text: 'Overview', link: '/integration/' },
-            { text: 'Symfony Bundle', link: '/integration/symfony' },
-            { text: 'Standalone', link: '/integration/standalone' },
-            { text: 'Extensions', link: '/integration/extensions' }
-          ]
-        },
-        {
-          text: 'Advanced',
-          items: [
-            { text: 'Middleware', link: '/integration/middleware' },
-            { text: 'Performance', link: '/integration/performance' },
-            { text: 'Deployment', link: '/integration/deployment' }
-          ]
-        }
+        { text: 'Overview', link: '/integration/' },
+        { text: 'Symfony Bundle', link: '/integration/symfony' },
+        { text: 'Standalone', link: '/integration/standalone' },
+        { text: 'Extensions', link: '/integration/extensions' }
       ],
       
       '/examples/': [

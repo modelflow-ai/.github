@@ -37,7 +37,7 @@ interface ChatInterface
      *     temperature?: float,
      *     top_p?: float,
      *     max_tokens?: int,
-     *     safe_mode?: boolean,
+     *     safe_mode?: bool,
      *     random_seed?: int,
      *     response_format?: array{ type: "json_object" },
      * } $parameters
@@ -63,7 +63,7 @@ interface ChatInterface
      *     temperature?: float,
      *     top_p?: float,
      *     max_tokens?: int,
-     *     safe_mode?: boolean,
+     *     safe_mode?: bool,
      *     random_seed?: int,
      *     response_format?: array{ type: "json_object" },
      * } $parameters
