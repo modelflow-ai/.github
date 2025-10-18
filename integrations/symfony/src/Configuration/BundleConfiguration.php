@@ -178,7 +178,7 @@ final class BundleConfiguration
     {
         $node = new ArrayNodeDefinition('custom');
 
-        // @phpstan-ignore-next-line
+        /** @phpstan-ignore-next-line */
         $node->arrayPrototype()
             ->children()
                 ->scalarNode('chat_factory')->end()
@@ -195,7 +195,7 @@ final class BundleConfiguration
     {
         $node = new ArrayNodeDefinition('adapters');
 
-        // @phpstan-ignore-next-line
+        /** @phpstan-ignore-next-line */
         $node->defaultValue([])
             ->info('You can configure your own adapter here or use a preconfigured one (see examples) and enable it.')
             ->example(DefaultConfigurationProvider::getDefaultValues())
@@ -257,7 +257,7 @@ final class BundleConfiguration
     {
         $node = new ArrayNodeDefinition('embeddings');
 
-        // @phpstan-ignore-next-line
+        /** @phpstan-ignore-next-line */
         $node->children()
             ->arrayNode('generators')
                 ->defaultValue([])
@@ -324,7 +324,7 @@ final class BundleConfiguration
     {
         $node = new ArrayNodeDefinition('experts');
 
-        // @phpstan-ignore-next-line
+        /** @phpstan-ignore-next-line */
         $node->defaultValue([])
             ->info('You can configure your experts here.')
             ->arrayPrototype()
