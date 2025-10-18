@@ -58,6 +58,32 @@ modelflow_ai:
                 dsn: 'qdrant://localhost:6333/documents'
 ```
 
+### Custom Providers
+```yaml
+modelflow_ai:
+    providers:
+        custom:
+            my_custom_provider:
+                chat_factory: 'App\Service\CustomChatFactory'
+                completion_factory: 'App\Service\CustomCompletionFactory'
+                image_factory: 'App\Service\CustomImageFactory'
+                embeddings_factory: 'App\Service\CustomEmbeddingsFactory'
+
+    adapters:
+        my_custom_model:
+            enabled: true
+            provider: 'my_custom_provider'
+            model: 'custom-model-1'
+            chat: true
+
+    embeddings:
+        generators:
+            custom_embeddings:
+                enabled: true
+                provider: 'my_custom_provider'
+                model: 'custom-embedding-model'
+```
+
 ## Usage in Controllers
 
 ### Dependency Injection
