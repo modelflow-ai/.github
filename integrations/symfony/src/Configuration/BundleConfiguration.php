@@ -184,6 +184,7 @@ final class BundleConfiguration
                 ->scalarNode('chat_factory')->end()
                 ->scalarNode('completion_factory')->end()
                 ->scalarNode('image_factory')->end()
+                ->scalarNode('embeddings_factory')->end()
                 ->append($this->createCriteriaNode([]))
             ->end();
 
