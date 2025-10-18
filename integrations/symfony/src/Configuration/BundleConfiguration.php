@@ -57,7 +57,6 @@ final class BundleConfiguration
     {
         $node = new ArrayNodeDefinition('openai');
 
-        // @phpstan-ignore-next-line
         $node->children()
             ->booleanNode('enabled')->defaultFalse()->end()
             ->arrayNode('credentials')
@@ -76,7 +75,6 @@ final class BundleConfiguration
     {
         $node = new ArrayNodeDefinition('mistral');
 
-        // @phpstan-ignore-next-line
         $node->children()
             ->booleanNode('enabled')->defaultFalse()->end()
             ->arrayNode('credentials')
@@ -95,7 +93,6 @@ final class BundleConfiguration
     {
         $node = new ArrayNodeDefinition('anthropic');
 
-        // @phpstan-ignore-next-line
         $node->children()
             ->booleanNode('enabled')->defaultFalse()->end()
             ->arrayNode('credentials')
@@ -115,7 +112,6 @@ final class BundleConfiguration
     {
         $node = new ArrayNodeDefinition('fireworksai');
 
-        // @phpstan-ignore-next-line
         $node->children()
             ->booleanNode('enabled')->defaultFalse()->end()
             ->arrayNode('credentials')
@@ -135,7 +131,6 @@ final class BundleConfiguration
     {
         $node = new ArrayNodeDefinition('google_gemini');
 
-        // @phpstan-ignore-next-line
         $node->children()
             ->booleanNode('enabled')->defaultFalse()->end()
             ->arrayNode('credentials')
@@ -154,7 +149,6 @@ final class BundleConfiguration
     {
         $node = new ArrayNodeDefinition('ollama');
 
-        // @phpstan-ignore-next-line
         $node->children()
             ->booleanNode('enabled')->defaultFalse()->end()
             ->scalarNode('url')
@@ -178,7 +172,6 @@ final class BundleConfiguration
     {
         $node = new ArrayNodeDefinition('custom');
 
-        /** @phpstan-ignore-next-line */
         $node->arrayPrototype()
             ->children()
                 ->scalarNode('chat_factory')->end()
@@ -195,7 +188,6 @@ final class BundleConfiguration
     {
         $node = new ArrayNodeDefinition('adapters');
 
-        /** @phpstan-ignore-next-line */
         $node->defaultValue([])
             ->info('You can configure your own adapter here or use a preconfigured one (see examples) and enable it.')
             ->example(DefaultConfigurationProvider::getDefaultValues())
@@ -257,7 +249,6 @@ final class BundleConfiguration
     {
         $node = new ArrayNodeDefinition('embeddings');
 
-        /** @phpstan-ignore-next-line */
         $node->children()
             ->arrayNode('generators')
                 ->defaultValue([])
@@ -324,7 +315,6 @@ final class BundleConfiguration
     {
         $node = new ArrayNodeDefinition('experts');
 
-        /** @phpstan-ignore-next-line */
         $node->defaultValue([])
             ->info('You can configure your experts here.')
             ->arrayPrototype()

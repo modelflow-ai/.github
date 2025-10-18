@@ -11,6 +11,24 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+/**
+ * PHPStan Bootstrap File - Symfony DI Helper Function Stubs.
+ *
+ * This file provides fallback definitions for Symfony's Dependency Injection
+ * configurator helper functions used in service configuration files (config/*.php).
+ *
+ * PHPStan performs static analysis without executing code, so it cannot discover
+ * these helper functions that are only available at runtime within Symfony's
+ * ContainerConfigurator context. This bootstrap file defines stub implementations
+ * that allow PHPStan to properly analyze service configuration files.
+ *
+ * The function_exists() guards ensure these stubs don't conflict with Symfony's
+ * actual implementations when the code is executed at runtime.
+ *
+ * @internal this file is only used during static analysis and should not be
+ *           included in production code
+ */
+
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
@@ -44,5 +62,15 @@ if (!\function_exists('Symfony\Component\DependencyInjection\Loader\Configurator
     function service_closure(string $serviceId): ServiceClosureArgument
     {
         return new ServiceClosureArgument(new Reference($serviceId));
+    }
+}
+
+if (!\function_exists('Symfony\Component\DependencyInjection\Loader\Configurator\param')) {
+    /**
+     * Creates a parameter reference.
+     */
+    function param(string $name): string
+    {
+        return '%' . $name . '%';
     }
 }
