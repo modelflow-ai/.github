@@ -16,6 +16,9 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use ModelflowAi\Chat\AIChatRequestHandler;
 use ModelflowAi\Chat\AIChatRequestHandlerInterface;
 use ModelflowAi\Chat\ChatPackage;
+use ModelflowAi\Chat\Middleware\Adapter\AdapterDecisionMiddleware;
+use ModelflowAi\Chat\Middleware\Adapter\AdapterExecutionMiddleware;
+use ModelflowAi\Chat\Middleware\ResponseFormat\ResponseFormatMiddleware;
 use ModelflowAi\Chat\Middleware\Tools\ToolExecutionMiddleware;
 use ModelflowAi\Chat\ToolInfo\ToolExecutor;
 use ModelflowAi\Chat\ToolInfo\ToolExecutorInterface;
@@ -41,6 +44,17 @@ return static function (ContainerConfigurator $container) {
         ->alias(ToolExecutorInterface::class, 'modelflow_ai.chat.tool_executor');
 
     $container->services()
+        ->set('modelflow_ai.chat.middleware.adapter_decision', AdapterDecisionMiddleware::class)
+        ->args([
+            service('modelflow_ai.chat_request_handler.decision_tree'),
+        ])
+        ->tag('modelflow_ai.chat.middleware', ['priority' => PHP_INT_MAX - 10]);
+
+    $container->services()
+        ->set('modelflow_ai.chat.middleware.response_format', ResponseFormatMiddleware::class)
+        ->tag('modelflow_ai.chat.middleware');
+
+    $container->services()
         ->set('modelflow_ai.chat.middleware.tool_execution', ToolExecutionMiddleware::class)
         ->args([
             service('modelflow_ai.chat.tool_executor'),
@@ -49,9 +63,12 @@ return static function (ContainerConfigurator $container) {
         ->tag('modelflow_ai.chat.middleware');
 
     $container->services()
+        ->set('modelflow_ai.chat.middleware.adapter_execution', AdapterExecutionMiddleware::class)
+        ->tag('modelflow_ai.chat.middleware', ['priority' => PHP_INT_MIN + 10]);
+
+    $container->services()
         ->set('modelflow_ai.chat_request_handler', AIChatRequestHandler::class)
         ->args([
-            service('modelflow_ai.chat_request_handler.decision_tree'),
             tagged_iterator('modelflow_ai.chat.middleware'),
         ])
         ->alias(AIChatRequestHandlerInterface::class, 'modelflow_ai.chat_request_handler');
