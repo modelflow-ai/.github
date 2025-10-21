@@ -13,15 +13,30 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Embeddings\Adapter\Request;
 
+use Webmozart\Assert\Assert;
+
 final readonly class EmbedRequest
 {
+    /**
+     * @param string[] $texts Array of texts for batch processing (always array, never empty)
+     */
     public function __construct(
-        private string $text,
+        private array $texts,
     ) {
+        Assert::notEmpty($texts, 'EmbedRequest requires at least one text to embed.');
+        Assert::allStringNotEmpty($texts, 'Each text in EmbedRequest must be a non-empty string.');
     }
 
-    public function getText(): string
+    /**
+     * @return string[]
+     */
+    public function getTexts(): array
     {
-        return $this->text;
+        return $this->texts;
+    }
+
+    public function count(): int
+    {
+        return \count($this->texts);
     }
 }

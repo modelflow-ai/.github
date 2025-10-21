@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace ModelflowAi\FireworksAiAdapter\Embeddings;
 
-use ModelflowAi\Embeddings\Adapter\DeprecatedEmbedTextTrait;
 use ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface;
 use ModelflowAi\Embeddings\Adapter\Request\EmbedRequest;
 use ModelflowAi\Embeddings\Adapter\Response\EmbedResponse;
@@ -22,8 +21,6 @@ use OpenAI\Contracts\ClientContract;
 
 final readonly class FireworksAiEmbeddingAdapter implements EmbeddingAdapterInterface
 {
-    use DeprecatedEmbedTextTrait;
-
     public function __construct(
         private ClientContract $client,
         private string $model = 'nomic-ai/nomic-embed-text-v1.5',
@@ -34,7 +31,7 @@ final readonly class FireworksAiEmbeddingAdapter implements EmbeddingAdapterInte
     {
         $response = $this->client->embeddings()->create([
             'model' => $this->model,
-            'input' => $request->getText(),
+            'input' => $request->getTexts(),
             'encoding_format' => 'float',
         ]);
 
@@ -42,8 +39,13 @@ final readonly class FireworksAiEmbeddingAdapter implements EmbeddingAdapterInte
             throw new \RuntimeException('Could not embed text');
         }
 
+        $vectors = [];
+        foreach ($response->embeddings as $item) {
+            $vectors[] = $item->embedding;
+        }
+
         return new EmbedResponse(
-            $response->embeddings[0]->embedding,
+            $vectors,
             new EmbeddingUsage(
                 $response->usage->promptTokens,
                 $response->usage->totalTokens,

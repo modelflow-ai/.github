@@ -27,38 +27,6 @@ final class MistralEmbeddingAdapterTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testEmbedText(): void
-    {
-        $embedding = $this->prophesize(EmbeddingsInterface::class);
-        $client = $this->prophesize(ClientInterface::class);
-        $client->embeddings()->willReturn($embedding->reveal());
-
-        $embedding->create([
-            'model' => Model::EMBED->value,
-            'input' => ['some text'],
-        ])->willReturn(CreateResponse::from([
-            'id' => 'embd-aad6fc62b17349b192ef09225058bc45',
-            'object' => 'list',
-            'data' => [
-                [
-                    'object' => 'embedding',
-                    'embedding' => [0.1, 0.2, 0.3],
-                    'index' => 0,
-                ],
-            ],
-            'model' => Model::EMBED->value,
-            'usage' => [
-                'prompt_tokens' => 9,
-                'total_tokens' => 9,
-            ],
-        ], MetaInformation::from([])));
-
-        $adapter = new MistralEmbeddingAdapter($client->reveal());
-        $result = $adapter->embedText('some text');
-
-        $this->assertSame([0.1, 0.2, 0.3], $result);
-    }
-
     public function testEmbed(): void
     {
         $embedding = $this->prophesize(EmbeddingsInterface::class);
@@ -86,10 +54,10 @@ final class MistralEmbeddingAdapterTest extends TestCase
         ], MetaInformation::from([])));
 
         $adapter = new MistralEmbeddingAdapter($client->reveal());
-        $request = new EmbedRequest('some text');
+        $request = new EmbedRequest(['some text']);
         $response = $adapter->embed($request);
 
-        $this->assertSame([0.1, 0.2, 0.3], $response->getVector());
+        $this->assertSame([[0.1, 0.2, 0.3]], $response->getVectors());
         $this->assertSame(9, $response->getUsage()->getPromptTokens());
         $this->assertSame(9, $response->getUsage()->getTotalTokens());
     }
@@ -121,9 +89,58 @@ final class MistralEmbeddingAdapterTest extends TestCase
         ], MetaInformation::from([])));
 
         $adapter = new MistralEmbeddingAdapter($client->reveal(), 'custom-model');
-        $request = new EmbedRequest('some text');
+        $request = new EmbedRequest(['some text']);
         $response = $adapter->embed($request);
 
-        $this->assertSame([0.1, 0.2, 0.3], $response->getVector());
+        $this->assertSame([[0.1, 0.2, 0.3]], $response->getVectors());
+    }
+
+    public function testEmbedBatchTexts(): void
+    {
+        $embedding = $this->prophesize(EmbeddingsInterface::class);
+        $client = $this->prophesize(ClientInterface::class);
+        $client->embeddings()->willReturn($embedding->reveal());
+
+        $embedding->create([
+            'model' => Model::EMBED->value,
+            'input' => ['first text', 'second text', 'third text'],
+        ])->willReturn(CreateResponse::from([
+            'id' => 'embd-aad6fc62b17349b192ef09225058bc45',
+            'object' => 'list',
+            'data' => [
+                [
+                    'object' => 'embedding',
+                    'embedding' => [0.1, 0.2, 0.3],
+                    'index' => 0,
+                ],
+                [
+                    'object' => 'embedding',
+                    'embedding' => [0.4, 0.5, 0.6],
+                    'index' => 1,
+                ],
+                [
+                    'object' => 'embedding',
+                    'embedding' => [0.7, 0.8, 0.9],
+                    'index' => 2,
+                ],
+            ],
+            'model' => Model::EMBED->value,
+            'usage' => [
+                'prompt_tokens' => 27,
+                'total_tokens' => 27,
+            ],
+        ], MetaInformation::from([])));
+
+        $adapter = new MistralEmbeddingAdapter($client->reveal());
+        $request = new EmbedRequest(['first text', 'second text', 'third text']);
+        $response = $adapter->embed($request);
+
+        $this->assertSame([
+            [0.1, 0.2, 0.3],
+            [0.4, 0.5, 0.6],
+            [0.7, 0.8, 0.9],
+        ], $response->getVectors());
+        $this->assertSame(27, $response->getUsage()->getPromptTokens());
+        $this->assertSame(27, $response->getUsage()->getTotalTokens());
     }
 }

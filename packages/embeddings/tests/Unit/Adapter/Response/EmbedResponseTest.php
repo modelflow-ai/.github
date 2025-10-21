@@ -19,14 +19,39 @@ use PHPUnit\Framework\TestCase;
 
 class EmbedResponseTest extends TestCase
 {
-    public function testConstruct(): void
+    public function testConstructWithSingleVector(): void
     {
-        $vector = [0.1, 0.2, 0.3];
+        $vectors = [[0.1, 0.2, 0.3]];
         $usage = new EmbeddingUsage(10, 20);
 
-        $response = new EmbedResponse($vector, $usage);
+        $response = new EmbedResponse($vectors, $usage);
 
-        $this->assertSame($vector, $response->getVector());
+        $this->assertSame($vectors, $response->getVectors());
         $this->assertSame($usage, $response->getUsage());
+        $this->assertSame(1, $response->count());
+    }
+
+    public function testConstructWithMultipleVectors(): void
+    {
+        $vectors = [
+            [0.1, 0.2, 0.3],
+            [0.4, 0.5, 0.6],
+            [0.7, 0.8, 0.9],
+        ];
+        $usage = new EmbeddingUsage(30, 60);
+
+        $response = new EmbedResponse($vectors, $usage);
+
+        $this->assertSame($vectors, $response->getVectors());
+        $this->assertSame($usage, $response->getUsage());
+        $this->assertSame(3, $response->count());
+    }
+
+    public function testConstructWithEmptyArrayThrowsException(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('EmbedResponse requires at least one vector.');
+
+        new EmbedResponse([], new EmbeddingUsage(0, 0));
     }
 }

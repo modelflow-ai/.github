@@ -43,38 +43,73 @@ class EmbeddingsStoreHandler implements EmbeddingsStoreHandlerInterface
 
     public function handle(EmbeddingsStoreRequest $request): EmbeddingsStoreResponse
     {
-        $processedEmbeddings = [];
+        // Step 1: Generate all embeddings and group by adapter key
+        $embeddingsByAdapter = [];
         $embeddingsPerKey = [];
-        $usages = [];
+
         foreach ($request->getEmbeddings() as $embedding) {
             $embeddingClass = $embedding::class;
             if (!isset($this->embeddingClassMapping[$embeddingClass])) {
-                throw new \InvalidArgumentException(
-                    \sprintf('No mapping configured for embedding class "%s".', $embeddingClass),
-                );
+                throw new \InvalidArgumentException(\sprintf('No mapping configured for embedding class "%s".', $embeddingClass));
             }
 
             $key = $this->embeddingClassMapping[$embeddingClass];
-
             $embeddingGenerator = $this->getEmbeddingGenerator($key);
-            $embeddingAdapter = $this->getEmbeddingAdapter($key);
-
-            $embeddingsPerKey[$key] ??= [];
 
             $generatedEmbeddings = $embeddingGenerator->generateEmbedding(
                 $embedding,
                 $request->getHeaderGenerator(),
             );
+
             foreach ($generatedEmbeddings as $generatedEmbedding) {
-                $embedRequest = new EmbedRequest($generatedEmbedding->getContent());
+                $embeddingsByAdapter[$key][] = $generatedEmbedding;
+            }
+
+            $embeddingsPerKey[$key] ??= [];
+        }
+
+        // Step 2: Process each adapter's embeddings in batches
+        $processedEmbeddings = [];
+        $usages = [];
+        $batchSize = 30;
+
+        foreach ($embeddingsByAdapter as $key => $generatedEmbeddings) {
+            $embeddingAdapter = $this->getEmbeddingAdapter($key);
+            $chunks = \array_chunk($generatedEmbeddings, $batchSize);
+
+            foreach ($chunks as $chunk) {
+                // Collect texts for batch processing
+                $texts = [];
+                foreach ($chunk as $generatedEmbedding) {
+                    $texts[] = $generatedEmbedding->getContent();
+                }
+
+                // Send batch request
+                $embedRequest = new EmbedRequest($texts);
                 $embedResponse = $embeddingAdapter->embed($embedRequest);
-                $generatedEmbedding->setVector($embedResponse->getVector());
+                $vectors = $embedResponse->getVectors();
+
+                // Verify vector count matches input count to prevent silent misalignment
+                if (\count($vectors) !== \count($chunk)) {
+                    throw new \RuntimeException(\sprintf(
+                        'Vector count mismatch: expected %d vectors but got %d from adapter.',
+                        \count($chunk),
+                        \count($vectors),
+                    ));
+                }
+
+                // Assign vectors back to embeddings
+                foreach ($chunk as $index => $generatedEmbedding) {
+                    $generatedEmbedding->setVector($vectors[$index]);
+                    $embeddingsPerKey[$key][] = $generatedEmbedding;
+                    $processedEmbeddings[] = $generatedEmbedding;
+                }
+
                 $usages[] = $embedResponse->getUsage();
-                $embeddingsPerKey[$key][] = $generatedEmbedding;
-                $processedEmbeddings[] = $generatedEmbedding;
             }
         }
 
+        // Step 3: Store embeddings
         foreach ($embeddingsPerKey as $key => $embeddings) {
             $embeddingStore = $this->getEmbeddingStore($key);
             $embeddingStore->addDocuments($embeddings);

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ModelflowAi\FireworksAiAdapter\Tests\Unit\Embeddings;
 
+use ModelflowAi\Embeddings\Adapter\Request\EmbedRequest;
 use ModelflowAi\FireworksAiAdapter\Embeddings\FireworksAiEmbeddingAdapter;
 use OpenAI\Contracts\ClientContract;
 use OpenAI\Contracts\Resources\EmbeddingsContract;
@@ -26,7 +27,7 @@ final class FireworksAiEmbeddingAdapterTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testEmbedText(): void
+    public function testEmbed(): void
     {
         $embedding = $this->prophesize(EmbeddingsContract::class);
         $client = $this->prophesize(ClientContract::class);
@@ -34,7 +35,7 @@ final class FireworksAiEmbeddingAdapterTest extends TestCase
 
         $embedding->create([
             'model' => 'nomic-ai/nomic-embed-text-v1.5',
-            'input' => 'some text',
+            'input' => ['some text'],
             'encoding_format' => 'float',
         ])->willReturn(CreateResponse::from(
             CreateResponseFixture::ATTRIBUTES,
@@ -54,11 +55,14 @@ final class FireworksAiEmbeddingAdapterTest extends TestCase
         ));
 
         $adapter = new FireworksAiEmbeddingAdapter($client->reveal(), 'nomic-ai/nomic-embed-text-v1.5');
-        $result = $adapter->embedText('some text');
+        $request = new EmbedRequest(['some text']);
+        $response = $adapter->embed($request);
 
-        $this->assertSame([
+        $this->assertSame([[
             -0.008906792,
             -0.013743395,
-        ], $result);
+        ]], $response->getVectors());
+        $this->assertSame(8, $response->getUsage()->getPromptTokens());
+        $this->assertSame(8, $response->getUsage()->getTotalTokens());
     }
 }

@@ -18,10 +18,28 @@ use PHPUnit\Framework\TestCase;
 
 class EmbedRequestTest extends TestCase
 {
-    public function testConstruct(): void
+    public function testConstructWithSingleText(): void
     {
-        $request = new EmbedRequest('test text');
+        $request = new EmbedRequest(['test text']);
 
-        $this->assertSame('test text', $request->getText());
+        $this->assertSame(['test text'], $request->getTexts());
+        $this->assertSame(1, $request->count());
+    }
+
+    public function testConstructWithMultipleTexts(): void
+    {
+        $texts = ['first text', 'second text', 'third text'];
+        $request = new EmbedRequest($texts);
+
+        $this->assertSame($texts, $request->getTexts());
+        $this->assertSame(3, $request->count());
+    }
+
+    public function testConstructWithEmptyArrayThrowsException(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('EmbedRequest requires at least one text to embed.');
+
+        new EmbedRequest([]);
     }
 }

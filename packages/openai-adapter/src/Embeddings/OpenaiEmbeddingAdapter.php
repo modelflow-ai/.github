@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace ModelflowAi\OpenaiAdapter\Embeddings;
 
-use ModelflowAi\Embeddings\Adapter\DeprecatedEmbedTextTrait;
 use ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface;
 use ModelflowAi\Embeddings\Adapter\Request\EmbedRequest;
 use ModelflowAi\Embeddings\Adapter\Response\EmbedResponse;
@@ -22,8 +21,6 @@ use OpenAI\Contracts\ClientContract;
 
 final readonly class OpenaiEmbeddingAdapter implements EmbeddingAdapterInterface
 {
-    use DeprecatedEmbedTextTrait;
-
     public function __construct(
         private ClientContract $client,
         private string $model = 'text-embedding-ada-002',
@@ -34,7 +31,7 @@ final readonly class OpenaiEmbeddingAdapter implements EmbeddingAdapterInterface
     {
         $response = $this->client->embeddings()->create([
             'model' => $this->model,
-            'input' => $request->getText(),
+            'input' => $request->getTexts(),
             'encoding_format' => 'float',
         ]);
 
@@ -42,27 +39,17 @@ final readonly class OpenaiEmbeddingAdapter implements EmbeddingAdapterInterface
             throw new \RuntimeException('Could not embed text');
         }
 
+        $vectors = [];
+        foreach ($response->embeddings as $item) {
+            $vectors[] = $item->embedding;
+        }
+
         return new EmbedResponse(
-            $response->embeddings[0]->embedding,
+            $vectors,
             new EmbeddingUsage(
                 $response->usage->promptTokens,
                 $response->usage->totalTokens,
             ),
         );
-    }
-
-    public function embedText(string $text): array
-    {
-        $response = $this->client->embeddings()->create([
-            'model' => $this->model,
-            'input' => $text,
-            'encoding_format' => 'float',
-        ]);
-
-        if ([] === $response->embeddings) {
-            throw new \RuntimeException('Could not embed text');
-        }
-
-        return $response->embeddings[0]->embedding;
     }
 }

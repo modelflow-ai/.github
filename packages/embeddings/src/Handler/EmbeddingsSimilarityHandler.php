@@ -40,12 +40,12 @@ class EmbeddingsSimilarityHandler implements EmbeddingsSimilarityHandlerInterfac
         $embeddingStore = $this->getEmbeddingStore($key);
         $embeddingAdapter = $this->getEmbeddingAdapter($key);
 
-        $embedRequest = new EmbedRequest($request->getContent());
+        $embedRequest = new EmbedRequest([$request->getContent()]);
         $embedResponse = $embeddingAdapter->embed($embedRequest);
         $usage = $embedResponse->getUsage();
 
         $similarEmbeddings = $embeddingStore->similaritySearch(
-            $embedResponse->getVector(),
+            $embedResponse->getVectors()[0],
             $request->getLimit(),
             $request->getAdditionalFilter(),
         );

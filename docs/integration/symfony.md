@@ -84,6 +84,61 @@ modelflow_ai:
                 model: 'custom-embedding-model'
 ```
 
+### Custom Embeddings Factory
+
+Create a custom embeddings factory by implementing the `EmbeddingAdapterFactoryInterface`:
+
+```php
+namespace App\Service;
+
+use ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface;
+use ModelflowAi\Embeddings\Adapter\EmbeddingAdapterFactoryInterface;
+use ModelflowAi\Embeddings\Adapter\Request\EmbedRequest;
+use ModelflowAi\Embeddings\Adapter\Response\EmbedResponse;
+use ModelflowAi\Embeddings\Usage\EmbeddingUsage;
+
+class CustomEmbeddingsFactory implements EmbeddingAdapterFactoryInterface
+{
+    public function createEmbeddingAdapter(array $options = []): EmbeddingAdapterInterface
+    {
+        $model = $options['model'] ?? 'default-model';
+
+        return new class($model) implements EmbeddingAdapterInterface {
+            public function __construct(private string $model) {}
+
+            public function embed(EmbedRequest $request): EmbedResponse
+            {
+                $texts = $request->getTexts();
+                $vectors = [];
+
+                // Generate embeddings for each text in the batch
+                foreach ($texts as $text) {
+                    // Your custom embedding logic here
+                    $vectors[] = $this->generateEmbedding($text);
+                }
+
+                return new EmbedResponse(
+                    $vectors,
+                    new EmbeddingUsage(
+                        count($texts) * 10, // prompt tokens
+                        count($texts) * 15  // total tokens
+                    )
+                );
+            }
+
+            private function generateEmbedding(string $text): array
+            {
+                // Your custom embedding implementation
+                // Return an array of floats (the embedding vector)
+                return array_fill(0, 1536, 0.1);
+            }
+        };
+    }
+}
+```
+
+The custom factory will be automatically registered and can be used with the embeddings system.
+
 ## Usage in Controllers
 
 ### Dependency Injection
