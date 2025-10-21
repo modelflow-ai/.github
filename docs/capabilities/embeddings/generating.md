@@ -11,23 +11,21 @@ composer require modelflow-ai/embeddings modelflow-ai/openai-adapter
 
 ### Simple Generation
 ```php
-use ModelflowAi\Embeddings\EmbeddingsRequestHandler;
-use ModelflowAi\Embeddings\Handler\EmbeddingsStoreHandler;
-use ModelflowAi\Embeddings\Handler\EmbeddingsSimilarityHandler;
-use ModelflowAi\Embeddings\Generator\EmbeddingGenerator;
-use ModelflowAi\Embeddings\Splitter\EmbeddingSplitter;
-use ModelflowAi\Embeddings\Formatter\EmbeddingFormatter;
+use ModelflowAi\Embeddings\Adapter\Request\EmbedRequest;
 use ModelflowAi\OpenaiAdapter\Embeddings\OpenaiEmbeddingAdapter;
 
 // Setup adapter
 $adapter = new OpenaiEmbeddingAdapter(
-    OpenAI::client($_ENV['OPENAI_API_KEY']), 
+    OpenAI::client($_ENV['OPENAI_API_KEY']),
     'text-embedding-3-small'
 );
 
 // Generate embedding for single text
-$embedding = $adapter->embedText('Hello, world!');
-echo "Generated embedding with " . count($embedding->getVector()) . " dimensions";
+$request = new EmbedRequest(['Hello, world!']);
+$response = $adapter->embed($request);
+$vectors = $response->getVectors();
+
+echo "Generated embedding with " . count($vectors[0]) . " dimensions";
 ```
 
 ### Batch Generation
@@ -39,12 +37,13 @@ $texts = [
     'Java is object-oriented'
 ];
 
-$embeddings = [];
-foreach ($texts as $text) {
-    $embeddings[] = $adapter->embedText($text);
-}
+// Generate embeddings in a single batch request (more efficient)
+$request = new EmbedRequest($texts);
+$response = $adapter->embed($request);
+$vectors = $response->getVectors();
 
-echo "Generated " . count($embeddings) . " embeddings";
+echo "Generated " . count($vectors) . " embeddings";
+echo "Used " . $response->getUsage()->getTotalTokens() . " tokens";
 ```
 
 ## Text Splitting
@@ -58,9 +57,14 @@ $chunks = $splitter->split($longText);
 
 echo "Split into " . count($chunks) . " chunks";
 
-foreach ($chunks as $chunk) {
-    $embedding = $adapter->embedText($chunk);
-    // Store embedding...
+// Process chunks in batches for better performance
+$request = new EmbedRequest($chunks);
+$response = $adapter->embed($request);
+$vectors = $response->getVectors();
+
+// Store embeddings...
+foreach ($vectors as $index => $vector) {
+    echo "Chunk $index has " . count($vector) . " dimensions\n";
 }
 ```
 
@@ -96,7 +100,9 @@ $largeAdapter = new OpenaiEmbeddingAdapter($client, 'text-embedding-3-large'); /
 $adaAdapter = new OpenaiEmbeddingAdapter($client, 'text-embedding-ada-002'); // 1536 dimensions
 
 // Use small for general purposes, large for higher quality
-$embedding = $smallAdapter->embedText('Sample text');
+$request = new EmbedRequest(['Sample text']);
+$response = $smallAdapter->embed($request);
+$vector = $response->getVectors()[0];
 ```
 
 ### Mistral Models
@@ -108,7 +114,9 @@ $mistralAdapter = new MistralEmbeddingAdapter(
     'mistral-embed'
 );
 
-$embedding = $mistralAdapter->embedText('Text to embed');
+$request = new EmbedRequest(['Text to embed']);
+$response = $mistralAdapter->embed($request);
+$vector = $response->getVectors()[0];
 ```
 
 ### Local Models (Ollama)
@@ -120,13 +128,17 @@ $ollamaAdapter = new OllamaEmbeddingAdapter(
     'mxbai-embed-large'
 );
 
-$embedding = $ollamaAdapter->embedText('Local embedding generation');
+$request = new EmbedRequest(['Local embedding generation']);
+$response = $ollamaAdapter->embed($request);
+$vector = $response->getVectors()[0];
 ```
 
 ## Advanced Generation
 
 ### Embedding Pipeline
 ```php
+use ModelflowAi\Embeddings\Adapter\Request\EmbedRequest;
+
 class EmbeddingPipeline
 {
     public function __construct(
@@ -134,27 +146,30 @@ class EmbeddingPipeline
         private EmbeddingSplitter $splitter,
         private EmbeddingFormatter $formatter
     ) {}
-    
+
     public function processDocument(string $content, array $metadata = []): array
     {
         // Split content
         $chunks = $this->splitter->split($content);
-        
+
+        // Generate all embeddings in a single batch request (efficient!)
+        $request = new EmbedRequest($chunks);
+        $response = $this->adapter->embed($request);
+        $vectors = $response->getVectors();
+
+        // Format embeddings with metadata
         $embeddings = [];
-        foreach ($chunks as $index => $chunk) {
-            // Generate embedding
-            $embedding = $this->adapter->embedText($chunk);
-            
-            // Add metadata
-            $embedding = $this->formatter->format($embedding, array_merge($metadata, [
+        foreach ($vectors as $index => $vector) {
+            $embedding = $this->formatter->format($vector, array_merge($metadata, [
                 'chunk_index' => $index,
-                'chunk_size' => strlen($chunk),
-                'content_preview' => substr($chunk, 0, 100)
+                'chunk_size' => strlen($chunks[$index]),
+                'content' => $chunks[$index],
+                'content_preview' => substr($chunks[$index], 0, 100)
             ]));
-            
+
             $embeddings[] = $embedding;
         }
-        
+
         return $embeddings;
     }
 }
@@ -176,39 +191,68 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 $cache = new FilesystemAdapter('embeddings', 3600); // 1 hour TTL
 $cachedAdapter = new CacheEmbeddingAdapter($originalAdapter, $cache);
 
-// First call generates and caches
-$embedding1 = $cachedAdapter->embedText('This text will be cached');
+// First call generates and caches each text individually
+$request1 = new EmbedRequest(['This text will be cached', 'Another text']);
+$response1 = $cachedAdapter->embed($request1);
 
-// Second call returns from cache
-$embedding2 = $cachedAdapter->embedText('This text will be cached');
+// Second call with same texts returns from cache (very fast!)
+// Mixed requests only generate embeddings for uncached texts
+$request2 = new EmbedRequest(['This text will be cached', 'New uncached text']);
+$response2 = $cachedAdapter->embed($request2); // Only 'New uncached text' is generated
 ```
 
 ## Performance Optimization
 
+### Why Batch Processing Matters
+
+The new batch API significantly improves performance:
+
+- **Reduced API Calls**: Generate 100 embeddings in 1 call instead of 100 calls
+- **Lower Latency**: Network overhead reduced by ~99% for large batches
+- **Better Throughput**: Process thousands of texts in seconds, not minutes
+- **Cost Efficiency**: Some providers offer better rates for batch requests
+- **Automatic Caching**: CacheEmbeddingAdapter intelligently caches at the individual text level
+
+**Example performance comparison:**
+```php
+// OLD WAY (deprecated): 100 API calls for 100 texts
+foreach ($texts as $text) {
+    $vector = $adapter->embedText($text); // Don't do this!
+}
+
+// NEW WAY: 1 API call for 100 texts
+$request = new EmbedRequest($texts);
+$response = $adapter->embed($request);
+$vectors = $response->getVectors(); // Much faster!
+```
+
 ### Batch Processing
 ```php
+use ModelflowAi\Embeddings\Adapter\Request\EmbedRequest;
+
 class BatchEmbeddingProcessor
 {
     public function __construct(
         private EmbeddingAdapterInterface $adapter,
         private int $batchSize = 100
     ) {}
-    
+
     public function processBatch(array $texts): array
     {
-        $embeddings = [];
+        $allVectors = [];
         $batches = array_chunk($texts, $this->batchSize);
-        
+
         foreach ($batches as $batch) {
-            foreach ($batch as $text) {
-                $embeddings[] = $this->adapter->embedText($text);
-            }
-            
+            // Process entire batch in single API call (much more efficient!)
+            $request = new EmbedRequest($batch);
+            $response = $this->adapter->embed($request);
+            $allVectors = array_merge($allVectors, $response->getVectors());
+
             // Small delay to respect rate limits
             usleep(100000); // 0.1 seconds
         }
-        
-        return $embeddings;
+
+        return $allVectors;
     }
 }
 ```
