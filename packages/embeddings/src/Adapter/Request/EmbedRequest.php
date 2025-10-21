@@ -15,13 +15,27 @@ namespace ModelflowAi\Embeddings\Adapter\Request;
 
 final readonly class EmbedRequest
 {
+    /**
+     * @param string[] $texts Array of texts for batch processing (always array, never empty)
+     */
     public function __construct(
-        private string $text,
+        private array $texts,
     ) {
+        if ([] === $texts) {
+            throw new \InvalidArgumentException('EmbedRequest requires at least one text to embed.');
+        }
     }
 
-    public function getText(): string
+    /**
+     * @return string[]
+     */
+    public function getTexts(): array
     {
-        return $this->text;
+        return $this->texts;
+    }
+
+    public function count(): int
+    {
+        return \count($this->texts);
     }
 }

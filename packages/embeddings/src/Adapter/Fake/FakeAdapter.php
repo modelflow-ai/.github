@@ -44,7 +44,7 @@ class FakeAdapter implements EmbeddingAdapterInterface
 
         return new EmbedResponse(
             $vector,
-            new EmbeddingUsage(\strlen($text)),
+            new EmbeddingUsage(\strlen((string) $text)),
         );
     }
 }

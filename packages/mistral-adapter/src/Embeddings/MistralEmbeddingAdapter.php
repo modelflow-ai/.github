@@ -35,11 +35,16 @@ final readonly class MistralEmbeddingAdapter implements EmbeddingAdapterInterfac
     {
         $response = $this->client->embeddings()->create([
             'model' => $this->model,
-            'input' => [$request->getText()],
+            'input' => $request->getTexts(),
         ]);
 
+        $vectors = [];
+        foreach ($response->data as $item) {
+            $vectors[] = $item->embedding;
+        }
+
         return new EmbedResponse(
-            $response->data[0]->embedding,
+            $vectors,
             new EmbeddingUsage(
                 $response->usage->promptTokens,
                 $response->usage->totalTokens,

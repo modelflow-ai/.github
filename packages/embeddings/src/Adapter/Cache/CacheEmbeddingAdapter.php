@@ -32,36 +32,70 @@ final readonly class CacheEmbeddingAdapter implements EmbeddingAdapterInterface
 
     public function embed(EmbedRequest $request): EmbedResponse
     {
-        $text = $request->getText();
-        $hash = \hash('sha256', $text);
-        $cacheItem = $this->cacheItemPool->getItem($hash);
+        $texts = $request->getTexts();
+        $uncachedTexts = [];
+        $uncachedIndices = [];
+        $vectors = [];
+        $totalPromptTokens = 0;
+        $totalTotalTokens = 0;
 
-        if ($cacheItem->isHit()) {
-            /** @var array{vector: float[], usage: array{promptTokens: int, totalTokens: int}} $cachedData */
-            $cachedData = $cacheItem->get();
-            $usage = new EmbeddingUsage(
-                $cachedData['usage']['promptTokens'],
-                $cachedData['usage']['totalTokens'],
-            );
+        // Check cache for each text
+        foreach ($texts as $index => $text) {
+            $hash = \hash('sha256', $text);
+            $cacheItem = $this->cacheItemPool->getItem($hash);
 
-            return new EmbedResponse($cachedData['vector'], $usage);
+            if ($cacheItem->isHit()) {
+                /** @var array{vector: float[], usage: array{promptTokens: int, totalTokens: int}} $cachedData */
+                $cachedData = $cacheItem->get();
+                $vectors[$index] = $cachedData['vector'];
+                $totalPromptTokens += $cachedData['usage']['promptTokens'];
+                $totalTotalTokens += $cachedData['usage']['totalTokens'];
+            } else {
+                $uncachedTexts[] = $text;
+                $uncachedIndices[] = $index;
+            }
         }
 
-        $response = $this->adapter->embed($request);
-        $vector = $response->getVector();
-        $usage = $response->getUsage();
+        // Batch process uncached texts
+        if ([] !== $uncachedTexts) {
+            $batchRequest = new EmbedRequest($uncachedTexts);
+            $batchResponse = $this->adapter->embed($batchRequest);
+            $uncachedVectors = $batchResponse->getVectors();
 
-        $cacheData = [
-            'vector' => $vector,
-            'usage' => [
-                'promptTokens' => $usage->getPromptTokens(),
-                'totalTokens' => $usage->getTotalTokens(),
-            ],
-        ];
+            // Cache and assign results
+            foreach ($uncachedTexts as $i => $text) {
+                $hash = \hash('sha256', $text);
+                $cacheItem = $this->cacheItemPool->getItem($hash);
 
-        $cacheItem->set($cacheData);
-        $this->cacheItemPool->save($cacheItem);
+                // Distribute usage evenly across uncached texts
+                $promptTokens = (int) ($batchResponse->getUsage()->getPromptTokens() / \count($uncachedTexts));
+                $totalTokens = (int) ($batchResponse->getUsage()->getTotalTokens() / \count($uncachedTexts));
 
-        return $response;
+                $cacheData = [
+                    'vector' => $uncachedVectors[$i],
+                    'usage' => [
+                        'promptTokens' => $promptTokens,
+                        'totalTokens' => $totalTokens,
+                    ],
+                ];
+
+                $cacheItem->set($cacheData);
+                $this->cacheItemPool->save($cacheItem);
+
+                // Assign to correct position in final array
+                $originalIndex = $uncachedIndices[$i];
+                $vectors[$originalIndex] = $uncachedVectors[$i];
+                $totalPromptTokens += $promptTokens;
+                $totalTotalTokens += $totalTokens;
+            }
+        }
+
+        // Ensure vectors are in correct order
+        \ksort($vectors);
+
+        return new EmbedResponse(
+            \array_values($vectors),
+            new EmbeddingUsage($totalPromptTokens, $totalTotalTokens),
+        );
     }
 }

@@ -71,7 +71,7 @@ final class OpenaiEmbeddingAdapterTest extends TestCase
 
         $embedding->create([
             'model' => 'text-embedding-ada-002',
-            'input' => 'some text',
+            'input' => ['some text'],
             'encoding_format' => 'float',
         ])->willReturn(CreateResponse::from(
             CreateResponseFixture::ATTRIBUTES,
@@ -91,13 +91,13 @@ final class OpenaiEmbeddingAdapterTest extends TestCase
         ));
 
         $adapter = new OpenaiEmbeddingAdapter($client->reveal());
-        $request = new EmbedRequest('some text');
+        $request = new EmbedRequest(['some text']);
         $response = $adapter->embed($request);
 
-        $this->assertSame([
+        $this->assertSame([[
             -0.008906792,
             -0.013743395,
-        ], $response->getVector());
+        ]], $response->getVectors());
         $this->assertSame(8, $response->getUsage()->getPromptTokens());
         $this->assertSame(8, $response->getUsage()->getTotalTokens());
     }
@@ -110,7 +110,7 @@ final class OpenaiEmbeddingAdapterTest extends TestCase
 
         $embedding->create([
             'model' => 'custom-model',
-            'input' => 'some text',
+            'input' => ['some text'],
             'encoding_format' => 'float',
         ])->willReturn(CreateResponse::from(
             CreateResponseFixture::ATTRIBUTES,
@@ -130,13 +130,13 @@ final class OpenaiEmbeddingAdapterTest extends TestCase
         ));
 
         $adapter = new OpenaiEmbeddingAdapter($client->reveal(), 'custom-model');
-        $request = new EmbedRequest('some text');
+        $request = new EmbedRequest(['some text']);
         $response = $adapter->embed($request);
 
-        $this->assertSame([
+        $this->assertSame([[
             -0.008906792,
             -0.013743395,
-        ], $response->getVector());
+        ]], $response->getVectors());
         $this->assertSame(8, $response->getUsage()->getPromptTokens());
         $this->assertSame(8, $response->getUsage()->getTotalTokens());
     }

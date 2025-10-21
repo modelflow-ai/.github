@@ -34,7 +34,7 @@ final readonly class OpenaiEmbeddingAdapter implements EmbeddingAdapterInterface
     {
         $response = $this->client->embeddings()->create([
             'model' => $this->model,
-            'input' => $request->getText(),
+            'input' => $request->getTexts(),
             'encoding_format' => 'float',
         ]);
 
@@ -42,8 +42,13 @@ final readonly class OpenaiEmbeddingAdapter implements EmbeddingAdapterInterface
             throw new \RuntimeException('Could not embed text');
         }
 
+        $vectors = [];
+        foreach ($response->embeddings as $item) {
+            $vectors[] = $item->embedding;
+        }
+
         return new EmbedResponse(
-            $response->embeddings[0]->embedding,
+            $vectors,
             new EmbeddingUsage(
                 $response->usage->promptTokens,
                 $response->usage->totalTokens,

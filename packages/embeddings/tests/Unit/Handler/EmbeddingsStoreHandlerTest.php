@@ -44,8 +44,8 @@ class EmbeddingsStoreHandlerTest extends TestCase
 
         $generator->generateEmbedding($embedding, null)->willReturn([$generatedEmbedding]);
 
-        $embedResponse = new EmbedResponse($vector, new EmbeddingUsage(10, 20));
-        $adapter->embed(Argument::that(fn (EmbedRequest $request) => 'processed content' === $request->getText()))->willReturn($embedResponse);
+        $embedResponse = new EmbedResponse([$vector], new EmbeddingUsage(10, 20));
+        $adapter->embed(Argument::that(fn (EmbedRequest $request) => ['processed content'] === $request->getTexts()))->willReturn($embedResponse);
 
         $store->addDocuments([$generatedEmbedding])->shouldBeCalled();
 
@@ -85,7 +85,7 @@ class EmbeddingsStoreHandlerTest extends TestCase
 
         $generator->generateEmbedding($embedding, $headerGenerator)->willReturn([$generatedEmbedding]);
 
-        $embedResponse = new EmbedResponse($vector, new EmbeddingUsage(10, 20));
+        $embedResponse = new EmbedResponse([$vector], new EmbeddingUsage(10, 20));
         $adapter->embed(Argument::any())->willReturn($embedResponse);
 
         $store->addDocuments([$generatedEmbedding])->shouldBeCalled();
@@ -160,7 +160,7 @@ class EmbeddingsStoreHandlerTest extends TestCase
 
         $generator->generateEmbedding($embedding, $headerGenerator)->willReturn([$generatedEmbedding]);
 
-        $embedResponse = new EmbedResponse($vector, new EmbeddingUsage(10, 20));
+        $embedResponse = new EmbedResponse([$vector], new EmbeddingUsage(10, 20));
         $adapter->embed(Argument::any())->willReturn($embedResponse);
 
         $handler = new EmbeddingsStoreHandler(
@@ -220,8 +220,8 @@ class EmbeddingsStoreHandlerTest extends TestCase
 
         $generator->generateEmbedding($embedding, null)->willReturn([$generatedEmbedding]);
 
-        $embedResponse = new EmbedResponse($vector, new EmbeddingUsage(10, 20));
-        $adapter->embed(Argument::that(fn (EmbedRequest $request) => 'processed content' === $request->getText()))->willReturn($embedResponse);
+        $embedResponse = new EmbedResponse([$vector], new EmbeddingUsage(10, 20));
+        $adapter->embed(Argument::that(fn (EmbedRequest $request) => ['processed content'] === $request->getTexts()))->willReturn($embedResponse);
 
         $store->addDocuments([$generatedEmbedding])->shouldBeCalled();
 
