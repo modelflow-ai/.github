@@ -27,38 +27,6 @@ final class MistralEmbeddingAdapterTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testEmbedText(): void
-    {
-        $embedding = $this->prophesize(EmbeddingsInterface::class);
-        $client = $this->prophesize(ClientInterface::class);
-        $client->embeddings()->willReturn($embedding->reveal());
-
-        $embedding->create([
-            'model' => Model::EMBED->value,
-            'input' => ['some text'],
-        ])->willReturn(CreateResponse::from([
-            'id' => 'embd-aad6fc62b17349b192ef09225058bc45',
-            'object' => 'list',
-            'data' => [
-                [
-                    'object' => 'embedding',
-                    'embedding' => [0.1, 0.2, 0.3],
-                    'index' => 0,
-                ],
-            ],
-            'model' => Model::EMBED->value,
-            'usage' => [
-                'prompt_tokens' => 9,
-                'total_tokens' => 9,
-            ],
-        ], MetaInformation::from([])));
-
-        $adapter = new MistralEmbeddingAdapter($client->reveal());
-        $result = $adapter->embedText('some text');
-
-        $this->assertSame([0.1, 0.2, 0.3], $result);
-    }
-
     public function testEmbed(): void
     {
         $embedding = $this->prophesize(EmbeddingsInterface::class);

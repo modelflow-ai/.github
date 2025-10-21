@@ -45,8 +45,9 @@ class QdrantEmbeddingsStoreTest extends TestCase
 
     protected function embed(EmbeddingInterface $embedding): EmbeddingInterface
     {
-        $vector = $this->embeddingAdapter->embedText($embedding->getContent());
-        $embedding->setVector($vector);
+        $request = new \ModelflowAi\Embeddings\Adapter\Request\EmbedRequest([$embedding->getContent()]);
+        $response = $this->embeddingAdapter->embed($request);
+        $embedding->setVector($response->getVectors()[0]);
 
         return $embedding;
     }
@@ -149,13 +150,17 @@ class QdrantEmbeddingsStoreTest extends TestCase
 
         $store->addDocuments([$embedding1, $embedding2]);
 
-        $result = $store->similaritySearch($this->embeddingAdapter->embedText('I am searching for ancient secrets'), 1);
+        $request = new \ModelflowAi\Embeddings\Adapter\Request\EmbedRequest(['I am searching for ancient secrets']);
+        $response = $this->embeddingAdapter->embed($request);
+        $vector = $response->getVectors()[0];
+
+        $result = $store->similaritySearch($vector, 1);
 
         $this->assertCount(1, $result);
         $this->assertInstanceOf(TestEmbedding::class, $result[0]);
         $this->assertSame($uuid1, $result[0]->uuid);
 
-        $result = $store->similaritySearch($this->embeddingAdapter->embedText('I am searching for ancient secrets'), 2);
+        $result = $store->similaritySearch($vector, 2);
 
         $this->assertCount(2, $result);
         $this->assertInstanceOf(TestEmbedding::class, $result[0]);
@@ -180,8 +185,11 @@ class QdrantEmbeddingsStoreTest extends TestCase
 
         $store->addDocuments([$embedding1, $embedding2]);
 
+        $request = new \ModelflowAi\Embeddings\Adapter\Request\EmbedRequest(['searching']);
+        $response = $this->embeddingAdapter->embed($request);
+
         $result = $store->similaritySearch(
-            $this->embeddingAdapter->embedText('searching'),
+            $response->getVectors()[0],
             2,
             ['category' => 'category1'],
         );
@@ -210,8 +218,11 @@ class QdrantEmbeddingsStoreTest extends TestCase
 
         $store->addDocuments([$embedding1, $embedding2, $embedding3]);
 
+        $request = new \ModelflowAi\Embeddings\Adapter\Request\EmbedRequest(['searching']);
+        $response = $this->embeddingAdapter->embed($request);
+
         $result = $store->similaritySearch(
-            $this->embeddingAdapter->embedText('searching'),
+            $response->getVectors()[0],
             3,
             ['category' => ['category1', 'category2']],
         );
@@ -231,8 +242,11 @@ class QdrantEmbeddingsStoreTest extends TestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Unsupported filter value type');
 
+        $request = new \ModelflowAi\Embeddings\Adapter\Request\EmbedRequest(['searching']);
+        $response = $this->embeddingAdapter->embed($request);
+
         $store->similaritySearch(
-            $this->embeddingAdapter->embedText('searching'),
+            $response->getVectors()[0],
             2,
             ['category' => new \stdClass()],
         );

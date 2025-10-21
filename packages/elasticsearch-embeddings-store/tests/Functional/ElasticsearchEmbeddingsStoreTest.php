@@ -17,6 +17,7 @@ use Elastic\Elasticsearch\Client;
 use Elastic\Elasticsearch\ClientBuilder;
 use Elastic\Elasticsearch\Response\Elasticsearch;
 use ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface;
+use ModelflowAi\Embeddings\Adapter\Request\EmbedRequest;
 use ModelflowAi\Embeddings\Model\EmbeddingInterface;
 use ModelflowAi\Embeddings\Model\EmbeddingTrait;
 use ModelflowAi\Embeddings\Store\Elasticsearch\ElasticsearchEmbeddingsStore;
@@ -43,8 +44,9 @@ class ElasticsearchEmbeddingsStoreTest extends TestCase
 
     protected function embed(EmbeddingInterface $embedding): EmbeddingInterface
     {
-        $vector = $this->embeddingAdapter->embedText($embedding->getContent());
-        $embedding->setVector($vector);
+        $request = new EmbedRequest([$embedding->getContent()]);
+        $response = $this->embeddingAdapter->embed($request);
+        $embedding->setVector($response->getVectors()[0]);
 
         return $embedding;
     }
@@ -145,13 +147,15 @@ class ElasticsearchEmbeddingsStoreTest extends TestCase
 
         $store->addDocuments([$embedding1, $embedding2]);
 
-        $result = $store->similaritySearch($this->embeddingAdapter->embedText('I am searching for ancient secrets'), 1);
+        $request = new EmbedRequest(['I am searching for ancient secrets']);
+        $response = $this->embeddingAdapter->embed($request);
+        $result = $store->similaritySearch($response->getVectors()[0], 1);
 
         $this->assertCount(1, $result);
         $this->assertInstanceOf(TestEmbedding::class, $result[0]);
         $this->assertSame($uuid1, $result[0]->uuid);
 
-        $result = $store->similaritySearch($this->embeddingAdapter->embedText('I am searching for ancient secrets'), 2);
+        $result = $store->similaritySearch($response->getVectors()[0], 2);
 
         $this->assertCount(2, $result);
         $this->assertInstanceOf(TestEmbedding::class, $result[0]);

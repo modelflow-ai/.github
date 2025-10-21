@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Embeddings\Adapter\Cache;
 
-use ModelflowAi\Embeddings\Adapter\DeprecatedEmbedTextTrait;
 use ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface;
 use ModelflowAi\Embeddings\Adapter\Request\EmbedRequest;
 use ModelflowAi\Embeddings\Adapter\Response\EmbedResponse;
@@ -22,8 +21,6 @@ use Psr\Cache\CacheItemPoolInterface;
 
 final readonly class CacheEmbeddingAdapter implements EmbeddingAdapterInterface
 {
-    use DeprecatedEmbedTextTrait;
-
     public function __construct(
         private EmbeddingAdapterInterface $adapter,
         private CacheItemPoolInterface $cacheItemPool,

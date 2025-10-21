@@ -18,12 +18,5 @@ use ModelflowAi\Embeddings\Adapter\Response\EmbedResponse;
 
 interface EmbeddingAdapterInterface
 {
-    /**
-     * @return float[]
-     *
-     * @deprecated use EmbeddingAdapterInterface::embed instead
-     */
-    public function embedText(string $text): array;
-
     public function embed(EmbedRequest $request): EmbedResponse;
 }

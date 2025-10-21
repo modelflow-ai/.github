@@ -61,9 +61,7 @@ class EmbeddingsStoreHandler implements EmbeddingsStoreHandlerInterface
                 $request->getHeaderGenerator(),
             );
 
-            $generatedEmbeddingsArray = \is_array($generatedEmbeddings) ? $generatedEmbeddings : \iterator_to_array($generatedEmbeddings);
-
-            foreach ($generatedEmbeddingsArray as $generatedEmbedding) {
+            foreach ($generatedEmbeddings as $generatedEmbedding) {
                 $embeddingsByAdapter[$key][] = $generatedEmbedding;
             }
 

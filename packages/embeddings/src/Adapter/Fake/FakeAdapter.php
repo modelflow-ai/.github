@@ -28,15 +28,6 @@ class FakeAdapter implements EmbeddingAdapterInterface
     ) {
     }
 
-    public function embedText(string $text): array
-    {
-        if (!\array_key_exists($text, $this->embeddings)) {
-            throw new \RuntimeException(\sprintf('Text "%s" not found in embeddings.', $text));
-        }
-
-        return $this->embeddings[$text];
-    }
-
     public function embed(EmbedRequest $request): EmbedResponse
     {
         $texts = $request->getTexts();
@@ -44,7 +35,11 @@ class FakeAdapter implements EmbeddingAdapterInterface
         $totalTokens = 0;
 
         foreach ($texts as $text) {
-            $vectors[] = $this->embedText($text);
+            if (!\array_key_exists($text, $this->embeddings)) {
+                throw new \RuntimeException(\sprintf('Text "%s" not found in embeddings.', $text));
+            }
+
+            $vectors[] = $this->embeddings[$text];
             $totalTokens += \strlen($text);
         }
 

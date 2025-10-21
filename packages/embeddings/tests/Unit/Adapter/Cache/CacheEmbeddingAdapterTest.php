@@ -52,42 +52,6 @@ class CacheEmbeddingAdapterTest extends TestCase
         );
     }
 
-    public function testEmbedText(): void
-    {
-        $text = 'Test text to embed';
-        $hash = \hash('sha256', $text);
-        $expectedVector = [0.1, 0.2, 0.3, 0.4, 0.5];
-        $usage = new EmbeddingUsage(10, 15);
-
-        $expectedResponse = new EmbedResponse(
-            [$expectedVector],
-            $usage,
-        );
-
-        $expectedCacheData = [
-            'vector' => $expectedVector,
-            'usage' => [
-                'promptTokens' => 10,
-                'totalTokens' => 15,
-            ],
-        ];
-
-        $cacheItem = $this->prophesize(CacheItemInterface::class);
-        $cacheItem->isHit()->willReturn(false);
-        $cacheItem->set($expectedCacheData)->shouldBeCalled()->willReturn($cacheItem->reveal());
-        $cacheItem->get()->shouldNotBeCalled();
-
-        $this->cacheItemPool->getItem($hash)->willReturn($cacheItem->reveal());
-        $this->cacheItemPool->save($cacheItem->reveal())->shouldBeCalled();
-
-        $this->adapter->embed(Argument::that(fn ($request) => $request instanceof EmbedRequest
-            && $request->getTexts() === [$text]))->willReturn($expectedResponse);
-
-        $response = $this->cacheEmbeddingAdapter->embedText($text);
-
-        $this->assertSame($expectedVector, $response);
-    }
-
     public function testEmbedReturnsFromCacheOnHit(): void
     {
         $text = 'Test text to embed';

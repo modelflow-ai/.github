@@ -19,22 +19,6 @@ use PHPUnit\Framework\TestCase;
 
 class FakeAdapterTest extends TestCase
 {
-    public function testEmbedText(): void
-    {
-        $text = 'Hello world';
-        $embedding = [0.1, 0.2, 0.3, 0.4, 0.5];
-
-        $embeddings = [
-            $text => $embedding,
-        ];
-
-        $adapter = new FakeAdapter($embeddings);
-
-        $result = $adapter->embedText($text);
-
-        $this->assertSame($embedding, $result);
-    }
-
     public function testEmbedReturnsCorrectEmbedding(): void
     {
         $text = 'Hello world';

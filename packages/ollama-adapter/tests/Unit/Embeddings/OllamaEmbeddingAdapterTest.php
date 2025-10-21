@@ -26,39 +26,15 @@ final class OllamaEmbeddingAdapterTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testEmbedText(): void
-    {
-        $embedding = $this->prophesize(EmbeddingsInterface::class);
-        $client = $this->prophesize(ClientInterface::class);
-        $client->embeddings()->willReturn($embedding->reveal());
-
-        $embedding->create([
-            'model' => 'all-minilm',
-            'prompt' => 'some text',
-        ])->willReturn(CreateResponse::from([
-            'embedding' => [0.1, 0.2, 0.3],
-            'usage' => [
-                'prompt_tokens' => 4,
-                'total_tokens' => 4,
-            ],
-        ], MetaInformation::from([])));
-
-        $adapter = new OllamaEmbeddingAdapter($client->reveal());
-        $result = $adapter->embedText('some text');
-
-        $this->assertSame([0.1, 0.2, 0.3], $result);
-    }
-
     public function testEmbed(): void
     {
         $embedding = $this->prophesize(EmbeddingsInterface::class);
         $client = $this->prophesize(ClientInterface::class);
         $client->embeddings()->willReturn($embedding->reveal());
 
-        $response = CreateResponse::from(
-            ['embedding' => [0.1, 0.2, 0.3]],
-            MetaInformation::from([]),
-        );
+        $response = CreateResponse::from([
+            'embedding' => [0.1, 0.2, 0.3],
+        ], MetaInformation::from([]));
 
         $embedding->create([
             'model' => 'all-minilm',
@@ -66,10 +42,10 @@ final class OllamaEmbeddingAdapterTest extends TestCase
         ])->willReturn($response);
 
         $adapter = new OllamaEmbeddingAdapter($client->reveal());
-        $request = new EmbedRequest('some text');
+        $request = new EmbedRequest(['some text']);
         $response = $adapter->embed($request);
 
-        $this->assertSame([0.1, 0.2, 0.3], $response->getVector());
+        $this->assertSame([[0.1, 0.2, 0.3]], $response->getVectors());
         $this->assertSame(0, $response->getUsage()->getPromptTokens());
         $this->assertSame(0, $response->getUsage()->getTotalTokens());
     }
@@ -80,10 +56,9 @@ final class OllamaEmbeddingAdapterTest extends TestCase
         $client = $this->prophesize(ClientInterface::class);
         $client->embeddings()->willReturn($embedding->reveal());
 
-        $response = CreateResponse::from(
-            ['embedding' => [0.1, 0.2, 0.3]],
-            MetaInformation::from([]),
-        );
+        $response = CreateResponse::from([
+            'embedding' => [0.1, 0.2, 0.3],
+        ], MetaInformation::from([]));
 
         $embedding->create([
             'model' => 'custom-model',
@@ -91,9 +66,9 @@ final class OllamaEmbeddingAdapterTest extends TestCase
         ])->willReturn($response);
 
         $adapter = new OllamaEmbeddingAdapter($client->reveal(), 'custom-model');
-        $request = new EmbedRequest('some text');
+        $request = new EmbedRequest(['some text']);
         $response = $adapter->embed($request);
 
-        $this->assertSame([0.1, 0.2, 0.3], $response->getVector());
+        $this->assertSame([[0.1, 0.2, 0.3]], $response->getVectors());
     }
 }

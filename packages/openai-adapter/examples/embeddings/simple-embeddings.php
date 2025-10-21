@@ -35,13 +35,13 @@ foreach ($texts as $index => $text) {
     echo "Text {$displayIndex}: {$text}\n";
 
     // Create embed request
-    $request = new EmbedRequest($text);
+    $request = new EmbedRequest([$text]);
 
     // Get embedding
     $response = $embeddingAdapter->embed($request);
 
     // Display results
-    $embedding = $response->getVector();
+    $embedding = $response->getVectors()[0];
     $usage = $response->getUsage();
 
     echo '   📊 Embedding dimensions: ' . \count($embedding) . "\n";
@@ -53,14 +53,14 @@ foreach ($texts as $index => $text) {
 // Demonstrate basic similarity calculation
 echo "Calculating cosine similarity between first two embeddings...\n";
 
-$request1 = new EmbedRequest($texts[0]);
-$request2 = new EmbedRequest($texts[1]);
+$request1 = new EmbedRequest([$texts[0]]);
+$request2 = new EmbedRequest([$texts[1]]);
 
 $response1 = $embeddingAdapter->embed($request1);
 $response2 = $embeddingAdapter->embed($request2);
 
-$embedding1 = $response1->getVector();
-$embedding2 = $response2->getVector();
+$embedding1 = $response1->getVectors()[0];
+$embedding2 = $response2->getVectors()[0];
 
 // Simple cosine similarity calculation
 $dotProduct = 0;

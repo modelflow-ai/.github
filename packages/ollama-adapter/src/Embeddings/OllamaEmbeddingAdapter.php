@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace ModelflowAi\OllamaAdapter\Embeddings;
 
-use ModelflowAi\Embeddings\Adapter\DeprecatedEmbedTextTrait;
 use ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface;
 use ModelflowAi\Embeddings\Adapter\Request\EmbedRequest;
 use ModelflowAi\Embeddings\Adapter\Response\EmbedResponse;
@@ -22,8 +21,6 @@ use ModelflowAi\Ollama\ClientInterface;
 
 final readonly class OllamaEmbeddingAdapter implements EmbeddingAdapterInterface
 {
-    use DeprecatedEmbedTextTrait;
-
     public function __construct(
         private ClientInterface $client,
         private string $model = 'all-minilm',
@@ -32,16 +29,28 @@ final readonly class OllamaEmbeddingAdapter implements EmbeddingAdapterInterface
 
     public function embed(EmbedRequest $request): EmbedResponse
     {
-        $response = $this->client->embeddings()->create([
-            'model' => $this->model,
-            'prompt' => $request->getText(),
-        ]);
+        $texts = $request->getTexts();
+        $vectors = [];
+        $totalPromptTokens = 0;
+        $totalTotalTokens = 0;
+
+        // Ollama API processes one embedding at a time
+        foreach ($texts as $text) {
+            $response = $this->client->embeddings()->create([
+                'model' => $this->model,
+                'prompt' => $text,
+            ]);
+
+            $vectors[] = $response->embedding;
+            $totalPromptTokens += $response->usage->promptTokens;
+            $totalTotalTokens += $response->usage->totalTokens;
+        }
 
         return new EmbedResponse(
-            $response->embedding,
+            $vectors,
             new EmbeddingUsage(
-                $response->usage->promptTokens,
-                $response->usage->totalTokens,
+                $totalPromptTokens,
+                $totalTotalTokens,
             ),
         );
     }
