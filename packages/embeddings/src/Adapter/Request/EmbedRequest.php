@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Embeddings\Adapter\Request;
 
+use Webmozart\Assert\Assert;
+
 final readonly class EmbedRequest
 {
     /**
@@ -21,9 +23,8 @@ final readonly class EmbedRequest
     public function __construct(
         private array $texts,
     ) {
-        if ([] === $texts) {
-            throw new \InvalidArgumentException('EmbedRequest requires at least one text to embed.');
-        }
+        Assert::notEmpty($texts, 'EmbedRequest requires at least one text to embed.');
+        Assert::allStringNotEmpty($texts, 'Each text in EmbedRequest must be a non-empty string.');
     }
 
     /**

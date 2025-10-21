@@ -89,6 +89,15 @@ class EmbeddingsStoreHandler implements EmbeddingsStoreHandlerInterface
                 $embedResponse = $embeddingAdapter->embed($embedRequest);
                 $vectors = $embedResponse->getVectors();
 
+                // Verify vector count matches input count to prevent silent misalignment
+                if (\count($vectors) !== \count($chunk)) {
+                    throw new \RuntimeException(\sprintf(
+                        'Vector count mismatch: expected %d vectors but got %d from adapter.',
+                        \count($chunk),
+                        \count($vectors),
+                    ));
+                }
+
                 // Assign vectors back to embeddings
                 foreach ($chunk as $index => $generatedEmbedding) {
                     $generatedEmbedding->setVector($vectors[$index]);

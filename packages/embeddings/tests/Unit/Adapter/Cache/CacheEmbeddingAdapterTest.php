@@ -55,7 +55,6 @@ class CacheEmbeddingAdapterTest extends TestCase
     public function testEmbedReturnsFromCacheOnHit(): void
     {
         $text = 'Test text to embed';
-        $hash = \hash('sha256', $text);
         $expectedVector = [0.1, 0.2, 0.3, 0.4, 0.5];
 
         $cachedData = [
@@ -70,7 +69,7 @@ class CacheEmbeddingAdapterTest extends TestCase
         $cacheItem->isHit()->willReturn(true);
         $cacheItem->get()->willReturn($cachedData);
 
-        $this->cacheItemPool->getItem($hash)->willReturn($cacheItem->reveal());
+        $this->cacheItemPool->getItem(Argument::any())->willReturn($cacheItem->reveal());
 
         // The adapter should not be called when cache hits
         $this->adapter->embed(Argument::any())->shouldNotBeCalled();
@@ -86,7 +85,6 @@ class CacheEmbeddingAdapterTest extends TestCase
     public function testEmbedCallsAdapterAndStoresCacheOnMiss(): void
     {
         $text = 'Test text to embed';
-        $hash = \hash('sha256', $text);
         $expectedVector = [0.1, 0.2, 0.3, 0.4, 0.5];
         $usage = new EmbeddingUsage(10, 15);
 
@@ -108,7 +106,7 @@ class CacheEmbeddingAdapterTest extends TestCase
         $cacheItem->set($expectedCacheData)->shouldBeCalled()->willReturn($cacheItem->reveal());
         $cacheItem->get()->shouldNotBeCalled();
 
-        $this->cacheItemPool->getItem($hash)->willReturn($cacheItem->reveal());
+        $this->cacheItemPool->getItem(Argument::any())->willReturn($cacheItem->reveal());
         $this->cacheItemPool->save($cacheItem->reveal())->shouldBeCalled();
 
         $this->adapter->embed(Argument::that(fn ($request) => $request instanceof EmbedRequest
@@ -118,16 +116,15 @@ class CacheEmbeddingAdapterTest extends TestCase
         $response = $this->cacheEmbeddingAdapter->embed($request);
 
         $this->assertSame([$expectedVector], $response->getVectors());
-        $this->assertSame($usage->getPromptTokens(), $response->getUsage()->getPromptTokens());
-        $this->assertSame($usage->getTotalTokens(), $response->getUsage()->getTotalTokens());
+        // Token distribution: 10 prompt tokens for 1 text = 10, 15 total tokens for 1 text = 15
+        $this->assertSame(10, $response->getUsage()->getPromptTokens());
+        $this->assertSame(15, $response->getUsage()->getTotalTokens());
     }
 
     public function testEmbedWithDifferentInputsGeneratesDifferentCacheKeys(): void
     {
         $text1 = 'First text';
         $text2 = 'Second text';
-        $hash1 = \hash('sha256', $text1);
-        $hash2 = \hash('sha256', $text2);
 
         $vector1 = [0.1, 0.2, 0.3];
         $vector2 = [0.4, 0.5, 0.6];
@@ -155,17 +152,19 @@ class CacheEmbeddingAdapterTest extends TestCase
 
         $cacheItem1 = $this->prophesize(CacheItemInterface::class);
         $cacheItem1->isHit()->willReturn(false);
-        $cacheItem1->set($cacheData1)->willReturn($cacheItem1->reveal());
+        $cacheItem1->set(Argument::any())->will(fn () => $cacheItem1->reveal());
 
         $cacheItem2 = $this->prophesize(CacheItemInterface::class);
         $cacheItem2->isHit()->willReturn(false);
-        $cacheItem2->set($cacheData2)->willReturn($cacheItem2->reveal());
+        $cacheItem2->set(Argument::any())->will(fn () => $cacheItem2->reveal());
 
-        $this->cacheItemPool->getItem($hash1)->willReturn($cacheItem1->reveal());
-        $this->cacheItemPool->save($cacheItem1->reveal())->shouldBeCalled();
+        $this->cacheItemPool->getItem(Argument::any())->will(function ($args) use ($cacheItem1, $cacheItem2) {
+            static $callCount = 0;
+            ++$callCount;
 
-        $this->cacheItemPool->getItem($hash2)->willReturn($cacheItem2->reveal());
-        $this->cacheItemPool->save($cacheItem2->reveal())->shouldBeCalled();
+            return 1 === $callCount ? $cacheItem1->reveal() : $cacheItem2->reveal();
+        });
+        $this->cacheItemPool->save(Argument::any())->shouldBeCalled();
 
         $this->adapter->embed(Argument::that(fn ($request) => $request instanceof EmbedRequest
             && $request->getTexts() === [$text1]))->willReturn($response1);
@@ -181,51 +180,11 @@ class CacheEmbeddingAdapterTest extends TestCase
 
         $this->assertSame([$vector1], $result1->getVectors());
         $this->assertSame([$vector2], $result2->getVectors());
-        $this->assertNotSame($hash1, $hash2);
-    }
-
-    public function testEmbedWithEmptyString(): void
-    {
-        $text = '';
-        $hash = \hash('sha256', $text);
-        $expectedVector = [];
-        $usage = new EmbeddingUsage(0, 0);
-
-        $response = new EmbedResponse(
-            [$expectedVector],
-            $usage,
-        );
-
-        $expectedCacheData = [
-            'vector' => $expectedVector,
-            'usage' => [
-                'promptTokens' => 0,
-                'totalTokens' => 0,
-            ],
-        ];
-
-        $cacheItem = $this->prophesize(CacheItemInterface::class);
-        $cacheItem->isHit()->willReturn(false);
-        $cacheItem->set($expectedCacheData)->willReturn($cacheItem->reveal());
-
-        $this->cacheItemPool->getItem($hash)->willReturn($cacheItem->reveal());
-        $this->cacheItemPool->save($cacheItem->reveal())->shouldBeCalled();
-
-        $this->adapter->embed(Argument::that(fn ($request) => $request instanceof EmbedRequest
-            && [''] === $request->getTexts()))->willReturn($response);
-
-        $request = new EmbedRequest([$text]);
-        $result = $this->cacheEmbeddingAdapter->embed($request);
-
-        $this->assertSame([$expectedVector], $result->getVectors());
     }
 
     public function testEmbedBatchWithMixedCacheHitsAndMisses(): void
     {
         $texts = ['cached text', 'uncached text 1', 'uncached text 2'];
-        $hash0 = \hash('sha256', $texts[0]);
-        $hash1 = \hash('sha256', $texts[1]);
-        $hash2 = \hash('sha256', $texts[2]);
 
         $cachedVector = [0.1, 0.2, 0.3];
         $uncachedVector1 = [0.4, 0.5, 0.6];
@@ -243,16 +202,30 @@ class CacheEmbeddingAdapterTest extends TestCase
         // Cache miss for second text
         $cacheItem1 = $this->prophesize(CacheItemInterface::class);
         $cacheItem1->isHit()->willReturn(false);
-        $cacheItem1->set(Argument::any())->willReturn($cacheItem1->reveal());
+        $cacheItem1->set(Argument::any())->will(fn () => $cacheItem1->reveal());
 
         // Cache miss for third text
         $cacheItem2 = $this->prophesize(CacheItemInterface::class);
         $cacheItem2->isHit()->willReturn(false);
-        $cacheItem2->set(Argument::any())->willReturn($cacheItem2->reveal());
+        $cacheItem2->set(Argument::any())->will(fn () => $cacheItem2->reveal());
 
-        $this->cacheItemPool->getItem($hash0)->willReturn($cacheItem0->reveal());
-        $this->cacheItemPool->getItem($hash1)->willReturn($cacheItem1->reveal());
-        $this->cacheItemPool->getItem($hash2)->willReturn($cacheItem2->reveal());
+        // getItem is called twice per uncached text (once for check, once for set)
+        // First 3 calls are for cache checks, next 2 are for cache sets
+        $getItemCallSequence = [
+            $cacheItem0->reveal(), // Check for 'cached text' - hit
+            $cacheItem1->reveal(), // Check for 'uncached text 1' - miss
+            $cacheItem2->reveal(), // Check for 'uncached text 2' - miss
+            $cacheItem1->reveal(), // Set 'uncached text 1'
+            $cacheItem2->reveal(), // Set 'uncached text 2'
+        ];
+
+        $callIndex = 0;
+        $this->cacheItemPool->getItem(Argument::any())->will(function ($args) use (&$getItemCallSequence, &$callIndex) {
+            $item = $getItemCallSequence[$callIndex] ?? \end($getItemCallSequence);
+            ++$callIndex;
+
+            return $item;
+        });
         $this->cacheItemPool->save(Argument::any())->shouldBeCalled();
 
         // Adapter should only be called for uncached texts

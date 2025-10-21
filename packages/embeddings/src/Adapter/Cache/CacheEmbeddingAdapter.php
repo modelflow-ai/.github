@@ -21,10 +21,15 @@ use Psr\Cache\CacheItemPoolInterface;
 
 final readonly class CacheEmbeddingAdapter implements EmbeddingAdapterInterface
 {
+    private string $cachePrefix;
+
     public function __construct(
         private EmbeddingAdapterInterface $adapter,
         private CacheItemPoolInterface $cacheItemPool,
+        ?string $cachePrefix = null,
     ) {
+        // Generate cache prefix from adapter class name if not provided
+        $this->cachePrefix = $cachePrefix ?? \str_replace('\\', '_', $adapter::class);
     }
 
     public function embed(EmbedRequest $request): EmbedResponse
@@ -38,7 +43,7 @@ final readonly class CacheEmbeddingAdapter implements EmbeddingAdapterInterface
 
         // Check cache for each text
         foreach ($texts as $index => $text) {
-            $hash = \hash('sha256', $text);
+            $hash = $this->getCacheKey($text);
             $cacheItem = $this->cacheItemPool->getItem($hash);
 
             if ($cacheItem->isHit()) {
@@ -60,13 +65,23 @@ final readonly class CacheEmbeddingAdapter implements EmbeddingAdapterInterface
             $uncachedVectors = $batchResponse->getVectors();
 
             // Cache and assign results
+            $uncachedCount = \count($uncachedTexts);
+            $batchPromptTokens = $batchResponse->getUsage()->getPromptTokens();
+            $batchTotalTokens = $batchResponse->getUsage()->getTotalTokens();
+
+            // Calculate base tokens per text and remainders
+            $basePromptTokens = (int) ($batchPromptTokens / $uncachedCount);
+            $baseTokens = (int) ($batchTotalTokens / $uncachedCount);
+            $remainderPromptTokens = $batchPromptTokens % $uncachedCount;
+            $remainderTokens = $batchTotalTokens % $uncachedCount;
+
             foreach ($uncachedTexts as $i => $text) {
-                $hash = \hash('sha256', $text);
+                $hash = $this->getCacheKey($text);
                 $cacheItem = $this->cacheItemPool->getItem($hash);
 
-                // Distribute usage evenly across uncached texts
-                $promptTokens = (int) ($batchResponse->getUsage()->getPromptTokens() / \count($uncachedTexts));
-                $totalTokens = (int) ($batchResponse->getUsage()->getTotalTokens() / \count($uncachedTexts));
+                // Distribute remainder tokens to first N texts to maintain accuracy
+                $promptTokens = $basePromptTokens + ($i < $remainderPromptTokens ? 1 : 0);
+                $totalTokens = $baseTokens + ($i < $remainderTokens ? 1 : 0);
 
                 $cacheData = [
                     'vector' => $uncachedVectors[$i],
@@ -94,5 +109,13 @@ final readonly class CacheEmbeddingAdapter implements EmbeddingAdapterInterface
             \array_values($vectors),
             new EmbeddingUsage($totalPromptTokens, $totalTotalTokens),
         );
+    }
+
+    /**
+     * Generate cache key with adapter namespace to prevent cross-model collisions.
+     */
+    private function getCacheKey(string $text): string
+    {
+        return \hash('sha256', $this->cachePrefix . ':' . $text);
     }
 }

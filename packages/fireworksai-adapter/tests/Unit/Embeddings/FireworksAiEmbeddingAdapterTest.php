@@ -27,7 +27,6 @@ final class FireworksAiEmbeddingAdapterTest extends TestCase
 {
     use ProphecyTrait;
 
-
     public function testEmbed(): void
     {
         $embedding = $this->prophesize(EmbeddingsContract::class);
