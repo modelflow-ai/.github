@@ -60,7 +60,7 @@ class CacheEmbeddingAdapterTest extends TestCase
         $usage = new EmbeddingUsage(10, 15);
 
         $expectedResponse = new EmbedResponse(
-            $expectedVector,
+            [$expectedVector],
             $usage,
         );
 
@@ -81,10 +81,9 @@ class CacheEmbeddingAdapterTest extends TestCase
         $this->cacheItemPool->save($cacheItem->reveal())->shouldBeCalled();
 
         $this->adapter->embed(Argument::that(fn ($request) => $request instanceof EmbedRequest
-            && $request->getText() === $text))->willReturn($expectedResponse);
+            && $request->getTexts() === [$text]))->willReturn($expectedResponse);
 
-        $request = new EmbedRequest($text);
-        $response = $this->cacheEmbeddingAdapter->embedText($request->getText());
+        $response = $this->cacheEmbeddingAdapter->embedText($text);
 
         $this->assertSame($expectedVector, $response);
     }
@@ -155,7 +154,8 @@ class CacheEmbeddingAdapterTest extends TestCase
         $response = $this->cacheEmbeddingAdapter->embed($request);
 
         $this->assertSame([$expectedVector], $response->getVectors());
-        $this->assertSame($usage, $response->getUsage());
+        $this->assertSame($usage->getPromptTokens(), $response->getUsage()->getPromptTokens());
+        $this->assertSame($usage->getTotalTokens(), $response->getUsage()->getTotalTokens());
     }
 
     public function testEmbedWithDifferentInputsGeneratesDifferentCacheKeys(): void

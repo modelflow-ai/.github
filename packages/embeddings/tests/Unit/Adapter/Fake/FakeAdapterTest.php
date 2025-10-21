@@ -46,9 +46,9 @@ class FakeAdapterTest extends TestCase
 
         $adapter = new FakeAdapter($embeddings);
 
-        $result = $adapter->embed(new EmbedRequest($text));
+        $result = $adapter->embed(new EmbedRequest([$text]));
 
-        $this->assertSame($embedding, $result->getVector());
+        $this->assertSame([$embedding], $result->getVectors());
     }
 
     public function testEmbedWithMultipleEmbeddings(): void
@@ -66,11 +66,11 @@ class FakeAdapterTest extends TestCase
 
         $adapter = new FakeAdapter($embeddings);
 
-        $result1 = $adapter->embed(new EmbedRequest($text1));
-        $result2 = $adapter->embed(new EmbedRequest($text2));
+        $result1 = $adapter->embed(new EmbedRequest([$text1]));
+        $result2 = $adapter->embed(new EmbedRequest([$text2]));
 
-        $this->assertSame($embedding1, $result1->getVector());
-        $this->assertSame($embedding2, $result2->getVector());
+        $this->assertSame([$embedding1], $result1->getVectors());
+        $this->assertSame([$embedding2], $result2->getVectors());
     }
 
     public function testEmbedWithEmptyEmbedding(): void
@@ -84,10 +84,10 @@ class FakeAdapterTest extends TestCase
 
         $adapter = new FakeAdapter($embeddings);
 
-        $result = $adapter->embed(new EmbedRequest($text));
+        $result = $adapter->embed(new EmbedRequest([$text]));
 
-        $this->assertSame($embedding, $result->getVector());
-        $this->assertEmpty($result->getVector());
+        $this->assertSame([$embedding], $result->getVectors());
+        $this->assertEmpty($result->getVectors()[0]);
     }
 
     public function testEmbedThrowsExceptionForUnknownText(): void
@@ -106,7 +106,7 @@ class FakeAdapterTest extends TestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage(\sprintf('Text "%s" not found in embeddings.', $unknownText));
 
-        $adapter->embed(new EmbedRequest($unknownText));
+        $adapter->embed(new EmbedRequest([$unknownText]));
     }
 
     public function testConstructWithEmptyEmbeddings(): void
@@ -116,7 +116,7 @@ class FakeAdapterTest extends TestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Text "any text" not found in embeddings.');
 
-        $adapter->embed(new EmbedRequest('any text'));
+        $adapter->embed(new EmbedRequest(['any text']));
     }
 
     public function testEmbedWithSpecialCharacters(): void
@@ -130,9 +130,9 @@ class FakeAdapterTest extends TestCase
 
         $adapter = new FakeAdapter($embeddings);
 
-        $result = $adapter->embed(new EmbedRequest($text));
+        $result = $adapter->embed(new EmbedRequest([$text]));
 
-        $this->assertSame($embedding, $result->getVector());
+        $this->assertSame([$embedding], $result->getVectors());
     }
 
     public function testEmbedCaseSensitivity(): void
@@ -150,11 +150,11 @@ class FakeAdapterTest extends TestCase
 
         $adapter = new FakeAdapter($embeddings);
 
-        $lowerCaseResult = $adapter->embed(new EmbedRequest($lowerCaseText));
-        $upperCaseResult = $adapter->embed(new EmbedRequest($upperCaseText));
+        $lowerCaseResult = $adapter->embed(new EmbedRequest([$lowerCaseText]));
+        $upperCaseResult = $adapter->embed(new EmbedRequest([$upperCaseText]));
 
-        $this->assertSame($lowerCaseEmbedding, $lowerCaseResult->getVector());
-        $this->assertSame($upperCaseEmbedding, $upperCaseResult->getVector());
+        $this->assertSame([$lowerCaseEmbedding], $lowerCaseResult->getVectors());
+        $this->assertSame([$upperCaseEmbedding], $upperCaseResult->getVectors());
         $this->assertNotSame($lowerCaseResult, $upperCaseResult);
     }
 }

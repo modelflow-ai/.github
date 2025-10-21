@@ -39,12 +39,18 @@ class FakeAdapter implements EmbeddingAdapterInterface
 
     public function embed(EmbedRequest $request): EmbedResponse
     {
-        $text = $request->getText();
-        $vector = $this->embedText($text);
+        $texts = $request->getTexts();
+        $vectors = [];
+        $totalTokens = 0;
+
+        foreach ($texts as $text) {
+            $vectors[] = $this->embedText($text);
+            $totalTokens += \strlen($text);
+        }
 
         return new EmbedResponse(
-            $vector,
-            new EmbeddingUsage(\strlen((string) $text)),
+            $vectors,
+            new EmbeddingUsage($totalTokens, $totalTokens),
         );
     }
 }

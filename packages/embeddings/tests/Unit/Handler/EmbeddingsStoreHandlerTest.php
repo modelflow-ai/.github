@@ -188,7 +188,13 @@ class EmbeddingsStoreHandlerTest extends TestCase
         $this->expectExceptionMessage('No adapter configured for key "test_key".');
 
         $key = 'test_key';
+        $embedding = new TestEmbedding('test-id', 'test content');
+        $generatedEmbedding = new TestEmbedding('test-id', 'processed content');
+
         $generator = $this->prophesize(EmbeddingGeneratorInterface::class);
+        $generator->generateEmbedding($embedding, Argument::any())
+            ->willReturn([$generatedEmbedding]);
+
         $store = $this->prophesize(EmbeddingsStoreInterface::class);
 
         $handler = new EmbeddingsStoreHandler(
@@ -200,7 +206,7 @@ class EmbeddingsStoreHandlerTest extends TestCase
 
         $request = new EmbeddingsStoreRequest(
             function () {},
-            [new TestEmbedding('test-id', 'test content')],
+            [$embedding],
         );
 
         $handler->handle($request);

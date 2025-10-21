@@ -43,8 +43,8 @@ class EmbeddingsSimilarityHandlerTest extends TestCase
         $store = $this->prophesize(EmbeddingsStoreInterface::class);
         $adapter = $this->prophesize(EmbeddingAdapterInterface::class);
 
-        $embedResponse = new EmbedResponse($vector, new EmbeddingUsage(10, 20));
-        $adapter->embed(Argument::that(fn (EmbedRequest $request) => $request->getText() === $content))->willReturn($embedResponse);
+        $embedResponse = new EmbedResponse([$vector], new EmbeddingUsage(10, 20));
+        $adapter->embed(Argument::that(fn (EmbedRequest $request) => $request->getTexts() === [$content]))->willReturn($embedResponse);
 
         $similarEmbeddings = [
             $this->prophesize(EmbeddingInterface::class)->reveal(),
@@ -119,8 +119,8 @@ class EmbeddingsSimilarityHandlerTest extends TestCase
         $store = $this->prophesize(EmbeddingsStoreInterface::class);
         $adapter = $this->prophesize(EmbeddingAdapterInterface::class);
 
-        $embedResponse = new EmbedResponse($vector, new EmbeddingUsage(10, 20));
-        $adapter->embed(Argument::that(fn (EmbedRequest $request) => $request->getText() === $content))->willReturn($embedResponse);
+        $embedResponse = new EmbedResponse([$vector], new EmbeddingUsage(10, 20));
+        $adapter->embed(Argument::that(fn (EmbedRequest $request) => $request->getTexts() === [$content]))->willReturn($embedResponse);
 
         $similarEmbeddings = [
             $this->prophesize(EmbeddingInterface::class)->reveal(),

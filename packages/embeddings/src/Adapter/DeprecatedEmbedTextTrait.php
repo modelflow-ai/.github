@@ -17,12 +17,15 @@ use ModelflowAi\Embeddings\Adapter\Request\EmbedRequest;
 
 trait DeprecatedEmbedTextTrait
 {
+    /**
+     * @return float[]
+     */
     public function embedText(string $text): array
     {
         trigger_deprecation('modelflow-ai/embeddings', '0.4.0', 'The "%s::embedText" method is deprecated, use "%s::embed" instead.', static::class, static::class);
 
-        $response = $this->embed(new EmbedRequest($text));
+        $response = $this->embed(new EmbedRequest([$text]));
 
-        return $response->getVector();
+        return $response->getVectors()[0];
     }
 }
