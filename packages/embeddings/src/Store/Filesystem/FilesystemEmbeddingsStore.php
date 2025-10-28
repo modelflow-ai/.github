@@ -16,6 +16,7 @@ namespace ModelflowAi\Embeddings\Store\Filesystem;
 use ModelflowAi\Embeddings\Algorithm\DistanceL2Utils;
 use ModelflowAi\Embeddings\Model\EmbeddingInterface;
 use ModelflowAi\Embeddings\Store\EmbeddingsStoreInterface;
+use ModelflowAi\Embeddings\Store\ScoreAssignmentTrait;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
@@ -24,6 +25,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  */
 class FilesystemEmbeddingsStore implements EmbeddingsStoreInterface
 {
+    use ScoreAssignmentTrait;
+
     public function __construct(
         public string $filePath,
     ) {
@@ -85,9 +88,8 @@ class FilesystemEmbeddingsStore implements EmbeddingsStoreInterface
             $distance = $distances[$index];
             $score = 1.0 / (1.0 + $distance);
 
-            // Set score via reflection since it's a protected property
-            $reflection = new \ReflectionProperty($embedding, 'score');
-            $reflection->setValue($embedding, $score);
+            // Assign score using cached reflection helper
+            $this->assignScore($embedding, $score);
 
             $results[] = $embedding;
         }
