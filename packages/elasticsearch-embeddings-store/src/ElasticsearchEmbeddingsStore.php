@@ -133,7 +133,13 @@ class ElasticsearchEmbeddingsStore implements EmbeddingsStoreInterface
 
         $embeddings = [];
         foreach ($rawResponse['hits']['hits'] as $hit) {
-            $embeddings[] = $hit['_source']['className']::fromArray($hit['_source']);
+            // Add similarity score to payload before creating embedding
+            $payload = $hit['_source'];
+            if (isset($hit['_score'])) {
+                $payload['score'] = (float) $hit['_score'];
+            }
+
+            $embeddings[] = $payload['className']::fromArray($payload);
         }
 
         return $embeddings;

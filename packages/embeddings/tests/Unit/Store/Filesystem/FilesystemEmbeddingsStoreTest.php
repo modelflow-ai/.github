@@ -138,6 +138,12 @@ class FilesystemEmbeddingsStoreTest extends TestCase
         $this->assertSame($embedding3->getContent(), $results[0]->getContent());
         $this->assertSame($embedding2->getContent(), $results[1]->getContent());
         $this->assertSame($embedding1->getContent(), $results[2]->getContent());
+        // Verify scores are set and decrease in order (higher score = better match)
+        $this->assertNotNull($results[0]->getScore());
+        $this->assertNotNull($results[1]->getScore());
+        $this->assertNotNull($results[2]->getScore());
+        $this->assertGreaterThanOrEqual($results[1]->getScore(), $results[0]->getScore());
+        $this->assertGreaterThanOrEqual($results[2]->getScore(), $results[1]->getScore());
     }
 
     public function testSimilaritySearchWithNullVector(): void
@@ -244,6 +250,7 @@ class TestEmbedding implements EmbeddingInterface
     private ?string $formattedContent = null;
     private string $hash;
     private int $chunkNumber = 0;
+    protected ?float $score = null;
 
     /**
      * @param float[]|null $vector
@@ -313,6 +320,11 @@ class TestEmbedding implements EmbeddingInterface
     public function getChunkNumber(): int
     {
         return $this->chunkNumber;
+    }
+
+    public function getScore(): ?float
+    {
+        return $this->score;
     }
 
     public function getCategory(): ?string
