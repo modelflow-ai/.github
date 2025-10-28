@@ -266,6 +266,7 @@ class TestEmbedding implements EmbeddingInterface
     private array $vector = [];
     private string $formattedContent = '';
     private int $chunkNumber = 0;
+    protected ?float $score = null;
 
     public function __construct(
         private readonly string $identifier,
@@ -346,6 +347,11 @@ class TestEmbedding implements EmbeddingInterface
     public function getChunkNumber(): int
     {
         return $this->chunkNumber;
+    }
+
+    public function getScore(): ?float
+    {
+        return $this->score;
     }
 
     /**

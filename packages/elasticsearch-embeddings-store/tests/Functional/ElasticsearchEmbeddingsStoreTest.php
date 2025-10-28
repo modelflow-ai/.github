@@ -154,6 +154,8 @@ class ElasticsearchEmbeddingsStoreTest extends TestCase
         $this->assertCount(1, $result);
         $this->assertInstanceOf(TestEmbedding::class, $result[0]);
         $this->assertSame($uuid1, $result[0]->uuid);
+        $this->assertNotNull($result[0]->getScore(), 'Score should be set for similarity search results');
+        $this->assertGreaterThan(0.0, $result[0]->getScore(), 'Score should be greater than 0');
 
         $result = $store->similaritySearch($response->getVectors()[0], 2);
 
@@ -162,6 +164,10 @@ class ElasticsearchEmbeddingsStoreTest extends TestCase
         $this->assertInstanceOf(TestEmbedding::class, $result[1]);
         $this->assertSame($uuid1, $result[0]->uuid);
         $this->assertSame($uuid2, $result[1]->uuid);
+        // Verify scores are set and first result has higher score (better match)
+        $this->assertNotNull($result[0]->getScore());
+        $this->assertNotNull($result[1]->getScore());
+        $this->assertGreaterThanOrEqual($result[1]->getScore(), $result[0]->getScore(), 'First result should have equal or better score');
     }
 }
 

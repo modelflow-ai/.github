@@ -45,6 +45,18 @@ interface EmbeddingInterface
     public function getChunkNumber(): int;
 
     /**
+     * Get the similarity score for this embedding.
+     *
+     * The score represents how well this embedding matches a search query
+     * in similarity search operations. Higher scores indicate better matches.
+     * Returns null if no score has been assigned (e.g., for embeddings not
+     * returned from a similarity search).
+     *
+     * @return float|null The similarity score (typically 0-1 range) or null if not set
+     */
+    public function getScore(): ?float;
+
+    /**
      * @return array<string, mixed>
      */
     public function toArray(): array;

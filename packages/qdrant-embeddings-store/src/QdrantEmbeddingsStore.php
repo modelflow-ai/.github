@@ -143,7 +143,13 @@ class QdrantEmbeddingsStore implements EmbeddingsStoreInterface
 
         $embeddings = [];
         foreach ($results as $point) {
-            $embeddings[] = $point['payload']['className']::fromArray($point['payload']);
+            // Add similarity score to payload before creating embedding
+            $payload = $point['payload'];
+            if (isset($point['score'])) {
+                $payload['score'] = (float) $point['score'];
+            }
+
+            $embeddings[] = $payload['className']::fromArray($payload);
         }
 
         return $embeddings;

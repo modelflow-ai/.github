@@ -72,7 +72,17 @@ class MemoryEmbeddingsStore implements EmbeddingsStoreInterface
 
         $results = [];
         foreach ($topKIndices as $index) {
-            $results[] = $this->embeddings[$index];
+            $embedding = clone $this->embeddings[$index];
+            // Calculate similarity score (inverse of distance, normalized to 0-1 range)
+            // Lower distance = higher similarity
+            $distance = $distances[$index];
+            $score = 1.0 / (1.0 + $distance);
+
+            // Set score via reflection since it's a protected property
+            $reflection = new \ReflectionProperty($embedding, 'score');
+            $reflection->setValue($embedding, $score);
+
+            $results[] = $embedding;
         }
 
         return $results;

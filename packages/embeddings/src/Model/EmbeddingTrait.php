@@ -46,6 +46,8 @@ trait EmbeddingTrait
 
     protected int $chunkNumber = 0;
 
+    protected ?float $score = null;
+
     public function split(string $content, int $chunkNumber): EmbeddingInterface
     {
         $embedding = clone $this;
@@ -120,6 +122,11 @@ trait EmbeddingTrait
     public function getChunkNumber(): int
     {
         return $this->chunkNumber;
+    }
+
+    public function getScore(): ?float
+    {
+        return $this->score;
     }
 
     public function toArray(): array
