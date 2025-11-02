@@ -42,7 +42,6 @@ class TokenEstimatorTest extends TestCase
         $text = 'This is a longer text that should result in more tokens being estimated based on the character count.';
         $tokens = TokenEstimator::estimateTokens($text);
 
-        // Should be roughly text length / 4
         $expectedTokens = (int) \ceil(\mb_strlen($text) / 4.0);
         $this->assertGreaterThanOrEqual($expectedTokens - 10, $tokens);
         $this->assertLessThanOrEqual($expectedTokens + 20, $tokens);
@@ -53,7 +52,6 @@ class TokenEstimatorTest extends TestCase
         $text = "Line 1\nLine 2\nLine 3";
         $tokens = TokenEstimator::estimateTokens($text);
 
-        // Should add overhead for newlines
         $this->assertGreaterThan(5, $tokens);
     }
 
@@ -62,7 +60,6 @@ class TokenEstimatorTest extends TestCase
         $text = '你好世界'; // "Hello World" in Chinese
         $tokens = TokenEstimator::estimateTokens($text);
 
-        // Should handle multibyte characters correctly
         $this->assertGreaterThanOrEqual(1, $tokens);
     }
 
@@ -82,11 +79,6 @@ class TokenEstimatorTest extends TestCase
         );
         $tokens = TokenEstimator::estimateMessageTokens($message);
 
-        // Should include:
-        // - content tokens (Hello World ≈ 3)
-        // - role overhead (1)
-        // - framing overhead (4)
-        // Total: ≈ 8 tokens
         $this->assertGreaterThanOrEqual(5, $tokens);
     }
 
@@ -98,10 +90,6 @@ class TokenEstimatorTest extends TestCase
         );
         $tokens = TokenEstimator::estimateMessageTokens($message);
 
-        // Should include:
-        // - role overhead (1)
-        // - framing overhead (4)
-        // Total: 5 tokens minimum
         $this->assertGreaterThanOrEqual(5, $tokens);
     }
 
@@ -121,14 +109,6 @@ class TokenEstimatorTest extends TestCase
         );
         $tokens = TokenEstimator::estimateMessageTokens($message);
 
-        // Should include:
-        // - content tokens (Using a tool ≈ 3-4)
-        // - role overhead (1)
-        // - framing overhead (4)
-        // - tool call overhead (3)
-        // - tool name tokens (test_function ≈ 3-4)
-        // - tool arguments tokens (JSON ~10-15)
-        // Total: > 20 tokens
         $this->assertGreaterThan(20, $tokens);
     }
 
@@ -156,13 +136,11 @@ class TokenEstimatorTest extends TestCase
         );
         $tokens = TokenEstimator::estimateMessageTokens($message);
 
-        // Should include overhead for each tool call
         $this->assertGreaterThan(30, $tokens);
     }
 
     public function testEstimateMessageTokensConsistency(): void
     {
-        // Same content should produce same token estimate
         $message1 = new AIChatResponseMessage(
             AIChatMessageRoleEnum::ASSISTANT,
             'Test message',
@@ -175,7 +153,6 @@ class TokenEstimatorTest extends TestCase
         $tokens1 = TokenEstimator::estimateMessageTokens($message1);
         $tokens2 = TokenEstimator::estimateMessageTokens($message2);
 
-        // Both should have same token count (role overhead is same)
         $this->assertSame($tokens1, $tokens2);
     }
 }
