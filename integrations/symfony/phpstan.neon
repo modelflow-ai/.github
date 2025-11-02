@@ -5,7 +5,6 @@ parameters:
         - tests
     level: max
     excludePaths:
-        - config/reference.php
         - vendor/*
         - var/*
     bootstrapFiles:
