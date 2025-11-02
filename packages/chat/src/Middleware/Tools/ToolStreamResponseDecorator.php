@@ -33,6 +33,9 @@ final class ToolStreamResponseDecorator implements AIChatResponseStreamInterface
     private $nextMiddleware;
     private ?Usage $accumulatedUsage = null;
 
+    /** @var list<UsageCallbackInterface> */
+    private array $callbacks = [];
+
     public function __construct(
         private readonly AIChatResponseStreamInterface $originalStream,
         private AIChatStreamedRequest $request,
@@ -94,6 +97,11 @@ final class ToolStreamResponseDecorator implements AIChatResponseStreamInterface
                 $this->executionCount,
             );
 
+            // Register all callbacks on the nested stream to capture usage from tool executions
+            foreach ($this->callbacks as $callback) {
+                $nestedStream->registerUsageCallback($callback);
+            }
+
             // Yield all messages from the nested stream
             foreach ($nestedStream->getMessageStream() as $message) {
                 yield $message;
@@ -141,7 +149,10 @@ final class ToolStreamResponseDecorator implements AIChatResponseStreamInterface
 
     public function registerUsageCallback(UsageCallbackInterface $callback): void
     {
-        // Delegate to the original stream
+        // Store callback locally for nested streams
+        $this->callbacks[] = $callback;
+
+        // Also delegate to the original stream
         $this->originalStream->registerUsageCallback($callback);
     }
 }

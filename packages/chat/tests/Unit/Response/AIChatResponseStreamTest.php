@@ -87,8 +87,11 @@ class AIChatResponseStreamTest extends TestCase
         $receivedUpdates = [];
 
         $callback = new class($receivedUpdates) implements UsageCallbackInterface {
-            public function __construct(private array &$updates)
+            private array $updates;
+
+            public function __construct(array &$updates)
             {
+                $this->updates = &$updates;
             }
 
             public function onUsageUpdate(Usage $usage, bool $isFinal): void
@@ -160,8 +163,11 @@ class AIChatResponseStreamTest extends TestCase
         $callCount2 = 0;
 
         $callback1 = new class($callCount1) implements UsageCallbackInterface {
-            public function __construct(private int &$count)
+            private int $count;
+
+            public function __construct(int &$count)
             {
+                $this->count = &$count;
             }
 
             public function onUsageUpdate(Usage $usage, bool $isFinal): void
@@ -171,8 +177,11 @@ class AIChatResponseStreamTest extends TestCase
         };
 
         $callback2 = new class($callCount2) implements UsageCallbackInterface {
-            public function __construct(private int &$count)
+            private int $count;
+
+            public function __construct(int &$count)
             {
+                $this->count = &$count;
             }
 
             public function onUsageUpdate(Usage $usage, bool $isFinal): void

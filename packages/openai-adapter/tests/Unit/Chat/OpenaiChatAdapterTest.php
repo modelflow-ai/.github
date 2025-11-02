@@ -587,11 +587,9 @@ final class OpenaiChatAdapterTest extends TestCase
         $this->assertInstanceOf(AIChatResponseStream::class, $result);
 
         // Register callback to track usage updates
-        $receivedUpdates = [];
-        $result->registerUsageCallback(new class($receivedUpdates) implements UsageCallbackInterface {
-            public function __construct(private array &$updates)
-            {
-            }
+        $callback = new class() implements UsageCallbackInterface {
+            /** @var list<array{inputTokens:int, outputTokens:int, totalTokens:int, isFinal:bool}> */
+            public array $updates = [];
 
             public function onUsageUpdate(Usage $usage, bool $isFinal): void
             {
@@ -602,7 +600,8 @@ final class OpenaiChatAdapterTest extends TestCase
                     'isFinal' => $isFinal,
                 ];
             }
-        });
+        };
+        $result->registerUsageCallback($callback);
 
         // Consume the stream
         $contents = ['Lorem', 'Ipsum'];
@@ -612,11 +611,11 @@ final class OpenaiChatAdapterTest extends TestCase
         }
 
         // Verify usage was received
-        $this->assertCount(1, $receivedUpdates);
-        $this->assertSame(10, $receivedUpdates[0]['inputTokens']);
-        $this->assertSame(20, $receivedUpdates[0]['outputTokens']);
-        $this->assertSame(30, $receivedUpdates[0]['totalTokens']);
-        $this->assertTrue($receivedUpdates[0]['isFinal']);
+        $this->assertCount(1, $callback->updates);
+        $this->assertSame(10, $callback->updates[0]['inputTokens']);
+        $this->assertSame(20, $callback->updates[0]['outputTokens']);
+        $this->assertSame(30, $callback->updates[0]['totalTokens']);
+        $this->assertTrue($callback->updates[0]['isFinal']);
 
         // Verify getUsage() returns the same data
         $usage = $result->getUsage();

@@ -293,6 +293,10 @@ final readonly class FireworksAiChatAdapter implements AIChatAdapterInterface
                 $usageTracker->updateUsage($usage, true);
             }
 
+            if (0 === \count($response->choices)) {
+                continue;
+            }
+
             $delta = $response->choices[0]->delta;
 
             if (!$role instanceof AIChatMessageRoleEnum) {
@@ -348,6 +352,10 @@ final readonly class FireworksAiChatAdapter implements AIChatAdapterInterface
                     $response->usage->totalTokens,
                 );
                 $usageTracker->updateUsage($usage, true);
+            }
+
+            if (0 === \count($response->choices)) {
+                continue;
             }
 
             $delta = $response->choices[0]->delta;

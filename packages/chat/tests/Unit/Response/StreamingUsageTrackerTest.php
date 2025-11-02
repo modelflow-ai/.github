@@ -106,8 +106,11 @@ class StreamingUsageTrackerTest extends TestCase
         $receivedUpdates = [];
 
         $callback = new class($receivedUpdates) implements UsageCallbackInterface {
-            public function __construct(private array &$updates)
+            private array $updates;
+
+            public function __construct(array &$updates)
             {
+                $this->updates = &$updates;
             }
 
             public function onUsageUpdate(Usage $usage, bool $isFinal): void
@@ -144,8 +147,11 @@ class StreamingUsageTrackerTest extends TestCase
         $receivedUpdates2 = [];
 
         $callback1 = new class($receivedUpdates1) implements UsageCallbackInterface {
-            public function __construct(private array &$updates)
+            private array $updates;
+
+            public function __construct(array &$updates)
             {
+                $this->updates = &$updates;
             }
 
             public function onUsageUpdate(Usage $usage, bool $isFinal): void
@@ -155,8 +161,11 @@ class StreamingUsageTrackerTest extends TestCase
         };
 
         $callback2 = new class($receivedUpdates2) implements UsageCallbackInterface {
-            public function __construct(private array &$updates)
+            private array $updates;
+
+            public function __construct(array &$updates)
             {
+                $this->updates = &$updates;
             }
 
             public function onUsageUpdate(Usage $usage, bool $isFinal): void
@@ -181,8 +190,11 @@ class StreamingUsageTrackerTest extends TestCase
         $callCount = 0;
 
         $callback = new class($callCount) implements UsageCallbackInterface {
-            public function __construct(private int &$count)
+            private int $count;
+
+            public function __construct(int &$count)
             {
+                $this->count = &$count;
             }
 
             public function onUsageUpdate(Usage $usage, bool $isFinal): void

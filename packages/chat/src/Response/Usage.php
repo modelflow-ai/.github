@@ -36,7 +36,7 @@ final class Usage
      */
     public function isEstimated(): bool
     {
-        return $this->metadata['estimated'] ?? false;
+        return (bool) ($this->metadata['estimated'] ?? false);
     }
 
     /**
