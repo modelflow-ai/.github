@@ -169,8 +169,6 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface
             while ($responses->valid()) {
                 $response = $responses->current();
 
-                // Google Gemini provides cumulative usage metadata in stream responses
-                // We track the last usage received and send it at the end (not deltas during streaming)
                 if ($usageTracker instanceof StreamingUsageTracker && null !== $response->usageMetadata) {
                     $lastUsage = new Usage(
                         $response->usageMetadata->promptTokenCount,
@@ -194,7 +192,6 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface
                 $responses->next();
             }
 
-            // After the stream completes, update with the final usage
             if ($usageTracker instanceof StreamingUsageTracker && $lastUsage instanceof Usage) {
                 $usageTracker->updateUsage($lastUsage, true);
             }

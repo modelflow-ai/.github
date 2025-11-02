@@ -143,12 +143,10 @@ final readonly class OllamaChatAdapter implements AIChatAdapterInterface
 
             $delta = $response->message->delta ?? '';
 
-            // Estimate tokens for this chunk
             if ($usageTracker instanceof StreamingUsageTracker && '' !== $delta) {
                 $chunkTokens = TokenEstimator::estimateTokens($delta);
                 $outputTokens += $chunkTokens;
 
-                // Emit incremental usage update for this chunk
                 $usageTracker->updateUsage(
                     new Usage(0, $chunkTokens, $chunkTokens),
                 );
@@ -162,17 +160,14 @@ final readonly class OllamaChatAdapter implements AIChatAdapterInterface
 
         // After streaming completes, send final update with input tokens
         if ($usageTracker instanceof StreamingUsageTracker) {
-            // Estimate input tokens from request messages
             $inputTokens = 0;
             foreach ($request->getMessages() as $message) {
-                // Estimate tokens for each message part
                 foreach ($message->parts as $part) {
                     if ($part instanceof \ModelflowAi\Chat\Request\Message\TextPart) {
                         $inputTokens += TokenEstimator::estimateTokens($part->text);
                     }
                 }
-                // Add overhead for message structure
-                $inputTokens += 4;
+                $inputTokens += 4; // Message structure overhead
             }
 
             // Send final update with input tokens (output tokens already sent incrementally)

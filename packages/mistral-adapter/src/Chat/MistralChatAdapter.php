@@ -248,7 +248,6 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface
         $role = null;
 
         foreach ($responses as $response) {
-            // Check for usage data (Mistral sends it in the final chunk similar to OpenAI)
             if ($usageTracker instanceof StreamingUsageTracker && null !== $response->usage) {
                 $usage = new Usage(
                     $response->usage->promptTokens,

@@ -363,7 +363,6 @@ final readonly class OpenaiChatAdapter implements AIChatAdapterInterface, Suppor
 
         /** @var CreateStreamedResponse $response */
         foreach ($responses as $response) {
-            // Check for usage data in the response (OpenAI sends it in the final chunk)
             if ($usageTracker instanceof StreamingUsageTracker && null !== $response->usage) {
                 $usage = new Usage(
                     $response->usage->promptTokens,
@@ -424,7 +423,6 @@ final readonly class OpenaiChatAdapter implements AIChatAdapterInterface, Suppor
 
         /** @var CreateStreamedResponse $response */
         foreach ($responses as $response) {
-            // Check for usage data in tool call streaming
             if ($usageTracker instanceof StreamingUsageTracker && null !== $response->usage) {
                 $usage = new Usage(
                     $response->usage->promptTokens,

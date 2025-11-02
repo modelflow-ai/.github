@@ -97,17 +97,14 @@ final class ToolStreamResponseDecorator implements AIChatResponseStreamInterface
                 $this->executionCount,
             );
 
-            // Register all callbacks on the nested stream to capture usage from tool executions
             foreach ($this->callbacks as $callback) {
                 $nestedStream->registerUsageCallback($callback);
             }
 
-            // Yield all messages from the nested stream
             foreach ($nestedStream->getMessageStream() as $message) {
                 yield $message;
             }
 
-            // Accumulate usage from nested tool execution
             $nestedUsage = $nestedStream->getUsage();
             if ($nestedUsage instanceof Usage) {
                 $this->accumulatedUsage = $this->accumulatedUsage instanceof Usage
@@ -149,10 +146,7 @@ final class ToolStreamResponseDecorator implements AIChatResponseStreamInterface
 
     public function registerUsageCallback(UsageCallbackInterface $callback): void
     {
-        // Store callback locally for nested streams
         $this->callbacks[] = $callback;
-
-        // Also delegate to the original stream
         $this->originalStream->registerUsageCallback($callback);
     }
 }
