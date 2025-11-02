@@ -24,10 +24,10 @@ final class Usage
      * @param array<string, mixed> $metadata
      */
     public function __construct(
-        public int $inputTokens,
-        public int $outputTokens,
-        public int $totalTokens,
-        public array $metadata = [],
+        public readonly int $inputTokens,
+        public readonly int $outputTokens,
+        public readonly int $totalTokens,
+        public readonly array $metadata = [],
     ) {
     }
 
@@ -53,13 +53,11 @@ final class Usage
             return $this;
         }
 
-        $clone = clone $this;
-        $clone->inputTokens += $nextUsage->inputTokens;
-        $clone->outputTokens += $nextUsage->outputTokens;
-        $clone->totalTokens += $nextUsage->totalTokens;
-        // Merge metadata, with nextUsage taking precedence
-        $clone->metadata = \array_merge($this->metadata, $nextUsage->metadata);
-
-        return $clone;
+        return new self(
+            $this->inputTokens + $nextUsage->inputTokens,
+            $this->outputTokens + $nextUsage->outputTokens,
+            $this->totalTokens + $nextUsage->totalTokens,
+            \array_merge($this->metadata, $nextUsage->metadata),
+        );
     }
 }
