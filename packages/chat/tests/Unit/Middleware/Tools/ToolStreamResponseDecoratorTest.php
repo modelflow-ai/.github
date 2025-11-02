@@ -22,6 +22,7 @@ use ModelflowAi\Chat\Response\AIChatResponseMessage;
 use ModelflowAi\Chat\Response\AIChatResponseStream;
 use ModelflowAi\Chat\Response\AIChatResponseStreamInterface;
 use ModelflowAi\Chat\Response\AIChatToolCall;
+use ModelflowAi\Chat\Response\StreamingUsageTracker;
 use ModelflowAi\Chat\Response\Usage;
 use ModelflowAi\Chat\ToolInfo\ToolExecutor;
 use ModelflowAi\Chat\ToolInfo\ToolTypeEnum;
@@ -297,10 +298,13 @@ class ToolStreamResponseDecoratorTest extends TestCase
 
         // Create original stream
         $messageIterator = new \ArrayIterator([$message1, $message2]);
+        $usageTracker = new StreamingUsageTracker();
+        $usageTracker->updateUsage(new Usage(10, 20, 30), true);
         $originalStream = new AIChatResponseStream(
             $this->request->reveal(),
             $messageIterator,
-            new Usage(10, 20, 30),
+            [],
+            $usageTracker,
         );
 
         // Mock the request handling
@@ -332,10 +336,13 @@ class ToolStreamResponseDecoratorTest extends TestCase
         $secondStreamMessages = [$secondMessage];
         $secondStreamIterator = new \ArrayIterator($secondStreamMessages);
 
+        $usageTracker2 = new StreamingUsageTracker();
+        $usageTracker2->updateUsage(new Usage(5, 10, 15), true);
         $secondStream = new AIChatResponseStream(
             $finalRequest->reveal(),
             $secondStreamIterator,
-            new Usage(5, 10, 15),
+            [],
+            $usageTracker2,
         );
 
         $nextMiddleware = function ($request, $adapter) use ($finalRequest, $secondStream) {
@@ -391,10 +398,13 @@ class ToolStreamResponseDecoratorTest extends TestCase
 
         // Create original stream
         $messageIterator = new \ArrayIterator([$message1]);
+        $usageTracker1 = new StreamingUsageTracker();
+        $usageTracker1->updateUsage(new Usage(10, 20, 30), true);
         $originalStream = new AIChatResponseStream(
             $this->request->reveal(),
             $messageIterator,
-            new Usage(10, 20, 30),
+            [],
+            $usageTracker1,
         );
 
         // Mock the request handling for first call
@@ -423,10 +433,13 @@ class ToolStreamResponseDecoratorTest extends TestCase
         );
 
         $secondStreamIterator = new \ArrayIterator([$secondStreamMessage]);
+        $usageTracker2 = new StreamingUsageTracker();
+        $usageTracker2->updateUsage(new Usage(5, 10, 15), true);
         $secondStream = new AIChatResponseStream(
             $finalRequest1->reveal(),
             $secondStreamIterator,
-            new Usage(5, 10, 15),
+            [],
+            $usageTracker2,
         );
 
         // Mock the request handling for second call
@@ -455,10 +468,13 @@ class ToolStreamResponseDecoratorTest extends TestCase
         );
 
         $thirdStreamIterator = new \ArrayIterator([$thirdStreamMessage]);
+        $usageTracker3 = new StreamingUsageTracker();
+        $usageTracker3->updateUsage(new Usage(2, 3, 4), true);
         $thirdStream = new AIChatResponseStream(
             $finalRequest2->reveal(),
             $thirdStreamIterator,
-            new Usage(2, 3, 4),
+            [],
+            $usageTracker3,
         );
 
         // Setup the next middleware to return the second and third streams in sequence
@@ -515,10 +531,13 @@ class ToolStreamResponseDecoratorTest extends TestCase
 
         // Create original stream
         $messageIterator = new \ArrayIterator([$message]);
+        $usageTracker = new StreamingUsageTracker();
+        $usageTracker->updateUsage(new Usage(10, 20, 30), true);
         $originalStream = new AIChatResponseStream(
             $this->request->reveal(),
             $messageIterator,
-            new Usage(10, 20, 30),
+            [],
+            $usageTracker,
         );
 
         // Mock the request handling
@@ -550,10 +569,13 @@ class ToolStreamResponseDecoratorTest extends TestCase
 
         // Create a stream that always returns the same message with a tool call
         $nextStreamIterator = new \ArrayIterator([$nextStreamMessage]);
+        $nextUsageTracker = new StreamingUsageTracker();
+        $nextUsageTracker->updateUsage(new Usage(1, 1, 1), true);
         $nextStream = new AIChatResponseStream(
             $finalRequest->reveal(),
             $nextStreamIterator,
-            new Usage(1, 1, 1),
+            [],
+            $nextUsageTracker,
         );
 
         // The next middleware always returns the same stream with a tool call
@@ -609,7 +631,7 @@ class ToolStreamResponseDecoratorTest extends TestCase
             self::MAX_TOOL_EXECUTIONS,
         );
 
-        $this->assertSame(0, $decorator->getUsage()?->totalTokens);
+        $this->assertNull($decorator->getUsage());
 
         // Should still return messages correctly
         $resultMessages = \iterator_to_array($decorator->getMessageStream());

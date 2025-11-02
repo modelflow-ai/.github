@@ -27,23 +27,17 @@ readonly class AIChatResponseStream extends AIChatResponse implements AIChatResp
     public function __construct(
         private AIChatStreamedRequest $request,
         private \Iterator $messages,
-        ?Usage $usage = null,
         private array $metadata = [],
         private StreamingUsageTracker $usageTracker = new StreamingUsageTracker(),
     ) {
         parent::__construct(
             $request,
             new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, ''),
-            $usage,
+            null,
             $this->metadata,
         );
 
         $this->messageBuilder = new AIChatResponseStreamMessageBuilder();
-
-        // If usage was provided in constructor, initialize the tracker
-        if ($usage instanceof Usage) {
-            $this->usageTracker->updateUsage($usage, true);
-        }
     }
 
     public function getRequest(): AIChatStreamedRequest

@@ -20,6 +20,7 @@ use ModelflowAi\Chat\Response\AIChatResponse;
 use ModelflowAi\Chat\Response\AIChatResponseInterface;
 use ModelflowAi\Chat\Response\AIChatResponseMessage;
 use ModelflowAi\Chat\Response\AIChatResponseStream;
+use ModelflowAi\Chat\Response\StreamingUsageTracker;
 use ModelflowAi\Chat\Response\Usage;
 use Webmozart\Assert\Assert;
 
@@ -50,7 +51,12 @@ class FakeChatAdapter implements AIChatAdapterInterface
                 $message = [$message];
             }
 
-            return new AIChatResponseStream($request, $this->stream($message), $usage);
+            $usageTracker = new StreamingUsageTracker();
+            if ($usage instanceof Usage) {
+                $usageTracker->updateUsage($usage, true);
+            }
+
+            return new AIChatResponseStream($request, $this->stream($message), [], $usageTracker);
         }
 
         Assert::isInstanceOf($message, AIChatResponseMessage::class);

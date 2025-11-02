@@ -108,7 +108,6 @@ class AIChatResponseStreamTest extends TestCase
             new \ArrayIterator([
                 new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Lorem'),
             ]),
-            null,
             [],
             $tracker,
         );
@@ -136,7 +135,6 @@ class AIChatResponseStreamTest extends TestCase
             new \ArrayIterator([
                 new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Lorem'),
             ]),
-            null,
             [],
             $tracker,
         );
@@ -154,25 +152,6 @@ class AIChatResponseStreamTest extends TestCase
         $this->assertSame(30, $result->totalTokens);
     }
 
-    public function testConstructorWithInitialUsage(): void
-    {
-        $request = $this->prophesize(AIChatStreamedRequest::class);
-        $initialUsage = new Usage(5, 10, 15);
-
-        $response = new AIChatResponseStream(
-            $request->reveal(),
-            new \ArrayIterator([
-                new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Lorem'),
-            ]),
-            $initialUsage,
-        );
-
-        $result = $response->getUsage();
-        $this->assertNotNull($result);
-        $this->assertSame(5, $result->inputTokens);
-        $this->assertSame(10, $result->outputTokens);
-        $this->assertSame(15, $result->totalTokens);
-    }
 
     public function testRegisterMultipleCallbacks(): void
     {
@@ -208,7 +187,6 @@ class AIChatResponseStreamTest extends TestCase
             new \ArrayIterator([
                 new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Lorem'),
             ]),
-            null,
             [],
             $tracker,
         );
