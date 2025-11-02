@@ -50,11 +50,11 @@ class SymfonyHttpTransporter implements TransportInterface
             ],
         ];
 
-        if(ContentType::JSON === $payload->contentType) {
+        if (ContentType::JSON === $payload->contentType) {
             $options['json'] = $payload->parameters;
         }
 
-        if(ContentType::MULTIPART === $payload->contentType) {
+        if (ContentType::MULTIPART === $payload->contentType) {
             $options['body'] = $payload->parameters;
         }
 
@@ -126,6 +126,7 @@ class SymfonyHttpTransporter implements TransportInterface
             throw new TransportException($exception->getResponse(), $exception->getCode(), $exception);
         }
 
+        // @phpstan-ignore-next-line - toStream() exists in concrete implementations but not in ResponseInterface
         $resource = $response->toStream();
 
         return new RawResponse($resource, $metaInformation);

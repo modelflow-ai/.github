@@ -15,6 +15,7 @@ namespace ModelflowAi\ApiClient\Transport\Testing;
 
 use ModelflowAi\ApiClient\Transport\Payload;
 use ModelflowAi\ApiClient\Transport\Response\ObjectResponse;
+use ModelflowAi\ApiClient\Transport\Response\RawResponse;
 use ModelflowAi\ApiClient\Transport\Response\Response;
 use ModelflowAi\ApiClient\Transport\Response\TextResponse;
 
@@ -71,9 +72,19 @@ class MockResponseMatcher
         return null;
     }
 
+    public function matchRawResponse(Payload $payload): ?RawResponse
+    {
+        $response = $this->matchResponse($payload);
+        if ($response instanceof RawResponse) {
+            return $response;
+        }
+
+        return null;
+    }
+
     private function payloadMatches(Payload $payload, PartialPayload $partialPayload): bool
     {
-        if ($payload->contentType->name !== $partialPayload->contentType->name // @phpstan-ignore-line
+        if ($payload->contentType->name !== $partialPayload->contentType->name
             || $payload->method->name !== $partialPayload->method->name
             || false === $payload->resourceUri->equals($partialPayload->resourceUri)
         ) {
