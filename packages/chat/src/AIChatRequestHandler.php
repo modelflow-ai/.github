@@ -30,26 +30,33 @@ use Webmozart\Assert\Assert;
 
 final class AIChatRequestHandler implements AIChatRequestHandlerInterface
 {
+    public static function create(
+        DecisionTreeInterface $decisionTree,
+        iterable $middleware = [],
+    ): self {
+        $middleware = [
+            new AdapterDecisionMiddleware($decisionTree),
+            new ResponseFormatMiddleware(),
+            ...$middleware,
+            new AdapterExecutionMiddleware(),
+        ];
+
+        return new self($middleware);
+    }
+
     private readonly AIChatMiddlewareStack $middlewareStack;
 
     /**
-     * @param DecisionTreeInterface<AIChatRequest, AIChatAdapterInterface> $decisionTree
      * @param AIChatMiddlewareInterface[] $middleware Optional middleware to add
      */
     public function __construct(
-        DecisionTreeInterface $decisionTree,
         iterable $middleware = [],
     ) {
         $this->middlewareStack = new AIChatMiddlewareStack();
 
-        $this->middlewareStack->add(new AdapterDecisionMiddleware($decisionTree));
-        $this->middlewareStack->add(new ResponseFormatMiddleware());
-
         foreach ($middleware as $m) {
             $this->middlewareStack->add($m);
         }
-
-        $this->middlewareStack->add(new AdapterExecutionMiddleware());
     }
 
     public function createRequest(AIChatMessage ...$messages): AIChatRequestBuilder

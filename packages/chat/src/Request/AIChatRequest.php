@@ -51,7 +51,7 @@ class AIChatRequest implements CriteriaBehaviour
         private readonly array $toolInfos,
         private array $options,
         callable $requestHandler,
-        private readonly array $metadata = [],
+        private array $metadata = [],
         private readonly ?ResponseFormatInterface $responseFormat = null,
         private readonly ToolChoiceEnum $toolChoice = ToolChoiceEnum::AUTO,
     ) {
@@ -170,6 +170,14 @@ class AIChatRequest implements CriteriaBehaviour
     {
         $clone = clone $this;
         $clone->messages = new AIChatMessageCollection(...[...$this->messages, $message]);
+
+        return $clone;
+    }
+
+    public function withMetadata(array $metadata): static
+    {
+        $clone = clone $this;
+        $clone->metadata = $metadata;
 
         return $clone;
     }
