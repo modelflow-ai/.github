@@ -23,4 +23,25 @@ interface AIChatResponseStreamInterface extends AIChatResponseInterface
      * @return \Iterator<int, AIChatResponseMessage>
      */
     public function getMessageStream(): \Iterator;
+
+    /**
+     * Register a callback to receive usage updates as they become available during streaming.
+     *
+     * The callback will be invoked:
+     * - Immediately if usage data is already available
+     * - As usage data arrives during streaming
+     * - With isFinal=true when the stream completes
+     */
+    public function registerUsageCallback(UsageCallbackInterface $callback): void;
+
+    /**
+     * Get the accumulated usage data.
+     *
+     * Returns null if:
+     * - The stream hasn't been consumed yet
+     * - No usage data has been received from the provider
+     *
+     * After the stream completes, this will return the final accumulated usage.
+     */
+    public function getUsage(): ?Usage;
 }

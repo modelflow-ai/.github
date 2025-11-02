@@ -22,12 +22,14 @@ readonly class AIChatResponseStream extends AIChatResponse implements AIChatResp
 
     /**
      * @param \Iterator<int, AIChatResponseMessage> $messages
+     * @param StreamingUsageTracker|null $usageTracker Optional tracker for streaming usage updates
      */
     public function __construct(
         private AIChatStreamedRequest $request,
         private \Iterator $messages,
         ?Usage $usage = null,
         private array $metadata = [],
+        private StreamingUsageTracker $usageTracker = new StreamingUsageTracker(),
     ) {
         parent::__construct(
             $request,
@@ -37,6 +39,11 @@ readonly class AIChatResponseStream extends AIChatResponse implements AIChatResp
         );
 
         $this->messageBuilder = new AIChatResponseStreamMessageBuilder();
+
+        // If usage was provided in constructor, initialize the tracker
+        if ($usage instanceof Usage) {
+            $this->usageTracker->updateUsage($usage, true);
+        }
     }
 
     public function getRequest(): AIChatStreamedRequest
@@ -56,5 +63,25 @@ readonly class AIChatResponseStream extends AIChatResponse implements AIChatResp
 
             yield $message;
         }
+    }
+
+    public function registerUsageCallback(UsageCallbackInterface $callback): void
+    {
+        $this->usageTracker->registerCallback($callback);
+    }
+
+    public function getUsage(): ?Usage
+    {
+        return $this->usageTracker->getUsage();
+    }
+
+    /**
+     * Internal method for adapters to update usage during streaming.
+     *
+     * @internal
+     */
+    public function updateUsage(Usage $usage, bool $isFinal = false): void
+    {
+        $this->usageTracker->updateUsage($usage, $isFinal);
     }
 }

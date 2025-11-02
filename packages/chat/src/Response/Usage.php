@@ -20,11 +20,23 @@ final class Usage
         return new self(0, 0, 0);
     }
 
+    /**
+     * @param array<string, mixed> $metadata
+     */
     public function __construct(
         public int $inputTokens,
         public int $outputTokens,
         public int $totalTokens,
+        public array $metadata = [],
     ) {
+    }
+
+    /**
+     * Check if this usage data is based on estimation rather than provider-reported values.
+     */
+    public function isEstimated(): bool
+    {
+        return $this->metadata['estimated'] ?? false;
     }
 
     /**
@@ -45,6 +57,8 @@ final class Usage
         $clone->inputTokens += $nextUsage->inputTokens;
         $clone->outputTokens += $nextUsage->outputTokens;
         $clone->totalTokens += $nextUsage->totalTokens;
+        // Merge metadata, with nextUsage taking precedence
+        $clone->metadata = \array_merge($this->metadata, $nextUsage->metadata);
 
         return $clone;
     }

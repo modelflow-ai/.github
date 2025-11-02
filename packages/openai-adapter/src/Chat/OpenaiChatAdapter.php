@@ -29,6 +29,7 @@ use ModelflowAi\Chat\Response\AIChatResponse;
 use ModelflowAi\Chat\Response\AIChatResponseMessage;
 use ModelflowAi\Chat\Response\AIChatResponseStream;
 use ModelflowAi\Chat\Response\AIChatToolCall;
+use ModelflowAi\Chat\Response\StreamingUsageTracker;
 use ModelflowAi\Chat\Response\Usage;
 use ModelflowAi\Chat\ToolInfo\ToolTypeEnum;
 use OpenAI\Contracts\ClientContract;
@@ -342,9 +343,12 @@ final readonly class OpenaiChatAdapter implements AIChatAdapterInterface, Suppor
 
         $responses = $this->client->chat()->createStreamed($parameters);
 
+        $usageTracker = new StreamingUsageTracker(false);
+
         return new AIChatResponseStream(
-            $request,
-            $this->createStreamedMessages($responses),
+            request: $request,
+            messages: $this->createStreamedMessages($responses, $usageTracker),
+            usageTracker: $usageTracker,
         );
     }
 
@@ -353,12 +357,22 @@ final readonly class OpenaiChatAdapter implements AIChatAdapterInterface, Suppor
      *
      * @return \Iterator<int, AIChatResponseMessage>
      */
-    protected function createStreamedMessages(StreamResponse $responses): \Iterator
+    protected function createStreamedMessages(StreamResponse $responses, ?StreamingUsageTracker $usageTracker = null): \Iterator
     {
         $role = null;
 
         /** @var CreateStreamedResponse $response */
         foreach ($responses as $response) {
+            // Check for usage data in the response (OpenAI sends it in the final chunk)
+            if ($usageTracker instanceof StreamingUsageTracker && null !== $response->usage) {
+                $usage = new Usage(
+                    $response->usage->promptTokens,
+                    $response->usage->completionTokens ?? 0,
+                    $response->usage->totalTokens,
+                );
+                $usageTracker->updateUsage($usage, true);
+            }
+
             if (0 === \count($response->choices)) {
                 continue;
             }
@@ -370,7 +384,7 @@ final readonly class OpenaiChatAdapter implements AIChatAdapterInterface, Suppor
             }
 
             if (0 < \count($delta->toolCalls)) {
-                foreach ($this->determineToolCall($responses, $response) as $toolCall) {
+                foreach ($this->determineToolCall($responses, $response, $usageTracker) as $toolCall) {
                     yield new AIChatResponseMessage(
                         $role,
                         $delta->content ?? '',
@@ -395,7 +409,7 @@ final readonly class OpenaiChatAdapter implements AIChatAdapterInterface, Suppor
      *
      * @return \Iterator<int, AIChatToolCall>
      */
-    protected function determineToolCall(StreamResponse $responses, CreateStreamedResponse $firstResponse): \Iterator
+    protected function determineToolCall(StreamResponse $responses, CreateStreamedResponse $firstResponse, ?StreamingUsageTracker $usageTracker = null): \Iterator
     {
         $message = [
             'id' => $firstResponse->choices[0]->delta->toolCalls[0]->id,
@@ -410,6 +424,16 @@ final readonly class OpenaiChatAdapter implements AIChatAdapterInterface, Suppor
 
         /** @var CreateStreamedResponse $response */
         foreach ($responses as $response) {
+            // Check for usage data in tool call streaming
+            if ($usageTracker instanceof StreamingUsageTracker && null !== $response->usage) {
+                $usage = new Usage(
+                    $response->usage->promptTokens,
+                    $response->usage->completionTokens ?? 0,
+                    $response->usage->totalTokens,
+                );
+                $usageTracker->updateUsage($usage, true);
+            }
+
             if (0 === \count($response->choices)) {
                 continue;
             }

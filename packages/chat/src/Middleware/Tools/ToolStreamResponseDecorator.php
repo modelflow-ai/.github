@@ -20,6 +20,7 @@ use ModelflowAi\Chat\Request\Message\ToolCallsPart;
 use ModelflowAi\Chat\Response\AIChatResponseMessage;
 use ModelflowAi\Chat\Response\AIChatResponseStreamInterface;
 use ModelflowAi\Chat\Response\Usage;
+use ModelflowAi\Chat\Response\UsageCallbackInterface;
 use ModelflowAi\Chat\ToolInfo\ToolExecutor;
 
 /**
@@ -30,7 +31,7 @@ final class ToolStreamResponseDecorator implements AIChatResponseStreamInterface
 {
     /** @var callable */
     private $nextMiddleware;
-    private Usage $usage;
+    private ?Usage $accumulatedUsage = null;
 
     public function __construct(
         private readonly AIChatResponseStreamInterface $originalStream,
@@ -42,7 +43,6 @@ final class ToolStreamResponseDecorator implements AIChatResponseStreamInterface
         private int $executionCount = 0,
     ) {
         $this->nextMiddleware = $nextMiddleware;
-        $this->usage = $originalStream->getUsage() ?? Usage::empty();
     }
 
     public function getMessageStream(): \Iterator
@@ -99,7 +99,13 @@ final class ToolStreamResponseDecorator implements AIChatResponseStreamInterface
                 yield $message;
             }
 
-            $this->usage = $this->usage->add($nestedStream->getUsage());
+            // Accumulate usage from nested tool execution
+            $nestedUsage = $nestedStream->getUsage();
+            if ($nestedUsage instanceof Usage) {
+                $this->accumulatedUsage = $this->accumulatedUsage instanceof Usage
+                    ? $this->accumulatedUsage->add($nestedUsage)
+                    : $nestedUsage;
+            }
         }
     }
 
@@ -115,11 +121,27 @@ final class ToolStreamResponseDecorator implements AIChatResponseStreamInterface
 
     public function getUsage(): ?Usage
     {
-        return $this->usage;
+        // Get usage from original stream (which may be updated during streaming)
+        $originalUsage = $this->originalStream->getUsage();
+
+        // If we have accumulated usage from tool executions, add it
+        if ($this->accumulatedUsage instanceof Usage) {
+            return $originalUsage instanceof Usage
+                ? $originalUsage->add($this->accumulatedUsage)
+                : $this->accumulatedUsage;
+        }
+
+        return $originalUsage;
     }
 
     public function getMetadata(): array
     {
         return $this->request->getMetadata();
+    }
+
+    public function registerUsageCallback(UsageCallbackInterface $callback): void
+    {
+        // Delegate to the original stream
+        $this->originalStream->registerUsageCallback($callback);
     }
 }

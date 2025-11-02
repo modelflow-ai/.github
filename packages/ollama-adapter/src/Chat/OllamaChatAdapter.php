@@ -20,6 +20,8 @@ use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Chat\Response\AIChatResponse;
 use ModelflowAi\Chat\Response\AIChatResponseMessage;
 use ModelflowAi\Chat\Response\AIChatResponseStream;
+use ModelflowAi\Chat\Response\StreamingUsageTracker;
+use ModelflowAi\Chat\Response\TokenEstimator;
 use ModelflowAi\Chat\Response\Usage;
 use ModelflowAi\Ollama\ClientInterface;
 use ModelflowAi\Ollama\Responses\Chat\CreateStreamedResponse;
@@ -114,9 +116,13 @@ final readonly class OllamaChatAdapter implements AIChatAdapterInterface
     {
         $responses = $this->client->chat()->createStreamed($parameters);
 
+        // Ollama doesn't provide usage data in streams, so we use estimation
+        $usageTracker = new StreamingUsageTracker(true);
+
         return new AIChatResponseStream(
-            $request,
-            $this->createStreamedMessages($responses),
+            request: $request,
+            messages: $this->createStreamedMessages($responses, $request, $usageTracker),
+            usageTracker: $usageTracker,
         );
     }
 
@@ -125,19 +131,52 @@ final readonly class OllamaChatAdapter implements AIChatAdapterInterface
      *
      * @return \Iterator<int, AIChatResponseMessage>
      */
-    protected function createStreamedMessages(\Iterator $responses): \Iterator
+    protected function createStreamedMessages(\Iterator $responses, AIChatRequest $request, ?StreamingUsageTracker $usageTracker = null): \Iterator
     {
         $role = null;
+        $outputTokens = 0;
 
         foreach ($responses as $response) {
             if (!$role instanceof AIChatMessageRoleEnum) {
                 $role = AIChatMessageRoleEnum::from($response->message->role);
             }
 
+            $delta = $response->message->delta ?? '';
+
+            // Estimate tokens for this chunk
+            if ($usageTracker instanceof StreamingUsageTracker && '' !== $delta) {
+                $chunkTokens = TokenEstimator::estimateTokens($delta);
+                $outputTokens += $chunkTokens;
+            }
+
             yield new AIChatResponseMessage(
                 $role,
-                $response->message->delta ?? '',
+                $delta,
             );
+        }
+
+        // After streaming completes, create estimated usage with metadata flag
+        if ($usageTracker instanceof StreamingUsageTracker) {
+            // Estimate input tokens from request messages
+            $inputTokens = 0;
+            foreach ($request->getMessages() as $message) {
+                // Estimate tokens for each message part
+                foreach ($message->parts as $part) {
+                    if ($part instanceof \ModelflowAi\Chat\Request\Message\TextPart) {
+                        $inputTokens += TokenEstimator::estimateTokens($part->text);
+                    }
+                }
+                // Add overhead for message structure
+                $inputTokens += 4;
+            }
+
+            $usage = new Usage(
+                $inputTokens,
+                $outputTokens,
+                $inputTokens + $outputTokens,
+                ['estimated' => true],
+            );
+            $usageTracker->updateUsage($usage, true);
         }
     }
 

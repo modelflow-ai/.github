@@ -16,6 +16,8 @@ namespace App;
 use ModelflowAi\Chat\AIChatRequestHandlerInterface;
 use ModelflowAi\Chat\Request\Message\AIChatMessage;
 use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
+use ModelflowAi\Chat\Response\Usage;
+use ModelflowAi\Chat\Response\UsageCallbackInterface;
 use ModelflowAi\DecisionTree\Criteria\PrivacyCriteria;
 use ModelflowAi\PromptTemplate\ChatPromptTemplate;
 
@@ -31,10 +33,30 @@ $response = $handler->createStreamedRequest(
     ->addCriteria(PrivacyCriteria::HIGH)
     ->execute();
 
+// Register a callback to receive usage updates in real-time
+$response->registerUsageCallback(new class implements UsageCallbackInterface {
+    public function onUsageUpdate(Usage $usage, bool $isFinal): void
+    {
+        if ($isFinal) {
+            echo "\n[Usage: {$usage->totalTokens} tokens]";
+        }
+    }
+});
+
 foreach ($response->getMessageStream() as $index => $message) {
     if (0 === $index) {
         echo $message->role->value . ': ';
     }
 
     echo $message->content;
+}
+
+// Get final usage after stream completes
+echo "\n\n";
+$usage = $response->getUsage();
+if ($usage) {
+    echo "Final usage: {$usage->inputTokens} input + {$usage->outputTokens} output = {$usage->totalTokens} total tokens\n";
+    if ($usage->isEstimated()) {
+        echo "(estimated)\n";
+    }
 }
