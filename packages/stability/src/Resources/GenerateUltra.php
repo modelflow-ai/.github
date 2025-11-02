@@ -47,9 +47,12 @@ final readonly class GenerateUltra implements GenerateUltraInterface
 
         $payload = Payload::create('generate/ultra', $parameters);
 
-        $response = $this->transport->requestRaw($payload);
+        $response = $this->transport->requestObject($payload);
 
-        return GenerateBase64Response::from($response->resource, $response->meta);
+        /** @var array{finish_reason: string, seed: string, image: string} $data */
+        $data = $response->data;
+
+        return GenerateBase64Response::from($data, $response->meta);
     }
 
     /**

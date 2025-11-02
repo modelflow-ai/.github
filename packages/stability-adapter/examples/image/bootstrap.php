@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-require_once \dirname(__DIR__, 3) . '/stability/examples/bootstrap.php';
+require_once \dirname(__DIR__, 2) . '/vendor/autoload.php';
 
 use ModelflowAi\DecisionTree\Criteria\CapabilityCriteria;
 use ModelflowAi\DecisionTree\DecisionRule;
@@ -25,7 +25,7 @@ use ModelflowAi\Stability\Stability;
 use ModelflowAi\StabilityAdapter\Image\StabilityImageAdapter;
 use Symfony\Component\Dotenv\Dotenv;
 
-(new Dotenv())->bootEnv(\dirname(__DIR__, 3) . '/stability/examples/.env');
+(new Dotenv())->bootEnv(__DIR__ . '/.env');
 
 $stabilityClient = Stability::client($_ENV['STABILITY_API_KEY']);
 

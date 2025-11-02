@@ -30,7 +30,7 @@ $input = new ArgvInput(null, $definition);
 
 /** @var string $prompt */
 $prompt = $input->getArgument('prompt');
-/** @var string $format */
+/** @var 'jpeg'|'png'|'webp' $format */
 $format = $input->getOption('format');
 
 $arguments = [
