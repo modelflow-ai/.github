@@ -147,6 +147,11 @@ final readonly class OllamaChatAdapter implements AIChatAdapterInterface
             if ($usageTracker instanceof StreamingUsageTracker && '' !== $delta) {
                 $chunkTokens = TokenEstimator::estimateTokens($delta);
                 $outputTokens += $chunkTokens;
+
+                // Emit incremental usage update for this chunk
+                $usageTracker->updateUsage(
+                    new Usage(0, $chunkTokens, $chunkTokens),
+                );
             }
 
             yield new AIChatResponseMessage(
@@ -155,7 +160,7 @@ final readonly class OllamaChatAdapter implements AIChatAdapterInterface
             );
         }
 
-        // After streaming completes, create estimated usage with metadata flag
+        // After streaming completes, send final update with input tokens
         if ($usageTracker instanceof StreamingUsageTracker) {
             // Estimate input tokens from request messages
             $inputTokens = 0;
@@ -170,13 +175,11 @@ final readonly class OllamaChatAdapter implements AIChatAdapterInterface
                 $inputTokens += 4;
             }
 
-            $usage = new Usage(
-                $inputTokens,
-                $outputTokens,
-                $inputTokens + $outputTokens,
-                ['estimated' => true],
+            // Send final update with input tokens (output tokens already sent incrementally)
+            $usageTracker->updateUsage(
+                new Usage($inputTokens, 0, $inputTokens, ['estimated' => true]),
+                true,
             );
-            $usageTracker->updateUsage($usage, true);
         }
     }
 
