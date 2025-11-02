@@ -587,7 +587,7 @@ final class OpenaiChatAdapterTest extends TestCase
         $this->assertInstanceOf(AIChatResponseStream::class, $result);
 
         // Register callback to track usage updates
-        $callback = new class() implements UsageCallbackInterface {
+        $callback = new class implements UsageCallbackInterface {
             /** @var list<array{inputTokens:int, outputTokens:int, totalTokens:int, isFinal:bool}> */
             public array $updates = [];
 

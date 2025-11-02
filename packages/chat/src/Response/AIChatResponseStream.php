@@ -22,7 +22,6 @@ readonly class AIChatResponseStream extends AIChatResponse implements AIChatResp
 
     /**
      * @param \Iterator<int, AIChatResponseMessage> $messages
-     * @param StreamingUsageTracker|null $usageTracker Optional tracker for streaming usage updates
      */
     public function __construct(
         private AIChatStreamedRequest $request,

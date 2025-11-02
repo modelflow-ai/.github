@@ -84,15 +84,10 @@ class AIChatResponseStreamTest extends TestCase
     public function testRegisterUsageCallback(): void
     {
         $request = $this->prophesize(AIChatStreamedRequest::class);
-        $receivedUpdates = [];
 
-        $callback = new class($receivedUpdates) implements UsageCallbackInterface {
-            private array $updates;
-
-            public function __construct(array &$updates)
-            {
-                $this->updates = &$updates;
-            }
+        $callback = new class implements UsageCallbackInterface {
+            /** @var array<int, array{inputTokens: int, outputTokens: int, totalTokens: int, isFinal: bool}> */
+            public array $updates = [];
 
             public function onUsageUpdate(Usage $usage, bool $isFinal): void
             {
@@ -121,11 +116,11 @@ class AIChatResponseStreamTest extends TestCase
         $usage = new Usage(10, 20, 30);
         $tracker->updateUsage($usage, true);
 
-        $this->assertCount(1, $receivedUpdates);
-        $this->assertSame(10, $receivedUpdates[0]['inputTokens']);
-        $this->assertSame(20, $receivedUpdates[0]['outputTokens']);
-        $this->assertSame(30, $receivedUpdates[0]['totalTokens']);
-        $this->assertTrue($receivedUpdates[0]['isFinal']);
+        $this->assertCount(1, $callback->updates);
+        $this->assertSame(10, $callback->updates[0]['inputTokens']);
+        $this->assertSame(20, $callback->updates[0]['outputTokens']);
+        $this->assertSame(30, $callback->updates[0]['totalTokens']);
+        $this->assertTrue($callback->updates[0]['isFinal']);
     }
 
     public function testGetUsageWithTracker(): void
@@ -149,26 +144,19 @@ class AIChatResponseStreamTest extends TestCase
         $tracker->updateUsage($usage, true);
 
         $result = $response->getUsage();
+        // @phpstan-ignore-next-line - PHPStan doesn't understand state mutation through tracker
         $this->assertNotNull($result);
         $this->assertSame(10, $result->inputTokens);
         $this->assertSame(20, $result->outputTokens);
         $this->assertSame(30, $result->totalTokens);
     }
 
-
     public function testRegisterMultipleCallbacks(): void
     {
         $request = $this->prophesize(AIChatStreamedRequest::class);
-        $callCount1 = 0;
-        $callCount2 = 0;
 
-        $callback1 = new class($callCount1) implements UsageCallbackInterface {
-            private int $count;
-
-            public function __construct(int &$count)
-            {
-                $this->count = &$count;
-            }
+        $callback1 = new class implements UsageCallbackInterface {
+            public int $count = 0;
 
             public function onUsageUpdate(Usage $usage, bool $isFinal): void
             {
@@ -176,13 +164,8 @@ class AIChatResponseStreamTest extends TestCase
             }
         };
 
-        $callback2 = new class($callCount2) implements UsageCallbackInterface {
-            private int $count;
-
-            public function __construct(int &$count)
-            {
-                $this->count = &$count;
-            }
+        $callback2 = new class implements UsageCallbackInterface {
+            public int $count = 0;
 
             public function onUsageUpdate(Usage $usage, bool $isFinal): void
             {
@@ -206,7 +189,7 @@ class AIChatResponseStreamTest extends TestCase
         $usage = new Usage(10, 20, 30);
         $tracker->updateUsage($usage, true);
 
-        $this->assertSame(1, $callCount1);
-        $this->assertSame(1, $callCount2);
+        $this->assertSame(1, $callback1->count);
+        $this->assertSame(1, $callback2->count);
     }
 }

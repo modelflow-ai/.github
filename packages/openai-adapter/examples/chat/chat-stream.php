@@ -36,7 +36,7 @@ $response->registerUsageCallback(new class implements UsageCallbackInterface {
     public function onUsageUpdate(Usage $usage, bool $isFinal): void
     {
         $status = $isFinal ? 'Final' : 'Partial';
-        echo PHP_EOL . "[{$status} Usage: {$usage->totalTokens} tokens]";
+        echo \PHP_EOL . "[{$status} Usage: {$usage->totalTokens} tokens]";
     }
 });
 
@@ -49,11 +49,11 @@ foreach ($response->getMessageStream() as $index => $message) {
 }
 
 // Get final usage after stream completes
-echo PHP_EOL . PHP_EOL;
+echo \PHP_EOL . \PHP_EOL;
 $usage = $response->getUsage();
-if ($usage) {
-    echo "Final usage: {$usage->inputTokens} input + {$usage->outputTokens} output = {$usage->totalTokens} total tokens" . PHP_EOL;
+if (null !== $usage) {
+    echo "Final usage: {$usage->inputTokens} input + {$usage->outputTokens} output = {$usage->totalTokens} total tokens" . \PHP_EOL;
     if ($usage->isEstimated()) {
-        echo "(estimated)" . PHP_EOL;
+        echo '(estimated)' . \PHP_EOL;
     }
 }

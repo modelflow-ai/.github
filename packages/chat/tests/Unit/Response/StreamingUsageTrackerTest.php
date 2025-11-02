@@ -103,15 +103,10 @@ class StreamingUsageTrackerTest extends TestCase
     public function testRegisterCallbackAndReceiveUpdates(): void
     {
         $tracker = new StreamingUsageTracker();
-        $receivedUpdates = [];
 
-        $callback = new class($receivedUpdates) implements UsageCallbackInterface {
-            private array $updates;
-
-            public function __construct(array &$updates)
-            {
-                $this->updates = &$updates;
-            }
+        $callback = new class implements UsageCallbackInterface {
+            /** @var array<int, array{usage: Usage, isFinal: bool}> */
+            public array $updates = [];
 
             public function onUsageUpdate(Usage $usage, bool $isFinal): void
             {
@@ -130,29 +125,23 @@ class StreamingUsageTrackerTest extends TestCase
         $tracker->updateUsage($usage1, false);
         $tracker->updateUsage($usage2, true);
 
-        $this->assertCount(2, $receivedUpdates);
+        $this->assertCount(2, $callback->updates);
 
-        $this->assertSame(10, $receivedUpdates[0]['usage']->inputTokens);
-        $this->assertFalse($receivedUpdates[0]['isFinal']);
+        $this->assertSame(10, $callback->updates[0]['usage']->inputTokens);
+        $this->assertFalse($callback->updates[0]['isFinal']);
 
-        $this->assertSame(10, $receivedUpdates[1]['usage']->inputTokens);
-        $this->assertSame(15, $receivedUpdates[1]['usage']->outputTokens);
-        $this->assertTrue($receivedUpdates[1]['isFinal']);
+        $this->assertSame(10, $callback->updates[1]['usage']->inputTokens);
+        $this->assertSame(15, $callback->updates[1]['usage']->outputTokens);
+        $this->assertTrue($callback->updates[1]['isFinal']);
     }
 
     public function testRegisterMultipleCallbacks(): void
     {
         $tracker = new StreamingUsageTracker();
-        $receivedUpdates1 = [];
-        $receivedUpdates2 = [];
 
-        $callback1 = new class($receivedUpdates1) implements UsageCallbackInterface {
-            private array $updates;
-
-            public function __construct(array &$updates)
-            {
-                $this->updates = &$updates;
-            }
+        $callback1 = new class implements UsageCallbackInterface {
+            /** @var array<int, int> */
+            public array $updates = [];
 
             public function onUsageUpdate(Usage $usage, bool $isFinal): void
             {
@@ -160,13 +149,9 @@ class StreamingUsageTrackerTest extends TestCase
             }
         };
 
-        $callback2 = new class($receivedUpdates2) implements UsageCallbackInterface {
-            private array $updates;
-
-            public function __construct(array &$updates)
-            {
-                $this->updates = &$updates;
-            }
+        $callback2 = new class implements UsageCallbackInterface {
+            /** @var array<int, int> */
+            public array $updates = [];
 
             public function onUsageUpdate(Usage $usage, bool $isFinal): void
             {
@@ -180,22 +165,16 @@ class StreamingUsageTrackerTest extends TestCase
         $usage = new Usage(10, 20, 30);
         $tracker->updateUsage($usage, true);
 
-        $this->assertSame([30], $receivedUpdates1);
-        $this->assertSame([30], $receivedUpdates2);
+        $this->assertSame([30], $callback1->updates);
+        $this->assertSame([30], $callback2->updates);
     }
 
     public function testCallbacksNotCalledAfterFinalization(): void
     {
         $tracker = new StreamingUsageTracker();
-        $callCount = 0;
 
-        $callback = new class($callCount) implements UsageCallbackInterface {
-            private int $count;
-
-            public function __construct(int &$count)
-            {
-                $this->count = &$count;
-            }
+        $callback = new class implements UsageCallbackInterface {
+            public int $count = 0;
 
             public function onUsageUpdate(Usage $usage, bool $isFinal): void
             {
@@ -211,6 +190,6 @@ class StreamingUsageTrackerTest extends TestCase
         $tracker->updateUsage($usage1, true);
         $tracker->updateUsage($usage2, false);
 
-        $this->assertSame(1, $callCount);
+        $this->assertSame(1, $callback->count);
     }
 }

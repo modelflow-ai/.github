@@ -33,6 +33,11 @@
 - Test naming: `testMethodName`, `testMethodNameWithCondition`
 - Exception testing: `@expectException` annotation
 
+## Git Commit Guidelines
+- **NO AI attribution in commit messages** - Never include Claude name, co-author, or "Generated with Claude Code"
+- **Clear, descriptive messages** - Explain what changed and why
+- **Professional tone** - Keep messages clean and focused on the change
+
 ## Error Handling
 - Use exception hierarchies with specific exception classes
 - Prefer early returns over deep nesting
