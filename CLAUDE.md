@@ -19,6 +19,13 @@
 - Always use strict comparison (`===`, `!==`)
 - Use native PHP functions with `\` prefix in the global namespace
 
+## Documentation Philosophy
+- **Self-documenting code over comments** - Clear naming + type hints > redundant docstrings
+- **Only add docstrings when they add value** - Complex algorithms, non-obvious behavior, or important context
+- **Type hints are documentation** - Modern PHP 8.2+ with strict types makes @param/@return tags redundant
+- **Tests as documentation** - Well-written tests show how code should be used
+- **No docstring coverage requirements** - Configured in `.coderabbit.yaml` to avoid noise
+
 ## Testing Standards
 - Unit tests for all classes
 - PHPUnit 10.3+ with strict assertions
