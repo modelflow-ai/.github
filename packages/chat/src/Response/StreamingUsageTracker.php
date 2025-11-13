@@ -34,9 +34,6 @@ final class StreamingUsageTracker
     ) {
     }
 
-    /**
-     * Register a callback to receive usage updates.
-     */
     public function registerCallback(UsageCallbackInterface $callback): void
     {
         $this->callbacks[] = $callback;
@@ -46,12 +43,6 @@ final class StreamingUsageTracker
         }
     }
 
-    /**
-     * Update the current usage and notify callbacks.
-     *
-     * @param Usage $usage The new usage data (will be accumulated with existing)
-     * @param bool $isFinal Whether this is the final update
-     */
     public function updateUsage(Usage $usage, bool $isFinal = false): void
     {
         if ($this->isFinalized) {
@@ -72,27 +63,16 @@ final class StreamingUsageTracker
         }
     }
 
-    /**
-     * Get the current accumulated usage.
-     *
-     * @return Usage|null The current usage, or null if no usage data has been received
-     */
     public function getUsage(): ?Usage
     {
         return $this->currentUsage;
     }
 
-    /**
-     * Check if usage tracking is based on estimation.
-     */
     public function isEstimated(): bool
     {
         return $this->isEstimated;
     }
 
-    /**
-     * Check if usage has been finalized.
-     */
     public function isFinalized(): bool
     {
         return $this->isFinalized;

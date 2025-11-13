@@ -172,14 +172,14 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface
      *
      * @return \Iterator<int, AIChatResponseMessage>
      */
-    protected function createStreamedMessages(\Iterator $responses, string $prefix, ?StreamingUsageTracker $usageTracker = null): \Iterator
+    protected function createStreamedMessages(\Iterator $responses, string $prefix, StreamingUsageTracker $usageTracker): \Iterator
     {
         $role = null;
         $lastUsage = null;
 
         foreach ($responses as $response) {
             // Anthropic sends cumulative usage with each event
-            if ($usageTracker instanceof StreamingUsageTracker && null !== $response->usage) {
+            if (null !== $response->usage) {
                 $lastUsage = new Usage(
                     $response->usage->promptTokens,
                     $response->usage->completionTokens ?? 0,
@@ -205,7 +205,7 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface
         }
 
         // Send final usage after stream completes
-        if ($usageTracker instanceof StreamingUsageTracker && $lastUsage instanceof Usage) {
+        if ($lastUsage instanceof Usage) {
             $usageTracker->updateUsage($lastUsage, true);
         }
     }

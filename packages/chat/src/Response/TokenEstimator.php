@@ -29,10 +29,6 @@ final class TokenEstimator
      * - Split on whitespace and punctuation
      * - Average ~4 characters per token for English text
      * - Add overhead for special characters and formatting
-     *
-     * @param string $text The text to estimate tokens for
-     *
-     * @return int The estimated token count
      */
     public static function estimateTokens(string $text): int
     {
@@ -60,10 +56,6 @@ final class TokenEstimator
      * Estimate tokens for a chat message.
      *
      * Takes into account the message structure overhead (role, formatting, etc.)
-     *
-     * @param AIChatResponseMessage $message The message to estimate tokens for
-     *
-     * @return int The estimated token count including overhead
      */
     public static function estimateMessageTokens(AIChatResponseMessage $message): int
     {
@@ -72,12 +64,10 @@ final class TokenEstimator
         // Add tokens for role (approximately 1 token)
         ++$tokens;
 
-        // Add tokens for content
         if (null !== $message->content) {
             $tokens += self::estimateTokens($message->content);
         }
 
-        // Add tokens for tool calls
         if (null !== $message->toolCalls) {
             foreach ($message->toolCalls as $toolCall) {
                 // Tool call overhead (~3 tokens for structure)

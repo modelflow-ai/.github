@@ -31,33 +31,26 @@ final class Usage
     ) {
     }
 
-    /**
-     * Check if this usage data is based on estimation rather than provider-reported values.
-     */
     public function isEstimated(): bool
     {
         return (bool) ($this->metadata['estimated'] ?? false);
     }
 
-    /**
-     * Combines this usage with another usage object by adding their token counts.
-     * Returns the current instance unchanged if the provided usage is null or invalid.
-     *
-     * @param self|null $nextUsage The usage to add to this one
-     *
-     * @return self A new Usage instance with combined token counts
-     */
     public function add(?self $nextUsage): self
     {
         if (!$nextUsage instanceof self) {
             return $this;
         }
 
+        $combinedEstimated = ($this->metadata['estimated'] ?? false) || ($nextUsage->metadata['estimated'] ?? false);
+        $mergedMetadata = \array_merge($this->metadata, $nextUsage->metadata);
+        $mergedMetadata['estimated'] = $combinedEstimated;
+
         return new self(
             $this->inputTokens + $nextUsage->inputTokens,
             $this->outputTokens + $nextUsage->outputTokens,
             $this->totalTokens + $nextUsage->totalTokens,
-            \array_merge($this->metadata, $nextUsage->metadata),
+            $mergedMetadata,
         );
     }
 }

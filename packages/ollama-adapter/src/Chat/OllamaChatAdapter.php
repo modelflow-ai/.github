@@ -148,7 +148,7 @@ final readonly class OllamaChatAdapter implements AIChatAdapterInterface
                 $outputTokens += $chunkTokens;
 
                 $usageTracker->updateUsage(
-                    new Usage(0, $chunkTokens, $chunkTokens),
+                    new Usage(0, $chunkTokens, $chunkTokens, ['estimated' => true]),
                 );
             }
 

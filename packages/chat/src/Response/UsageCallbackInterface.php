@@ -21,11 +21,5 @@ namespace ModelflowAi\Chat\Response;
  */
 interface UsageCallbackInterface
 {
-    /**
-     * Called when usage data is updated.
-     *
-     * @param Usage $usage The current accumulated usage data
-     * @param bool $isFinal Whether this is the final usage update (stream completed)
-     */
     public function onUsageUpdate(Usage $usage, bool $isFinal): void;
 }

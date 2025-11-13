@@ -67,14 +67,4 @@ readonly class AIChatResponseStream extends AIChatResponse implements AIChatResp
     {
         return $this->usageTracker->getUsage();
     }
-
-    /**
-     * Internal method for adapters to update usage during streaming.
-     *
-     * @internal
-     */
-    public function updateUsage(Usage $usage, bool $isFinal = false): void
-    {
-        $this->usageTracker->updateUsage($usage, $isFinal);
-    }
 }
