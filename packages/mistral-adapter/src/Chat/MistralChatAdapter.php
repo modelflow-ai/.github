@@ -26,6 +26,7 @@ use ModelflowAi\Chat\Response\AIChatResponse;
 use ModelflowAi\Chat\Response\AIChatResponseMessage;
 use ModelflowAi\Chat\Response\AIChatResponseStream;
 use ModelflowAi\Chat\Response\AIChatToolCall;
+use ModelflowAi\Chat\Response\StreamingUsageTracker;
 use ModelflowAi\Chat\Response\Usage;
 use ModelflowAi\Chat\ToolInfo\ToolTypeEnum;
 use ModelflowAi\Mistral\ClientInterface;
@@ -228,9 +229,12 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface
     {
         $responses = $this->client->chat()->createStreamed($parameters);
 
+        $usageTracker = new StreamingUsageTracker(false);
+
         return new AIChatResponseStream(
-            $request,
-            $this->createStreamedMessages($responses),
+            request: $request,
+            messages: $this->createStreamedMessages($responses, $usageTracker),
+            usageTracker: $usageTracker,
         );
     }
 
@@ -239,11 +243,20 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface
      *
      * @return \Iterator<int, AIChatResponseMessage>
      */
-    protected function createStreamedMessages(\Iterator $responses): \Iterator
+    protected function createStreamedMessages(\Iterator $responses, ?StreamingUsageTracker $usageTracker = null): \Iterator
     {
         $role = null;
 
         foreach ($responses as $response) {
+            if ($usageTracker instanceof StreamingUsageTracker && null !== $response->usage) {
+                $usage = new Usage(
+                    $response->usage->promptTokens,
+                    $response->usage->completionTokens ?? 0,
+                    $response->usage->totalTokens,
+                );
+                $usageTracker->updateUsage($usage, true);
+            }
+
             $delta = $response->choices[0]->delta;
 
             if (!$role instanceof AIChatMessageRoleEnum) {

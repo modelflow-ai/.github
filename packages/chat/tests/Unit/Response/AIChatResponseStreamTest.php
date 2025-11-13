@@ -17,6 +17,9 @@ use ModelflowAi\Chat\Request\AIChatStreamedRequest;
 use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Chat\Response\AIChatResponseMessage;
 use ModelflowAi\Chat\Response\AIChatResponseStream;
+use ModelflowAi\Chat\Response\StreamingUsageTracker;
+use ModelflowAi\Chat\Response\Usage;
+use ModelflowAi\Chat\Response\UsageCallbackInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
@@ -76,5 +79,117 @@ class AIChatResponseStreamTest extends TestCase
         ]));
 
         $this->assertSame($request->reveal(), $response->getRequest());
+    }
+
+    public function testRegisterUsageCallback(): void
+    {
+        $request = $this->prophesize(AIChatStreamedRequest::class);
+
+        $callback = new class implements UsageCallbackInterface {
+            /** @var array<int, array{inputTokens: int, outputTokens: int, totalTokens: int, isFinal: bool}> */
+            public array $updates = [];
+
+            public function onUsageUpdate(Usage $usage, bool $isFinal): void
+            {
+                $this->updates[] = [
+                    'inputTokens' => $usage->inputTokens,
+                    'outputTokens' => $usage->outputTokens,
+                    'totalTokens' => $usage->totalTokens,
+                    'isFinal' => $isFinal,
+                ];
+            }
+        };
+
+        $tracker = new StreamingUsageTracker();
+        $response = new AIChatResponseStream(
+            $request->reveal(),
+            new \ArrayIterator([
+                new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Lorem'),
+            ]),
+            [],
+            $tracker,
+        );
+
+        $response->registerUsageCallback($callback);
+
+        // Simulate usage update
+        $usage = new Usage(10, 20, 30);
+        $tracker->updateUsage($usage, true);
+
+        $this->assertCount(1, $callback->updates);
+        $this->assertSame(10, $callback->updates[0]['inputTokens']);
+        $this->assertSame(20, $callback->updates[0]['outputTokens']);
+        $this->assertSame(30, $callback->updates[0]['totalTokens']);
+        $this->assertTrue($callback->updates[0]['isFinal']);
+    }
+
+    public function testGetUsageWithTracker(): void
+    {
+        $request = $this->prophesize(AIChatStreamedRequest::class);
+        $tracker = new StreamingUsageTracker();
+
+        $response = new AIChatResponseStream(
+            $request->reveal(),
+            new \ArrayIterator([
+                new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Lorem'),
+            ]),
+            [],
+            $tracker,
+        );
+
+        $this->assertNull($response->getUsage());
+
+        // Update usage through tracker
+        $usage = new Usage(10, 20, 30);
+        $tracker->updateUsage($usage, true);
+
+        $result = $response->getUsage();
+        // @phpstan-ignore-next-line - PHPStan doesn't understand state mutation through tracker
+        $this->assertNotNull($result);
+        $this->assertSame(10, $result->inputTokens);
+        $this->assertSame(20, $result->outputTokens);
+        $this->assertSame(30, $result->totalTokens);
+    }
+
+    public function testRegisterMultipleCallbacks(): void
+    {
+        $request = $this->prophesize(AIChatStreamedRequest::class);
+
+        $callback1 = new class implements UsageCallbackInterface {
+            public int $count = 0;
+
+            public function onUsageUpdate(Usage $usage, bool $isFinal): void
+            {
+                ++$this->count;
+            }
+        };
+
+        $callback2 = new class implements UsageCallbackInterface {
+            public int $count = 0;
+
+            public function onUsageUpdate(Usage $usage, bool $isFinal): void
+            {
+                ++$this->count;
+            }
+        };
+
+        $tracker = new StreamingUsageTracker();
+        $response = new AIChatResponseStream(
+            $request->reveal(),
+            new \ArrayIterator([
+                new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Lorem'),
+            ]),
+            [],
+            $tracker,
+        );
+
+        $response->registerUsageCallback($callback1);
+        $response->registerUsageCallback($callback2);
+
+        $usage = new Usage(10, 20, 30);
+        $tracker->updateUsage($usage, true);
+
+        $this->assertSame(1, $callback1->count);
+        $this->assertSame(1, $callback2->count);
     }
 }

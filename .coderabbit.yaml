@@ -1,0 +1,70 @@
+# CodeRabbit Configuration for ModelFlow AI
+# https://docs.coderabbit.ai/guides/configure-coderabbit
+
+language: "en-US"
+
+reviews:
+  # Request changes workflow - only block on critical issues
+  request_changes_workflow: false
+
+  # High level summary
+  high_level_summary: true
+
+  # Poem and review status
+  poem: true
+  review_status: true
+
+  # Collapse walkthrough
+  collapse_walkthrough: false
+
+  # Auto-review settings
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - main
+      - master
+      - develop
+      - "0.4"
+
+  # Tools configuration
+  tools:
+    # Disable docstring coverage check
+    # Rationale: Modern PHP 8.2+ with strict types, type hints, and clear naming
+    # makes most docstrings redundant. Only add docstrings when they provide
+    # value beyond what the code itself communicates.
+    ruff:
+      enabled: false
+
+  # Path-based instructions
+  path_instructions:
+    - path: "**.php"
+      instructions: |
+        - Follow PSR-12 coding standards
+        - Use strict types (declare(strict_types=1))
+        - Prefer self-documenting code over comments
+        - Only flag missing docstrings for complex algorithms or non-obvious behavior
+        - Type hints are preferred over @param/@return tags for simple types
+
+    - path: "**/tests/**"
+      instructions: |
+        - Test method names should be self-documenting
+        - Docstrings not required for test methods
+        - Focus on test clarity and coverage
+
+    - path: "**/examples/**"
+      instructions: |
+        - Example code should be clear and educational
+        - Comments explaining workflow are valuable
+        - Docstrings not required
+
+# Chat settings
+chat:
+  auto_reply: true
+
+# Knowledge base
+knowledge_base:
+  opt_out: false
+
+  learnings:
+    scope: "global"

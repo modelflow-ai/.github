@@ -32,6 +32,7 @@ use ModelflowAi\Chat\Request\Message\TextPart;
 use ModelflowAi\Chat\Response\AIChatResponse;
 use ModelflowAi\Chat\Response\AIChatResponseMessage;
 use ModelflowAi\Chat\Response\AIChatResponseStream;
+use ModelflowAi\Chat\Response\StreamingUsageTracker;
 use ModelflowAi\Chat\Response\Usage;
 use Webmozart\Assert\Assert;
 
@@ -147,9 +148,12 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface
     {
         $result = $model->streamGenerateContent(...$messages);
 
+        $usageTracker = new StreamingUsageTracker(false);
+
         return new AIChatResponseStream(
-            $request,
-            $this->createStreamedMessages($result->getIterator()),
+            request: $request,
+            messages: $this->createStreamedMessages($result->getIterator(), $usageTracker),
+            usageTracker: $usageTracker,
         );
     }
 
@@ -158,11 +162,21 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface
      *
      * @return \Iterator<int, AIChatResponseMessage>
      */
-    protected function createStreamedMessages(\Iterator $responses): \Iterator
+    protected function createStreamedMessages(\Iterator $responses, ?StreamingUsageTracker $usageTracker = null): \Iterator
     {
         try {
+            $lastUsage = null;
             while ($responses->valid()) {
                 $response = $responses->current();
+
+                if ($usageTracker instanceof StreamingUsageTracker && null !== $response->usageMetadata) {
+                    $lastUsage = new Usage(
+                        $response->usageMetadata->promptTokenCount,
+                        $response->usageMetadata->totalTokenCount - $response->usageMetadata->promptTokenCount,
+                        $response->usageMetadata->totalTokenCount,
+                    );
+                }
+
                 try {
                     $text = $response->text();
                 } catch (\ValueError $exception) {
@@ -176,6 +190,10 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface
                 yield new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, $text);
 
                 $responses->next();
+            }
+
+            if ($usageTracker instanceof StreamingUsageTracker && $lastUsage instanceof Usage) {
+                $usageTracker->updateUsage($lastUsage, true);
             }
         } catch (\Exception $e) {
             throw new \RuntimeException('Error processing stream response: ' . $e->getMessage(), 0, $e);

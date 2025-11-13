@@ -26,6 +26,7 @@ use ModelflowAi\Chat\Request\Message\TextPart;
 use ModelflowAi\Chat\Response\AIChatResponse;
 use ModelflowAi\Chat\Response\AIChatResponseMessage;
 use ModelflowAi\Chat\Response\AIChatResponseStream;
+use ModelflowAi\Chat\Response\StreamingUsageTracker;
 use ModelflowAi\Chat\Response\Usage;
 
 /**
@@ -157,9 +158,12 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface
     {
         $responses = $this->client->messages()->createStreamed($parameters);
 
+        $usageTracker = new StreamingUsageTracker(false);
+
         return new AIChatResponseStream(
-            $request,
-            $this->createStreamedMessages($responses, 'json' === $request->getFormat() ? '{' : ''),
+            request: $request,
+            messages: $this->createStreamedMessages($responses, 'json' === $request->getFormat() ? '{' : '', $usageTracker),
+            usageTracker: $usageTracker,
         );
     }
 
@@ -168,11 +172,21 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface
      *
      * @return \Iterator<int, AIChatResponseMessage>
      */
-    protected function createStreamedMessages(\Iterator $responses, string $prefix): \Iterator
+    protected function createStreamedMessages(\Iterator $responses, string $prefix, StreamingUsageTracker $usageTracker): \Iterator
     {
         $role = null;
+        $lastUsage = null;
 
         foreach ($responses as $response) {
+            // Anthropic sends cumulative usage with each event
+            if (null !== $response->usage) {
+                $lastUsage = new Usage(
+                    $response->usage->promptTokens,
+                    $response->usage->completionTokens ?? 0,
+                    $response->usage->totalTokens,
+                );
+            }
+
             $delta = $response->content;
 
             if (!$role instanceof AIChatMessageRoleEnum) {
@@ -188,6 +202,11 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface
             }
 
             yield new AIChatResponseMessage($role, $text);
+        }
+
+        // Send final usage after stream completes
+        if ($lastUsage instanceof Usage) {
+            $usageTracker->updateUsage($lastUsage, true);
         }
     }
 

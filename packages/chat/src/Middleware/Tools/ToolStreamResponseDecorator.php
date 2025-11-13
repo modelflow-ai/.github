@@ -20,6 +20,7 @@ use ModelflowAi\Chat\Request\Message\ToolCallsPart;
 use ModelflowAi\Chat\Response\AIChatResponseMessage;
 use ModelflowAi\Chat\Response\AIChatResponseStreamInterface;
 use ModelflowAi\Chat\Response\Usage;
+use ModelflowAi\Chat\Response\UsageCallbackInterface;
 use ModelflowAi\Chat\ToolInfo\ToolExecutor;
 
 /**
@@ -30,7 +31,10 @@ final class ToolStreamResponseDecorator implements AIChatResponseStreamInterface
 {
     /** @var callable */
     private $nextMiddleware;
-    private Usage $usage;
+    private ?Usage $accumulatedUsage = null;
+
+    /** @var list<UsageCallbackInterface> */
+    private array $callbacks = [];
 
     public function __construct(
         private readonly AIChatResponseStreamInterface $originalStream,
@@ -42,7 +46,6 @@ final class ToolStreamResponseDecorator implements AIChatResponseStreamInterface
         private int $executionCount = 0,
     ) {
         $this->nextMiddleware = $nextMiddleware;
-        $this->usage = $originalStream->getUsage() ?? Usage::empty();
     }
 
     public function getMessageStream(): \Iterator
@@ -94,12 +97,20 @@ final class ToolStreamResponseDecorator implements AIChatResponseStreamInterface
                 $this->executionCount,
             );
 
-            // Yield all messages from the nested stream
+            foreach ($this->callbacks as $callback) {
+                $nestedStream->registerUsageCallback($callback);
+            }
+
             foreach ($nestedStream->getMessageStream() as $message) {
                 yield $message;
             }
 
-            $this->usage = $this->usage->add($nestedStream->getUsage());
+            $nestedUsage = $nestedStream->getUsage();
+            if ($nestedUsage instanceof Usage) {
+                $this->accumulatedUsage = $this->accumulatedUsage instanceof Usage
+                    ? $this->accumulatedUsage->add($nestedUsage)
+                    : $nestedUsage;
+            }
         }
     }
 
@@ -115,11 +126,27 @@ final class ToolStreamResponseDecorator implements AIChatResponseStreamInterface
 
     public function getUsage(): ?Usage
     {
-        return $this->usage;
+        // Get usage from original stream (which may be updated during streaming)
+        $originalUsage = $this->originalStream->getUsage();
+
+        // If we have accumulated usage from tool executions, add it
+        if ($this->accumulatedUsage instanceof Usage) {
+            return $originalUsage instanceof Usage
+                ? $originalUsage->add($this->accumulatedUsage)
+                : $this->accumulatedUsage;
+        }
+
+        return $originalUsage;
     }
 
     public function getMetadata(): array
     {
         return $this->request->getMetadata();
+    }
+
+    public function registerUsageCallback(UsageCallbackInterface $callback): void
+    {
+        $this->callbacks[] = $callback;
+        $this->originalStream->registerUsageCallback($callback);
     }
 }

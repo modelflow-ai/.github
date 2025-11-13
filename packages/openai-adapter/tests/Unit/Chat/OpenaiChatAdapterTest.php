@@ -28,6 +28,8 @@ use ModelflowAi\Chat\Request\ResponseFormat\ResponseFormatInterface;
 use ModelflowAi\Chat\Response\AIChatResponse;
 use ModelflowAi\Chat\Response\AIChatResponseStream;
 use ModelflowAi\Chat\Response\AIChatToolCall;
+use ModelflowAi\Chat\Response\Usage;
+use ModelflowAi\Chat\Response\UsageCallbackInterface;
 use ModelflowAi\Chat\ToolInfo\ToolChoiceEnum;
 use ModelflowAi\Chat\ToolInfo\ToolInfoBuilder;
 use ModelflowAi\Chat\ToolInfo\ToolTypeEnum;
@@ -557,6 +559,70 @@ final class OpenaiChatAdapterTest extends TestCase
         $adapter = new OpenaiChatAdapter($client);
 
         $this->assertFalse($adapter->supportsResponseFormat($unsupportedFormat));
+    }
+
+    public function testHandleRequestStreamedWithUsage(): void
+    {
+        /** @var resource $resource */
+        $resource = \fopen(__DIR__ . '/resources/stream-with-usage.txt', 'r');
+        $client = new ClientFake([
+            CreateStreamedResponse::fake($resource),
+        ]);
+
+        $request = new AIChatStreamedRequest(
+            new AIChatMessageCollection(
+                new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'System message'),
+                new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
+            ),
+            new CriteriaCollection(),
+            [],
+            [],
+            [],
+            fn () => null,
+        );
+
+        $adapter = new OpenaiChatAdapter($client);
+        $result = $adapter->handleRequest($request);
+
+        $this->assertInstanceOf(AIChatResponseStream::class, $result);
+
+        // Register callback to track usage updates
+        $callback = new class implements UsageCallbackInterface {
+            /** @var list<array{inputTokens:int, outputTokens:int, totalTokens:int, isFinal:bool}> */
+            public array $updates = [];
+
+            public function onUsageUpdate(Usage $usage, bool $isFinal): void
+            {
+                $this->updates[] = [
+                    'inputTokens' => $usage->inputTokens,
+                    'outputTokens' => $usage->outputTokens,
+                    'totalTokens' => $usage->totalTokens,
+                    'isFinal' => $isFinal,
+                ];
+            }
+        };
+        $result->registerUsageCallback($callback);
+
+        // Consume the stream
+        $contents = ['Lorem', 'Ipsum'];
+        foreach ($result->getMessageStream() as $i => $response) {
+            $this->assertSame(AIChatMessageRoleEnum::ASSISTANT, $response->role);
+            $this->assertSame($contents[$i], $response->content);
+        }
+
+        // Verify usage was received
+        $this->assertCount(1, $callback->updates);
+        $this->assertSame(10, $callback->updates[0]['inputTokens']);
+        $this->assertSame(20, $callback->updates[0]['outputTokens']);
+        $this->assertSame(30, $callback->updates[0]['totalTokens']);
+        $this->assertTrue($callback->updates[0]['isFinal']);
+
+        // Verify getUsage() returns the same data
+        $usage = $result->getUsage();
+        $this->assertNotNull($usage);
+        $this->assertSame(10, $usage->inputTokens);
+        $this->assertSame(20, $usage->outputTokens);
+        $this->assertSame(30, $usage->totalTokens);
     }
 
     /**

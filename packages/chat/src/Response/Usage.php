@@ -20,32 +20,37 @@ final class Usage
         return new self(0, 0, 0);
     }
 
+    /**
+     * @param array<string, mixed> $metadata
+     */
     public function __construct(
-        public int $inputTokens,
-        public int $outputTokens,
-        public int $totalTokens,
+        public readonly int $inputTokens,
+        public readonly int $outputTokens,
+        public readonly int $totalTokens,
+        public readonly array $metadata = [],
     ) {
     }
 
-    /**
-     * Combines this usage with another usage object by adding their token counts.
-     * Returns the current instance unchanged if the provided usage is null or invalid.
-     *
-     * @param self|null $nextUsage The usage to add to this one
-     *
-     * @return self A new Usage instance with combined token counts
-     */
+    public function isEstimated(): bool
+    {
+        return (bool) ($this->metadata['estimated'] ?? false);
+    }
+
     public function add(?self $nextUsage): self
     {
         if (!$nextUsage instanceof self) {
             return $this;
         }
 
-        $clone = clone $this;
-        $clone->inputTokens += $nextUsage->inputTokens;
-        $clone->outputTokens += $nextUsage->outputTokens;
-        $clone->totalTokens += $nextUsage->totalTokens;
+        $combinedEstimated = ($this->metadata['estimated'] ?? false) || ($nextUsage->metadata['estimated'] ?? false);
+        $mergedMetadata = \array_merge($this->metadata, $nextUsage->metadata);
+        $mergedMetadata['estimated'] = $combinedEstimated;
 
-        return $clone;
+        return new self(
+            $this->inputTokens + $nextUsage->inputTokens,
+            $this->outputTokens + $nextUsage->outputTokens,
+            $this->totalTokens + $nextUsage->totalTokens,
+            $mergedMetadata,
+        );
     }
 }

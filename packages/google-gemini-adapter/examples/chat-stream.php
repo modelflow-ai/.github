@@ -16,10 +16,13 @@ namespace App;
 use ModelflowAi\Chat\AIChatRequestHandlerInterface;
 use ModelflowAi\Chat\Request\Message\AIChatMessage;
 use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
+use ModelflowAi\Chat\Response\Usage;
+use ModelflowAi\Chat\Response\UsageCallbackInterface;
 use ModelflowAi\DecisionTree\Criteria\CapabilityCriteria;
 use ModelflowAi\PromptTemplate\ChatPromptTemplate;
 
-/** @var AIChatRequestHandlerInterface $handler */ $handler = require_once __DIR__ . '/bootstrap.php';
+/** @var AIChatRequestHandlerInterface $handler */
+$handler = require_once __DIR__ . '/bootstrap.php';
 
 $response = $handler->createStreamedRequest(
     ...ChatPromptTemplate::create(
@@ -30,10 +33,29 @@ $response = $handler->createStreamedRequest(
     ->addCriteria(CapabilityCriteria::SMART)
     ->execute();
 
+// Register a callback to receive usage updates in real-time
+$response->registerUsageCallback(new class implements UsageCallbackInterface {
+    public function onUsageUpdate(Usage $usage, bool $isFinal): void
+    {
+        $status = $isFinal ? 'Final' : 'Partial';
+        echo \PHP_EOL . "[{$status} Usage: {$usage->totalTokens} tokens]";
+    }
+});
+
 foreach ($response->getMessageStream() as $index => $message) {
     if (0 === $index) {
         echo $message->role->value . ': ';
     }
 
     echo $message->content;
+}
+
+// Get final usage after stream completes
+echo \PHP_EOL . \PHP_EOL;
+$usage = $response->getUsage();
+if (null !== $usage) {
+    echo "Final usage: {$usage->inputTokens} input + {$usage->outputTokens} output = {$usage->totalTokens} total tokens" . \PHP_EOL;
+    if ($usage->isEstimated()) {
+        echo '(estimated)' . \PHP_EOL;
+    }
 }
