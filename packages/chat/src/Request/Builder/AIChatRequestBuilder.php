@@ -68,6 +68,11 @@ class AIChatRequestBuilder
     protected array $tools = [];
 
     /**
+     * @var ToolInfo[]
+     */
+    protected array $toolInfos = [];
+
+    /**
      * @var array<string, mixed>
      */
     protected array $metadata = [];
@@ -203,7 +208,36 @@ class AIChatRequestBuilder
 
     public function tool(string $name, object $instance, ?string $method = null): static
     {
+        foreach ($this->toolInfos as $toolInfo) {
+            if ($toolInfo->name === $name) {
+                throw new \InvalidArgumentException(
+                    \sprintf('Tool with name "%s" already exists as direct ToolInfo', $name),
+                );
+            }
+        }
+
         $this->tools[$name] = [$instance, $method ?? $name];
+
+        return $this;
+    }
+
+    public function addToolInfo(ToolInfo $toolInfo): static
+    {
+        if (isset($this->tools[$toolInfo->name])) {
+            throw new \InvalidArgumentException(
+                \sprintf('Tool with name "%s" already exists as executable tool', $toolInfo->name),
+            );
+        }
+
+        foreach ($this->toolInfos as $existing) {
+            if ($existing->name === $toolInfo->name) {
+                throw new \InvalidArgumentException(
+                    \sprintf('Tool with name "%s" already exists as direct ToolInfo', $toolInfo->name),
+                );
+            }
+        }
+
+        $this->toolInfos[] = $toolInfo;
 
         return $this;
     }
@@ -213,11 +247,13 @@ class AIChatRequestBuilder
      */
     protected function buildToolInfos(): array
     {
-        return \array_map(
+        $reflectionToolInfos = \array_map(
             fn (string $name, array $tool) => ToolInfoBuilder::buildToolInfo($tool[0], $tool[1], $name),
             \array_keys($this->tools),
             $this->tools,
         );
+
+        return \array_merge($reflectionToolInfos, $this->toolInfos);
     }
 
     /**

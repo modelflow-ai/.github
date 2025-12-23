@@ -71,6 +71,10 @@ final class ToolResponseDecorator implements AIChatResponseInterface
 
             // Execute each tool and add the tool response messages
             foreach ($toolCalls as $toolCall) {
+                if (!\array_key_exists($toolCall->name, $request->getTools())) {
+                    continue;
+                }
+
                 $toolResponseMessage = $this->toolExecutor->execute($request, $toolCall);
                 $request = $request->withMessage($toolResponseMessage);
             }

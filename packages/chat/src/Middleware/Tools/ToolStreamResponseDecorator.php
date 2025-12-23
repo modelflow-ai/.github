@@ -60,6 +60,10 @@ final class ToolStreamResponseDecorator implements AIChatResponseStreamInterface
             // Collect tool calls if present
             if (null !== $message->toolCalls && \count($message->toolCalls) > 0) {
                 foreach ($message->toolCalls as $toolCall) {
+                    if (!\array_key_exists($toolCall->name, $this->request->getTools())) {
+                        continue;
+                    }
+
                     $toolCalls[] = $toolCall;
                 }
             }

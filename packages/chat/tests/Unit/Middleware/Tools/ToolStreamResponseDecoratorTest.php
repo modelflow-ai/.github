@@ -59,6 +59,7 @@ class ToolStreamResponseDecoratorTest extends TestCase
         $this->toolExecutor = $this->prophesize(ToolExecutor::class);
 
         $this->request->getMetadata()->willReturn(['key' => 'value']);
+        $this->request->getTools()->willReturn([]);
     }
 
     public function testGetMessageReturnsOriginalMessage(): void
@@ -275,6 +276,9 @@ class ToolStreamResponseDecoratorTest extends TestCase
 
     public function testGetMessageStreamWithToolCalls(): void
     {
+        // Mock getTools() to include the tool
+        $this->request->getTools()->willReturn(['tool_name' => [(object) [], 'method']]);
+
         // Create a tool call
         $toolCall = new AIChatToolCall(
             ToolTypeEnum::FUNCTION,
@@ -309,6 +313,7 @@ class ToolStreamResponseDecoratorTest extends TestCase
 
         // Mock the request handling
         $updatedRequest = $this->prophesize(AIChatStreamedRequest::class);
+        $updatedRequest->getTools()->willReturn(['tool_name' => [(object) [], 'method']]);
         $this->request->withMessage(Argument::type(AIChatMessage::class))
             ->willReturn($updatedRequest->reveal());
 
@@ -374,6 +379,12 @@ class ToolStreamResponseDecoratorTest extends TestCase
 
     public function testGetMessageStreamWithNestedToolCalls(): void
     {
+        // Mock getTools() to include both tools
+        $this->request->getTools()->willReturn([
+            'first_tool' => [(object) [], 'method1'],
+            'second_tool' => [(object) [], 'method2'],
+        ]);
+
         // Create two tool calls
         $toolCall1 = new AIChatToolCall(
             ToolTypeEnum::FUNCTION,
@@ -409,6 +420,10 @@ class ToolStreamResponseDecoratorTest extends TestCase
 
         // Mock the request handling for first call
         $updatedRequest1 = $this->prophesize(AIChatStreamedRequest::class);
+        $updatedRequest1->getTools()->willReturn([
+            'first_tool' => [(object) [], 'method1'],
+            'second_tool' => [(object) [], 'method2'],
+        ]);
         $this->request->withMessage(Argument::type(AIChatMessage::class))
             ->willReturn($updatedRequest1->reveal());
 
@@ -422,6 +437,10 @@ class ToolStreamResponseDecoratorTest extends TestCase
             ->willReturn($toolResponseMessage1);
 
         $finalRequest1 = $this->prophesize(AIChatStreamedRequest::class);
+        $finalRequest1->getTools()->willReturn([
+            'first_tool' => [(object) [], 'method1'],
+            'second_tool' => [(object) [], 'method2'],
+        ]);
         $updatedRequest1->withMessage($toolResponseMessage1)->willReturn($finalRequest1->reveal());
         $finalRequest1->getMetadata()->willReturn(['key' => 'final1']);
 
@@ -444,6 +463,10 @@ class ToolStreamResponseDecoratorTest extends TestCase
 
         // Mock the request handling for second call
         $updatedRequest2 = $this->prophesize(AIChatStreamedRequest::class);
+        $updatedRequest2->getTools()->willReturn([
+            'first_tool' => [(object) [], 'method1'],
+            'second_tool' => [(object) [], 'method2'],
+        ]);
         $finalRequest1->withMessage(Argument::type(AIChatMessage::class))
             ->willReturn($updatedRequest2->reveal());
 
@@ -514,6 +537,9 @@ class ToolStreamResponseDecoratorTest extends TestCase
 
     public function testGetMessageStreamRespectsMaxExecutions(): void
     {
+        // Mock getTools() to include the tool
+        $this->request->getTools()->willReturn(['recursive_tool' => [(object) [], 'method']]);
+
         // Create a tool call that will be used in a loop
         $toolCall = new AIChatToolCall(
             ToolTypeEnum::FUNCTION,
@@ -542,6 +568,7 @@ class ToolStreamResponseDecoratorTest extends TestCase
 
         // Mock the request handling
         $updatedRequest = $this->prophesize(AIChatStreamedRequest::class);
+        $updatedRequest->getTools()->willReturn(['recursive_tool' => [(object) [], 'method']]);
         $this->request->withMessage(Argument::type(AIChatMessage::class))
             ->willReturn($updatedRequest->reveal());
 
@@ -555,6 +582,7 @@ class ToolStreamResponseDecoratorTest extends TestCase
             ->willReturn($toolResponseMessage);
 
         $finalRequest = $this->prophesize(AIChatStreamedRequest::class);
+        $finalRequest->getTools()->willReturn(['recursive_tool' => [(object) [], 'method']]);
         $updatedRequest->withMessage(Argument::any())->willReturn($finalRequest->reveal());
         $finalRequest->withMessage(Argument::any())->willReturn($finalRequest->reveal());
         $finalRequest->getMetadata()->willReturn(['key' => 'final']);

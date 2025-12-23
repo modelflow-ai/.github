@@ -24,6 +24,7 @@ use ModelflowAi\Chat\Response\AIChatResponseMessage;
 use ModelflowAi\Chat\Response\AIChatResponseStream;
 use ModelflowAi\Chat\ToolInfo\ToolChoiceEnum;
 use ModelflowAi\Chat\ToolInfo\ToolInfo;
+use ModelflowAi\Chat\ToolInfo\ToolTypeEnum;
 use ModelflowAi\DecisionTree\Criteria\CapabilityCriteria;
 use ModelflowAi\DecisionTree\Criteria\FeatureCriteria;
 use PHPUnit\Framework\TestCase;
@@ -270,6 +271,194 @@ class AIChatRequestBuilderTest extends TestCase
 
         $response = $builder->execute();
         $this->assertInstanceOf(AIChatResponseStream::class, $response);
+    }
+
+    public function testAddToolInfo(): void
+    {
+        $builder = new AIChatRequestBuilder(fn () => null);
+
+        $toolInfo = new ToolInfo(
+            ToolTypeEnum::FUNCTION,
+            'external_tool',
+            'A tool executed externally',
+            [],
+            [],
+        );
+
+        $builder->addToolInfo($toolInfo);
+
+        $request = $builder->build();
+        $toolInfos = $request->getToolInfos();
+
+        $this->assertCount(1, $toolInfos);
+        $this->assertSame('external_tool', $toolInfos[0]->name);
+        $this->assertSame('A tool executed externally', $toolInfos[0]->description);
+
+        // Verify it's not in executable tools
+        $this->assertEmpty($request->getTools());
+    }
+
+    public function testAddToolInfoWithInstanceBasedTool(): void
+    {
+        $builder = new AIChatRequestBuilder(fn () => null);
+
+        // Add instance-based tool first
+        $builder->tool('instance_tool', $this, 'toolMethod');
+
+        // Add direct ToolInfo
+        $toolInfo = new ToolInfo(
+            ToolTypeEnum::FUNCTION,
+            'direct_tool',
+            'Direct tool',
+            [],
+            [],
+        );
+        $builder->addToolInfo($toolInfo);
+
+        $request = $builder->build();
+
+        // Should have 2 ToolInfos
+        $this->assertCount(2, $request->getToolInfos());
+
+        // But only 1 executable tool
+        $this->assertCount(1, $request->getTools());
+        $this->assertArrayHasKey('instance_tool', $request->getTools());
+        $this->assertArrayNotHasKey('direct_tool', $request->getTools());
+    }
+
+    public function testAddToolInfoThrowsOnDuplicateName(): void
+    {
+        $builder = new AIChatRequestBuilder(fn () => null);
+
+        $toolInfo1 = new ToolInfo(
+            ToolTypeEnum::FUNCTION,
+            'duplicate',
+            'First tool',
+            [],
+            [],
+        );
+
+        $toolInfo2 = new ToolInfo(
+            ToolTypeEnum::FUNCTION,
+            'duplicate',
+            'Second tool',
+            [],
+            [],
+        );
+
+        $builder->addToolInfo($toolInfo1);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Tool with name "duplicate" already exists');
+
+        $builder->addToolInfo($toolInfo2);
+    }
+
+    public function testAddToolInfoThrowsWhenConflictsWithInstanceTool(): void
+    {
+        $builder = new AIChatRequestBuilder(fn () => null);
+
+        // Add instance-based tool
+        $builder->tool('conflict_name', $this, 'toolMethod');
+
+        // Try to add ToolInfo with same name
+        $toolInfo = new ToolInfo(
+            ToolTypeEnum::FUNCTION,
+            'conflict_name',
+            'Conflicting tool',
+            [],
+            [],
+        );
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Tool with name "conflict_name" already exists as executable tool');
+
+        $builder->addToolInfo($toolInfo);
+    }
+
+    public function testToolThrowsWhenConflictsWithDirectToolInfo(): void
+    {
+        $builder = new AIChatRequestBuilder(fn () => null);
+
+        // Add direct ToolInfo first
+        $toolInfo = new ToolInfo(
+            ToolTypeEnum::FUNCTION,
+            'conflict_name',
+            'Direct tool',
+            [],
+            [],
+        );
+        $builder->addToolInfo($toolInfo);
+
+        // Try to add instance tool with same name
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Tool with name "conflict_name" already exists as direct ToolInfo');
+
+        $builder->tool('conflict_name', $this, 'toolMethod');
+    }
+
+    public function testMultipleDirectToolInfos(): void
+    {
+        $builder = new AIChatRequestBuilder(fn () => null);
+
+        $toolInfo1 = new ToolInfo(
+            ToolTypeEnum::FUNCTION,
+            'tool1',
+            'First tool',
+            [],
+            [],
+        );
+
+        $toolInfo2 = new ToolInfo(
+            ToolTypeEnum::FUNCTION,
+            'tool2',
+            'Second tool',
+            [],
+            [],
+        );
+
+        $builder->addToolInfo($toolInfo1)
+               ->addToolInfo($toolInfo2);
+
+        $request = $builder->build();
+
+        $this->assertCount(2, $request->getToolInfos());
+        $this->assertEmpty($request->getTools());
+    }
+
+    public function testToolInfoOrderPreservation(): void
+    {
+        $builder = new AIChatRequestBuilder(fn () => null);
+
+        // Add instance tool first
+        $builder->tool('instance_tool', $this, 'toolMethod');
+
+        // Add direct ToolInfos
+        $toolInfo1 = new ToolInfo(
+            ToolTypeEnum::FUNCTION,
+            'direct_tool_1',
+            'Direct tool 1',
+            [],
+            [],
+        );
+        $toolInfo2 = new ToolInfo(
+            ToolTypeEnum::FUNCTION,
+            'direct_tool_2',
+            'Direct tool 2',
+            [],
+            [],
+        );
+
+        $builder->addToolInfo($toolInfo1)
+               ->addToolInfo($toolInfo2);
+
+        $request = $builder->build();
+        $toolInfos = $request->getToolInfos();
+
+        // Instance-based tools should come first (from buildToolInfos)
+        $this->assertSame('instance_tool', $toolInfos[0]->name);
+        $this->assertSame('direct_tool_1', $toolInfos[1]->name);
+        $this->assertSame('direct_tool_2', $toolInfos[2]->name);
     }
 
     public function toolMethod(string $test): string
