@@ -62,6 +62,7 @@ class ToolResponseDecoratorTest extends TestCase
         $this->toolExecutor = $this->prophesize(ToolExecutor::class);
 
         $this->request->getMetadata()->willReturn(['key' => 'value']);
+        $this->request->getTools()->willReturn([]);
 
         $this->nextMiddleware = function ($request, $adapter) {
             return new AIChatResponse(
@@ -216,9 +217,13 @@ class ToolResponseDecoratorTest extends TestCase
             new Usage(5, 10, 15),
         );
 
+        // Mock getTools() to include the tool
+        $this->request->getTools()->willReturn(['tool_name' => [(object) [], 'method']]);
+
         // Mock the request handling
         $updatedRequest = $this->prophesize(AIChatRequest::class);
         $updatedRequest->getMetadata()->willReturn(['key' => 'updated']);
+        $updatedRequest->getTools()->willReturn(['tool_name' => [(object) [], 'method']]);
 
         $this->request->withMessage(Argument::type(AIChatMessage::class))
             ->willReturn($updatedRequest->reveal());
@@ -272,6 +277,12 @@ class ToolResponseDecoratorTest extends TestCase
 
     public function testProcessToolCallsWithMultipleToolCalls(): void
     {
+        // Mock getTools() to include both tools
+        $this->request->getTools()->willReturn([
+            'tool_name_1' => [(object) [], 'method1'],
+            'tool_name_2' => [(object) [], 'method2'],
+        ]);
+
         // Create multiple tool calls
         $toolCall1 = new AIChatToolCall(
             ToolTypeEnum::FUNCTION,
@@ -295,6 +306,10 @@ class ToolResponseDecoratorTest extends TestCase
 
         // Mock the request handling
         $updatedRequest = $this->prophesize(AIChatRequest::class);
+        $updatedRequest->getTools()->willReturn([
+            'tool_name_1' => [(object) [], 'method1'],
+            'tool_name_2' => [(object) [], 'method2'],
+        ]);
         $this->request->withMessage(Argument::type(AIChatMessage::class))
             ->willReturn($updatedRequest->reveal());
 
@@ -313,6 +328,10 @@ class ToolResponseDecoratorTest extends TestCase
             ->willReturn($toolResponseMessage1);
 
         $updatedRequest2 = $this->prophesize(AIChatRequest::class);
+        $updatedRequest2->getTools()->willReturn([
+            'tool_name_1' => [(object) [], 'method1'],
+            'tool_name_2' => [(object) [], 'method2'],
+        ]);
         $updatedRequest->withMessage($toolResponseMessage1)->willReturn($updatedRequest2->reveal());
 
         $this->toolExecutor->execute(Argument::type(AIChatRequest::class), $toolCall2)
@@ -360,6 +379,9 @@ class ToolResponseDecoratorTest extends TestCase
 
     public function testProcessToolCallsRespectsMaxExecutions(): void
     {
+        // Mock getTools() to include the tool
+        $this->request->getTools()->willReturn(['recursive_tool' => [(object) [], 'method']]);
+
         // Create a response chain with tool calls that would exceed max executions
         $toolCall = new AIChatToolCall(
             ToolTypeEnum::FUNCTION,
@@ -377,6 +399,7 @@ class ToolResponseDecoratorTest extends TestCase
 
         // Mock the request handling for first call
         $updatedRequest = $this->prophesize(AIChatRequest::class);
+        $updatedRequest->getTools()->willReturn(['recursive_tool' => [(object) [], 'method']]);
         $this->request->withMessage(Argument::type(AIChatMessage::class))
             ->willReturn($updatedRequest->reveal());
 
@@ -391,6 +414,7 @@ class ToolResponseDecoratorTest extends TestCase
 
         $finalRequest = $this->prophesize(AIChatRequest::class);
         $finalRequest->getMetadata()->willReturn(['key' => 'final']);
+        $finalRequest->getTools()->willReturn(['recursive_tool' => [(object) [], 'method']]);
         $updatedRequest->withMessage($toolResponseMessage)->willReturn($finalRequest->reveal());
         $finalRequest->withMessage(Argument::any())->willReturn($finalRequest->reveal());
 
@@ -457,5 +481,87 @@ class ToolResponseDecoratorTest extends TestCase
 
         // Check the accumulated usage (1,2,3 + 5,10,15 + 2,3,4 + 1,1,1)
         $this->assertSame(23, $result->getUsage()?->totalTokens);
+    }
+
+    public function testProcessToolCallsSkipsMetadataOnlyTools(): void
+    {
+        // Create a tool call for a metadata-only tool
+        $metadataToolCall = new AIChatToolCall(
+            ToolTypeEnum::FUNCTION,
+            'id_456',
+            'metadata_only_tool',
+            ['query' => 'test'],
+        );
+
+        // Create a tool call for an executable tool
+        $executableToolCall = new AIChatToolCall(
+            ToolTypeEnum::FUNCTION,
+            'id_123',
+            'executable_tool',
+            ['param' => 'value'],
+        );
+
+        $response = new AIChatResponse(
+            $this->request->reveal(),
+            new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Hello', [$metadataToolCall, $executableToolCall]),
+            new Usage(5, 10, 15),
+        );
+
+        // Mock getTools() to only return the executable tool
+        $this->request->getTools()->willReturn([
+            'executable_tool' => [(object) [], 'method'],
+        ]);
+
+        // Mock the request handling
+        $updatedRequest = $this->prophesize(AIChatRequest::class);
+        $updatedRequest->getMetadata()->willReturn(['key' => 'updated']);
+        $updatedRequest->getTools()->willReturn([
+            'executable_tool' => [(object) [], 'method'],
+        ]);
+
+        $this->request->withMessage(Argument::type(AIChatMessage::class))
+            ->willReturn($updatedRequest->reveal());
+
+        // Mock the tool executor - should ONLY be called for executable tool
+        $toolResponseMessage = new AIChatMessage(
+            AIChatMessageRoleEnum::TOOL,
+            'Tool response',
+        );
+        $this->toolExecutor->execute(Argument::type(AIChatRequest::class), $executableToolCall)
+            ->shouldBeCalledOnce()
+            ->willReturn($toolResponseMessage);
+
+        // Ensure executor is NOT called for metadata-only tool
+        $this->toolExecutor->execute(Argument::type(AIChatRequest::class), $metadataToolCall)
+            ->shouldNotBeCalled();
+
+        // Mock the updated request with tool response
+        $finalRequest = $this->prophesize(AIChatRequest::class);
+        $finalRequest->getMetadata()->willReturn(['key' => 'final']);
+        $updatedRequest->withMessage($toolResponseMessage)->willReturn($finalRequest->reveal());
+
+        // Mock the next middleware response
+        $secondResponse = new AIChatResponse(
+            $finalRequest->reveal(),
+            new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Final response'),
+            new Usage(5, 10, 15),
+        );
+
+        $nextMiddleware = function () use ($secondResponse) {
+            return $secondResponse;
+        };
+
+        $decorator = new ToolResponseDecorator(
+            $response,
+            $this->request->reveal(),
+            $this->adapter->reveal(),
+            $nextMiddleware,
+            $this->toolExecutor->reveal(),
+            self::MAX_TOOL_EXECUTIONS,
+        );
+
+        $result = $decorator->processToolCalls();
+
+        $this->assertInstanceOf(ToolResponseDecorator::class, $result);
     }
 }
