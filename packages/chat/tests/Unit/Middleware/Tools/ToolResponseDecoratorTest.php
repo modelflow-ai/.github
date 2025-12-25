@@ -564,4 +564,72 @@ class ToolResponseDecoratorTest extends TestCase
 
         $this->assertInstanceOf(ToolResponseDecorator::class, $result);
     }
+
+    public function testProcessToolCallsPreventsInfiniteLoopWhenAllToolCallsAreInvalid(): void
+    {
+        // Create tool calls for non-existent tools
+        $invalidToolCall1 = new AIChatToolCall(
+            ToolTypeEnum::FUNCTION,
+            'id_123',
+            'non_existent_tool_1',
+            ['param' => 'value1'],
+        );
+
+        $invalidToolCall2 = new AIChatToolCall(
+            ToolTypeEnum::FUNCTION,
+            'id_456',
+            'non_existent_tool_2',
+            ['param' => 'value2'],
+        );
+
+        $response = new AIChatResponse(
+            $this->request->reveal(),
+            new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Hello', [$invalidToolCall1, $invalidToolCall2]),
+            new Usage(5, 10, 15),
+        );
+
+        // Mock getTools() to return empty array (no tools available)
+        $this->request->getTools()->willReturn([]);
+
+        // Mock the request handling - should still be called once to add the assistant message
+        $updatedRequest = $this->prophesize(AIChatRequest::class);
+        $updatedRequest->getMetadata()->willReturn(['key' => 'updated']);
+        $updatedRequest->getTools()->willReturn([]);
+
+        $this->request->withMessage(Argument::type(AIChatMessage::class))
+            ->willReturn($updatedRequest->reveal());
+
+        // Tool executor should NEVER be called since all tools are invalid
+        $this->toolExecutor->execute(Argument::cetera())
+            ->shouldNotBeCalled();
+
+        // Next middleware should also NEVER be called because we break early
+        $middlewareCalled = false;
+        $nextMiddleware = function () use (&$middlewareCalled) {
+            $middlewareCalled = true;
+
+            return new AIChatResponse(
+                $this->request->reveal(),
+                new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Should not be called'),
+                Usage::empty(),
+            );
+        };
+
+        $decorator = new ToolResponseDecorator(
+            $response,
+            $this->request->reveal(),
+            $this->adapter->reveal(),
+            $nextMiddleware,
+            $this->toolExecutor->reveal(),
+            self::MAX_TOOL_EXECUTIONS,
+        );
+
+        $result = $decorator->processToolCalls();
+
+        $this->assertInstanceOf(ToolResponseDecorator::class, $result);
+        $this->assertFalse($middlewareCalled, 'Next middleware should not be called when all tool calls are invalid');
+
+        // Should return the original response since no valid tool calls were processed
+        $this->assertSame('Hello', $result->getMessage()->content);
+    }
 }

@@ -122,7 +122,7 @@ class AIChatRequest implements CriteriaBehaviour
 
     public function hasTools(): bool
     {
-        return [] !== $this->tools;
+        return [] !== $this->tools || [] !== $this->toolInfos;
     }
 
     /**
