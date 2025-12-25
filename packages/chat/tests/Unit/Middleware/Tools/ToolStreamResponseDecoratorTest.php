@@ -665,4 +665,96 @@ class ToolStreamResponseDecoratorTest extends TestCase
         $resultMessages = \iterator_to_array($decorator->getMessageStream());
         $this->assertCount(1, $resultMessages);
     }
+
+    public function testGetMessageStreamPreventsInfiniteLoopWhenAllToolCallsAreInvalid(): void
+    {
+        // Create tool calls for non-existent tools
+        $invalidToolCall1 = new AIChatToolCall(
+            ToolTypeEnum::FUNCTION,
+            'id_123',
+            'non_existent_tool_1',
+            ['param' => 'value1'],
+        );
+
+        $invalidToolCall2 = new AIChatToolCall(
+            ToolTypeEnum::FUNCTION,
+            'id_456',
+            'non_existent_tool_2',
+            ['param' => 'value2'],
+        );
+
+        // Create message with invalid tool calls
+        $message = new AIChatResponseMessage(
+            AIChatMessageRoleEnum::ASSISTANT,
+            'Hello with invalid tools',
+            [$invalidToolCall1, $invalidToolCall2],
+        );
+
+        // Mock getTools() to return empty array (no tools available)
+        $this->request->getTools()->willReturn([]);
+
+        // Create original stream
+        $messageIterator = new \ArrayIterator([$message]);
+        $usageTracker = new StreamingUsageTracker();
+        $usageTracker->updateUsage(new Usage(10, 20, 30), true);
+        $originalStream = new AIChatResponseStream(
+            $this->request->reveal(),
+            $messageIterator,
+            [],
+            $usageTracker,
+        );
+
+        // Mock the request handling - should still be called once to add the assistant message
+        $updatedRequest = $this->prophesize(AIChatStreamedRequest::class);
+        $updatedRequest->getMetadata()->willReturn(['key' => 'updated']);
+        $updatedRequest->getTools()->willReturn([]);
+
+        $this->request->withMessage(Argument::type(AIChatMessage::class))
+            ->willReturn($updatedRequest->reveal());
+
+        // Tool executor should NEVER be called since all tools are invalid
+        $this->toolExecutor->execute(Argument::cetera())
+            ->shouldNotBeCalled();
+
+        // Next middleware should also NEVER be called because we return early
+        $middlewareCalled = false;
+        $nextMiddleware = function () use (&$middlewareCalled) {
+            $middlewareCalled = true;
+
+            $message = new AIChatResponseMessage(
+                AIChatMessageRoleEnum::ASSISTANT,
+                'Should not be called',
+                null,
+            );
+
+            $usageTracker = new StreamingUsageTracker();
+            $usageTracker->updateUsage(Usage::empty(), true);
+
+            return new AIChatResponseStream(
+                $this->request->reveal(),
+                new \ArrayIterator([$message]),
+                [],
+                $usageTracker,
+            );
+        };
+
+        $decorator = new ToolStreamResponseDecorator(
+            $originalStream,
+            $this->request->reveal(),
+            $this->adapter->reveal(),
+            $nextMiddleware,
+            $this->toolExecutor->reveal(),
+            self::MAX_TOOL_EXECUTIONS,
+        );
+
+        $resultMessages = \iterator_to_array($decorator->getMessageStream());
+
+        // Should only return the original message, no nested stream processing
+        $this->assertCount(1, $resultMessages);
+        $this->assertSame($message, $resultMessages[0]);
+        $this->assertFalse($middlewareCalled, 'Next middleware should not be called when all tool calls are invalid');
+
+        // Should only have original usage, no accumulated usage from nested streams
+        $this->assertSame(30, $decorator->getUsage()?->totalTokens);
+    }
 }

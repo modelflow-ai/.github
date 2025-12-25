@@ -213,6 +213,42 @@ class AIChatRequestTest extends TestCase
         $this->assertTrue($request->hasTools());
     }
 
+    public function testHasToolsWithOnlyToolInfos(): void
+    {
+        $toolInfos = [
+            ToolInfoBuilder::buildToolInfo($this, 'toolMethod', 'test_tool'),
+        ];
+
+        $requestHandler = fn () => null;
+        $request = new AIChatRequest(
+            new AIChatMessageCollection(),
+            new CriteriaCollection(),
+            [], // No tools
+            $toolInfos, // Only toolInfos
+            [],
+            $requestHandler,
+        );
+
+        $this->assertTrue($request->hasTools(), 'hasTools should return true when only toolInfos are present');
+        $this->assertEmpty($request->getTools());
+        $this->assertNotEmpty($request->getToolInfos());
+    }
+
+    public function testHasToolsWithNoToolsAndNoToolInfos(): void
+    {
+        $requestHandler = fn () => null;
+        $request = new AIChatRequest(
+            new AIChatMessageCollection(),
+            new CriteriaCollection(),
+            [], // No tools
+            [], // No toolInfos
+            [],
+            $requestHandler,
+        );
+
+        $this->assertFalse($request->hasTools(), 'hasTools should return false when both tools and toolInfos are empty');
+    }
+
     public function testIsStreamed(): void
     {
         $request = new AIChatRequest(

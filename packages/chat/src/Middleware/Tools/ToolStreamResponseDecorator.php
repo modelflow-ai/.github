@@ -79,9 +79,20 @@ final class ToolStreamResponseDecorator implements AIChatResponseStreamInterface
             );
 
             // Execute each tool and add the tool response messages
+            $count = 0;
             foreach ($toolCalls as $toolCall) {
+                if (!\array_key_exists($toolCall->name, $this->request->getTools())) {
+                    continue;
+                }
+
+                ++$count;
                 $toolResponseMessage = $this->toolExecutor->execute($this->request, $toolCall);
                 $this->request = $this->request->withMessage($toolResponseMessage);
+            }
+
+            if (0 === $count) {
+                // No valid tool calls executed, return early to avoid infinite loop
+                return;
             }
 
             // Execute the request again
