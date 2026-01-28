@@ -1,0 +1,37 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^PHPDoc tag @var with type ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Chat\\Request\\AIChatRequest, ModelflowAi\\Chat\\Adapter\\AIChatAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\AnthropicAdapter\\Chat\\AnthropicChatAdapter\>\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: examples/bootstrap.php
+
+		-
+			message: '#^Parameter \#1 \$apiKey of static method ModelflowAi\\Anthropic\\Anthropic\:\:client\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/bootstrap.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: examples/chat-response-format.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\<string, mixed\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: examples/chat-response-format.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between null and ModelflowAi\\ApiClient\\Responses\\Usage will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: src/Chat/AnthropicChatAdapter.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\Response\\\\AIChatResponse'' and ModelflowAi\\Chat\\Response\\AIChatResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 3
+			path: tests/Unit/Chat/AnthropicChatAdapterTest.php

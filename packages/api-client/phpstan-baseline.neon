@@ -1,0 +1,67 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Trait ModelflowAi\\ApiClient\\Resources\\Concerns\\Streamable is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: src/Resources/Concerns/Streamable.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: src/Transport/SymfonyHttpTransporter.php
+
+		-
+			message: '#^Parameter \#1 \$data of class ModelflowAi\\ApiClient\\Transport\\Response\\ObjectResponse constructor expects array\<string, mixed\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Transport/SymfonyHttpTransporter.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: src/Transport/Testing/MockTransport.php
+
+		-
+			message: '#^Parameter \#1 \$data of class ModelflowAi\\ApiClient\\Transport\\Response\\ObjectResponse constructor expects array\<string, mixed\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Transport/Testing/MockTransport.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\ApiClient\\\\Responses\\\\MetaInformation'' and ModelflowAi\\ApiClient\\Responses\\MetaInformation will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 2
+			path: tests/Unit/Responses/MetaInformationTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\ApiClient\\\\Responses\\\\Usage'' and ModelflowAi\\ApiClient\\Responses\\Usage will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/UsageTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\ApiClient\\\\Transport\\\\Payload'' and ModelflowAi\\ApiClient\\Transport\\Payload will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Transport/PayloadTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertSame\(\) with ModelflowAi\\ApiClient\\Transport\\Enums\\ContentType\:\:JSON and ModelflowAi\\ApiClient\\Transport\\Enums\\ContentType will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Transport/PayloadTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\ApiClient\\\\Transport\\\\Response\\\\ObjectResponse'' and ModelflowAi\\ApiClient\\Transport\\Response\\ObjectResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Transport/SymfonyHttpTransporterTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\ApiClient\\\\Transport\\\\Response\\\\TextResponse'' and ModelflowAi\\ApiClient\\Transport\\Response\\TextResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Transport/SymfonyHttpTransporterTest.php

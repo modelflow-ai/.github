@@ -1,0 +1,67 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: src/QdrantEmbeddingsStore.php
+
+		-
+			message: '#^Cannot access offset ''className'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/QdrantEmbeddingsStore.php
+
+		-
+			message: '#^Cannot access offset ''payload'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/QdrantEmbeddingsStore.php
+
+		-
+			message: '#^Cannot access offset ''score'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: src/QdrantEmbeddingsStore.php
+
+		-
+			message: '#^Cannot call static method fromArray\(\) on mixed\.$#'
+			identifier: staticMethod.nonObject
+			count: 1
+			path: src/QdrantEmbeddingsStore.php
+
+		-
+			message: '#^Cannot cast mixed to float\.$#'
+			identifier: cast.double
+			count: 1
+			path: src/QdrantEmbeddingsStore.php
+
+		-
+			message: '#^Method ModelflowAi\\Embeddings\\Store\\Qdrant\\QdrantEmbeddingsStore\:\:similaritySearch\(\) should return array\<ModelflowAi\\Embeddings\\Model\\EmbeddingInterface\> but returns list\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/QdrantEmbeddingsStore.php
+
+		-
+			message: '#^Call to static method Webmozart\\Assert\\Assert\:\:integer\(\) with int\<1, max\> and ''The chunk size must…'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/QdrantEmbeddingsStoreFactory.php
+
+		-
+			message: '#^Cannot access offset ''points'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Functional/QdrantEmbeddingsStoreTest.php
+
+		-
+			message: '#^Method ModelflowAi\\Embeddings\\Store\\Qdrant\\Tests\\Functional\\QdrantEmbeddingsStoreTest\:\:find\(\) should return array\<array\{payload\: array\{uuid\: string\}\}\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Functional/QdrantEmbeddingsStoreTest.php
+
+		-
+			message: '#^Parameter \#1 \$baseUrl of method ModelflowAi\\Ollama\\Factory\:\:withBaseUrl\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Functional/QdrantEmbeddingsStoreTest.php

@@ -1,0 +1,31 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Property App\\Entity\\Chat\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/Chat.php
+
+		-
+			message: '#^Parameter \#1 \$array \(array\<Symfony\\Component\\HttpFoundation\\File\\UploadedFile\>\) to function array_filter does not contain falsy values, the array will always stay the same\.$#'
+			identifier: arrayFilter.same
+			count: 1
+			path: src/Entity/ChatMessage.php
+
+		-
+			message: '#^Property App\\Entity\\ChatMessage\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/ChatMessage.php
+
+		-
+			message: '#^Property App\\Entity\\ChatMessageFile\:\:\$id \(int\|null\) is never assigned int so it can be removed from the property type\.$#'
+			identifier: property.unusedType
+			count: 1
+			path: src/Entity/ChatMessageFile.php
+
+		-
+			message: '#^PHPDoc tag @var with type ModelflowAi\\Chat\\Request\\Builder\\AIChatRequestBuilder is not subtype of native type ModelflowAi\\Chat\\Request\\Builder\\AIChatStreamedRequestBuilder\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: src/MessageHandler/AddChatMessageHandler.php

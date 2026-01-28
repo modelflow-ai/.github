@@ -19,9 +19,15 @@ jobs:
             fail-fast: false
             matrix:
                 include:
-                    - php-version: '8.2'
+                    - php-version: '8.5'
                       dependency-versions: 'highest'
                       lint: true
+                    - php-version: '8.4'
+                      dependency-versions: 'highest'
+                      lint: false
+                    - php-version: '8.3'
+                      dependency-versions: 'lowest'
+                      lint: false
                     - php-version: '8.2'
                       dependency-versions: 'lowest'
                       lint: false

@@ -1,0 +1,37 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Call to static method Webmozart\\Assert\\Assert\:\:isInstanceOf\(\) with ModelflowAi\\Completion\\Response\\AICompletionResponse and ''ModelflowAi\\\\Completion\\\\Response\\\\AICompletionResponse'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/AICompletionRequestHandler.php
+
+		-
+			message: '#^Method ModelflowAi\\Completion\\Request\\AICompletionRequest\:\:execute\(\) should return ModelflowAi\\Completion\\Response\\AICompletionResponse but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Request/AICompletionRequest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Completion\\\\Request\\\\Builder\\\\AICompletionRequestBuilder'' and ModelflowAi\\Completion\\Request\\Builder\\AICompletionRequestBuilder will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/AICompletionRequestHandlerTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Completion\\\\Response\\\\AICompletionResponse'' and ModelflowAi\\Completion\\Response\\AICompletionResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Request/AICompletionRequestTest.php
+
+		-
+			message: '#^Parameter \#1 \$request of class ModelflowAi\\Completion\\Response\\AICompletionResponse constructor expects ModelflowAi\\Completion\\Request\\AICompletionRequest, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Unit/Request/AICompletionRequestTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Completion\\\\Request\\\\AICompletionRequest'' and ModelflowAi\\Completion\\Request\\AICompletionRequest will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Request/Builder/AICompletionRequestBuilderTest.php

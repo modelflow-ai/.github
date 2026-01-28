@@ -1,0 +1,211 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Cannot access offset ''content'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Resources/Chat.php
+
+		-
+			message: '#^Cannot access offset ''images'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Resources/Chat.php
+
+		-
+			message: '#^Cannot access offset ''role'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Resources/Chat.php
+
+		-
+			message: '#^Parameter \#1 \$array of static method Webmozart\\Assert\\Assert\:\:keyExists\(\) expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Resources/Chat.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Ollama\\\\Responses\\\\Chat\\\\CreateResponse'' and ModelflowAi\\Ollama\\Responses\\Chat\\CreateResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Functional/ClientTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Ollama\\\\Responses\\\\Completion\\\\CreateResponse'' and ModelflowAi\\Ollama\\Responses\\Completion\\CreateResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Functional/ClientTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Ollama\\\\Responses\\\\Embeddings\\\\CreateResponse'' and ModelflowAi\\Ollama\\Responses\\Embeddings\\CreateResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Functional/ClientTest.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between ModelflowAi\\ApiClient\\Transport\\Enums\\ContentType\:\:JSON and ModelflowAi\\ApiClient\\Transport\\Enums\\ContentType will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 3
+			path: tests/Functional/ClientTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Ollama\\\\ClientInterface'' and ModelflowAi\\Ollama\\ClientInterface will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/FactoryTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Ollama\\\\Factory'' and ModelflowAi\\Ollama\\Factory will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 2
+			path: tests/Unit/FactoryTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Ollama\\\\ClientInterface'' and ModelflowAi\\Ollama\\ClientInterface will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/OllamaTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Ollama\\\\Factory'' and ModelflowAi\\Ollama\\Factory will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/OllamaTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\ApiClient\\\\Responses\\\\MetaInformation'' and ModelflowAi\\ApiClient\\Responses\\MetaInformation will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 3
+			path: tests/Unit/Resources/ChatTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Ollama\\\\Responses\\\\Chat\\\\CreateResponse'' and ModelflowAi\\Ollama\\Responses\\Chat\\CreateResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 2
+			path: tests/Unit/Resources/ChatTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Ollama\\\\Responses\\\\Chat\\\\CreateStreamedResponse'' and ModelflowAi\\Ollama\\Responses\\Chat\\CreateStreamedResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Resources/ChatTest.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between ModelflowAi\\ApiClient\\Transport\\Enums\\ContentType\:\:JSON and ModelflowAi\\ApiClient\\Transport\\Enums\\ContentType will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 3
+			path: tests/Unit/Resources/ChatTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\ApiClient\\\\Responses\\\\MetaInformation'' and ModelflowAi\\ApiClient\\Responses\\MetaInformation will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Resources/CompletionTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Ollama\\\\Responses\\\\Completion\\\\CreateResponse'' and ModelflowAi\\Ollama\\Responses\\Completion\\CreateResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Resources/CompletionTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Ollama\\\\Responses\\\\Completion\\\\CreateStreamedResponse'' and ModelflowAi\\Ollama\\Responses\\Completion\\CreateStreamedResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Resources/CompletionTest.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between ModelflowAi\\ApiClient\\Transport\\Enums\\ContentType\:\:JSON and ModelflowAi\\ApiClient\\Transport\\Enums\\ContentType will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 2
+			path: tests/Unit/Resources/CompletionTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\ApiClient\\\\Responses\\\\MetaInformation'' and ModelflowAi\\ApiClient\\Responses\\MetaInformation will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Resources/EmbeddingsTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Ollama\\\\Responses\\\\Embeddings\\\\CreateResponse'' and ModelflowAi\\Ollama\\Responses\\Embeddings\\CreateResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Resources/EmbeddingsTest.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between ModelflowAi\\ApiClient\\Transport\\Enums\\ContentType\:\:JSON and ModelflowAi\\ApiClient\\Transport\\Enums\\ContentType will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 1
+			path: tests/Unit/Resources/EmbeddingsTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Ollama\\\\Responses\\\\Chat\\\\CreateResponseMessage'' and ModelflowAi\\Ollama\\Responses\\Chat\\CreateResponseMessage will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/Chat/CreateResponseMessageTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\ApiClient\\\\Responses\\\\MetaInformation'' and ModelflowAi\\ApiClient\\Responses\\MetaInformation will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/Chat/CreateResponseTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Ollama\\\\Responses\\\\Chat\\\\CreateResponse'' and ModelflowAi\\Ollama\\Responses\\Chat\\CreateResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/Chat/CreateResponseTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Ollama\\\\Responses\\\\Chat\\\\CreateStreamedResponseMessage'' and ModelflowAi\\Ollama\\Responses\\Chat\\CreateStreamedResponseMessage will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/Chat/CreateStreamedResponseMessageTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\ApiClient\\\\Responses\\\\MetaInformation'' and ModelflowAi\\ApiClient\\Responses\\MetaInformation will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/Chat/CreateStreamedResponseTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Ollama\\\\Responses\\\\Chat\\\\CreateStreamedResponse'' and ModelflowAi\\Ollama\\Responses\\Chat\\CreateStreamedResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/Chat/CreateStreamedResponseTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\ApiClient\\\\Responses\\\\MetaInformation'' and ModelflowAi\\ApiClient\\Responses\\MetaInformation will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/Completion/CreateResponseTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Ollama\\\\Responses\\\\Completion\\\\CreateResponse'' and ModelflowAi\\Ollama\\Responses\\Completion\\CreateResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/Completion/CreateResponseTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\ApiClient\\\\Responses\\\\MetaInformation'' and ModelflowAi\\ApiClient\\Responses\\MetaInformation will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/Completion/CreateStreamedResponseTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Ollama\\\\Responses\\\\Completion\\\\CreateStreamedResponse'' and ModelflowAi\\Ollama\\Responses\\Completion\\CreateStreamedResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/Completion/CreateStreamedResponseTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\ApiClient\\\\Responses\\\\MetaInformation'' and ModelflowAi\\ApiClient\\Responses\\MetaInformation will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/Embeddings/CreateResponseTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Ollama\\\\Responses\\\\Embeddings\\\\CreateResponse'' and ModelflowAi\\Ollama\\Responses\\Embeddings\\CreateResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/Embeddings/CreateResponseTest.php

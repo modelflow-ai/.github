@@ -1,41 +1,229 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^PHPDoc tag @var for variable \\$decisionTree contains unknown class AIChatAdapterInterface\\.$#"
+			message: '#^Parameter \#1 \$apiKey of static method OpenAI\:\:client\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/bootstrap.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$decisionTree contains unknown class AIChatAdapterInterface\.$#'
+			identifier: class.notFound
 			count: 1
 			path: examples/chat/bootstrap.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$decisionTree contains unknown class AIChatRequest\\.$#"
+			message: '#^PHPDoc tag @var for variable \$decisionTree contains unknown class AIChatRequest\.$#'
+			identifier: class.notFound
 			count: 1
 			path: examples/chat/bootstrap.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$decisionTree contains unknown class DecisionTreeInterface\\.$#"
+			message: '#^PHPDoc tag @var for variable \$decisionTree contains unknown class DecisionTreeInterface\.$#'
+			identifier: class.notFound
 			count: 1
 			path: examples/chat/bootstrap.php
 
 		-
-			message: "#^Parameter \\#1 \\$decisionTree of class ModelflowAi\\\\Chat\\\\AIChatRequestHandler constructor expects ModelflowAi\\\\DecisionTree\\\\DecisionTreeInterface\\<ModelflowAi\\\\Chat\\\\Request\\\\AIChatRequest, ModelflowAi\\\\Chat\\\\Adapter\\\\AIChatAdapterInterface\\>, DecisionTreeInterface\\<AIChatRequest, AIChatAdapterInterface\\> given\\.$#"
+			message: '#^PHPDoc tag @var with type DecisionTreeInterface\<AIChatRequest, AIChatAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\OpenaiAdapter\\Chat\\OpenaiChatAdapter\>\.$#'
+			identifier: varTag.nativeType
 			count: 1
 			path: examples/chat/bootstrap.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$decisionTree contains unknown class AIImageAdapterInterface\\.$#"
+			message: '#^Parameter \#1 \$client of class ModelflowAi\\OpenaiAdapter\\Chat\\OpenaiChatAdapter constructor expects OpenAI\\Contracts\\ClientContract, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: examples/chat/bootstrap.php
+
+		-
+			message: '#^Parameter \#1 \$decisionTree of class ModelflowAi\\Chat\\AIChatRequestHandler constructor expects ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Chat\\Request\\AIChatRequest, ModelflowAi\\Chat\\Adapter\\AIChatAdapterInterface\>, DecisionTreeInterface\<AIChatRequest, AIChatAdapterInterface\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/chat/bootstrap.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: examples/chat/chat-response-format.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\<string, mixed\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: examples/chat/chat-response-format.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>totalTokens" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: examples/chat/tools-stream.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>totalTokens" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: examples/chat/tools.php
+
+		-
+			message: '#^Parameter \#1 \$client of class ModelflowAi\\OpenaiAdapter\\Embeddings\\OpenaiEmbeddingAdapter constructor expects OpenAI\\Contracts\\ClientContract, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Parameter \#1 \$client of class ModelflowAi\\OpenaiAdapter\\Embeddings\\OpenaiEmbeddingAdapter constructor expects OpenAI\\Contracts\\ClientContract, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/embeddings/simple-embeddings.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$decisionTree contains unknown class AIImageAdapterInterface\.$#'
+			identifier: class.notFound
 			count: 1
 			path: examples/image/bootstrap.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$decisionTree contains unknown class AIImageRequest\\.$#"
+			message: '#^PHPDoc tag @var for variable \$decisionTree contains unknown class AIImageRequest\.$#'
+			identifier: class.notFound
 			count: 1
 			path: examples/image/bootstrap.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$decisionTree contains unknown class DecisionTreeInterface\\.$#"
+			message: '#^PHPDoc tag @var for variable \$decisionTree contains unknown class DecisionTreeInterface\.$#'
+			identifier: class.notFound
 			count: 1
 			path: examples/image/bootstrap.php
 
 		-
-			message: "#^Parameter \\#1 \\$decisionTree of class ModelflowAi\\\\Image\\\\Middleware\\\\HandleMiddleware constructor expects ModelflowAi\\\\DecisionTree\\\\DecisionTreeInterface\\<ModelflowAi\\\\Image\\\\Request\\\\AIImageRequest, ModelflowAi\\\\Image\\\\Adapter\\\\AIImageAdapterInterface\\>, DecisionTreeInterface\\<AIImageRequest, AIImageAdapterInterface\\> given\\.$#"
+			message: '#^PHPDoc tag @var with type DecisionTreeInterface\<AIImageRequest, AIImageAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\OpenaiAdapter\\Image\\OpenAIImageGenerationAdapter\>\.$#'
+			identifier: varTag.nativeType
 			count: 1
 			path: examples/image/bootstrap.php
+
+		-
+			message: '#^Parameter \#1 \$decisionTree of class ModelflowAi\\Image\\Middleware\\HandleMiddleware constructor expects ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Image\\Request\\AIImageRequest, ModelflowAi\\Image\\Adapter\\AIImageAdapterInterface\>, DecisionTreeInterface\<AIImageRequest, AIImageAdapterInterface\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/image/bootstrap.php
+
+		-
+			message: '#^Parameter \#2 \$client of class ModelflowAi\\OpenaiAdapter\\Image\\OpenAIImageGenerationAdapter constructor expects OpenAI\\Contracts\\ClientContract, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: examples/image/bootstrap.php
+
+		-
+			message: '#^Binary operation "\." between literal\-string&non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Cannot call method addCriteria\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Cannot call method asBase64\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Cannot call method asStream\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Cannot call method base64\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Cannot call method build\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Cannot call method createRequest\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Cannot call method execute\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Cannot call method imageFormat\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Cannot call method stream\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Cannot call method textToImage\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Parameter \#1 \$stream of function stream_get_contents expects resource, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Call to static method Webmozart\\Assert\\Assert\:\:isArray\(\) with array\{name\: string\|null, arguments\: non\-empty\-list\<string\>\} will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: src/Chat/OpenaiChatAdapter.php
+
+		-
+			message: '#^Call to static method Webmozart\\Assert\\Assert\:\:notNull\(\) with non\-empty\-list\<string\> will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: src/Chat/OpenaiChatAdapter.php
+
+		-
+			message: '#^PHPDoc tag @var with type Symfony\\Component\\HttpClient\\Response\\StreamableInterface is not subtype of native type Symfony\\Contracts\\HttpClient\\ResponseInterface\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: src/Image/OpenAIImageGenerationAdapter.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\Response\\\\AIChatResponse'' and ModelflowAi\\Chat\\Response\\AIChatResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 6
+			path: tests/Unit/Chat/OpenaiChatAdapterTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertSame\(\) with ModelflowAi\\Chat\\ToolInfo\\ToolTypeEnum\:\:FUNCTION and ModelflowAi\\Chat\\ToolInfo\\ToolTypeEnum will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 2
+			path: tests/Unit/Chat/OpenaiChatAdapterTest.php
+
+		-
+			message: '#^Parameter \#1 \$override of static method OpenAI\\Responses\\Chat\\CreateResponse\:\:fake\(\) expects array\<string, mixed\>, array\<mixed, mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Unit/Chat/OpenaiChatAdapterTest.php

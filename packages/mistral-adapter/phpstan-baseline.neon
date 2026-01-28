@@ -1,0 +1,187 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Parameter \#1 \$apiKey of static method ModelflowAi\\Mistral\\Mistral\:\:client\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/bootstrap.php
+
+		-
+			message: '#^PHPDoc tag @var with type ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Chat\\Request\\AIChatRequest, ModelflowAi\\Chat\\Adapter\\AIChatAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\MistralAdapter\\Chat\\MistralChatAdapter\>\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: examples/chat/bootstrap.php
+
+		-
+			message: '#^Parameter \#1 \$client of class ModelflowAi\\MistralAdapter\\Chat\\MistralChatAdapter constructor expects ModelflowAi\\Mistral\\ClientInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 4
+			path: examples/chat/bootstrap.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>totalTokens" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: examples/chat/chat-json.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: examples/chat/chat-response-format.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\<string, mixed\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: examples/chat/chat-response-format.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>totalTokens" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: examples/chat/chat.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>totalTokens" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: examples/chat/tools-stream.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>totalTokens" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: examples/chat/tools.php
+
+		-
+			message: '#^Parameter \#1 \$client of class ModelflowAi\\MistralAdapter\\Embeddings\\MistralEmbeddingAdapter constructor expects ModelflowAi\\Mistral\\ClientInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/embeddings/bootstrap.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method createSimilarityRequest\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method createStoreRequest\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method execute\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method getContent\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method getEmbeddings\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 4
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method getFileName\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method getPromptTokens\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method getTotalTokens\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method getUsage\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method withAdditionalFilter\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method withLimit\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Parameter \#1 \$value of function count expects array\|Countable, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Part \$item\-\>getFileName\(\) \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Part \$similarityResponse\-\>getUsage\(\)\-\>getPromptTokens\(\) \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Part \$storeResponse\-\>getUsage\(\)\-\>getPromptTokens\(\) \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Part \$storeResponse\-\>getUsage\(\)\-\>getTotalTokens\(\) \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Parameter \#1 \$client of class ModelflowAi\\MistralAdapter\\Embeddings\\MistralEmbeddingAdapter constructor expects ModelflowAi\\Mistral\\ClientInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/embeddings/simple-embeddings.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\Response\\\\AIChatResponse'' and ModelflowAi\\Chat\\Response\\AIChatResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 6
+			path: tests/Unit/Chat/MistralChatAdapterTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertSame\(\) with ModelflowAi\\Chat\\ToolInfo\\ToolTypeEnum\:\:FUNCTION and ModelflowAi\\Chat\\ToolInfo\\ToolTypeEnum will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 2
+			path: tests/Unit/Chat/MistralChatAdapterTest.php

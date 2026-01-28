@@ -1,0 +1,49 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Binary operation "\." between mixed and ''\.'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: examples/index.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''\.b64'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: examples/index.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: examples/index.php
+
+		-
+			message: '#^PHPDoc tag @var with type ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Image\\Request\\AIImageRequest, ModelflowAi\\Image\\Adapter\\AIImageAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\Image\\Adapter\\Fake\\FakeAdapter\>\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: examples/index.php
+
+		-
+			message: '#^Method ModelflowAi\\Image\\Request\\AIImageRequest\:\:execute\(\) should return ModelflowAi\\Image\\Response\\AIImageResponse but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Request/AIImageRequest.php
+
+		-
+			message: '#^Parameter \#1 \$string of function base64_decode expects string, resource\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Response/AIImageResponse.php
+
+		-
+			message: '#^PHPDoc tag @var with type ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Image\\Request\\AIImageRequest, ModelflowAi\\Image\\Adapter\\AIImageAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\DecisionTree\\Behaviour\\SupportsBehaviour\>\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: tests/Functional/AiImageRequestHandlerTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Image\\\\Request\\\\Builder\\\\TextToImageActionBuilder'' and ModelflowAi\\Image\\Request\\Builder\\TextToImageActionBuilder will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Request/Builder/AIImageRequestBuilderTest.php

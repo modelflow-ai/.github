@@ -1,0 +1,181 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Call to static method Webmozart\\Assert\\Assert\:\:isInstanceOf\(\) with ModelflowAi\\Chat\\Response\\AIChatResponseInterface and ''ModelflowAi\\\\Chat\\\\Response\\\\AIChatResponseInterface'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/AIChatRequestHandler.php
+
+		-
+			message: '#^Call to static method Webmozart\\Assert\\Assert\:\:notNull\(\) with array\<ModelflowAi\\Chat\\Response\\AIChatResponseMessage\>\|ModelflowAi\\Chat\\Response\\AIChatResponseMessage will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Adapter/Fake/FakeChatAdapter.php
+
+		-
+			message: '#^Method ModelflowAi\\Chat\\Middleware\\Adapter\\AdapterDecisionMiddleware\:\:process\(\) should return ModelflowAi\\Chat\\Response\\AIChatResponseInterface but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Middleware/Adapter/AdapterDecisionMiddleware.php
+
+		-
+			message: '#^Call to static method Webmozart\\Assert\\Assert\:\:isInstanceOf\(\) with ModelflowAi\\Chat\\Request\\ResponseFormat\\ResponseFormatInterface and ''ModelflowAi\\\\Chat\\\\Request\\\\ResponseFormat\\\\ResponseFormatInterface'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Middleware/ResponseFormat/ResponseFormatMiddleware.php
+
+		-
+			message: '#^Method ModelflowAi\\Chat\\Middleware\\ResponseFormat\\ResponseFormatMiddleware\:\:process\(\) should return ModelflowAi\\Chat\\Response\\AIChatResponseInterface but returns mixed\.$#'
+			identifier: return.type
+			count: 2
+			path: src/Middleware/ResponseFormat/ResponseFormatMiddleware.php
+
+		-
+			message: '#^Parameter \#1 \$originalResponse of class ModelflowAi\\Chat\\Middleware\\Tools\\ToolResponseDecorator constructor expects ModelflowAi\\Chat\\Response\\AIChatResponseInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Middleware/Tools/ToolExecutionMiddleware.php
+
+		-
+			message: '#^Method ModelflowAi\\Chat\\Request\\AIChatRequest\:\:execute\(\) should return ModelflowAi\\Chat\\Response\\AIChatResponseInterface but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Request/AIChatRequest.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>parts" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: src/Request/AIChatRequest.php
+
+		-
+			message: '#^Call to static method Webmozart\\Assert\\Assert\:\:allIsInstanceOf\(\) with array\<ModelflowAi\\Chat\\Request\\Message\\MessagePart\> and ''ModelflowAi\\\\Chat\\\\Request\\\\Message\\\\MessagePart'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Request/Message/AIChatMessage.php
+
+		-
+			message: '#^Binary operation "\." between literal\-string&non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 3
+			path: src/Request/ResponseFormat/JsonSchemaResponseFormat.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between null and string will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: src/Response/TokenEstimator.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\Request\\\\AIChatMessageCollection'' and ModelflowAi\\Chat\\Request\\AIChatMessageCollection will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 2
+			path: tests/Unit/AIChatRequestHandlerTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\Request\\\\Builder\\\\AIChatRequestBuilder'' and ModelflowAi\\Chat\\Request\\Builder\\AIChatRequestBuilder will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/AIChatRequestHandlerTest.php
+
+		-
+			message: '#^Cannot access offset 0 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 3
+			path: tests/Unit/Middleware/AIChatMiddlewareStackTest.php
+
+		-
+			message: '#^Cannot access offset 1 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 3
+			path: tests/Unit/Middleware/AIChatMiddlewareStackTest.php
+
+		-
+			message: '#^Cannot access offset 2 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 4
+			path: tests/Unit/Middleware/AIChatMiddlewareStackTest.php
+
+		-
+			message: '#^Method ModelflowAi\\Chat\\Middleware\\AIChatMiddlewareInterface@anonymous/tests/Unit/Middleware/AIChatMiddlewareStackTest\.php\:207\:\:process\(\) should return ModelflowAi\\Chat\\Response\\AIChatResponseInterface but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Unit/Middleware/AIChatMiddlewareStackTest.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 4
+			path: tests/Unit/Middleware/AIChatMiddlewareStackTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertSame\(\) with ModelflowAi\\Chat\\Adapter\\AIChatAdapterInterface\|null and ModelflowAi\\Chat\\Adapter\\AIChatAdapterInterface\|null will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Middleware/ResponseFormat/ResponseFormatMiddlewareTest.php
+
+		-
+			message: '#^Parameter \#1 \$request of class ModelflowAi\\Chat\\Response\\AIChatResponse constructor expects ModelflowAi\\Chat\\Request\\AIChatRequest, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Unit/Middleware/Tools/ToolResponseDecoratorTest.php
+
+		-
+			message: '#^Parameter \#1 \$request of class ModelflowAi\\Chat\\Response\\AIChatResponse constructor expects ModelflowAi\\Chat\\Request\\AIChatRequest, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Unit/Request/AIChatRequestTest.php
+
+		-
+			message: '#^Parameter \#1 \$request of class ModelflowAi\\Chat\\Response\\AIChatResponseStream constructor expects ModelflowAi\\Chat\\Request\\AIChatStreamedRequest, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Unit/Request/AIChatStreamedRequestTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\Request\\\\AIChatRequest'' and ModelflowAi\\Chat\\Request\\AIChatRequest will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Request/Builder/AIChatRequestBuilderTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\ToolInfo\\\\ToolInfo'' and ModelflowAi\\Chat\\ToolInfo\\ToolInfo will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Request/Builder/AIChatRequestBuilderTest.php
+
+		-
+			message: '#^PHPDoc tag @var with type array\<ModelflowAi\\Chat\\Request\\Message\\AIChatMessage\> is not subtype of native type ModelflowAi\\Chat\\Request\\AIChatMessageCollection\.$#'
+			identifier: varTag.nativeType
+			count: 3
+			path: tests/Unit/Request/Builder/AIChatRequestBuilderTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\Request\\\\AIChatStreamedRequest'' and ModelflowAi\\Chat\\Request\\AIChatStreamedRequest will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Request/Builder/AIChatStreamedRequestBuilderTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertSame\(\) with ModelflowAi\\Chat\\ToolInfo\\ToolTypeEnum\:\:FUNCTION and ModelflowAi\\Chat\\ToolInfo\\ToolTypeEnum will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Response/AIChatToolCallTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\Request\\\\Message\\\\AIChatMessage'' and ModelflowAi\\Chat\\Request\\Message\\AIChatMessage will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 2
+			path: tests/Unit/ToolInfo/ToolExecutorTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertSame\(\) with ModelflowAi\\Chat\\ToolInfo\\ToolTypeEnum\:\:FUNCTION and ModelflowAi\\Chat\\ToolInfo\\ToolTypeEnum will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/ToolInfo/ToolInfoBuilderTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertSame\(\) with ModelflowAi\\Chat\\ToolInfo\\ToolTypeEnum\:\:FUNCTION and ModelflowAi\\Chat\\ToolInfo\\ToolTypeEnum will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/ToolInfo/ToolInfoTest.php
