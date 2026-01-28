@@ -49,7 +49,7 @@ class AIChatMessageCollection extends \ArrayObject
     public function toArray(): array
     {
         return \array_map(
-            fn (AIChatMessage $message) => $message->toArray(),
+            static fn (AIChatMessage $message) => $message->toArray(),
             $this->getArrayCopy(),
         );
     }

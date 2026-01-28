@@ -41,7 +41,7 @@ final readonly class CreateStreamedResponseDelta
      */
     public static function from(array $attributes): self
     {
-        $toolCalls = \array_map(fn (array $result, int $index): CreateStreamedResponseToolCall => CreateStreamedResponseToolCall::from(
+        $toolCalls = \array_map(static fn (array $result, int $index): CreateStreamedResponseToolCall => CreateStreamedResponseToolCall::from(
             $index,
             $result,
         ), $attributes['tool_calls'] ?? [], \array_keys($attributes['tool_calls'] ?? []));

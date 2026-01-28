@@ -129,7 +129,7 @@ class EmbeddingsSimilarityRequestTest extends TestCase
         );
         $called = false;
 
-        $execute = function (EmbeddingsSimilarityRequest $request) use (&$called, $mockResponse) {
+        $execute = static function (EmbeddingsSimilarityRequest $request) use (&$called, $mockResponse) {
             $called = true;
 
             return $mockResponse;
@@ -153,7 +153,7 @@ class EmbeddingsSimilarityRequestTest extends TestCase
 
         $mockResponse = new \stdClass();
 
-        $execute = fn (EmbeddingsSimilarityRequest $request) => $mockResponse;
+        $execute = static fn (EmbeddingsSimilarityRequest $request) => $mockResponse;
 
         $request = new EmbeddingsSimilarityRequest(
             $execute,

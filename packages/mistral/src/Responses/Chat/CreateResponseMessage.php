@@ -41,7 +41,7 @@ final readonly class CreateResponseMessage
      */
     public static function from(array $attributes): self
     {
-        $toolCalls = \array_map(fn (array $result, int $index): CreateResponseToolCall => CreateResponseToolCall::from(
+        $toolCalls = \array_map(static fn (array $result, int $index): CreateResponseToolCall => CreateResponseToolCall::from(
             $index,
             $result,
         ), $attributes['tool_calls'] ?? [], \array_keys($attributes['tool_calls'] ?? []));

@@ -73,7 +73,7 @@ final readonly class FireworksAiChatAdapter implements AIChatAdapterInterface
                     ];
                 } elseif ($part instanceof ToolCallsPart) {
                     $message['tool_calls'] = \array_map(
-                        fn (AIChatToolCall $tool) => [
+                        static fn (AIChatToolCall $tool) => [
                             'id' => $tool->id,
                             'type' => $tool->type->value,
                             'function' => [
@@ -173,7 +173,7 @@ final readonly class FireworksAiChatAdapter implements AIChatAdapterInterface
      *     temperature?: float,
      * } $parameters
      */
-    protected function create(AIChatRequest $request, array $parameters): AIChatResponse
+    private function create(AIChatRequest $request, array $parameters): AIChatResponse
     {
         $result = $this->client->chat()->create($parameters);
 
@@ -257,7 +257,7 @@ final readonly class FireworksAiChatAdapter implements AIChatAdapterInterface
      *     temperature?: float,
      * } $parameters
      */
-    protected function createStreamed(AIChatStreamedRequest $request, array $parameters): AIChatResponse
+    private function createStreamed(AIChatStreamedRequest $request, array $parameters): AIChatResponse
     {
         $parameters['stream_options'] = ['include_usage' => true];
 
@@ -277,7 +277,7 @@ final readonly class FireworksAiChatAdapter implements AIChatAdapterInterface
      *
      * @return \Iterator<int, AIChatResponseMessage>
      */
-    protected function createStreamedMessages(StreamResponse $responses, ?StreamingUsageTracker $usageTracker = null): \Iterator
+    private function createStreamedMessages(StreamResponse $responses, ?StreamingUsageTracker $usageTracker = null): \Iterator
     {
         $role = null;
 
@@ -329,7 +329,7 @@ final readonly class FireworksAiChatAdapter implements AIChatAdapterInterface
      *
      * @return \Iterator<int, AIChatToolCall>
      */
-    protected function determineToolCall(StreamResponse $responses, CreateStreamedResponse $firstResponse, ?StreamingUsageTracker $usageTracker = null): \Iterator
+    private function determineToolCall(StreamResponse $responses, CreateStreamedResponse $firstResponse, ?StreamingUsageTracker $usageTracker = null): \Iterator
     {
         $message = [
             'id' => $firstResponse->choices[0]->delta->toolCalls[0]->id,
@@ -406,7 +406,7 @@ final readonly class FireworksAiChatAdapter implements AIChatAdapterInterface
     /**
      * @return array<string, mixed>
      */
-    protected function decodeArguments(string $arguments): array
+    private function decodeArguments(string $arguments): array
     {
         /** @var array<string, mixed> $result */
         $result = \json_decode($arguments, true);

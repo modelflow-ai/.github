@@ -77,7 +77,7 @@ final class FireworksAiChatAdapterTest extends TestCase
             new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'System message'),
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
             new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, 'Assistant message'),
-        ), new CriteriaCollection(), [], [], [], fn () => null);
+        ), new CriteriaCollection(), [], [], [], static fn () => null);
 
         $adapter = new FireworksAiChatAdapter($client->reveal(), 'accounts/fireworks/models/llama-v3-70b-instruct');
         $result = $adapter->handleRequest($request);
@@ -131,7 +131,7 @@ final class FireworksAiChatAdapterTest extends TestCase
         ), new CriteriaCollection(), [], [], [
             'seed' => 123,
             'temperature' => 0.5,
-        ], fn () => null);
+        ], static fn () => null);
 
         $adapter = new FireworksAiChatAdapter($client->reveal(), 'accounts/fireworks/models/llama-v3-70b-instruct');
         $result = $adapter->handleRequest($request);
@@ -179,7 +179,7 @@ final class FireworksAiChatAdapterTest extends TestCase
             new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'System message'),
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
             new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, 'Assistant message'),
-        ), new CriteriaCollection(), [], [], [], fn () => null, [], new JsonResponseFormat());
+        ), new CriteriaCollection(), [], [], [], static fn () => null, [], new JsonResponseFormat());
 
         $adapter = new FireworksAiChatAdapter($client->reveal(), 'accounts/fireworks/models/llama-v3-70b-instruct');
         $result = $adapter->handleRequest($request);
@@ -203,7 +203,7 @@ final class FireworksAiChatAdapterTest extends TestCase
             new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'System message'),
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
             new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, 'Assistant message'),
-        ), new CriteriaCollection(), [], [], [], fn () => null);
+        ), new CriteriaCollection(), [], [], [], static fn () => null);
 
         $adapter = new FireworksAiChatAdapter($client);
         $result = $adapter->handleRequest($request);
@@ -232,7 +232,7 @@ final class FireworksAiChatAdapterTest extends TestCase
             'test' => [$this, 'toolMethod'],
         ], [
             ToolInfoBuilder::buildToolInfo($this, 'toolMethod', 'test'),
-        ], [], fn () => null, [], null, ToolChoiceEnum::AUTO);
+        ], [], static fn () => null, [], null, ToolChoiceEnum::AUTO);
 
         $adapter = new FireworksAiChatAdapter($client);
         $result = $adapter->handleRequest($request);
@@ -281,7 +281,7 @@ final class FireworksAiChatAdapterTest extends TestCase
             'test' => [$this, 'toolMethod'],
         ], [
             ToolInfoBuilder::buildToolInfo($this, 'toolMethod', 'test'),
-        ], [], fn () => null);
+        ], [], static fn () => null);
 
         $adapter = new FireworksAiChatAdapter($client);
         $result = $adapter->handleRequest($request);

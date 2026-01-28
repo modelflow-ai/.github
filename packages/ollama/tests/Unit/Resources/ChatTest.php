@@ -47,7 +47,7 @@ final class ChatTest extends TestCase
     {
         $response = new ObjectResponse(DataFixtures::CHAT_CREATE_RESPONSE, MetaInformation::from([]));
         $this->transport->requestObject(
-            Argument::that(fn (Payload $payload) => 'chat' === $payload->resourceUri->uri
+            Argument::that(static fn (Payload $payload) => 'chat' === $payload->resourceUri->uri
             && Method::POST === $payload->method
             && ContentType::JSON === $payload->contentType
             && @\array_merge(DataFixtures::CHAT_CREATE_REQUEST, ['stream' => false]) === $payload->parameters),
@@ -78,7 +78,7 @@ final class ChatTest extends TestCase
     {
         $response = new ObjectResponse(DataFixtures::CHAT_CREATE_RESPONSE, MetaInformation::from([]));
         $this->transport->requestObject(
-            Argument::that(fn (Payload $payload) => 'chat' === $payload->resourceUri->uri
+            Argument::that(static fn (Payload $payload) => 'chat' === $payload->resourceUri->uri
             && Method::POST === $payload->method
             && ContentType::JSON === $payload->contentType
             && @\array_merge(DataFixtures::CHAT_CREATE_WITH_IMAGE_REQUEST, ['stream' => false]) === $payload->parameters),
@@ -153,7 +153,7 @@ final class ChatTest extends TestCase
         }
 
         $this->transport->requestStream(
-            Argument::that(fn (Payload $payload) => 'chat' === $payload->resourceUri->uri
+            Argument::that(static fn (Payload $payload) => 'chat' === $payload->resourceUri->uri
                 && Method::POST === $payload->method
                 && ContentType::JSON === $payload->contentType
                 && @\array_merge(DataFixtures::CHAT_CREATE_REQUEST, ['stream' => true]) === $payload->parameters),

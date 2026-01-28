@@ -248,7 +248,7 @@ class AIChatRequestBuilder
     protected function buildToolInfos(): array
     {
         $reflectionToolInfos = \array_map(
-            fn (string $name, array $tool) => ToolInfoBuilder::buildToolInfo($tool[0], $tool[1], $name),
+            static fn (string $name, array $tool) => ToolInfoBuilder::buildToolInfo($tool[0], $tool[1], $name),
             \array_keys($this->tools),
             $this->tools,
         );

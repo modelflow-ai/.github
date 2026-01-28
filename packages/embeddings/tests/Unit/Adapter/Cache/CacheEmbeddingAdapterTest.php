@@ -109,7 +109,7 @@ class CacheEmbeddingAdapterTest extends TestCase
         $this->cacheItemPool->getItem(Argument::any())->willReturn($cacheItem->reveal());
         $this->cacheItemPool->save($cacheItem->reveal())->shouldBeCalled();
 
-        $this->adapter->embed(Argument::that(fn ($request) => $request instanceof EmbedRequest
+        $this->adapter->embed(Argument::that(static fn ($request) => $request instanceof EmbedRequest
             && $request->getTexts() === [$text]))->willReturn($expectedResponse);
 
         $request = new EmbedRequest([$text]);
@@ -152,13 +152,13 @@ class CacheEmbeddingAdapterTest extends TestCase
 
         $cacheItem1 = $this->prophesize(CacheItemInterface::class);
         $cacheItem1->isHit()->willReturn(false);
-        $cacheItem1->set(Argument::any())->will(fn () => $cacheItem1->reveal());
+        $cacheItem1->set(Argument::any())->will(static fn () => $cacheItem1->reveal());
 
         $cacheItem2 = $this->prophesize(CacheItemInterface::class);
         $cacheItem2->isHit()->willReturn(false);
-        $cacheItem2->set(Argument::any())->will(fn () => $cacheItem2->reveal());
+        $cacheItem2->set(Argument::any())->will(static fn () => $cacheItem2->reveal());
 
-        $this->cacheItemPool->getItem(Argument::any())->will(function ($args) use ($cacheItem1, $cacheItem2) {
+        $this->cacheItemPool->getItem(Argument::any())->will(static function ($args) use ($cacheItem1, $cacheItem2) {
             static $callCount = 0;
             ++$callCount;
 
@@ -166,10 +166,10 @@ class CacheEmbeddingAdapterTest extends TestCase
         });
         $this->cacheItemPool->save(Argument::any())->shouldBeCalled();
 
-        $this->adapter->embed(Argument::that(fn ($request) => $request instanceof EmbedRequest
+        $this->adapter->embed(Argument::that(static fn ($request) => $request instanceof EmbedRequest
             && $request->getTexts() === [$text1]))->willReturn($response1);
 
-        $this->adapter->embed(Argument::that(fn ($request) => $request instanceof EmbedRequest
+        $this->adapter->embed(Argument::that(static fn ($request) => $request instanceof EmbedRequest
             && $request->getTexts() === [$text2]))->willReturn($response2);
 
         $request1 = new EmbedRequest([$text1]);
@@ -202,12 +202,12 @@ class CacheEmbeddingAdapterTest extends TestCase
         // Cache miss for second text
         $cacheItem1 = $this->prophesize(CacheItemInterface::class);
         $cacheItem1->isHit()->willReturn(false);
-        $cacheItem1->set(Argument::any())->will(fn () => $cacheItem1->reveal());
+        $cacheItem1->set(Argument::any())->will(static fn () => $cacheItem1->reveal());
 
         // Cache miss for third text
         $cacheItem2 = $this->prophesize(CacheItemInterface::class);
         $cacheItem2->isHit()->willReturn(false);
-        $cacheItem2->set(Argument::any())->will(fn () => $cacheItem2->reveal());
+        $cacheItem2->set(Argument::any())->will(static fn () => $cacheItem2->reveal());
 
         // getItem is called twice per uncached text (once for check, once for set)
         // First 3 calls are for cache checks, next 2 are for cache sets
@@ -220,7 +220,7 @@ class CacheEmbeddingAdapterTest extends TestCase
         ];
 
         $callIndex = 0;
-        $this->cacheItemPool->getItem(Argument::any())->will(function ($args) use (&$getItemCallSequence, &$callIndex) {
+        $this->cacheItemPool->getItem(Argument::any())->will(static function ($args) use (&$getItemCallSequence, &$callIndex) {
             $item = $getItemCallSequence[$callIndex] ?? \end($getItemCallSequence);
             ++$callIndex;
 
@@ -233,7 +233,7 @@ class CacheEmbeddingAdapterTest extends TestCase
             [$uncachedVector1, $uncachedVector2],
             new EmbeddingUsage(20, 40),
         );
-        $this->adapter->embed(Argument::that(fn ($request) => $request instanceof EmbedRequest
+        $this->adapter->embed(Argument::that(static fn ($request) => $request instanceof EmbedRequest
             && $request->getTexts() === ['uncached text 1', 'uncached text 2']))->willReturn($batchResponse);
 
         $request = new EmbedRequest($texts);

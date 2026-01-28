@@ -101,7 +101,7 @@ class ElasticsearchEmbeddingsStoreTest extends TestCase
 
         $this->assertCount(2, $results);
 
-        $uuids = \array_map(fn (array $result) => $result['_id'], $results);
+        $uuids = \array_map(static fn (array $result) => $result['_id'], $results);
         $this->assertContains($embedding1->getIdentifier(), $uuids);
         $this->assertContains($embedding2->getIdentifier(), $uuids);
     }
@@ -126,7 +126,7 @@ class ElasticsearchEmbeddingsStoreTest extends TestCase
 
         $this->assertCount(2, $results);
 
-        $uuids = \array_map(fn (array $result) => $result['_id'], $results);
+        $uuids = \array_map(static fn (array $result) => $result['_id'], $results);
         $this->assertContains($embedding1->getIdentifier(), $uuids);
         $this->assertContains($embedding2->getIdentifier(), $uuids);
     }

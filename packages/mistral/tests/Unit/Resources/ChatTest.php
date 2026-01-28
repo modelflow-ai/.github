@@ -48,7 +48,7 @@ final class ChatTest extends TestCase
     {
         $response = new ObjectResponse(DataFixtures::CHAT_CREATE_RESPONSE, MetaInformation::from([]));
         $this->transport->requestObject(
-            Argument::that(fn (Payload $payload) => 'chat/completions' === $payload->resourceUri->uri
+            Argument::that(static fn (Payload $payload) => 'chat/completions' === $payload->resourceUri->uri
             && Method::POST === $payload->method
             && ContentType::JSON === $payload->contentType
             && DataFixtures::CHAT_CREATE_REQUEST === $payload->parameters),
@@ -87,7 +87,7 @@ final class ChatTest extends TestCase
 
         $response = new ObjectResponse($response, MetaInformation::from([]));
         $this->transport->requestObject(
-            Argument::that(fn (Payload $payload) => 'chat/completions' === $payload->resourceUri->uri
+            Argument::that(static fn (Payload $payload) => 'chat/completions' === $payload->resourceUri->uri
             && Method::POST === $payload->method
             && ContentType::JSON === $payload->contentType
             && $parameters === $payload->parameters),
@@ -122,7 +122,7 @@ final class ChatTest extends TestCase
 
         $response = new ObjectResponse($responseData, MetaInformation::from([]));
         $this->transport->requestObject(
-            Argument::that(fn (Payload $payload) => 'chat/completions' === $payload->resourceUri->uri
+            Argument::that(static fn (Payload $payload) => 'chat/completions' === $payload->resourceUri->uri
                 && Method::POST === $payload->method
                 && ContentType::JSON === $payload->contentType
                 && $requestData === $payload->parameters),
@@ -217,7 +217,7 @@ final class ChatTest extends TestCase
         }
 
         $this->transport->requestStream(
-            Argument::that(fn (Payload $payload) => 'chat/completions' === $payload->resourceUri->uri
+            Argument::that(static fn (Payload $payload) => 'chat/completions' === $payload->resourceUri->uri
                 && Method::POST === $payload->method
                 && ContentType::JSON === $payload->contentType
                 && @\array_merge(DataFixtures::CHAT_CREATE_REQUEST, ['stream' => true]) === $payload->parameters),
@@ -282,7 +282,7 @@ final class ChatTest extends TestCase
         }
 
         $this->transport->requestStream(
-            Argument::that(fn (Payload $payload) => 'chat/completions' === $payload->resourceUri->uri
+            Argument::that(static fn (Payload $payload) => 'chat/completions' === $payload->resourceUri->uri
                 && Method::POST === $payload->method
                 && ContentType::JSON === $payload->contentType
                 && @\array_merge($requestData, ['stream' => true]) === $payload->parameters),

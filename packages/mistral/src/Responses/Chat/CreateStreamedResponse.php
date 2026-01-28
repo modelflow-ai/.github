@@ -56,7 +56,7 @@ final readonly class CreateStreamedResponse
      */
     public static function from(int $index, array $attributes, MetaInformation $meta): self
     {
-        $choices = \array_map(fn (array $result): CreateStreamedResponseChoice => CreateStreamedResponseChoice::from(
+        $choices = \array_map(static fn (array $result): CreateStreamedResponseChoice => CreateStreamedResponseChoice::from(
             $result,
         ), $attributes['choices']);
 

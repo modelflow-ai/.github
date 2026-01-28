@@ -36,7 +36,7 @@ class AIChatRequestBuilderTest extends TestCase
 
     public function testAddOptions(): void
     {
-        $builder = new AIChatRequestBuilder(fn () => null);
+        $builder = new AIChatRequestBuilder(static fn () => null);
 
         $builder->addOptions(['seed' => 12_345_678]);
 
@@ -97,7 +97,7 @@ class AIChatRequestBuilderTest extends TestCase
 
     public function testStreamed(): void
     {
-        $builder = new AIChatRequestBuilder(fn () => null);
+        $builder = new AIChatRequestBuilder(static fn () => null);
 
         $builder->streamed();
 
@@ -108,7 +108,7 @@ class AIChatRequestBuilderTest extends TestCase
 
     public function testAddCriteria(): void
     {
-        $builder = new AIChatRequestBuilder(fn () => null);
+        $builder = new AIChatRequestBuilder(static fn () => null);
 
         $builder->addCriteria(FeatureCriteria::IMAGE_TO_TEXT);
 
@@ -118,7 +118,7 @@ class AIChatRequestBuilderTest extends TestCase
 
     public function testAddCriteriaArray(): void
     {
-        $builder = new AIChatRequestBuilder(fn () => null);
+        $builder = new AIChatRequestBuilder(static fn () => null);
 
         $builder->addCriteria([
             FeatureCriteria::IMAGE_TO_TEXT,
@@ -132,7 +132,7 @@ class AIChatRequestBuilderTest extends TestCase
 
     public function testAddMessage(): void
     {
-        $builder = new AIChatRequestBuilder(fn () => null);
+        $builder = new AIChatRequestBuilder(static fn () => null);
         $message = new AIChatMessage(AIChatMessageRoleEnum::USER, 'test message');
 
         $builder->addMessage($message);
@@ -142,7 +142,7 @@ class AIChatRequestBuilderTest extends TestCase
 
     public function testAddMessages(): void
     {
-        $builder = new AIChatRequestBuilder(fn () => null);
+        $builder = new AIChatRequestBuilder(static fn () => null);
         $messages = [
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'test message'),
             new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'test message'),
@@ -155,7 +155,7 @@ class AIChatRequestBuilderTest extends TestCase
 
     public function testAddSystemMessages(): void
     {
-        $builder = new AIChatRequestBuilder(fn () => null);
+        $builder = new AIChatRequestBuilder(static fn () => null);
 
         $builder->addSystemMessage('test message');
 
@@ -167,7 +167,7 @@ class AIChatRequestBuilderTest extends TestCase
 
     public function testAddAssistantMessages(): void
     {
-        $builder = new AIChatRequestBuilder(fn () => null);
+        $builder = new AIChatRequestBuilder(static fn () => null);
 
         $builder->addAssistantMessage('test message');
 
@@ -179,7 +179,7 @@ class AIChatRequestBuilderTest extends TestCase
 
     public function testAddUserMessages(): void
     {
-        $builder = new AIChatRequestBuilder(fn () => null);
+        $builder = new AIChatRequestBuilder(static fn () => null);
 
         $builder->addUserMessage('test message');
 
@@ -191,7 +191,7 @@ class AIChatRequestBuilderTest extends TestCase
 
     public function testToolChoice(): void
     {
-        $builder = new AIChatRequestBuilder(fn () => null);
+        $builder = new AIChatRequestBuilder(static fn () => null);
 
         $builder->toolChoice(ToolChoiceEnum::NONE);
 
@@ -200,14 +200,14 @@ class AIChatRequestBuilderTest extends TestCase
 
     public function testDefaultToolChoice(): void
     {
-        $builder = new AIChatRequestBuilder(fn () => null);
+        $builder = new AIChatRequestBuilder(static fn () => null);
 
         $this->assertSame(ToolChoiceEnum::AUTO, $builder->build()->getToolChoice());
     }
 
     public function testAddTool(): void
     {
-        $builder = new AIChatRequestBuilder(fn () => null);
+        $builder = new AIChatRequestBuilder(static fn () => null);
 
         $builder->tool('test', $this, 'toolMethod');
 
@@ -224,7 +224,7 @@ class AIChatRequestBuilderTest extends TestCase
 
     public function testAddMetadata(): void
     {
-        $builder = new AIChatRequestBuilder(fn () => null);
+        $builder = new AIChatRequestBuilder(static fn () => null);
 
         $builder->addMetadata(['test' => 'value']);
 
@@ -233,7 +233,7 @@ class AIChatRequestBuilderTest extends TestCase
 
     public function testBuild(): void
     {
-        $builder = new AIChatRequestBuilder(fn () => null);
+        $builder = new AIChatRequestBuilder(static fn () => null);
         $message = new AIChatMessage(AIChatMessageRoleEnum::USER, 'test message');
 
         $builder->addMessage($message);
@@ -275,7 +275,7 @@ class AIChatRequestBuilderTest extends TestCase
 
     public function testAddToolInfo(): void
     {
-        $builder = new AIChatRequestBuilder(fn () => null);
+        $builder = new AIChatRequestBuilder(static fn () => null);
 
         $toolInfo = new ToolInfo(
             ToolTypeEnum::FUNCTION,
@@ -300,7 +300,7 @@ class AIChatRequestBuilderTest extends TestCase
 
     public function testAddToolInfoWithInstanceBasedTool(): void
     {
-        $builder = new AIChatRequestBuilder(fn () => null);
+        $builder = new AIChatRequestBuilder(static fn () => null);
 
         // Add instance-based tool first
         $builder->tool('instance_tool', $this, 'toolMethod');
@@ -328,7 +328,7 @@ class AIChatRequestBuilderTest extends TestCase
 
     public function testAddToolInfoThrowsOnDuplicateName(): void
     {
-        $builder = new AIChatRequestBuilder(fn () => null);
+        $builder = new AIChatRequestBuilder(static fn () => null);
 
         $toolInfo1 = new ToolInfo(
             ToolTypeEnum::FUNCTION,
@@ -356,7 +356,7 @@ class AIChatRequestBuilderTest extends TestCase
 
     public function testAddToolInfoThrowsWhenConflictsWithInstanceTool(): void
     {
-        $builder = new AIChatRequestBuilder(fn () => null);
+        $builder = new AIChatRequestBuilder(static fn () => null);
 
         // Add instance-based tool
         $builder->tool('conflict_name', $this, 'toolMethod');
@@ -378,7 +378,7 @@ class AIChatRequestBuilderTest extends TestCase
 
     public function testToolThrowsWhenConflictsWithDirectToolInfo(): void
     {
-        $builder = new AIChatRequestBuilder(fn () => null);
+        $builder = new AIChatRequestBuilder(static fn () => null);
 
         // Add direct ToolInfo first
         $toolInfo = new ToolInfo(
@@ -399,7 +399,7 @@ class AIChatRequestBuilderTest extends TestCase
 
     public function testMultipleDirectToolInfos(): void
     {
-        $builder = new AIChatRequestBuilder(fn () => null);
+        $builder = new AIChatRequestBuilder(static fn () => null);
 
         $toolInfo1 = new ToolInfo(
             ToolTypeEnum::FUNCTION,
@@ -428,7 +428,7 @@ class AIChatRequestBuilderTest extends TestCase
 
     public function testToolInfoOrderPreservation(): void
     {
-        $builder = new AIChatRequestBuilder(fn () => null);
+        $builder = new AIChatRequestBuilder(static fn () => null);
 
         // Add instance tool first
         $builder->tool('instance_tool', $this, 'toolMethod');

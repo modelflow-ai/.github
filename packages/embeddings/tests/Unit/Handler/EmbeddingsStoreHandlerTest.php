@@ -45,7 +45,7 @@ class EmbeddingsStoreHandlerTest extends TestCase
         $generator->generateEmbedding($embedding, null)->willReturn([$generatedEmbedding]);
 
         $embedResponse = new EmbedResponse([$vector], new EmbeddingUsage(10, 20));
-        $adapter->embed(Argument::that(fn (EmbedRequest $request) => ['processed content'] === $request->getTexts()))->willReturn($embedResponse);
+        $adapter->embed(Argument::that(static fn (EmbedRequest $request) => ['processed content'] === $request->getTexts()))->willReturn($embedResponse);
 
         $store->addDocuments([$generatedEmbedding])->shouldBeCalled();
 
@@ -57,7 +57,7 @@ class EmbeddingsStoreHandlerTest extends TestCase
         );
 
         $request = new EmbeddingsStoreRequest(
-            function () {},
+            static function () {},
             [$embedding],
         );
 
@@ -74,7 +74,7 @@ class EmbeddingsStoreHandlerTest extends TestCase
     {
         $key = 'test_key';
         $vector = [0.1, 0.2, 0.3];
-        $headerGenerator = fn () => ['header' => 'value'];
+        $headerGenerator = static fn () => ['header' => 'value'];
 
         $embedding = new TestEmbedding('test-id', 'test content');
         $generatedEmbedding = new TestEmbedding('test-id', 'processed content');
@@ -98,7 +98,7 @@ class EmbeddingsStoreHandlerTest extends TestCase
         );
 
         $request = new EmbeddingsStoreRequest(
-            function () {},
+            static function () {},
             [$embedding],
             $headerGenerator,
         );
@@ -116,7 +116,7 @@ class EmbeddingsStoreHandlerTest extends TestCase
 
         $handler = new EmbeddingsStoreHandler([], [], [], []);
         $request = new EmbeddingsStoreRequest(
-            function () {},
+            static function () {},
             [new TestEmbedding('test-id', 'test content')],
         );
 
@@ -136,7 +136,7 @@ class EmbeddingsStoreHandlerTest extends TestCase
         );
 
         $request = new EmbeddingsStoreRequest(
-            function () {},
+            static function () {},
             [new TestEmbedding('test-id', 'test content')],
         );
 
@@ -150,7 +150,7 @@ class EmbeddingsStoreHandlerTest extends TestCase
 
         $key = 'test_key';
         $vector = [0.1, 0.2, 0.3];
-        $headerGenerator = fn () => ['header' => 'value'];
+        $headerGenerator = static fn () => ['header' => 'value'];
 
         $embedding = new TestEmbedding('test-id', 'test content');
         $generatedEmbedding = new TestEmbedding('test-id', 'processed content');
@@ -171,7 +171,7 @@ class EmbeddingsStoreHandlerTest extends TestCase
         );
 
         $request = new EmbeddingsStoreRequest(
-            function () {},
+            static function () {},
             [$embedding],
             $headerGenerator,
         );
@@ -205,7 +205,7 @@ class EmbeddingsStoreHandlerTest extends TestCase
         );
 
         $request = new EmbeddingsStoreRequest(
-            function () {},
+            static function () {},
             [$embedding],
         );
 
@@ -227,7 +227,7 @@ class EmbeddingsStoreHandlerTest extends TestCase
         $generator->generateEmbedding($embedding, null)->willReturn([$generatedEmbedding]);
 
         $embedResponse = new EmbedResponse([$vector], new EmbeddingUsage(10, 20));
-        $adapter->embed(Argument::that(fn (EmbedRequest $request) => ['processed content'] === $request->getTexts()))->willReturn($embedResponse);
+        $adapter->embed(Argument::that(static fn (EmbedRequest $request) => ['processed content'] === $request->getTexts()))->willReturn($embedResponse);
 
         $store->addDocuments([$generatedEmbedding])->shouldBeCalled();
 
@@ -244,7 +244,7 @@ class EmbeddingsStoreHandlerTest extends TestCase
         );
 
         $request = new EmbeddingsStoreRequest(
-            function () {},
+            static function () {},
             [$embedding],
         );
 

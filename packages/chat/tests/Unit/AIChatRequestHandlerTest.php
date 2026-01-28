@@ -117,7 +117,7 @@ class AIChatRequestHandlerTest extends TestCase
         $mockAdapter
             ->method('handleRequest')
             ->willReturnCallback(
-                fn (AIChatRequest $request) => new AIChatResponse(
+                static fn (AIChatRequest $request) => new AIChatResponse(
                     $request,
                     new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'No format'),
                     null,
@@ -177,7 +177,7 @@ class AIChatRequestHandlerTest extends TestCase
         $mockAdapter
             ->method('handleRequest')
             ->willReturnCallback(
-                fn (AIChatRequest $request) => new AIChatResponse(
+                static fn (AIChatRequest $request) => new AIChatResponse(
                     $request,
                     new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Supported'),
                     null,
@@ -250,7 +250,7 @@ class AIChatRequestHandlerTest extends TestCase
         $mockAdapter
             ->method('handleRequest')
             ->willReturnCallback(
-                fn (AIChatRequest $request) => new AIChatResponse(
+                static fn (AIChatRequest $request) => new AIChatResponse(
                     $request,
                     new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Not supported'),
                     null,
@@ -330,7 +330,7 @@ class AIChatRequestHandlerTest extends TestCase
         $mockAdapter
             ->method('handleRequest')
             ->willReturnCallback(
-                fn (AIChatRequest $request) => new AIChatResponse(
+                static fn (AIChatRequest $request) => new AIChatResponse(
                     $request,
                     new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Not supported'),
                     null,

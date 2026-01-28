@@ -31,7 +31,7 @@ class AIImageRequestBuilderTest extends TestCase
     {
         $action = $this->prophesize(AIImageRequestActionInterface::class)->reveal();
 
-        $builder = AIImageRequestBuilder::create(fn () => null);
+        $builder = AIImageRequestBuilder::create(static fn () => null);
         $builder->imageFormat(ImageFormat::JPEG);
 
         $this->assertSame(
@@ -44,7 +44,7 @@ class AIImageRequestBuilderTest extends TestCase
     {
         $action = $this->prophesize(AIImageRequestActionInterface::class)->reveal();
 
-        $builder = AIImageRequestBuilder::create(fn () => null);
+        $builder = AIImageRequestBuilder::create(static fn () => null);
         $builder->addCriteria(CapabilityCriteria::BASIC);
 
         $this->assertSame(
@@ -55,7 +55,7 @@ class AIImageRequestBuilderTest extends TestCase
 
     public function testTextToImage(): void
     {
-        $builder = AIImageRequestBuilder::create(fn () => null);
+        $builder = AIImageRequestBuilder::create(static fn () => null);
         $actionBuilder = $builder->textToImage('cute cat');
 
         $this->assertInstanceOf(
@@ -72,7 +72,7 @@ class AIImageRequestBuilderTest extends TestCase
     {
         $action = $this->prophesize(AIImageRequestActionInterface::class)->reveal();
 
-        $builder = AIImageRequestBuilder::create(fn () => null);
+        $builder = AIImageRequestBuilder::create(static fn () => null);
         $builder->as(OutputFormat::BASE64);
 
         $this->assertSame(
@@ -85,7 +85,7 @@ class AIImageRequestBuilderTest extends TestCase
     {
         $action = $this->prophesize(AIImageRequestActionInterface::class)->reveal();
 
-        $builder = AIImageRequestBuilder::create(fn () => null);
+        $builder = AIImageRequestBuilder::create(static fn () => null);
 
         $this->assertSame(
             $action,

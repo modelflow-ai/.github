@@ -39,7 +39,7 @@ readonly class ToolCallsPart extends MessagePart
     {
         $message['content'] = '';
         $message['tool_calls'] = \array_map(
-            fn (AIChatToolCall $tool) => [
+            static fn (AIChatToolCall $tool) => [
                 'id' => $tool->id,
                 'type' => $tool->type->value,
                 'function' => [

@@ -88,7 +88,7 @@ class AIChatMiddlewareStackTest extends TestCase
             $this->request->reveal(),
             null,
             Argument::type('callable'),
-        )->will(fn ($args) => $args[2]($args[0], $args[1]));
+        )->will(static fn ($args) => $args[2]($args[0], $args[1]));
 
         // Setup second middleware to return the response
         $secondMiddleware->process(
@@ -117,7 +117,7 @@ class AIChatMiddlewareStackTest extends TestCase
             $this->request->reveal(),
             null,
             Argument::type('callable'),
-        )->will(fn ($args) => $args[2]($args[0], $adapter));
+        )->will(static fn ($args) => $args[2]($args[0], $adapter));
 
         // Second middleware should receive the adapter from first middleware
         $secondMiddleware->process(
@@ -147,7 +147,7 @@ class AIChatMiddlewareStackTest extends TestCase
             $originalRequest,
             null,
             Argument::type('callable'),
-        )->will(fn ($args) => $args[2]($modifiedRequest, $args[1]));
+        )->will(static fn ($args) => $args[2]($modifiedRequest, $args[1]));
 
         // Second middleware should receive the modified request
         $secondMiddleware->process(
@@ -176,7 +176,7 @@ class AIChatMiddlewareStackTest extends TestCase
             $this->request->reveal(),
             null,
             Argument::type('callable'),
-        )->will(fn ($args) => $args[2]($args[0], $args[1]));
+        )->will(static fn ($args) => $args[2]($args[0], $args[1]));
 
         $this->middlewareStack->add($middleware->reveal());
 

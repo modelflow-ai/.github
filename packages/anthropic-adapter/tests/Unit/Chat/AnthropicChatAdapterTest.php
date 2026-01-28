@@ -55,7 +55,7 @@ final class AnthropicChatAdapterTest extends TestCase
             [],
             [],
             [],
-            fn () => null,
+            static fn () => null,
         );
 
         $this->assertTrue($adapter->supports($request));
@@ -79,7 +79,7 @@ final class AnthropicChatAdapterTest extends TestCase
                 ToolInfoBuilder::buildToolInfo($this, 'toolMethod', 'test'),
             ],
             [],
-            fn () => null,
+            static fn () => null,
         );
 
         $this->assertFalse($adapter->supports($request));
@@ -113,7 +113,7 @@ final class AnthropicChatAdapterTest extends TestCase
             [],
             [],
             [],
-            fn () => null,
+            static fn () => null,
         );
 
         $adapter = new AnthropicChatAdapter($client, Model::CLAUDE_3_HAIKU->value, 100);
@@ -143,7 +143,7 @@ final class AnthropicChatAdapterTest extends TestCase
         ), new CriteriaCollection(), [], [], [
             'seed' => 100,
             'temperature' => 0.5,
-        ], fn () => null);
+        ], static fn () => null);
 
         $adapter = new AnthropicChatAdapter($client, Model::CLAUDE_3_HAIKU->value, 100);
         $result = $adapter->handleRequest($request);
@@ -186,7 +186,7 @@ final class AnthropicChatAdapterTest extends TestCase
         $request = new AIChatRequest(new AIChatMessageCollection(
             new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, DataFixtures::MESSAGES_CREATE_REQUEST_RAW['messages'][0]['content']),
             new AIChatMessage(AIChatMessageRoleEnum::USER, DataFixtures::MESSAGES_CREATE_REQUEST_RAW['messages'][1]['content']),
-        ), new CriteriaCollection(), [], [], [], fn () => null, responseFormat: new JsonResponseFormat());
+        ), new CriteriaCollection(), [], [], [], static fn () => null, responseFormat: new JsonResponseFormat());
 
         $adapter = new AnthropicChatAdapter($client, Model::CLAUDE_3_HAIKU->value, 100);
         $result = $adapter->handleRequest($request);
@@ -226,7 +226,7 @@ final class AnthropicChatAdapterTest extends TestCase
         $request = new AIChatStreamedRequest(new AIChatMessageCollection(
             new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, DataFixtures::MESSAGES_CREATE_REQUEST_RAW['messages'][0]['content']),
             new AIChatMessage(AIChatMessageRoleEnum::USER, DataFixtures::MESSAGES_CREATE_REQUEST_RAW['messages'][1]['content']),
-        ), new CriteriaCollection(), [], [], [], fn () => null);
+        ), new CriteriaCollection(), [], [], [], static fn () => null);
 
         $adapter = new AnthropicChatAdapter($client, Model::CLAUDE_3_HAIKU->value, 100);
         $result = $adapter->handleRequest($request);

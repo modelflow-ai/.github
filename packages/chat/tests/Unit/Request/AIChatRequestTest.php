@@ -46,7 +46,7 @@ class AIChatRequestTest extends TestCase
         );
         $messages = new AIChatMessageCollection($message);
         $criteria = new CriteriaCollection();
-        $requestHandler = fn ($request) => null;
+        $requestHandler = static fn ($request) => null;
 
         $request = new AIChatRequest($messages, $criteria, [], [], [], $requestHandler);
 
@@ -61,7 +61,7 @@ class AIChatRequestTest extends TestCase
         );
         $messages = new AIChatMessageCollection($message);
         $criteria = new CriteriaCollection();
-        $requestHandler = fn ($request) => null;
+        $requestHandler = static fn ($request) => null;
 
         $request = new AIChatStreamedRequest($messages, $criteria, [], [], [], $requestHandler);
 
@@ -74,7 +74,7 @@ class AIChatRequestTest extends TestCase
         $message2 = new AIChatMessage(AIChatMessageRoleEnum::USER, 'Test content 2');
         $criteriaCollection = new CriteriaCollection();
 
-        $requestHandler = fn ($request) => new AIChatResponse(
+        $requestHandler = static fn ($request) => new AIChatResponse(
             $request,
             new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Response content 1'),
             new Usage(0, 0, 0),
@@ -101,7 +101,7 @@ class AIChatRequestTest extends TestCase
         $criteria2 = PrivacyCriteria::LOW;
         $criteriaCollection = new CriteriaCollection([$criteria1, $criteria2]);
 
-        $requestHandler = fn () => null;
+        $requestHandler = static fn () => null;
         $request = new AIChatRequest(new AIChatMessageCollection(), $criteriaCollection, [], [], [], $requestHandler);
 
         $this->assertTrue($request->matches([CapabilityCriteria::BASIC]));
@@ -114,7 +114,7 @@ class AIChatRequestTest extends TestCase
         $criteria2 = PrivacyCriteria::HIGH;
         $criteriaCollection = new CriteriaCollection([$criteria1, $criteria2]);
 
-        $requestHandler = fn () => null;
+        $requestHandler = static fn () => null;
         $request = new AIChatRequest(
             new AIChatMessageCollection(),
             $criteriaCollection,
@@ -133,7 +133,7 @@ class AIChatRequestTest extends TestCase
         $criteria2 = PrivacyCriteria::HIGH;
         $criteriaCollection = new CriteriaCollection([$criteria1, $criteria2]);
 
-        $requestHandler = fn () => null;
+        $requestHandler = static fn () => null;
         $request = new AIChatRequest(
             new AIChatMessageCollection(),
             $criteriaCollection,
@@ -150,7 +150,7 @@ class AIChatRequestTest extends TestCase
 
     public function testMetadata(): void
     {
-        $requestHandler = fn () => null;
+        $requestHandler = static fn () => null;
         $request = new AIChatRequest(
             new AIChatMessageCollection(),
             new CriteriaCollection(),
@@ -170,7 +170,7 @@ class AIChatRequestTest extends TestCase
         $criteria2 = PrivacyCriteria::HIGH;
         $criteriaCollection = new CriteriaCollection([$criteria1, $criteria2]);
 
-        $requestHandler = fn () => null;
+        $requestHandler = static fn () => null;
         $request = new AIChatRequest(new AIChatMessageCollection(), $criteriaCollection, [], [], [], $requestHandler);
 
         $this->assertSame($criteriaCollection->all, $request->getCriteria()->all);
@@ -182,7 +182,7 @@ class AIChatRequestTest extends TestCase
         $criteria2 = PrivacyCriteria::HIGH;
         $criteriaCollection = new CriteriaCollection([$criteria1, $criteria2]);
 
-        $requestHandler = fn () => null;
+        $requestHandler = static fn () => null;
         $request = new AIChatRequest(new AIChatMessageCollection(), $criteriaCollection, [], [], [
             'seed' => 12_345_678,
         ], $requestHandler);
@@ -200,12 +200,12 @@ class AIChatRequestTest extends TestCase
         ];
 
         $toolInfos = \array_map(
-            fn (string $name, array $tool) => ToolInfoBuilder::buildToolInfo($tool[0], $tool[1], $name),
+            static fn (string $name, array $tool) => ToolInfoBuilder::buildToolInfo($tool[0], $tool[1], $name),
             \array_keys($tools),
             $tools,
         );
 
-        $requestHandler = fn () => null;
+        $requestHandler = static fn () => null;
         $request = new AIChatRequest(new AIChatMessageCollection(), new CriteriaCollection(), $tools, $toolInfos, [], $requestHandler);
 
         $this->assertSame($tools, $request->getTools());
@@ -219,7 +219,7 @@ class AIChatRequestTest extends TestCase
             ToolInfoBuilder::buildToolInfo($this, 'toolMethod', 'test_tool'),
         ];
 
-        $requestHandler = fn () => null;
+        $requestHandler = static fn () => null;
         $request = new AIChatRequest(
             new AIChatMessageCollection(),
             new CriteriaCollection(),
@@ -236,7 +236,7 @@ class AIChatRequestTest extends TestCase
 
     public function testHasToolsWithNoToolsAndNoToolInfos(): void
     {
-        $requestHandler = fn () => null;
+        $requestHandler = static fn () => null;
         $request = new AIChatRequest(
             new AIChatMessageCollection(),
             new CriteriaCollection(),
@@ -257,7 +257,7 @@ class AIChatRequestTest extends TestCase
             [],
             [],
             [],
-            fn ($request) => null,
+            static fn ($request) => null,
         );
 
         $this->assertFalse($request->isStreamed());
@@ -269,7 +269,7 @@ class AIChatRequestTest extends TestCase
         $message2 = new AIChatMessage(AIChatMessageRoleEnum::USER, 'Test content 2');
         $criteriaCollection = new CriteriaCollection();
 
-        $requestHandler = fn ($request) => null;
+        $requestHandler = static fn ($request) => null;
         $request = new AIChatRequest(
             new AIChatMessageCollection($message1),
             $criteriaCollection,

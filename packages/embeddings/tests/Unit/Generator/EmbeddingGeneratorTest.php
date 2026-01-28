@@ -82,7 +82,7 @@ class EmbeddingGeneratorTest extends TestCase
 
         $headerText = 'Generated header: ';
 
-        $headerGenerator = fn (EmbeddingInterface $embedding) =>
+        $headerGenerator = static fn (EmbeddingInterface $embedding) =>
             // We can't assert same here because the embedding is passed to the headerGenerator
             // by the EmbeddingGenerator, which passes the split embedding rather than the original
             $headerText;
@@ -177,7 +177,7 @@ class EmbeddingGeneratorTest extends TestCase
 
         $headerText = 'Generated header: ';
 
-        $headerGenerator = fn (EmbeddingInterface $embedding) => $headerText . \spl_object_hash($embedding);
+        $headerGenerator = static fn (EmbeddingInterface $embedding) => $headerText . \spl_object_hash($embedding);
 
         $this->splitter->splitEmbedding($embedding1->reveal())->willReturn([$splitEmbedding1->reveal()]);
         $this->splitter->splitEmbedding($embedding2->reveal())->willReturn([$splitEmbedding2->reveal()]);

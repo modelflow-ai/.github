@@ -67,7 +67,7 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface
                     ];
                 } elseif ($part instanceof ToolCallsPart) {
                     $message['tool_calls'] = \array_map(
-                        fn (AIChatToolCall $tool) => [
+                        static fn (AIChatToolCall $tool) => [
                             'id' => $tool->id,
                             'type' => $tool->type->value,
                             'function' => [
@@ -157,7 +157,7 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface
      *     tool_choice?: string,
      * } $parameters
      */
-    protected function create(AIChatRequest $request, array $parameters): AIChatResponse
+    private function create(AIChatRequest $request, array $parameters): AIChatResponse
     {
         $result = $this->client->chat()->create($parameters);
 
@@ -225,7 +225,7 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface
      *     tool_choice?: string,
      * } $parameters
      */
-    protected function createStreamed(AIChatStreamedRequest $request, array $parameters): AIChatResponse
+    private function createStreamed(AIChatStreamedRequest $request, array $parameters): AIChatResponse
     {
         $responses = $this->client->chat()->createStreamed($parameters);
 
@@ -243,7 +243,7 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface
      *
      * @return \Iterator<int, AIChatResponseMessage>
      */
-    protected function createStreamedMessages(\Iterator $responses, ?StreamingUsageTracker $usageTracker = null): \Iterator
+    private function createStreamedMessages(\Iterator $responses, ?StreamingUsageTracker $usageTracker = null): \Iterator
     {
         $role = null;
 
@@ -285,7 +285,7 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface
     /**
      * @return \Iterator<int, AIChatToolCall>
      */
-    protected function determineToolCall(CreateStreamedResponse $response): \Iterator
+    private function determineToolCall(CreateStreamedResponse $response): \Iterator
     {
         foreach ($response->choices[0]->delta->toolCalls as $toolCall) {
             yield new AIChatToolCall(
@@ -300,7 +300,7 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface
     /**
      * @return array<string, mixed>
      */
-    protected function decodeArguments(string $arguments): array
+    private function decodeArguments(string $arguments): array
     {
         /** @var array<string, mixed> $result */
         $result = \json_decode($arguments, true);

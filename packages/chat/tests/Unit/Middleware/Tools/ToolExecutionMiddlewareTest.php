@@ -81,7 +81,7 @@ class ToolExecutionMiddlewareTest extends TestCase
             Usage::empty(),
         );
 
-        $next = fn (AIChatRequest $request, ?AIChatAdapterInterface $adapter) => $response;
+        $next = static fn (AIChatRequest $request, ?AIChatAdapterInterface $adapter) => $response;
 
         $result = $this->middleware->process($this->request->reveal(), $this->adapter->reveal(), $next);
 
@@ -102,7 +102,7 @@ class ToolExecutionMiddlewareTest extends TestCase
             $messageIterator,
         );
 
-        $next = fn (AIChatRequest $request, ?AIChatAdapterInterface $adapter) => $streamResponse;
+        $next = static fn (AIChatRequest $request, ?AIChatAdapterInterface $adapter) => $streamResponse;
 
         $result = $this->middleware->process(
             $this->streamedRequest->reveal(),
@@ -132,7 +132,7 @@ class ToolExecutionMiddlewareTest extends TestCase
             Usage::empty(),
         );
 
-        $next = fn (AIChatRequest $request, ?AIChatAdapterInterface $adapter) => $response;
+        $next = static fn (AIChatRequest $request, ?AIChatAdapterInterface $adapter) => $response;
 
         $result = $middleware->process($this->request->reveal(), $this->adapter->reveal(), $next);
 
@@ -160,7 +160,7 @@ class ToolExecutionMiddlewareTest extends TestCase
             Usage::empty(),
         );
 
-        $next = fn (AIChatRequest $request, ?AIChatAdapterInterface $adapter) => $response;
+        $next = static fn (AIChatRequest $request, ?AIChatAdapterInterface $adapter) => $response;
 
         $result = $middleware->process($this->request->reveal(), $this->adapter->reveal(), $next);
 

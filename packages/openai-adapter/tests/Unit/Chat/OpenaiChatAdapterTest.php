@@ -92,7 +92,7 @@ final class OpenaiChatAdapterTest extends TestCase
             [],
             [],
             [],
-            fn () => null,
+            static fn () => null,
         );
 
         $adapter = new OpenaiChatAdapter($client->reveal());
@@ -182,7 +182,7 @@ final class OpenaiChatAdapterTest extends TestCase
             [],
             [],
             [],
-            fn () => null,
+            static fn () => null,
         );
 
         $adapter = new OpenaiChatAdapter($client->reveal());
@@ -244,7 +244,7 @@ final class OpenaiChatAdapterTest extends TestCase
                 'seed' => 123,
                 'temperature' => 0.5,
             ],
-            fn () => null,
+            static fn () => null,
         );
 
         $adapter = new OpenaiChatAdapter($client->reveal());
@@ -299,7 +299,7 @@ final class OpenaiChatAdapterTest extends TestCase
             [],
             [],
             [],
-            fn () => null,
+            static fn () => null,
             [],
             new JsonResponseFormat(),
         );
@@ -371,7 +371,7 @@ final class OpenaiChatAdapterTest extends TestCase
             [],
             [],
             [],
-            fn () => null,
+            static fn () => null,
             [],
             new JsonSchemaResponseFormat([
                 'type' => 'object',
@@ -405,7 +405,7 @@ final class OpenaiChatAdapterTest extends TestCase
             [],
             [],
             [],
-            fn () => null,
+            static fn () => null,
         );
 
         $adapter = new OpenaiChatAdapter($client);
@@ -441,7 +441,7 @@ final class OpenaiChatAdapterTest extends TestCase
                 ToolInfoBuilder::buildToolInfo($this, 'toolMethod', 'test'),
             ],
             [],
-            fn () => null,
+            static fn () => null,
             [],
             null,
             ToolChoiceEnum::NONE,
@@ -502,7 +502,7 @@ final class OpenaiChatAdapterTest extends TestCase
                 ToolInfoBuilder::buildToolInfo($this, 'toolMethod', 'test'),
             ],
             [],
-            fn () => null,
+            static fn () => null,
         );
 
         $adapter = new OpenaiChatAdapter($client);
@@ -578,7 +578,7 @@ final class OpenaiChatAdapterTest extends TestCase
             [],
             [],
             [],
-            fn () => null,
+            static fn () => null,
         );
 
         $adapter = new OpenaiChatAdapter($client);

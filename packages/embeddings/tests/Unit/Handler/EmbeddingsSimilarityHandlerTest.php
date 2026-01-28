@@ -44,7 +44,7 @@ class EmbeddingsSimilarityHandlerTest extends TestCase
         $adapter = $this->prophesize(EmbeddingAdapterInterface::class);
 
         $embedResponse = new EmbedResponse([$vector], new EmbeddingUsage(10, 20));
-        $adapter->embed(Argument::that(fn (EmbedRequest $request) => $request->getTexts() === [$content]))->willReturn($embedResponse);
+        $adapter->embed(Argument::that(static fn (EmbedRequest $request) => $request->getTexts() === [$content]))->willReturn($embedResponse);
 
         $similarEmbeddings = [
             $this->prophesize(EmbeddingInterface::class)->reveal(),
@@ -59,7 +59,7 @@ class EmbeddingsSimilarityHandlerTest extends TestCase
         );
 
         $request = new EmbeddingsSimilarityRequest(
-            function () {},
+            static function () {},
             $content,
             $key,
             $limit,
@@ -80,7 +80,7 @@ class EmbeddingsSimilarityHandlerTest extends TestCase
 
         $handler = new EmbeddingsSimilarityHandler([], []);
         $request = new EmbeddingsSimilarityRequest(
-            function () {},
+            static function () {},
             'content',
             'invalid_key',
         );
@@ -102,7 +102,7 @@ class EmbeddingsSimilarityHandlerTest extends TestCase
         );
 
         $request = new EmbeddingsSimilarityRequest(
-            function () {},
+            static function () {},
             'content',
             $key,
         );
@@ -120,7 +120,7 @@ class EmbeddingsSimilarityHandlerTest extends TestCase
         $adapter = $this->prophesize(EmbeddingAdapterInterface::class);
 
         $embedResponse = new EmbedResponse([$vector], new EmbeddingUsage(10, 20));
-        $adapter->embed(Argument::that(fn (EmbedRequest $request) => $request->getTexts() === [$content]))->willReturn($embedResponse);
+        $adapter->embed(Argument::that(static fn (EmbedRequest $request) => $request->getTexts() === [$content]))->willReturn($embedResponse);
 
         $similarEmbeddings = [
             $this->prophesize(EmbeddingInterface::class)->reveal(),
@@ -138,7 +138,7 @@ class EmbeddingsSimilarityHandlerTest extends TestCase
         );
 
         $request = new EmbeddingsSimilarityRequest(
-            function () {},
+            static function () {},
             $content,
             $key,
             4,
