@@ -49,7 +49,7 @@ class ClientTest extends TestCase
 
         $response = new ObjectResponse(DataFixtures::CHAT_CREATE_RESPONSE, MetaInformation::from([]));
         $this->transport->requestObject(
-            Argument::that(fn (Payload $payload) => 'chat/completions' === $payload->resourceUri->uri
+            Argument::that(static fn (Payload $payload) => 'chat/completions' === $payload->resourceUri->uri
                 && Method::POST === $payload->method
                 && ContentType::JSON === $payload->contentType
                 && DataFixtures::CHAT_CREATE_REQUEST === $payload->parameters),
@@ -67,7 +67,7 @@ class ClientTest extends TestCase
 
         $response = new ObjectResponse(DataFixtures::EMBEDDINGS_CREATE_RESPONSE, MetaInformation::from([]));
         $this->transport->requestObject(
-            Argument::that(fn (Payload $payload) => 'embeddings' === $payload->resourceUri->uri
+            Argument::that(static fn (Payload $payload) => 'embeddings' === $payload->resourceUri->uri
                 && Method::POST === $payload->method
                 && ContentType::JSON === $payload->contentType
                 && @\array_merge(DataFixtures::EMBEDDINGS_CREATE_REQUEST, ['encoding_format' => 'float']) === $payload->parameters),

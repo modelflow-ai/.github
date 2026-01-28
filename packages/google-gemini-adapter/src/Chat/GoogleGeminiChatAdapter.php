@@ -109,7 +109,7 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface
     /**
      * @param Content[] $messages
      */
-    protected function create(AIChatRequest $request, array $messages, GenerativeModelContract $model): AIChatResponse
+    private function create(AIChatRequest $request, array $messages, GenerativeModelContract $model): AIChatResponse
     {
         $result = $model->generateContent(...$messages);
 
@@ -144,7 +144,7 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface
     /**
      * @param Content[] $messages
      */
-    protected function createStreamed(AIChatStreamedRequest $request, array $messages, GenerativeModelContract $model): AIChatResponse
+    private function createStreamed(AIChatStreamedRequest $request, array $messages, GenerativeModelContract $model): AIChatResponse
     {
         $result = $model->streamGenerateContent(...$messages);
 
@@ -162,7 +162,7 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface
      *
      * @return \Iterator<int, AIChatResponseMessage>
      */
-    protected function createStreamedMessages(\Iterator $responses, ?StreamingUsageTracker $usageTracker = null): \Iterator
+    private function createStreamedMessages(\Iterator $responses, ?StreamingUsageTracker $usageTracker = null): \Iterator
     {
         try {
             $lastUsage = null;

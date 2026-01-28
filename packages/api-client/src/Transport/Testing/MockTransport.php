@@ -56,7 +56,7 @@ class MockTransport implements TransportInterface
         }
 
         if (!$decoder) {
-            $decoder = fn (ChunkInterface $chunk) => [\json_decode($chunk->getContent(), true)];
+            $decoder = static fn (ChunkInterface $chunk) => [\json_decode($chunk->getContent(), true)];
         }
 
         foreach ($response->chunks as $chunk) {

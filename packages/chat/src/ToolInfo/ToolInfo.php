@@ -49,11 +49,11 @@ final readonly class ToolInfo
             'name' => $this->name,
             'description' => $this->description,
             'parameters' => \array_map(
-                fn (Parameter $parameter) => $parameter->toArray(),
+                static fn (Parameter $parameter) => $parameter->toArray(),
                 $this->parameters,
             ),
             'requiredParameters' => \array_map(
-                fn (Parameter $parameter) => $parameter->toArray(),
+                static fn (Parameter $parameter) => $parameter->toArray(),
                 $this->requiredParameters,
             ),
         ];

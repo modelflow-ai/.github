@@ -81,7 +81,7 @@ class SymfonyHttpTransporter implements TransportInterface
     public function requestStream(Payload $payload, ?callable $decoder = null): \Iterator
     {
         if (!$decoder) {
-            $decoder = fn (ChunkInterface $chunk) => [\json_decode($chunk->getContent(), true)];
+            $decoder = static fn (ChunkInterface $chunk) => [\json_decode($chunk->getContent(), true)];
         }
 
         $response = $this->request($payload);

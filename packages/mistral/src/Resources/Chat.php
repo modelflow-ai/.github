@@ -51,7 +51,7 @@ final readonly class Chat implements ChatInterface
 
         $payload = Payload::create('chat/completions', $parameters);
 
-        $decoder = function (ChunkInterface $chunk): \Iterator {
+        $decoder = static function (ChunkInterface $chunk): \Iterator {
             $content = $chunk->getContent();
 
             $lines = \explode(\PHP_EOL, $content);

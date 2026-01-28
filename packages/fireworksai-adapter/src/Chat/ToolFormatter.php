@@ -72,7 +72,7 @@ final class ToolFormatter
     public static function formatTools(array $tools): array
     {
         return \array_map(
-            fn (ToolInfo $tool) => [
+            static fn (ToolInfo $tool) => [
                 'type' => $tool->type->value,
                 'function' => self::formatTool($tool),
             ],
@@ -100,7 +100,7 @@ final class ToolFormatter
      *     format?: string,
      * }
      */
-    protected static function formatParameter(Parameter $parameter): array
+    private static function formatParameter(Parameter $parameter): array
     {
         $param = [
             'type' => $parameter->type,

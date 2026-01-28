@@ -30,7 +30,7 @@ class ToolExecutorTest extends TestCase
     {
         $messages = new AIChatMessageCollection();
         $criteria = new CriteriaCollection();
-        $requestHandler = fn ($request) => null;
+        $requestHandler = static fn ($request) => null;
 
         $request = new AIChatRequest($messages, $criteria, [
             'test' => [$this, 'toolMethod'],
@@ -61,7 +61,7 @@ class ToolExecutorTest extends TestCase
     {
         $messages = new AIChatMessageCollection();
         $criteria = new CriteriaCollection();
-        $requestHandler = fn ($request) => null;
+        $requestHandler = static fn ($request) => null;
 
         $request = new AIChatRequest($messages, $criteria, [
             'test' => [$this, 'toolMethodWithException'],

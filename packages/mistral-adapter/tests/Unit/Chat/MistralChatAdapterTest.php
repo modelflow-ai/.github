@@ -58,7 +58,7 @@ final class MistralChatAdapterTest extends TestCase
             [],
             [],
             [],
-            fn () => null,
+            static fn () => null,
         );
 
         $this->assertTrue($adapter->supports($request));
@@ -82,7 +82,7 @@ final class MistralChatAdapterTest extends TestCase
                 ToolInfoBuilder::buildToolInfo($this, 'toolMethod', 'test'),
             ],
             [],
-            fn () => null,
+            static fn () => null,
         );
 
         $this->assertTrue($adapter->supports($request));
@@ -106,7 +106,7 @@ final class MistralChatAdapterTest extends TestCase
                 ToolInfoBuilder::buildToolInfo($this, 'toolMethod', 'test'),
             ],
             [],
-            fn () => null,
+            static fn () => null,
         );
 
         $this->assertFalse($adapter->supports($request));
@@ -155,7 +155,7 @@ final class MistralChatAdapterTest extends TestCase
             [],
             [],
             [],
-            fn () => null,
+            static fn () => null,
         );
 
         $adapter = new MistralChatAdapter($client->reveal());
@@ -229,7 +229,7 @@ final class MistralChatAdapterTest extends TestCase
             [],
             [],
             [],
-            fn () => null,
+            static fn () => null,
         );
 
         $adapter = new MistralChatAdapter($client->reveal());
@@ -291,7 +291,7 @@ final class MistralChatAdapterTest extends TestCase
                 'seed' => 123,
                 'temperature' => 0.5,
             ],
-            fn () => null,
+            static fn () => null,
         );
 
         $adapter = new MistralChatAdapter($client->reveal());
@@ -345,7 +345,7 @@ final class MistralChatAdapterTest extends TestCase
             [],
             [],
             [],
-            fn () => null,
+            static fn () => null,
             responseFormat: new JsonResponseFormat(),
         );
 
@@ -401,7 +401,7 @@ final class MistralChatAdapterTest extends TestCase
             [],
             [],
             [],
-            fn () => null,
+            static fn () => null,
             [],
             new JsonResponseFormat(),
         );
@@ -479,7 +479,7 @@ final class MistralChatAdapterTest extends TestCase
             [],
             [],
             [],
-            fn () => null,
+            static fn () => null,
         );
 
         $adapter = new MistralChatAdapter($client->reveal());
@@ -582,7 +582,7 @@ final class MistralChatAdapterTest extends TestCase
                 ToolInfoBuilder::buildToolInfo($this, 'toolMethod', 'test'),
             ],
             [],
-            fn () => null,
+            static fn () => null,
             toolChoice: ToolChoiceEnum::AUTO,
         );
 
@@ -722,7 +722,7 @@ final class MistralChatAdapterTest extends TestCase
                 ToolInfoBuilder::buildToolInfo($this, 'toolMethod', 'test'),
             ],
             [],
-            fn () => null,
+            static fn () => null,
         );
 
         $adapter = new MistralChatAdapter($client->reveal(), Model::LARGE->value);

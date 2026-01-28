@@ -62,7 +62,7 @@ final readonly class Messages implements MessagesInterface
         /**
          * @see https://docs.anthropic.com/claude/reference/messages-streaming#raw-http-stream-response
          */
-        $decoder = function (ChunkInterface $chunk) use (&$message): \Iterator {
+        $decoder = static function (ChunkInterface $chunk) use (&$message): \Iterator {
             $content = $chunk->getContent();
 
             $lines = \array_filter(\explode(\PHP_EOL, $content));

@@ -55,7 +55,7 @@ final readonly class CreateResponse
      */
     public static function from(array $attributes, MetaInformation $meta): self
     {
-        $choices = \array_map(fn (array $result): CreateResponseChoice => CreateResponseChoice::from(
+        $choices = \array_map(static fn (array $result): CreateResponseChoice => CreateResponseChoice::from(
             $result,
         ), $attributes['choices']);
 

@@ -80,7 +80,7 @@ class ToolStreamResponseDecoratorTest extends TestCase
         $originalStream->getMessage()->willReturn($responseMessage);
         $originalStream->getUsage()->willReturn(new Usage(10, 20, 30));
 
-        $nextMiddleware = function ($request, $adapter) use ($originalStream) {
+        $nextMiddleware = static function ($request, $adapter) use ($originalStream) {
             return $originalStream->reveal();
         };
 
@@ -111,7 +111,7 @@ class ToolStreamResponseDecoratorTest extends TestCase
         $originalStream->getMessage()->willReturn($responseMessage);
         $originalStream->getUsage()->willReturn(new Usage(10, 20, 30));
 
-        $nextMiddleware = function ($request, $adapter) use ($originalStream) {
+        $nextMiddleware = static function ($request, $adapter) use ($originalStream) {
             return $originalStream->reveal();
         };
 
@@ -145,7 +145,7 @@ class ToolStreamResponseDecoratorTest extends TestCase
         $originalStream->getMessage()->willReturn($responseMessage);
         $originalStream->getUsage()->willReturn($usage);
 
-        $nextMiddleware = function ($request, $adapter) use ($originalStream) {
+        $nextMiddleware = static function ($request, $adapter) use ($originalStream) {
             return $originalStream->reveal();
         };
 
@@ -176,7 +176,7 @@ class ToolStreamResponseDecoratorTest extends TestCase
         $originalStream->getMessage()->willReturn($responseMessage);
         $originalStream->getUsage()->willReturn(new Usage(10, 20, 30));
 
-        $nextMiddleware = function ($request, $adapter) use ($originalStream) {
+        $nextMiddleware = static function ($request, $adapter) use ($originalStream) {
             return $originalStream->reveal();
         };
 
@@ -213,7 +213,7 @@ class ToolStreamResponseDecoratorTest extends TestCase
         $originalStream->getMessage()->willReturn($message1);
         $originalStream->getUsage()->willReturn(new Usage(10, 20, 30));
 
-        $nextMiddleware = function ($request, $adapter) use ($originalStream) {
+        $nextMiddleware = static function ($request, $adapter) use ($originalStream) {
             return $originalStream->reveal();
         };
 
@@ -254,7 +254,7 @@ class ToolStreamResponseDecoratorTest extends TestCase
         $originalStream->getMessage()->willReturn($message1);
         $originalStream->getUsage()->willReturn(new Usage(10, 20, 30));
 
-        $nextMiddleware = function ($request, $adapter) use ($originalStream) {
+        $nextMiddleware = static function ($request, $adapter) use ($originalStream) {
             return $originalStream->reveal();
         };
 
@@ -607,7 +607,7 @@ class ToolStreamResponseDecoratorTest extends TestCase
         );
 
         // The next middleware always returns the same stream with a tool call
-        $nextMiddleware = function ($request, $adapter) use ($nextStream) {
+        $nextMiddleware = static function ($request, $adapter) use ($nextStream) {
             return $nextStream;
         };
 
@@ -646,7 +646,7 @@ class ToolStreamResponseDecoratorTest extends TestCase
         $originalStream->getMessage()->willReturn($message);
         $originalStream->getUsage()->willReturn(null);
 
-        $nextMiddleware = function ($request, $adapter) use ($originalStream) {
+        $nextMiddleware = static function ($request, $adapter) use ($originalStream) {
             return $originalStream->reveal();
         };
 

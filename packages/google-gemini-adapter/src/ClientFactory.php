@@ -44,7 +44,7 @@ class ClientFactory
         return \Gemini::factory()
             ->withApiKey($this->apiKey)
             ->withHttpClient($client)
-            ->withStreamHandler(fn (RequestInterface $request): ResponseInterface => $client->sendRequest($request))
+            ->withStreamHandler(static fn (RequestInterface $request): ResponseInterface => $client->sendRequest($request))
             ->make();
     }
 }

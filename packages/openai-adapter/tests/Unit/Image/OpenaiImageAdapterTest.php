@@ -51,10 +51,10 @@ final class OpenaiImageAdapterTest extends TestCase
             ImageFormat::JPEG,
             OutputFormat::BASE64,
             new CriteriaCollection([]),
-            fn () => null,
+            static fn () => null,
         ));
 
-        $client->assertSent(Images::class, fn (string $method, array $parameters) => 'create' === $method
+        $client->assertSent(Images::class, static fn (string $method, array $parameters) => 'create' === $method
             && 'dall-e-3' === $parameters['model']
             && 'cute cat' === $parameters['prompt']
             && 1 === $parameters['n']
@@ -83,10 +83,10 @@ final class OpenaiImageAdapterTest extends TestCase
             ImageFormat::JPEG,
             OutputFormat::STREAM,
             new CriteriaCollection([]),
-            fn () => null,
+            static fn () => null,
         ));
 
-        $client->assertSent(Images::class, fn (string $method, array $parameters) => 'create' === $method
+        $client->assertSent(Images::class, static fn (string $method, array $parameters) => 'create' === $method
             && 'dall-e-3' === $parameters['model']
             && 'cute cat' === $parameters['prompt']
             && 1 === $parameters['n']
@@ -114,14 +114,14 @@ final class OpenaiImageAdapterTest extends TestCase
             ImageFormat::JPEG,
             OutputFormat::STREAM,
             new CriteriaCollection([]),
-            fn () => null,
+            static fn () => null,
         )));
         $this->assertTrue($adapter->supports(new AIImageRequest(
             new TextToImageAction('cute cat'),
             ImageFormat::JPEG,
             OutputFormat::STREAM,
             new CriteriaCollection([]),
-            fn () => null,
+            static fn () => null,
         )));
     }
 }

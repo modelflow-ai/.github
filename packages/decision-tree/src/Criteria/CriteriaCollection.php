@@ -88,7 +88,7 @@ readonly class CriteriaCollection
     public function toArray(): array
     {
         return \array_map(
-            fn (CriteriaInterface $criteria) => [
+            static fn (CriteriaInterface $criteria) => [
                 'name' => $criteria->getName(),
                 'value' => $criteria->getValue(),
                 'class' => $criteria::class,

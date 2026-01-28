@@ -27,7 +27,7 @@ class TextToImageActionBuilderTest extends TestCase
 
     public function testImageFormat(): void
     {
-        $builder = AIImageRequestBuilder::create(fn () => null);
+        $builder = AIImageRequestBuilder::create(static fn () => null);
 
         $textToImageBuilder = new TextToImageActionBuilder($builder, 'cute cat');
         $textToImageBuilder->imageFormat(ImageFormat::JPEG);
@@ -40,7 +40,7 @@ class TextToImageActionBuilderTest extends TestCase
 
     public function testAsStream(): void
     {
-        $builder = AIImageRequestBuilder::create(fn () => null);
+        $builder = AIImageRequestBuilder::create(static fn () => null);
 
         $textToImageBuilder = new TextToImageActionBuilder($builder, 'cute cat');
         $textToImageBuilder->asStream();
@@ -53,7 +53,7 @@ class TextToImageActionBuilderTest extends TestCase
 
     public function testAsBase64(): void
     {
-        $builder = AIImageRequestBuilder::create(fn () => null);
+        $builder = AIImageRequestBuilder::create(static fn () => null);
 
         $textToImageBuilder = new TextToImageActionBuilder($builder, 'cute cat');
         $textToImageBuilder->asBase64();
@@ -66,7 +66,7 @@ class TextToImageActionBuilderTest extends TestCase
 
     public function testBuild(): void
     {
-        $builder = AIImageRequestBuilder::create(fn () => null);
+        $builder = AIImageRequestBuilder::create(static fn () => null);
 
         $textToImageBuilder = new TextToImageActionBuilder($builder, 'cute cat');
 

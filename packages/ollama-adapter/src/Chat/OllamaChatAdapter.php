@@ -80,7 +80,7 @@ final readonly class OllamaChatAdapter implements AIChatAdapterInterface
      *     },
      * } $parameters
      */
-    protected function create(AIChatRequest $request, array $parameters): AIChatResponse
+    private function create(AIChatRequest $request, array $parameters): AIChatResponse
     {
         $response = $this->client->chat()->create($parameters);
 
@@ -112,7 +112,7 @@ final readonly class OllamaChatAdapter implements AIChatAdapterInterface
      *     },
      * } $parameters
      */
-    protected function createStreamed(AIChatStreamedRequest $request, array $parameters): AIChatResponse
+    private function createStreamed(AIChatStreamedRequest $request, array $parameters): AIChatResponse
     {
         $responses = $this->client->chat()->createStreamed($parameters);
 
@@ -131,7 +131,7 @@ final readonly class OllamaChatAdapter implements AIChatAdapterInterface
      *
      * @return \Iterator<int, AIChatResponseMessage>
      */
-    protected function createStreamedMessages(\Iterator $responses, AIChatRequest $request, ?StreamingUsageTracker $usageTracker = null): \Iterator
+    private function createStreamedMessages(\Iterator $responses, AIChatRequest $request, ?StreamingUsageTracker $usageTracker = null): \Iterator
     {
         $role = null;
         $outputTokens = 0;

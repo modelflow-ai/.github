@@ -43,7 +43,7 @@ final class ClientFactory
             ->withApiKey($this->apiKey)
             ->withBaseUri('https://api.fireworks.ai/inference/v1')
             ->withHttpClient($client)
-            ->withStreamHandler(fn (RequestInterface $request): ResponseInterface => $client->sendRequest($request))
+            ->withStreamHandler(static fn (RequestInterface $request): ResponseInterface => $client->sendRequest($request))
             ->make();
     }
 }

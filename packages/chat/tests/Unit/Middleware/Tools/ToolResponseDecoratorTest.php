@@ -64,7 +64,7 @@ class ToolResponseDecoratorTest extends TestCase
         $this->request->getMetadata()->willReturn(['key' => 'value']);
         $this->request->getTools()->willReturn([]);
 
-        $this->nextMiddleware = function ($request, $adapter) {
+        $this->nextMiddleware = static function ($request, $adapter) {
             return new AIChatResponse(
                 $request,
                 new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Hello', null),
@@ -457,7 +457,7 @@ class ToolResponseDecoratorTest extends TestCase
 
         // Mock a middleware that returns the chain of responses
         $responseQueue = [$secondResponse, $thirdResponse, $fourthResponse];
-        $nextMiddleware = function ($request, $adapter) use (&$responseQueue) {
+        $nextMiddleware = static function ($request, $adapter) use (&$responseQueue) {
             return \array_shift($responseQueue);
         };
 
@@ -547,7 +547,7 @@ class ToolResponseDecoratorTest extends TestCase
             new Usage(5, 10, 15),
         );
 
-        $nextMiddleware = function () use ($secondResponse) {
+        $nextMiddleware = static function () use ($secondResponse) {
             return $secondResponse;
         };
 

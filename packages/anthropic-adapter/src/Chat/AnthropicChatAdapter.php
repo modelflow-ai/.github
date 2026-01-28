@@ -128,7 +128,7 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface
     /**
      * @param Parameters $parameters
      */
-    protected function create(AIChatRequest $request, array $parameters): AIChatResponse
+    private function create(AIChatRequest $request, array $parameters): AIChatResponse
     {
         $result = $this->client->messages()->create($parameters);
 
@@ -154,7 +154,7 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface
     /**
      * @param Parameters $parameters
      */
-    protected function createStreamed(AIChatStreamedRequest $request, array $parameters): AIChatResponse
+    private function createStreamed(AIChatStreamedRequest $request, array $parameters): AIChatResponse
     {
         $responses = $this->client->messages()->createStreamed($parameters);
 
@@ -172,7 +172,7 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface
      *
      * @return \Iterator<int, AIChatResponseMessage>
      */
-    protected function createStreamedMessages(\Iterator $responses, string $prefix, StreamingUsageTracker $usageTracker): \Iterator
+    private function createStreamedMessages(\Iterator $responses, string $prefix, StreamingUsageTracker $usageTracker): \Iterator
     {
         $role = null;
         $lastUsage = null;

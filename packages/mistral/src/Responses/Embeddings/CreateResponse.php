@@ -50,7 +50,7 @@ final readonly class CreateResponse
      */
     public static function from(array $attributes, MetaInformation $meta): self
     {
-        $data = \array_map(fn (array $result): CreateResponseData => CreateResponseData::from(
+        $data = \array_map(static fn (array $result): CreateResponseData => CreateResponseData::from(
             $result,
         ), $attributes['data']);
 

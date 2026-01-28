@@ -41,7 +41,7 @@ $client = Psr18ClientDiscovery::find();
 
 $googleGeminiClient = \Gemini::factory()
     ->withApiKey($googleGeminiApiKey)
-    ->withStreamHandler(fn (RequestInterface $request): ResponseInterface => $client->sendRequest($request))
+    ->withStreamHandler(static fn (RequestInterface $request): ResponseInterface => $client->sendRequest($request))
     ->make();
 
 $flashAdapter = new GoogleGeminiChatAdapter($googleGeminiClient, 'models/gemini-2.0-flash');

@@ -58,7 +58,7 @@ class ThreadTest extends TestCase
         $thread = new Thread($this->requestHandler->reveal(), $expert);
 
         $this->requestHandler->createRequest()
-            ->willReturn(new AIChatRequestBuilder(fn (AIChatRequest $request) => new AIChatResponse(
+            ->willReturn(new AIChatRequestBuilder(static fn (AIChatRequest $request) => new AIChatResponse(
                 $request,
                 new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Test message'),
                 new Usage(0, 0, 0),
@@ -85,7 +85,7 @@ class ThreadTest extends TestCase
         $thread = new Thread($this->requestHandler->reveal(), $expert);
 
         $this->requestHandler->createStreamedRequest()
-            ->willReturn(new AIChatStreamedRequestBuilder(fn (AIChatStreamedRequest $request) => new AIChatResponseStream(
+            ->willReturn(new AIChatStreamedRequestBuilder(static fn (AIChatStreamedRequest $request) => new AIChatResponseStream(
                 $request,
                 new \ArrayIterator([
                     new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Test message'),
@@ -108,7 +108,7 @@ class ThreadTest extends TestCase
         $thread = new Thread($this->requestHandler->reveal(), $expert);
 
         $this->requestHandler->createRequest()
-            ->willReturn(new AIChatRequestBuilder(fn (AIChatRequest $request) => new AIChatResponse(
+            ->willReturn(new AIChatRequestBuilder(static fn (AIChatRequest $request) => new AIChatResponse(
                 $request,
                 new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Test message'),
                 new Usage(0, 0, 0),
@@ -139,7 +139,7 @@ class ThreadTest extends TestCase
         $thread->addContext('key', 'value');
 
         $this->requestHandler->createRequest()
-            ->willReturn(new AIChatRequestBuilder(fn (AIChatRequest $request) => new AIChatResponse(
+            ->willReturn(new AIChatRequestBuilder(static fn (AIChatRequest $request) => new AIChatResponse(
                 $request,
                 new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Test message'),
                 new Usage(0, 0, 0),
@@ -175,7 +175,7 @@ class ThreadTest extends TestCase
         $thread->addAssistantMessage('Test Question 6');
 
         $this->requestHandler->createRequest()
-            ->willReturn(new AIChatRequestBuilder(fn (AIChatRequest $request) => new AIChatResponse(
+            ->willReturn(new AIChatRequestBuilder(static fn (AIChatRequest $request) => new AIChatResponse(
                 $request,
                 new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Test message'),
                 new Usage(0, 0, 0),
@@ -230,7 +230,7 @@ class ThreadTest extends TestCase
         $thread->addContext('key', 'value');
 
         $this->requestHandler->createRequest()
-            ->willReturn(new AIChatRequestBuilder(fn (AIChatRequest $request) => new AIChatResponse(
+            ->willReturn(new AIChatRequestBuilder(static fn (AIChatRequest $request) => new AIChatResponse(
                 $request,
                 new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Test message'),
                 new Usage(0, 0, 0),
@@ -259,7 +259,7 @@ class ThreadTest extends TestCase
         $thread = new Thread($this->requestHandler->reveal(), $expert);
 
         $this->requestHandler->createRequest()
-            ->willReturn(new AIChatRequestBuilder(fn (AIChatRequest $request) => new AIChatResponse(
+            ->willReturn(new AIChatRequestBuilder(static fn (AIChatRequest $request) => new AIChatResponse(
                 $request,
                 new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Test message'),
                 new Usage(0, 0, 0),
@@ -283,7 +283,7 @@ class ThreadTest extends TestCase
         $thread = new Thread($this->requestHandler->reveal(), $expert);
 
         $this->requestHandler->createStreamedRequest()
-            ->willReturn(new AIChatStreamedRequestBuilder(fn (AIChatStreamedRequest $request) => new AIChatResponseStream(
+            ->willReturn(new AIChatStreamedRequestBuilder(static fn (AIChatStreamedRequest $request) => new AIChatResponseStream(
                 $request,
                 new \ArrayIterator([
                     new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Test message'),
@@ -309,7 +309,7 @@ class ThreadTest extends TestCase
         $thread->addUserMessage('Test message');
 
         $this->requestHandler->createRequest()
-            ->willReturn(new AIChatRequestBuilder(fn (AIChatRequest $request) => new AIChatResponse(
+            ->willReturn(new AIChatRequestBuilder(static fn (AIChatRequest $request) => new AIChatResponse(
                 $request,
                 new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, 'Test message'),
                 new Usage(0, 0, 0),

@@ -47,7 +47,7 @@ final class GoogleGeminiChatAdapterTest extends TestCase
             [],
             [],
             [],
-            fn () => null,
+            static fn () => null,
         );
 
         $this->assertTrue($adapter->supports($request));
@@ -86,7 +86,7 @@ final class GoogleGeminiChatAdapterTest extends TestCase
             [],
             [],
             [],
-            fn () => null,
+            static fn () => null,
         );
 
         $adapter = new GoogleGeminiChatAdapter($client, ModelType::GEMINI_FLASH->value);
@@ -98,7 +98,7 @@ final class GoogleGeminiChatAdapterTest extends TestCase
 
         $client->generativeModel(ModelType::GEMINI_FLASH->value)
             ->assertSent(
-                fn (string $methods, array $args) => 'generateContent' === $methods
+                static fn (string $methods, array $args) => 'generateContent' === $methods
                     && 'Hello' === $args[0]->parts[0]->text
                     && 'World!' === $args[1]->parts[0]->text,
             );
@@ -137,7 +137,7 @@ final class GoogleGeminiChatAdapterTest extends TestCase
             ),
         ), new CriteriaCollection(), [], [], [
             'temperature' => 0.5,
-        ], fn () => null);
+        ], static fn () => null);
 
         $adapter = new GoogleGeminiChatAdapter($client, ModelType::GEMINI_FLASH->value);
         $result = $adapter->handleRequest($request);
@@ -151,7 +151,7 @@ final class GoogleGeminiChatAdapterTest extends TestCase
 
         $client->generativeModel(ModelType::GEMINI_FLASH->value)
             ->assertSent(
-                fn (string $methods, array $args) => 'generateContent' === $methods
+                static fn (string $methods, array $args) => 'generateContent' === $methods
                     && 'Hello' === $args[0]->parts[0]->text
                     && 'World!' === $args[1]->parts[0]->text,
             );
@@ -172,7 +172,7 @@ final class GoogleGeminiChatAdapterTest extends TestCase
                 AIChatMessageRoleEnum::USER,
                 'World!',
             ),
-        ), new CriteriaCollection(), [], [], [], fn () => null);
+        ), new CriteriaCollection(), [], [], [], static fn () => null);
 
         $adapter = new GoogleGeminiChatAdapter($client, ModelType::GEMINI_FLASH->value);
         $result = $adapter->handleRequest($request);

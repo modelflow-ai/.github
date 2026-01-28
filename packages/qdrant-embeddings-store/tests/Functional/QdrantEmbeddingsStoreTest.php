@@ -104,7 +104,7 @@ class QdrantEmbeddingsStoreTest extends TestCase
 
         $this->assertCount(2, $results);
 
-        $uuids = \array_map(fn (array $result) => $result['payload']['uuid'], $results);
+        $uuids = \array_map(static fn (array $result) => $result['payload']['uuid'], $results);
         $this->assertContains($uuid1, $uuids);
         $this->assertContains($uuid2, $uuids);
     }
@@ -129,7 +129,7 @@ class QdrantEmbeddingsStoreTest extends TestCase
 
         $this->assertCount(2, $results);
 
-        $uuids = \array_map(fn (array $result) => $result['payload']['uuid'], $results);
+        $uuids = \array_map(static fn (array $result) => $result['payload']['uuid'], $results);
         $this->assertContains($uuid1, $uuids);
         $this->assertContains($uuid2, $uuids);
     }
@@ -234,7 +234,7 @@ class QdrantEmbeddingsStoreTest extends TestCase
         );
 
         $this->assertCount(2, $result);
-        $resultUuids = \array_map(fn ($embedding) => $embedding->uuid, $result); // @phpstan-ignore-line
+        $resultUuids = \array_map(static fn ($embedding) => $embedding->uuid, $result); // @phpstan-ignore-line
         $this->assertContains($uuid1, $resultUuids);
         $this->assertContains($uuid2, $resultUuids);
         $this->assertNotContains($uuid3, $resultUuids);

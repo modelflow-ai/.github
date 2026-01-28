@@ -47,7 +47,7 @@ final class CompletionTest extends TestCase
     {
         $response = new ObjectResponse(DataFixtures::COMPLETION_CREATE_RESPONSE, MetaInformation::from([]));
         $this->transport->requestObject(
-            Argument::that(fn (Payload $payload) => 'generate' === $payload->resourceUri->uri
+            Argument::that(static fn (Payload $payload) => 'generate' === $payload->resourceUri->uri
             && Method::POST === $payload->method
             && ContentType::JSON === $payload->contentType
             && @\array_merge(DataFixtures::COMPLETION_CREATE_REQUEST, ['stream' => false]) === $payload->parameters),
@@ -121,7 +121,7 @@ final class CompletionTest extends TestCase
         }
 
         $this->transport->requestStream(
-            Argument::that(fn (Payload $payload) => 'generate' === $payload->resourceUri->uri
+            Argument::that(static fn (Payload $payload) => 'generate' === $payload->resourceUri->uri
             && Method::POST === $payload->method
             && ContentType::JSON === $payload->contentType
             && @\array_merge(DataFixtures::COMPLETION_CREATE_REQUEST, ['stream' => true]) === $payload->parameters),

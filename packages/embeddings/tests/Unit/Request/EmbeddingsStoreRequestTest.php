@@ -34,7 +34,7 @@ class EmbeddingsStoreRequestTest extends TestCase
             $this->prophesize(EmbeddingInterface::class)->reveal(),
         ];
 
-        $headerGenerator = fn () => ['test-header' => 'test-value'];
+        $headerGenerator = static fn () => ['test-header' => 'test-value'];
 
         $request = new EmbeddingsStoreRequest(
             $execute,
@@ -76,7 +76,7 @@ class EmbeddingsStoreRequestTest extends TestCase
             $embeddings,
         );
 
-        $headerGenerator = fn () => ['new-header' => 'new-value'];
+        $headerGenerator = static fn () => ['new-header' => 'new-value'];
 
         $newRequest = $request->withHeaderGenerator($headerGenerator);
 
@@ -93,7 +93,7 @@ class EmbeddingsStoreRequestTest extends TestCase
             $this->prophesize(EmbeddingInterface::class)->reveal(),
         ];
 
-        $headerGenerator = fn () => ['test-header' => 'test-value'];
+        $headerGenerator = static fn () => ['test-header' => 'test-value'];
 
         $request = new EmbeddingsStoreRequest(
             $execute,
@@ -128,7 +128,7 @@ class EmbeddingsStoreRequestTest extends TestCase
         );
         $called = false;
 
-        $execute = function (EmbeddingsStoreRequest $request) use (&$called, $mockResponse) {
+        $execute = static function (EmbeddingsStoreRequest $request) use (&$called, $mockResponse) {
             $called = true;
 
             return $mockResponse;
@@ -155,7 +155,7 @@ class EmbeddingsStoreRequestTest extends TestCase
 
         $mockResponse = new \stdClass();
 
-        $execute = fn (EmbeddingsStoreRequest $request) => $mockResponse;
+        $execute = static fn (EmbeddingsStoreRequest $request) => $mockResponse;
 
         $embeddings = [
             $this->prophesize(EmbeddingInterface::class)->reveal(),

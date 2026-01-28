@@ -24,7 +24,7 @@ class AICompletionRequestBuilderTest extends TestCase
 
     public function testAsJson(): void
     {
-        $builder = new AICompletionRequestBuilder(fn () => null);
+        $builder = new AICompletionRequestBuilder(static fn () => null);
         $builder->prompt('Test text');
 
         $builder->asJson();
@@ -34,7 +34,7 @@ class AICompletionRequestBuilderTest extends TestCase
 
     public function testPrompt(): void
     {
-        $builder = new AICompletionRequestBuilder(fn () => null);
+        $builder = new AICompletionRequestBuilder(static fn () => null);
         $prompt = 'Test text';
 
         $builder->prompt($prompt);
@@ -44,7 +44,7 @@ class AICompletionRequestBuilderTest extends TestCase
 
     public function testBuild(): void
     {
-        $builder = new AICompletionRequestBuilder(fn () => null);
+        $builder = new AICompletionRequestBuilder(static fn () => null);
         $prompt = 'Test text';
 
         $builder->prompt($prompt);
@@ -60,7 +60,7 @@ class AICompletionRequestBuilderTest extends TestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('No text given');
 
-        $builder = new AICompletionRequestBuilder(fn () => null);
+        $builder = new AICompletionRequestBuilder(static fn () => null);
         $builder->build();
     }
 }

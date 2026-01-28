@@ -29,7 +29,7 @@ class AIChatStreamedRequestTest extends TestCase
 
     public function testConstructorWithStreamed(): void
     {
-        $requestHandler = fn ($request) => null;
+        $requestHandler = static fn ($request) => null;
         $request = new AIChatStreamedRequest(new AIChatMessageCollection(), new CriteriaCollection(), [], [], [], $requestHandler);
 
         $this->assertTrue($request->matches([FeatureCriteria::STREAM]));
@@ -42,7 +42,7 @@ class AIChatStreamedRequestTest extends TestCase
         $message2 = new AIChatMessage(AIChatMessageRoleEnum::USER, 'Test content 2');
         $criteriaCollection = new CriteriaCollection();
 
-        $requestHandler = fn ($request) => new AIChatResponseStream(
+        $requestHandler = static fn ($request) => new AIChatResponseStream(
             $request,
             new \ArrayIterator([]),
         );

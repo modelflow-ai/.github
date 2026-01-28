@@ -51,7 +51,7 @@ final class OllamaCompletionAdapterTest extends TestCase
             'eval_duration' => 5_981_849_000,
         ], MetaInformation::from([])));
 
-        $request = new AICompletionRequest('Prompt message', new CriteriaCollection(), [], fn () => null);
+        $request = new AICompletionRequest('Prompt message', new CriteriaCollection(), [], static fn () => null);
 
         $adapter = new OllamaCompletionAdapter($client->reveal());
         $result = $adapter->handleRequest($request);
@@ -84,7 +84,7 @@ final class OllamaCompletionAdapterTest extends TestCase
             'eval_duration' => 5_981_849_000,
         ], MetaInformation::from([])));
 
-        $request = new AICompletionRequest('Prompt message', new CriteriaCollection(), ['format' => 'json'], fn () => null);
+        $request = new AICompletionRequest('Prompt message', new CriteriaCollection(), ['format' => 'json'], static fn () => null);
 
         $adapter = new OllamaCompletionAdapter($client->reveal());
         $result = $adapter->handleRequest($request);

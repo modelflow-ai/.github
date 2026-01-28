@@ -25,7 +25,7 @@ class AIChatStreamedRequestBuilderTest extends TestCase
 
     public function testBuild(): void
     {
-        $builder = new AIChatStreamedRequestBuilder(fn () => null);
+        $builder = new AIChatStreamedRequestBuilder(static fn () => null);
 
         $request = $builder->build();
         $this->assertInstanceOf(AIChatStreamedRequest::class, $request);

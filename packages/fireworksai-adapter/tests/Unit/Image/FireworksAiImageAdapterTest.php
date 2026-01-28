@@ -60,7 +60,7 @@ final class FireworksAiImageAdapterTest extends TestCase
             ImageFormat::JPEG,
             OutputFormat::STREAM,
             new CriteriaCollection([]),
-            fn () => null,
+            static fn () => null,
         ));
 
         $stream = \fopen('https://placehold.co/1x1', 'r');
@@ -83,21 +83,21 @@ final class FireworksAiImageAdapterTest extends TestCase
             ImageFormat::JPEG,
             OutputFormat::STREAM,
             new CriteriaCollection([]),
-            fn () => null,
+            static fn () => null,
         )));
         $this->assertTrue($adapter->supports(new AIImageRequest(
             new TextToImageAction('cute cat'),
             ImageFormat::JPEG,
             OutputFormat::STREAM,
             new CriteriaCollection([]),
-            fn () => null,
+            static fn () => null,
         )));
         $this->assertFalse($adapter->supports(new AIImageRequest(
             new TextToImageAction('cute cat'),
             ImageFormat::WEBP,
             OutputFormat::STREAM,
             new CriteriaCollection([]),
-            fn () => null,
+            static fn () => null,
         )));
     }
 }
