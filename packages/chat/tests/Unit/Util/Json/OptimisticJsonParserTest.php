@@ -268,10 +268,11 @@ class OptimisticJsonParserTest extends TestCase
         OptimisticJsonParser::parse('{"key": "value"}', $errorMessage);
         $this->assertNull($errorMessage);
 
-        // Fixable JSON sets error message from initial parse attempt, then overwrites on successful fix
+        // Successful fix should clear the initial parse error
         $errorMessage = null;
         $result = OptimisticJsonParser::parse('{"key": "value"', $errorMessage);
         $this->assertSame(['key' => 'value'], $result);
+        $this->assertNull($errorMessage);
 
         // Unfixable JSON should set error message
         $errorMessage = null;

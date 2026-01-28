@@ -35,6 +35,8 @@ class OptimisticJsonParser
         $data = @\json_decode($fixedJsonString, true);
 
         if (\JSON_ERROR_NONE === \json_last_error()) {
+            $errorMessage = null;
+
             return $data;
         }
 
@@ -52,9 +54,8 @@ class OptimisticJsonParser
 
         $jsonString = self::closeUnclosedStrings($jsonString);
         $jsonString = self::fixIncompleteValues($jsonString);
-        $jsonString = self::closeUnclosedStructures($jsonString);
 
-        return $jsonString;
+        return self::closeUnclosedStructures($jsonString);
     }
 
     private static function closeUnclosedStrings(string $jsonString): string
