@@ -28,7 +28,7 @@
     "require": {
         "php": "^8.2",
         "openai-php/client": "^0.10",
-        "symfony/http-client": "^6.4 || ^7.0 || ^8.0",
+        "symfony/http-client": "^6.4 || ^7.0",
         "nyholm/psr7": "^1.8"
     },
     "require-dev": {
@@ -40,15 +40,15 @@
         "phpstan/extension-installer": "^1.2",
         "phpstan/phpstan": "^2.1",
         "phpstan/phpstan-phpunit": "^2.0",
-        "phpunit/phpunit": "^11.0 || ^12.0",
+        "phpunit/phpunit": "^11.0",
         "rector/rector": "^2.0",
         "phpspec/prophecy": "^1.0@dev",
         "jangregor/phpstan-prophecy": "^2.0",
         "phpspec/prophecy-phpunit": "^2.1@stable",
-        "symfony/dotenv": "^7.1 || ^8.0",
-        "symfony/console": "^7.1 || ^8.0",
+        "symfony/dotenv": "^7.1",
+        "symfony/console": "^7.1",
         "asapo/remove-vendor-plugin": "^0.1",
-        "symfony/cache": "^7.4 || ^8.0"
+        "symfony/cache": "^7.4"
     },
     "suggest": {
         "modelflow-ai/chat": "To use the chat-completion.",
