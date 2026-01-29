@@ -1365,7 +1365,7 @@ final class App
      */
     public static function config(array $config): array
     {
-        return $config;
+        return AppReference::config($config);
     }
 }
 

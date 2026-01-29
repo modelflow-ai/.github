@@ -37,7 +37,7 @@
         "phpstan/phpstan-phpunit": "^2.0",
         "phpunit/phpunit": "^11.0",
         "rector/rector": "^2.0",
-        "symfony/dotenv": "^6.4 || ^7.0",
+        "symfony/dotenv": "^6.4 || ^7.0 || ^8.0",
         "phpspec/prophecy-phpunit": "^2.1@stable",
         "jangregor/phpstan-prophecy": "^2.0",
         "asapo/remove-vendor-plugin": "^0.1"

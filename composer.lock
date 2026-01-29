@@ -572,7 +572,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/anthropic",
-                "reference": "3b66c54b09d83e55e69326530e71b16c1550d73a"
+                "reference": "95048570815f46f94deded80001f78bd09dc0ebb"
             },
             "require": {
                 "modelflow-ai/api-client": "^0.4",
@@ -589,7 +589,7 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/dotenv": "^6.4 || ^7.0"
+                "symfony/dotenv": "^6.4 || ^7.0 || ^8.0"
             },
             "type": "library",
             "extra": {
@@ -671,7 +671,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/anthropic-adapter",
-                "reference": "d337a8f4d475c8f45b4fd63b394037a557f5e5df"
+                "reference": "6f3b6131bfbd95d428b7c37776cc49c081610b57"
             },
             "require": {
                 "modelflow-ai/anthropic": "^0.4",
@@ -689,7 +689,7 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/dotenv": "^7.1"
+                "symfony/dotenv": "^7.1 || ^8.0"
             },
             "type": "library",
             "extra": {
@@ -770,11 +770,11 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/api-client",
-                "reference": "c8577087f80ac31d1115186b836b835751cca2da"
+                "reference": "9adb5673aaf0c41b72ceb599e1526cdac8860a0b"
             },
             "require": {
                 "php": "^8.2",
-                "symfony/http-client": "^6.4 || ^7.0",
+                "symfony/http-client": "^6.4 || ^7.0 || ^8.0",
                 "webmozart/assert": "^1.11"
             },
             "require-dev": {
@@ -866,7 +866,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/chat",
-                "reference": "4ad564909bb8ce5a3c974f628536f6db388135c8"
+                "reference": "0c62dbd239bd56014c53e05c96d985e63de69bdc"
             },
             "require": {
                 "ext-fileinfo": "*",
@@ -886,7 +886,7 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/dotenv": "^7.2"
+                "symfony/dotenv": "^7.2 || ^8.0"
             },
             "type": "library",
             "extra": {
@@ -978,7 +978,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/completion",
-                "reference": "51f1356d8432afcb7cccd2b04e05ef5ff5d0577b"
+                "reference": "42a7b2186dd83cb6b313f840bf801766cd774627"
             },
             "require": {
                 "ext-fileinfo": "*",
@@ -997,7 +997,7 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/dotenv": "^7.2"
+                "symfony/dotenv": "^7.2 || ^8.0"
             },
             "type": "library",
             "extra": {
@@ -1083,7 +1083,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/decision-tree",
-                "reference": "7fcbf840979f8cf2f838f1e5a3a13af4944388e5"
+                "reference": "5513626695500dc6be4481b7c52530b54124c0aa"
             },
             "require": {
                 "php": "^8.2"
@@ -1098,7 +1098,7 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/console": "^7.1"
+                "symfony/console": "^7.1 || ^8.0"
             },
             "type": "library",
             "extra": {
@@ -1177,7 +1177,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/elasticsearch-embeddings-store",
-                "reference": "72bf9593449135592f403f43375c0d956fc1c9a9"
+                "reference": "45337fbf55d84175cee306f53a71aef3e14e5bf4"
             },
             "require": {
                 "elasticsearch/elasticsearch": "^8.13.0",
@@ -1196,8 +1196,8 @@
                 "phpunit/phpunit": "^11.0",
                 "ramsey/uuid": "^4.7",
                 "rector/rector": "^2.0",
-                "symfony/cache": "^7.0",
-                "symfony/dotenv": "^7.1"
+                "symfony/cache": "^7.0 || ^8.0",
+                "symfony/dotenv": "^7.1 || ^8.0"
             },
             "type": "library",
             "extra": {
@@ -1278,12 +1278,12 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/embeddings",
-                "reference": "0bb01f549b8536c5af2ea0f39b7d3217dcf9a989"
+                "reference": "825b51cd5ea7282804d95b3b7996eb255be1a00b"
             },
             "require": {
                 "php": "^8.2",
                 "psr/cache": "^3.0@dev",
-                "symfony/property-access": "^6.4 || ^7.0"
+                "symfony/property-access": "^6.4 || ^7.0 || ^8.0"
             },
             "require-dev": {
                 "asapo/remove-vendor-plugin": "^0.1",
@@ -1296,7 +1296,7 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/cache": "^6.4 || ^7.0"
+                "symfony/cache": "^6.4 || ^7.0 || ^8.0"
             },
             "suggest": {
                 "modelflow-ai/elasticsearch-embeddings-store": "Embeddings store using Elasticsearch",
@@ -1386,7 +1386,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/experts",
-                "reference": "6c0c17cea37b1c7c1e5bce3ad1c4fc5aceb531d8"
+                "reference": "a2ebd7d9fd11dc028bce4b5ec788200ddc8e87d5"
             },
             "require": {
                 "modelflow-ai/chat": "^0.4",
@@ -1402,7 +1402,7 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/dotenv": "^7.2"
+                "symfony/dotenv": "^7.2 || ^8.0"
             },
             "type": "library",
             "extra": {
@@ -1488,13 +1488,13 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/fireworksai-adapter",
-                "reference": "234d6dc14227b017e8d8a814521d81b00754259e"
+                "reference": "0a8f1df90895ac9410cf4da066f4022ba59ba83c"
             },
             "require": {
                 "nyholm/psr7": "^1.8",
                 "openai-php/client": "^0.10",
                 "php": "^8.2",
-                "symfony/http-client": "^6.4 || ^7.0"
+                "symfony/http-client": "^6.4 || ^7.0 || ^8.0"
             },
             "require-dev": {
                 "asapo/remove-vendor-plugin": "^0.1",
@@ -1601,7 +1601,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/google-gemini-adapter",
-                "reference": "4739d49e86f484a6f0d699d205bb7bbeda38cede"
+                "reference": "3d2b23ef0091473e6aa461079dc33706c34382e6"
             },
             "require": {
                 "google-gemini-php/client": "^1.0.14",
@@ -1623,8 +1623,8 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/dotenv": "^7.1",
-                "symfony/http-client": "^7.0"
+                "symfony/dotenv": "^7.1 || ^8.0",
+                "symfony/http-client": "^7.0 || ^8.0"
             },
             "type": "library",
             "extra": {
@@ -1705,7 +1705,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/image",
-                "reference": "8a54d2777cc6db72839d8695a02bb6da6bc9895d"
+                "reference": "c720890f8b4bb72a97bde1978103c88a1627368e"
             },
             "require": {
                 "modelflow-ai/decision-tree": "^0.4",
@@ -1722,7 +1722,7 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/console": "^7.1"
+                "symfony/console": "^7.1 || ^8.0"
             },
             "suggest": {
                 "modelflow-ai/openai-adapter": "Adapter to integrate openai",
@@ -1808,7 +1808,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/mistral",
-                "reference": "a51bb68c7638847c5d491d1ef3e81a17f08f919c"
+                "reference": "1e8225c9074b07956fa0cee362492acdcd79e8c0"
             },
             "require": {
                 "modelflow-ai/api-client": "^0.4",
@@ -1825,7 +1825,7 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/dotenv": "^6.4 || ^7.0"
+                "symfony/dotenv": "^6.4 || ^7.0 || ^8.0"
             },
             "type": "library",
             "extra": {
@@ -1907,7 +1907,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/mistral-adapter",
-                "reference": "ccf9a8322d3595b6408a36e689b6080c8547d6c3"
+                "reference": "4c9121ae72176eb0383087997c2f3f6b0df3c865"
             },
             "require": {
                 "modelflow-ai/mistral": "^0.4",
@@ -1926,8 +1926,8 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/cache": "^7.4",
-                "symfony/dotenv": "^7.1"
+                "symfony/cache": "^7.4 || ^8.0",
+                "symfony/dotenv": "^7.1 || ^8.0"
             },
             "suggest": {
                 "modelflow-ai/embeddings": "To use the embeddings."
@@ -2109,7 +2109,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/ollama-adapter",
-                "reference": "9b24df51f50a9f45723aeba62cca3ff9c91d552d"
+                "reference": "9cced75846081f1d8728239a0fcbb1c9dce5f97a"
             },
             "require": {
                 "modelflow-ai/ollama": "^0.4",
@@ -2130,8 +2130,8 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/cache": "^7.4",
-                "symfony/dotenv": "^7.2"
+                "symfony/cache": "^7.4 || ^8.0",
+                "symfony/dotenv": "^7.2 || ^8.0"
             },
             "suggest": {
                 "modelflow-ai/embeddings": "To use the embeddings."
@@ -2216,13 +2216,13 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/openai-adapter",
-                "reference": "3d6a7c4b4c4be1e6a655b2dd3bde235a27a6b33f"
+                "reference": "f4a71c579da9fe2b179821bb8617e9e54d69ffab"
             },
             "require": {
                 "nyholm/psr7": "^1.8",
                 "openai-php/client": "^0.10",
                 "php": "^8.2",
-                "symfony/http-client": "^6.4 || ^7.0"
+                "symfony/http-client": "^6.4 || ^7.0 || ^8.0"
             },
             "require-dev": {
                 "asapo/remove-vendor-plugin": "^0.1",
@@ -2423,7 +2423,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/qdrant-embeddings-store",
-                "reference": "c12657224781433504783d32d06504ac5226a4d8"
+                "reference": "7d6f6b13eb077719db027d376dc5df720412886e"
             },
             "require": {
                 "hkulekci/qdrant": "^0.5",
@@ -2445,8 +2445,8 @@
                 "phpunit/phpunit": "^11.0",
                 "ramsey/uuid": "^4.7",
                 "rector/rector": "^2.0",
-                "symfony/cache": "^7.0",
-                "symfony/dotenv": "^7.1"
+                "symfony/cache": "^7.0 || ^8.0",
+                "symfony/dotenv": "^7.1 || ^8.0"
             },
             "type": "library",
             "extra": {
@@ -4662,31 +4662,27 @@
         },
         {
             "name": "symfony/http-client",
-            "version": "7.4.x-dev",
+            "version": "8.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "4d420d63f9371d000def506a86d6c771d99b480a"
+                "reference": "690ffeed604b23211efbb172e8eea24804787d6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/4d420d63f9371d000def506a86d6c771d99b480a",
-                "reference": "4d420d63f9371d000def506a86d6c771d99b480a",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/690ffeed604b23211efbb172e8eea24804787d6a",
+                "reference": "690ffeed604b23211efbb172e8eea24804787d6a",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.2",
+                "php": ">=8.4",
                 "psr/log": "^1|^2|^3",
-                "symfony/deprecation-contracts": "^2.5|^3",
-                "symfony/http-client-contracts": "~3.4.4|^3.5.2",
-                "symfony/polyfill-php83": "^1.29",
+                "symfony/http-client-contracts": "^3.7",
                 "symfony/service-contracts": "^2.5|^3"
             },
             "conflict": {
-                "amphp/amp": "<2.5",
-                "amphp/socket": "<1.1",
-                "php-http/discovery": "<1.15",
-                "symfony/http-foundation": "<6.4"
+                "amphp/amp": "<3",
+                "php-http/discovery": "<1.15"
             },
             "provide": {
                 "php-http/async-client-implementation": "*",
@@ -4695,21 +4691,21 @@
                 "symfony/http-client-implementation": "3.0"
             },
             "require-dev": {
-                "amphp/http-client": "^4.2.1|^5.0",
-                "amphp/http-tunnel": "^1.0|^2.0",
+                "amphp/http-client": "^5.3.2",
+                "amphp/http-tunnel": "^2.0",
                 "guzzlehttp/promises": "^1.4|^2.0",
                 "nyholm/psr7": "^1.0",
                 "php-http/httplug": "^1.0|^2.0",
                 "psr/http-client": "^1.0",
-                "symfony/amphp-http-client-meta": "^1.0|^2.0",
-                "symfony/cache": "^6.4|^7.0|^8.0",
-                "symfony/dependency-injection": "^6.4|^7.0|^8.0",
-                "symfony/http-kernel": "^6.4|^7.0|^8.0",
-                "symfony/messenger": "^6.4|^7.0|^8.0",
-                "symfony/process": "^6.4|^7.0|^8.0",
-                "symfony/rate-limiter": "^6.4|^7.0|^8.0",
-                "symfony/stopwatch": "^6.4|^7.0|^8.0"
+                "symfony/cache": "^7.4|^8.0",
+                "symfony/dependency-injection": "^7.4|^8.0",
+                "symfony/http-kernel": "^7.4|^8.0",
+                "symfony/messenger": "^7.4|^8.0",
+                "symfony/process": "^7.4|^8.0",
+                "symfony/rate-limiter": "^7.4|^8.0",
+                "symfony/stopwatch": "^7.4|^8.0"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -4739,7 +4735,7 @@
                 "http"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client/tree/7.4"
+                "source": "https://github.com/symfony/http-client/tree/8.1"
             },
             "funding": [
                 {
@@ -4759,7 +4755,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-29T08:55:18+00:00"
+            "time": "2026-01-29T09:42:48+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
@@ -5452,87 +5448,6 @@
             "time": "2024-09-09T11:45:10+00:00"
         },
         {
-            "name": "symfony/polyfill-php83",
-            "version": "1.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/polyfill-php83.git",
-                "reference": "17f6f9a6b1735c0f163024d959f700cfbc5155e5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php83/zipball/17f6f9a6b1735c0f163024d959f700cfbc5155e5",
-                "reference": "17f6f9a6b1735c0f163024d959f700cfbc5155e5",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2"
-            },
-            "default-branch": true,
-            "type": "library",
-            "extra": {
-                "thanks": {
-                    "url": "https://github.com/symfony/polyfill",
-                    "name": "symfony/polyfill"
-                }
-            },
-            "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ],
-                "psr-4": {
-                    "Symfony\\Polyfill\\Php83\\": ""
-                },
-                "classmap": [
-                    "Resources/stubs"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony polyfill backporting some PHP 8.3+ features to lower PHP versions",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "compatibility",
-                "polyfill",
-                "portable",
-                "shim"
-            ],
-            "support": {
-                "source": "https://github.com/symfony/polyfill-php83/tree/v1.33.0"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/nicolas-grekas",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2025-07-08T02:45:35+00:00"
-        },
-        {
             "name": "symfony/polyfill-php85",
             "version": "1.x-dev",
             "source": {
@@ -5615,26 +5530,27 @@
         },
         {
             "name": "symfony/property-access",
-            "version": "7.4.x-dev",
+            "version": "8.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
-                "reference": "fa49bf1ca8fce1ba0e2dba4e4658554cfb9364b1"
+                "reference": "fac5879848b46cb1a73fd80abbfbe13e1b5ae8e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-access/zipball/fa49bf1ca8fce1ba0e2dba4e4658554cfb9364b1",
-                "reference": "fa49bf1ca8fce1ba0e2dba4e4658554cfb9364b1",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/fac5879848b46cb1a73fd80abbfbe13e1b5ae8e5",
+                "reference": "fac5879848b46cb1a73fd80abbfbe13e1b5ae8e5",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.2",
-                "symfony/property-info": "^6.4.32|~7.3.10|^7.4.4|^8.0.4"
+                "php": ">=8.4",
+                "symfony/property-info": "^7.4.4|^8.0.4"
             },
             "require-dev": {
-                "symfony/cache": "^6.4|^7.0|^8.0",
-                "symfony/var-exporter": "^6.4.1|^7.0.1|^8.0"
+                "symfony/cache": "^7.4|^8.0",
+                "symfony/var-exporter": "^7.4|^8.0"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -5672,7 +5588,7 @@
                 "reflection"
             ],
             "support": {
-                "source": "https://github.com/symfony/property-access/tree/7.4"
+                "source": "https://github.com/symfony/property-access/tree/8.1"
             },
             "funding": [
                 {
@@ -5692,7 +5608,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-05T08:47:25+00:00"
+            "time": "2026-01-05T09:33:24+00:00"
         },
         {
             "name": "symfony/property-info",

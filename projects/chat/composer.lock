@@ -1321,7 +1321,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/anthropic",
-                "reference": "3b66c54b09d83e55e69326530e71b16c1550d73a"
+                "reference": "95048570815f46f94deded80001f78bd09dc0ebb"
             },
             "require": {
                 "modelflow-ai/api-client": "^0.4",
@@ -1338,7 +1338,7 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/dotenv": "^6.4 || ^7.0"
+                "symfony/dotenv": "^6.4 || ^7.0 || ^8.0"
             },
             "type": "library",
             "extra": {
@@ -1420,7 +1420,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/anthropic-adapter",
-                "reference": "d337a8f4d475c8f45b4fd63b394037a557f5e5df"
+                "reference": "6f3b6131bfbd95d428b7c37776cc49c081610b57"
             },
             "require": {
                 "modelflow-ai/anthropic": "^0.4",
@@ -1438,7 +1438,7 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/dotenv": "^7.1"
+                "symfony/dotenv": "^7.1 || ^8.0"
             },
             "type": "library",
             "extra": {
@@ -1615,7 +1615,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/chat",
-                "reference": "4ad564909bb8ce5a3c974f628536f6db388135c8"
+                "reference": "0c62dbd239bd56014c53e05c96d985e63de69bdc"
             },
             "require": {
                 "ext-fileinfo": "*",
@@ -1635,7 +1635,7 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/dotenv": "^7.2"
+                "symfony/dotenv": "^7.2 || ^8.0"
             },
             "type": "library",
             "extra": {
@@ -1727,7 +1727,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/decision-tree",
-                "reference": "7fcbf840979f8cf2f838f1e5a3a13af4944388e5"
+                "reference": "5513626695500dc6be4481b7c52530b54124c0aa"
             },
             "require": {
                 "php": "^8.2"
@@ -1742,7 +1742,7 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/console": "^7.1"
+                "symfony/console": "^7.1 || ^8.0"
             },
             "type": "library",
             "extra": {
@@ -1934,7 +1934,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/google-gemini-adapter",
-                "reference": "4739d49e86f484a6f0d699d205bb7bbeda38cede"
+                "reference": "3d2b23ef0091473e6aa461079dc33706c34382e6"
             },
             "require": {
                 "google-gemini-php/client": "^1.0.14",
@@ -1956,8 +1956,8 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/dotenv": "^7.1",
-                "symfony/http-client": "^7.0"
+                "symfony/dotenv": "^7.1 || ^8.0",
+                "symfony/http-client": "^7.0 || ^8.0"
             },
             "type": "library",
             "extra": {
@@ -2038,7 +2038,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/image",
-                "reference": "8a54d2777cc6db72839d8695a02bb6da6bc9895d"
+                "reference": "c720890f8b4bb72a97bde1978103c88a1627368e"
             },
             "require": {
                 "modelflow-ai/decision-tree": "^0.4",
@@ -2055,7 +2055,7 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/console": "^7.1"
+                "symfony/console": "^7.1 || ^8.0"
             },
             "suggest": {
                 "modelflow-ai/openai-adapter": "Adapter to integrate openai",
@@ -2141,7 +2141,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/mistral",
-                "reference": "a51bb68c7638847c5d491d1ef3e81a17f08f919c"
+                "reference": "1e8225c9074b07956fa0cee362492acdcd79e8c0"
             },
             "require": {
                 "modelflow-ai/api-client": "^0.4",
@@ -2158,7 +2158,7 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/dotenv": "^6.4 || ^7.0"
+                "symfony/dotenv": "^6.4 || ^7.0 || ^8.0"
             },
             "type": "library",
             "extra": {
@@ -2240,7 +2240,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/mistral-adapter",
-                "reference": "ccf9a8322d3595b6408a36e689b6080c8547d6c3"
+                "reference": "4c9121ae72176eb0383087997c2f3f6b0df3c865"
             },
             "require": {
                 "modelflow-ai/mistral": "^0.4",
@@ -2259,8 +2259,8 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/cache": "^7.4",
-                "symfony/dotenv": "^7.1"
+                "symfony/cache": "^7.4 || ^8.0",
+                "symfony/dotenv": "^7.1 || ^8.0"
             },
             "suggest": {
                 "modelflow-ai/embeddings": "To use the embeddings."
@@ -2442,7 +2442,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/ollama-adapter",
-                "reference": "9b24df51f50a9f45723aeba62cca3ff9c91d552d"
+                "reference": "9cced75846081f1d8728239a0fcbb1c9dce5f97a"
             },
             "require": {
                 "modelflow-ai/ollama": "^0.4",
@@ -2463,8 +2463,8 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/cache": "^7.4",
-                "symfony/dotenv": "^7.2"
+                "symfony/cache": "^7.4 || ^8.0",
+                "symfony/dotenv": "^7.2 || ^8.0"
             },
             "suggest": {
                 "modelflow-ai/embeddings": "To use the embeddings."
