@@ -1,0 +1,13 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\Request\\\\AIChatRequest'' and ModelflowAi\\Chat\\Request\\AIChatRequest will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 7
+			path: tests/Unit/ThreadTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\Request\\\\AIChatStreamedRequest'' and ModelflowAi\\Chat\\Request\\AIChatStreamedRequest will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/ThreadTest.php

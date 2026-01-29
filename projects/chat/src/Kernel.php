@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -11,7 +13,7 @@ class Kernel extends BaseKernel implements CompilerPassInterface
 {
     use MicroKernelTrait;
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $adapters = $container->getParameter('modelflow_ai.adapters');
 

@@ -18,11 +18,11 @@ use ModelflowAi\Image\Request\AIImageRequest;
 use ModelflowAi\Image\Request\Value\ImageFormat;
 use ModelflowAi\Image\Request\Value\OutputFormat;
 
-final class TextToImageActionBuilder
+final readonly class TextToImageActionBuilder
 {
     public function __construct(
-        private readonly AIImageRequestBuilder $builder,
-        private readonly string $prompt,
+        private AIImageRequestBuilder $builder,
+        private string $prompt,
     ) {
     }
 

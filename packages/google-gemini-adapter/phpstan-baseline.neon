@@ -1,0 +1,61 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^PHPDoc tag @var with type ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Chat\\Request\\AIChatRequest, ModelflowAi\\Chat\\Adapter\\AIChatAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\GoogleGeminiAdapter\\Chat\\GoogleGeminiChatAdapter\>\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: examples/bootstrap.php
+
+		-
+			message: '#^Parameter \#1 \$apiKey of method Gemini\\Factory\:\:withApiKey\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/bootstrap.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: examples/chat-response-format.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\<string, mixed\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: examples/chat-response-format.php
+
+		-
+			message: '#^Instanceof between Gemini\\Resources\\GenerativeModel and Gemini\\Resources\\GenerativeModel will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: src/Chat/GoogleGeminiChatAdapter.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between null and Gemini\\Data\\UsageMetadata will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: src/Chat/GoogleGeminiChatAdapter.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\Response\\\\AIChatResponse'' and ModelflowAi\\Chat\\Response\\AIChatResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 2
+			path: tests/Unit/Chat/GoogleGeminiChatAdapterTest.php
+
+		-
+			message: '#^Cannot access offset 0 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 4
+			path: tests/Unit/Chat/GoogleGeminiChatAdapterTest.php
+
+		-
+			message: '#^Cannot access property \$parts on mixed\.$#'
+			identifier: property.nonObject
+			count: 4
+			path: tests/Unit/Chat/GoogleGeminiChatAdapterTest.php
+
+		-
+			message: '#^Cannot access property \$text on mixed\.$#'
+			identifier: property.nonObject
+			count: 4
+			path: tests/Unit/Chat/GoogleGeminiChatAdapterTest.php

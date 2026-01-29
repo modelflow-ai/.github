@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\ApiClient\Tests\Exceptions;
+namespace ModelflowAi\ApiClient\Tests\Unit\Exceptions;
 
 use ModelflowAi\ApiClient\Exceptions\TransportException;
 use PHPUnit\Framework\TestCase;

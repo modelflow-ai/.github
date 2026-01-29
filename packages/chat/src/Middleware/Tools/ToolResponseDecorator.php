@@ -29,16 +29,16 @@ final class ToolResponseDecorator implements AIChatResponseInterface
 {
     /** @var callable */
     private $nextMiddleware;
-    private ?Usage $usage;
+    private readonly ?Usage $usage;
 
     public function __construct(
-        private AIChatResponseInterface $originalResponse,
-        private AIChatRequest $request,
+        private readonly AIChatResponseInterface $originalResponse,
+        private readonly AIChatRequest $request,
         private readonly ?AIChatAdapterInterface $adapter,
         callable $nextMiddleware,
         private readonly ToolExecutor $toolExecutor,
         private readonly int $maxToolExecutions,
-        private int $executionCount = 0,
+        private readonly int $executionCount = 0,
         ?Usage $usage = null,
     ) {
         $this->nextMiddleware = $nextMiddleware;

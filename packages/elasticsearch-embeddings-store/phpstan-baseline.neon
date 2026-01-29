@@ -1,0 +1,73 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: src/ElasticsearchEmbeddingsStore.php
+
+		-
+			message: '#^Cannot access offset ''_score'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/ElasticsearchEmbeddingsStore.php
+
+		-
+			message: '#^Cannot access offset ''_source'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/ElasticsearchEmbeddingsStore.php
+
+		-
+			message: '#^Cannot access offset ''className'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/ElasticsearchEmbeddingsStore.php
+
+		-
+			message: '#^Cannot access offset ''hits'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/ElasticsearchEmbeddingsStore.php
+
+		-
+			message: '#^Cannot access offset ''score'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/ElasticsearchEmbeddingsStore.php
+
+		-
+			message: '#^Cannot call static method fromArray\(\) on mixed\.$#'
+			identifier: staticMethod.nonObject
+			count: 1
+			path: src/ElasticsearchEmbeddingsStore.php
+
+		-
+			message: '#^Cannot cast mixed to float\.$#'
+			identifier: cast.double
+			count: 1
+			path: src/ElasticsearchEmbeddingsStore.php
+
+		-
+			message: '#^Method ModelflowAi\\Embeddings\\Store\\Elasticsearch\\ElasticsearchEmbeddingsStore\:\:similaritySearch\(\) should return array\<ModelflowAi\\Embeddings\\Model\\EmbeddingInterface\> but returns list\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/ElasticsearchEmbeddingsStore.php
+
+		-
+			message: '#^Cannot access offset ''hits'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Functional/ElasticsearchEmbeddingsStoreTest.php
+
+		-
+			message: '#^Method ModelflowAi\\Embeddings\\Store\\Elasticsearch\\Tests\\Functional\\ElasticsearchEmbeddingsStoreTest\:\:find\(\) should return array\<array\{_id\: string\}\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Functional/ElasticsearchEmbeddingsStoreTest.php
+
+		-
+			message: '#^Parameter \#1 \$baseUrl of method ModelflowAi\\Ollama\\Factory\:\:withBaseUrl\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Functional/ElasticsearchEmbeddingsStoreTest.php

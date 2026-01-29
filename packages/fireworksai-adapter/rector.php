@@ -11,19 +11,15 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-use Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector;
 use Rector\Config\RectorConfig;
-use Rector\Php81\Rector\Array_\FirstClassCallableRector;
+use Rector\Php81\Rector\Array_\ArrayToFirstClassCallableRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $config = require __DIR__ . '/../../rector.php';
     $config($rectorConfig, __DIR__);
 
     $rectorConfig->skip([
-        CallableThisArrayToAnonymousFunctionRector::class => [
-            __DIR__ . '/tests/Unit/Chat/FireworksAiChatAdapterTest.php',
-        ],
-        FirstClassCallableRector::class => [
+        ArrayToFirstClassCallableRector::class => [
             __DIR__ . '/tests/Unit/Chat/FireworksAiChatAdapterTest.php',
         ],
     ]);

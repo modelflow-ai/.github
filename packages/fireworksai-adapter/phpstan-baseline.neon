@@ -1,41 +1,349 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^PHPDoc tag @var for variable \\$decisionTree contains unknown class AIChatAdapterInterface\\.$#"
+			message: '#^Parameter \#1 \$apiKey of method ModelflowAi\\FireworksAiAdapter\\ClientFactory\:\:withApiKey\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/bootstrap.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$decisionTree contains unknown class AIChatAdapterInterface\.$#'
+			identifier: class.notFound
 			count: 1
 			path: examples/chat/bootstrap.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$decisionTree contains unknown class AIChatRequest\\.$#"
+			message: '#^PHPDoc tag @var for variable \$decisionTree contains unknown class AIChatRequest\.$#'
+			identifier: class.notFound
 			count: 1
 			path: examples/chat/bootstrap.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$decisionTree contains unknown class DecisionTreeInterface\\.$#"
+			message: '#^PHPDoc tag @var for variable \$decisionTree contains unknown class DecisionTreeInterface\.$#'
+			identifier: class.notFound
 			count: 1
 			path: examples/chat/bootstrap.php
 
 		-
-			message: "#^Parameter \\#1 \\$decisionTree of class ModelflowAi\\\\Chat\\\\AIChatRequestHandler constructor expects ModelflowAi\\\\DecisionTree\\\\DecisionTreeInterface\\<ModelflowAi\\\\Chat\\\\Request\\\\AIChatRequest, ModelflowAi\\\\Chat\\\\Adapter\\\\AIChatAdapterInterface\\>, DecisionTreeInterface\\<AIChatRequest, AIChatAdapterInterface\\> given\\.$#"
+			message: '#^PHPDoc tag @var with type DecisionTreeInterface\<AIChatRequest, AIChatAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\FireworksAiAdapter\\Chat\\FireworksAiChatAdapter\>\.$#'
+			identifier: varTag.nativeType
 			count: 1
 			path: examples/chat/bootstrap.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$decisionTree contains unknown class AICompletionAdapterInterface\\.$#"
+			message: '#^Parameter \#1 \$client of class ModelflowAi\\FireworksAiAdapter\\Chat\\FireworksAiChatAdapter constructor expects OpenAI\\Contracts\\ClientContract, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/chat/bootstrap.php
+
+		-
+			message: '#^Parameter \#1 \$decisionTree of class ModelflowAi\\Chat\\AIChatRequestHandler constructor expects ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Chat\\Request\\AIChatRequest, ModelflowAi\\Chat\\Adapter\\AIChatAdapterInterface\>, DecisionTreeInterface\<AIChatRequest, AIChatAdapterInterface\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/chat/bootstrap.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: examples/chat/chat-json.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\<string, mixed\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: examples/chat/chat-json.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: examples/chat/chat-response-format.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\<string, mixed\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: examples/chat/chat-response-format.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$decisionTree contains unknown class AICompletionAdapterInterface\.$#'
+			identifier: class.notFound
 			count: 1
 			path: examples/completion/bootstrap.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$decisionTree contains unknown class AICompletionRequest\\.$#"
+			message: '#^PHPDoc tag @var for variable \$decisionTree contains unknown class AICompletionRequest\.$#'
+			identifier: class.notFound
 			count: 1
 			path: examples/completion/bootstrap.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$decisionTree contains unknown class DecisionTreeInterface\\.$#"
+			message: '#^PHPDoc tag @var for variable \$decisionTree contains unknown class DecisionTreeInterface\.$#'
+			identifier: class.notFound
 			count: 1
 			path: examples/completion/bootstrap.php
 
 		-
-			message: "#^Parameter \\#1 \\$decisionTree of class ModelflowAi\\\\Completion\\\\AICompletionRequestHandler constructor expects ModelflowAi\\\\DecisionTree\\\\DecisionTreeInterface\\<ModelflowAi\\\\Completion\\\\Request\\\\AICompletionRequest, ModelflowAi\\\\Completion\\\\Adapter\\\\AICompletionAdapterInterface\\>, DecisionTreeInterface\\<AICompletionRequest, AICompletionAdapterInterface\\> given\\.$#"
+			message: '#^PHPDoc tag @var with type DecisionTreeInterface\<AICompletionRequest, AICompletionAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\FireworksAiAdapter\\Completion\\FireworksAiCompletionAdapter\>\.$#'
+			identifier: varTag.nativeType
 			count: 1
 			path: examples/completion/bootstrap.php
+
+		-
+			message: '#^Parameter \#1 \$client of class ModelflowAi\\FireworksAiAdapter\\Completion\\FireworksAiCompletionAdapter constructor expects OpenAI\\Contracts\\ClientContract, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/completion/bootstrap.php
+
+		-
+			message: '#^Parameter \#1 \$decisionTree of class ModelflowAi\\Completion\\AICompletionRequestHandler constructor expects ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Completion\\Request\\AICompletionRequest, ModelflowAi\\Completion\\Adapter\\AICompletionAdapterInterface\>, DecisionTreeInterface\<AICompletionRequest, AICompletionAdapterInterface\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/completion/bootstrap.php
+
+		-
+			message: '#^Parameter \#1 \$client of class ModelflowAi\\FireworksAiAdapter\\Embeddings\\FireworksAiEmbeddingAdapter constructor expects OpenAI\\Contracts\\ClientContract, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/embeddings/bootstrap.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method createSimilarityRequest\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method createStoreRequest\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method execute\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method getContent\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method getEmbeddings\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 4
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method getFileName\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method getPromptTokens\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method getTotalTokens\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method getUsage\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method withAdditionalFilter\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method withLimit\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Parameter \#1 \$value of function count expects array\|Countable, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Part \$item\-\>getFileName\(\) \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Part \$similarityResponse\-\>getUsage\(\)\-\>getPromptTokens\(\) \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Part \$storeResponse\-\>getUsage\(\)\-\>getPromptTokens\(\) \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Part \$storeResponse\-\>getUsage\(\)\-\>getTotalTokens\(\) \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Parameter \#1 \$client of class ModelflowAi\\FireworksAiAdapter\\Embeddings\\FireworksAiEmbeddingAdapter constructor expects OpenAI\\Contracts\\ClientContract, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/embeddings/simple-embeddings.php
+
+		-
+			message: '#^Binary operation "\." between ''Bearer '' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: examples/image/bootstrap.php
+
+		-
+			message: '#^PHPDoc tag @var with type ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Image\\Request\\AIImageRequest, ModelflowAi\\Image\\Adapter\\AIImageAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\FireworksAiAdapter\\Image\\FireworksAiImageGenerationAdapter\>\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: examples/image/bootstrap.php
+
+		-
+			message: '#^Binary operation "\." between literal\-string&non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Cannot call method addCriteria\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Cannot call method asBase64\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Cannot call method asStream\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Cannot call method base64\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Cannot call method build\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Cannot call method createRequest\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Cannot call method execute\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Cannot call method imageFormat\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Cannot call method stream\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Cannot call method textToImage\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Parameter \#1 \$stream of function stream_get_contents expects resource, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/image/image.php
+
+		-
+			message: '#^Call to static method Webmozart\\Assert\\Assert\:\:isArray\(\) with array\{name\: string\|null, arguments\: non\-empty\-list\<string\>\} will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: src/Chat/FireworksAiChatAdapter.php
+
+		-
+			message: '#^Call to static method Webmozart\\Assert\\Assert\:\:notNull\(\) with non\-empty\-list\<string\> will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: src/Chat/FireworksAiChatAdapter.php
+
+		-
+			message: '#^PHPDoc tag @var with type Symfony\\Component\\HttpClient\\Response\\StreamableInterface is not subtype of native type Symfony\\Contracts\\HttpClient\\ResponseInterface\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: src/Image/FireworksAiImageGenerationAdapter.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\Response\\\\AIChatResponse'' and ModelflowAi\\Chat\\Response\\AIChatResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 4
+			path: tests/Unit/Chat/FireworksAiChatAdapterTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertSame\(\) with ModelflowAi\\Chat\\ToolInfo\\ToolTypeEnum\:\:FUNCTION and ModelflowAi\\Chat\\ToolInfo\\ToolTypeEnum will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 2
+			path: tests/Unit/Chat/FireworksAiChatAdapterTest.php
+
+		-
+			message: '#^Parameter \#1 \$override of static method OpenAI\\Responses\\Chat\\CreateResponse\:\:fake\(\) expects array\<string, mixed\>, array\<mixed, mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Unit/Chat/FireworksAiChatAdapterTest.php

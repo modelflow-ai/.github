@@ -1,0 +1,175 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^PHPDoc tag @var with type ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Chat\\Request\\AIChatRequest, ModelflowAi\\Chat\\Adapter\\AIChatAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\DecisionTree\\Behaviour\\SupportsBehaviour\>\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: examples/chat/bootstrap.php
+
+		-
+			message: '#^Parameter \#1 \$client of class ModelflowAi\\OllamaAdapter\\Chat\\OllamaChatAdapter constructor expects ModelflowAi\\Ollama\\ClientInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/chat/bootstrap.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: examples/chat/chat-response-format.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\<string, mixed\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: examples/chat/chat-response-format.php
+
+		-
+			message: '#^PHPDoc tag @var with type ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Completion\\Request\\AICompletionRequest, ModelflowAi\\Completion\\Adapter\\AICompletionAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\DecisionTree\\Behaviour\\SupportsBehaviour\>\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: examples/completion/bootstrap.php
+
+		-
+			message: '#^Parameter \#1 \$client of class ModelflowAi\\OllamaAdapter\\Completion\\OllamaCompletionAdapter constructor expects ModelflowAi\\Ollama\\ClientInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/completion/bootstrap.php
+
+		-
+			message: '#^Parameter \#1 \$client of class ModelflowAi\\OllamaAdapter\\Embeddings\\OllamaEmbeddingAdapter constructor expects ModelflowAi\\Ollama\\ClientInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/embeddings/bootstrap.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method createSimilarityRequest\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method createStoreRequest\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method execute\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method getContent\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method getEmbeddings\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 4
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method getFileName\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method getPromptTokens\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method getTotalTokens\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method getUsage\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method withAdditionalFilter\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot call method withLimit\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Parameter \#1 \$value of function count expects array\|Countable, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Part \$item\-\>getFileName\(\) \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 2
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Part \$similarityResponse\-\>getUsage\(\)\-\>getPromptTokens\(\) \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Part \$storeResponse\-\>getUsage\(\)\-\>getPromptTokens\(\) \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Part \$storeResponse\-\>getUsage\(\)\-\>getTotalTokens\(\) \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: examples/embeddings/index.php
+
+		-
+			message: '#^Parameter \#1 \$client of class ModelflowAi\\OllamaAdapter\\Embeddings\\OllamaEmbeddingAdapter constructor expects ModelflowAi\\Ollama\\ClientInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/embeddings/simple-embeddings.php
+
+		-
+			message: '#^Cannot access offset ''seed'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Chat/OllamaChatAdapter.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\Response\\\\AIChatResponse'' and ModelflowAi\\Chat\\Response\\AIChatResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 3
+			path: tests/Unit/Chat/OllamaChatAdapterTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Completion\\\\Response\\\\AICompletionResponse'' and ModelflowAi\\Completion\\Response\\AICompletionResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 2
+			path: tests/Unit/Completion/OllamaCompletionAdapterTest.php

@@ -26,7 +26,6 @@ trait EmbeddingTrait
             }
 
             $property = $class->getProperty($key);
-            $property->setAccessible(true);
             $property->setValue($instance, $value);
         }
 

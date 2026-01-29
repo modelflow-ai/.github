@@ -1,0 +1,247 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Parameter \#1 \$apiKey of static method ModelflowAi\\Mistral\\Mistral\:\:client\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/chat-streamed.php
+
+		-
+			message: '#^Parameter \#1 \$apiKey of static method ModelflowAi\\Mistral\\Mistral\:\:client\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/chat-vision.php
+
+		-
+			message: '#^Parameter \#1 \$apiKey of static method ModelflowAi\\Mistral\\Mistral\:\:client\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/chat.php
+
+		-
+			message: '#^Parameter \#1 \$apiKey of static method ModelflowAi\\Mistral\\Mistral\:\:client\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/embedding.php
+
+		-
+			message: '#^Parameter \#1 \$apiKey of static method ModelflowAi\\Mistral\\Mistral\:\:client\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/tools-streamed.php
+
+		-
+			message: '#^Parameter \#1 \$apiKey of static method ModelflowAi\\Mistral\\Mistral\:\:client\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: examples/tools.php
+
+		-
+			message: '#^Cannot access offset ''content'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Resources/Chat.php
+
+		-
+			message: '#^Cannot access offset ''function'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Resources/Chat.php
+
+		-
+			message: '#^Cannot access offset ''image_url'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Resources/Chat.php
+
+		-
+			message: '#^Cannot access offset ''role'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Resources/Chat.php
+
+		-
+			message: '#^Cannot access offset ''text'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Resources/Chat.php
+
+		-
+			message: '#^Cannot access offset ''type'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 3
+			path: src/Resources/Chat.php
+
+		-
+			message: '#^Parameter \#1 \$array of static method Webmozart\\Assert\\Assert\:\:keyExists\(\) expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 7
+			path: src/Resources/Chat.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\ApiClient\\\\Responses\\\\MetaInformation'' and ModelflowAi\\ApiClient\\Responses\\MetaInformation will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Functional/ClientTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Mistral\\\\Responses\\\\Chat\\\\CreateResponse'' and ModelflowAi\\Mistral\\Responses\\Chat\\CreateResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Functional/ClientTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Mistral\\\\Responses\\\\Embeddings\\\\CreateResponse'' and ModelflowAi\\Mistral\\Responses\\Embeddings\\CreateResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Functional/ClientTest.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between ModelflowAi\\ApiClient\\Transport\\Enums\\ContentType\:\:JSON and ModelflowAi\\ApiClient\\Transport\\Enums\\ContentType will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 2
+			path: tests/Functional/ClientTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Mistral\\\\ClientInterface'' and ModelflowAi\\Mistral\\ClientInterface will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/FactoryTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Mistral\\\\Factory'' and ModelflowAi\\Mistral\\Factory will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 3
+			path: tests/Unit/FactoryTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Mistral\\\\ClientInterface'' and ModelflowAi\\Mistral\\ClientInterface will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/MistralTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Mistral\\\\Factory'' and ModelflowAi\\Mistral\\Factory will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/MistralTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Mistral\\\\Responses\\\\Chat\\\\CreateResponse'' and ModelflowAi\\Mistral\\Responses\\Chat\\CreateResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 3
+			path: tests/Unit/Resources/ChatTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Mistral\\\\Responses\\\\Chat\\\\CreateStreamedResponse'' and ModelflowAi\\Mistral\\Responses\\Chat\\CreateStreamedResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 2
+			path: tests/Unit/Resources/ChatTest.php
+
+		-
+			message: '#^Cannot access offset ''content'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Unit/Resources/ChatTest.php
+
+		-
+			message: '#^Cannot access offset 0 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Unit/Resources/ChatTest.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between ModelflowAi\\ApiClient\\Transport\\Enums\\ContentType\:\:JSON and ModelflowAi\\ApiClient\\Transport\\Enums\\ContentType will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 5
+			path: tests/Unit/Resources/ChatTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\ApiClient\\\\Responses\\\\MetaInformation'' and ModelflowAi\\ApiClient\\Responses\\MetaInformation will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Resources/EmbeddingsTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Mistral\\\\Responses\\\\Embeddings\\\\CreateResponse'' and ModelflowAi\\Mistral\\Responses\\Embeddings\\CreateResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 2
+			path: tests/Unit/Resources/EmbeddingsTest.php
+
+		-
+			message: '#^Parameter \#2 \$arrays of function array_diff expects an array of values castable to string, array\<string, list\<string\>\|string\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Unit/Resources/EmbeddingsTest.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between ModelflowAi\\ApiClient\\Transport\\Enums\\ContentType\:\:JSON and ModelflowAi\\ApiClient\\Transport\\Enums\\ContentType will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 2
+			path: tests/Unit/Resources/EmbeddingsTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Mistral\\\\Responses\\\\Chat\\\\CreateResponseChoice'' and ModelflowAi\\Mistral\\Responses\\Chat\\CreateResponseChoice will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/Chat/CreateResponseChoiceTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Mistral\\\\Responses\\\\Chat\\\\CreateResponseMessage'' and ModelflowAi\\Mistral\\Responses\\Chat\\CreateResponseMessage will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/Chat/CreateResponseMessageTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\ApiClient\\\\Responses\\\\MetaInformation'' and ModelflowAi\\ApiClient\\Responses\\MetaInformation will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 2
+			path: tests/Unit/Responses/Chat/CreateResponseTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Mistral\\\\Responses\\\\Chat\\\\CreateStreamedResponseChoice'' and ModelflowAi\\Mistral\\Responses\\Chat\\CreateStreamedResponseChoice will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/Chat/CreateStreamedResponseChoiceTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Mistral\\\\Responses\\\\Chat\\\\CreateStreamedResponseDelta'' and ModelflowAi\\Mistral\\Responses\\Chat\\CreateStreamedResponseDelta will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 2
+			path: tests/Unit/Responses/Chat/CreateStreamedResponseDeltaTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\ApiClient\\\\Responses\\\\MetaInformation'' and ModelflowAi\\ApiClient\\Responses\\MetaInformation will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/Chat/CreateStreamedResponseTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Mistral\\\\Responses\\\\Chat\\\\CreateStreamedResponseToolCallFunction'' and ModelflowAi\\Mistral\\Responses\\Chat\\CreateStreamedResponseToolCallFunction will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/Chat/CreateStreamedResponseToolCallFunctionTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Mistral\\\\Responses\\\\Chat\\\\CreateStreamedResponseToolCall'' and ModelflowAi\\Mistral\\Responses\\Chat\\CreateStreamedResponseToolCall will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/Chat/CreateStreamedResponseToolCallTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Mistral\\\\Responses\\\\Embeddings\\\\CreateResponseData'' and ModelflowAi\\Mistral\\Responses\\Embeddings\\CreateResponseData will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/Embeddings/CreateResponseDataTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\ApiClient\\\\Responses\\\\MetaInformation'' and ModelflowAi\\ApiClient\\Responses\\MetaInformation will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/Embeddings/CreateResponseTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Mistral\\\\Responses\\\\Embeddings\\\\CreateResponse'' and ModelflowAi\\Mistral\\Responses\\Embeddings\\CreateResponse will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Responses/Embeddings/CreateResponseTest.php
