@@ -158,11 +158,10 @@ class CriteriaCollectionTest extends TestCase
     }
 
     /**
-     * @dataProvider provideMatches
-     *
      * @param CriteriaInterface[] $requestCriteria
      * @param CriteriaInterface[] $ruleCriteria
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideMatches')]
     public function testMatchesWithDifferentCombinations(
         array $requestCriteria,
         array $ruleCriteria,

@@ -45,7 +45,7 @@ foreach ($texts as $index => $text) {
     $usage = $response->getUsage();
 
     echo '   📊 Embedding dimensions: ' . \count($embedding) . "\n";
-    echo '   📈 First 5 values: [' . \implode(', ', \array_map('number_format', \array_slice($embedding, 0, 5), \array_fill(0, 5, 4))) . "]\n";
+    echo '   📈 First 5 values: [' . \implode(', ', \array_map(number_format(...), \array_slice($embedding, 0, 5), \array_fill(0, 5, 4))) . "]\n";
     echo "   🔢 Prompt tokens: {$usage->getPromptTokens()}\n";
     echo "   🔢 Total tokens: {$usage->getTotalTokens()}\n\n";
 }

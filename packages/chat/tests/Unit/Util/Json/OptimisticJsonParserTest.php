@@ -18,54 +18,42 @@ use PHPUnit\Framework\TestCase;
 
 class OptimisticJsonParserTest extends TestCase
 {
-    /**
-     * @dataProvider validJsonProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('validJsonProvider')]
     public function testParseWithValidJson(string $json, mixed $expectedResult): void
     {
         $result = OptimisticJsonParser::parse($json);
         $this->assertSame($expectedResult, $result);
     }
 
-    /**
-     * @dataProvider incompleteJsonProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('incompleteJsonProvider')]
     public function testParseWithIncompleteJson(string $json, mixed $expectedResult): void
     {
         $result = OptimisticJsonParser::parse($json);
         $this->assertSame($expectedResult, $result);
     }
 
-    /**
-     * @dataProvider streamedJsonProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('streamedJsonProvider')]
     public function testParseWithStreamedJson(string $json, mixed $expectedResult): void
     {
         $result = OptimisticJsonParser::parse($json);
         $this->assertSame($expectedResult, $result);
     }
 
-    /**
-     * @dataProvider invalidJsonProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidJsonProvider')]
     public function testParseWithInvalidJson(string $json, mixed $expectedResult): void
     {
         $result = OptimisticJsonParser::parse($json);
         $this->assertSame($expectedResult, $result);
     }
 
-    /**
-     * @dataProvider edgeCasesProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('edgeCasesProvider')]
     public function testParseWithEdgeCases(string $json, mixed $expectedResult): void
     {
         $result = OptimisticJsonParser::parse($json);
         $this->assertSame($expectedResult, $result);
     }
 
-    /**
-     * @dataProvider falsyValuesProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('falsyValuesProvider')]
     public function testParseWithFalsyValues(string $json, mixed $expectedResult): void
     {
         $result = OptimisticJsonParser::parse($json);

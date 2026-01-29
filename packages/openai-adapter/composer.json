@@ -44,7 +44,7 @@
         "rector/rector": "^2.0",
         "phpspec/prophecy": "^1.0@dev",
         "jangregor/phpstan-prophecy": "^2.0",
-        "phpspec/prophecy-phpunit": "^2.1@stable",
+        "phpspec/prophecy-phpunit": "^2.2",
         "symfony/dotenv": "^7.1",
         "symfony/console": "^7.1",
         "asapo/remove-vendor-plugin": "^0.1",

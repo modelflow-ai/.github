@@ -31,9 +31,7 @@ final readonly class CreateStreamedResponseDelta
      */
     public static function from(array $attributes): ?self
     {
-        if (null === ($attributes['index'] ?? null)
-            || null === ($attributes['type'] ?? null)
-            || null === ($attributes['text'] ?? null)
+        if (\in_array(null, [$attributes['index'] ?? null, $attributes['type'] ?? null, $attributes['text'] ?? null], true)
         ) {
             return null;
         }

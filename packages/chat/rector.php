@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
-use Rector\Php81\Rector\Array_\FirstClassCallableRector;
+use Rector\Php81\Rector\Array_\ArrayToFirstClassCallableRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $config = require __DIR__ . '/../../rector.php';
     $config($rectorConfig, __DIR__);
 
     $rectorConfig->skip([
-        FirstClassCallableRector::class => [
+        ArrayToFirstClassCallableRector::class => [
             __DIR__ . '/tests/Unit/ToolInfo/ToolExecutorTest.php',
             __DIR__ . '/tests/Unit/Request/AIChatRequestTest.php',
             __DIR__ . '/tests/Unit/Middleware/Tools/ToolStreamResponseDecoratorTest.php',

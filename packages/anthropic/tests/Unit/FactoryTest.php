@@ -128,7 +128,6 @@ class FactoryTest extends TestCase
     public function getTransportFromClient(ClientInterface $client): TransportInterface
     {
         $property = new \ReflectionProperty($client, 'transport');
-        $property->setAccessible(true);
 
         /** @var TransportInterface $value */
         $value = $property->getValue($client);
@@ -144,7 +143,6 @@ class FactoryTest extends TestCase
         $transport = $this->getTransportFromClient($client);
 
         $property = new \ReflectionProperty($transport, 'headers');
-        $property->setAccessible(true);
 
         /** @var array<string, mixed> $value */
         $value = $property->getValue($transport);
@@ -157,7 +155,6 @@ class FactoryTest extends TestCase
         $transport = $this->getTransportFromClient($client);
 
         $property = new \ReflectionProperty($transport, 'baseUrl');
-        $property->setAccessible(true);
 
         /** @var string $value */
         $value = $property->getValue($transport);

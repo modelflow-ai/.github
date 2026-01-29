@@ -35,9 +35,7 @@ class TypesTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provideData
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideData')]
     public function testMapPhpTypeToJsonSchemaType(string $actual, string $expected): void
     {
         $type = $this->prophesize(\ReflectionNamedType::class);

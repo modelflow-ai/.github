@@ -21,7 +21,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 readonly class WebScrappingTool
 {
     public function __construct(
-        private readonly HttpClientInterface $client,
+        private HttpClientInterface $client,
     ) {
     }
 

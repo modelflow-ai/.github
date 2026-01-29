@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ModelflowAi\Chat\Response;
 
-final class Usage
+final readonly class Usage
 {
     public static function empty(): self
     {
@@ -24,10 +24,10 @@ final class Usage
      * @param array<string, mixed> $metadata
      */
     public function __construct(
-        public readonly int $inputTokens,
-        public readonly int $outputTokens,
-        public readonly int $totalTokens,
-        public readonly array $metadata = [],
+        public int $inputTokens,
+        public int $outputTokens,
+        public int $totalTokens,
+        public array $metadata = [],
     ) {
     }
 

@@ -28,9 +28,9 @@ use ModelflowAi\Chat\Response\AIChatResponseStreamInterface;
 use ModelflowAi\DecisionTree\DecisionTreeInterface;
 use Webmozart\Assert\Assert;
 
-final class AIChatRequestHandler implements AIChatRequestHandlerInterface
+final readonly class AIChatRequestHandler implements AIChatRequestHandlerInterface
 {
-    private readonly AIChatMiddlewareStack $middlewareStack;
+    private AIChatMiddlewareStack $middlewareStack;
 
     /**
      * @param DecisionTreeInterface<AIChatRequest, AIChatAdapterInterface> $decisionTree
