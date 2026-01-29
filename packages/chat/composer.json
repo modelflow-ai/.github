@@ -52,7 +52,7 @@
         "rector/rector": "^2.0",
         "phpspec/prophecy-phpunit": "^2.1@stable",
         "jangregor/phpstan-prophecy": "^2.0",
-        "symfony/dotenv": "^7.2",
+        "symfony/dotenv": "^7.2 || ^8.0",
         "asapo/remove-vendor-plugin": "^0.1"
     },
     "scripts": {

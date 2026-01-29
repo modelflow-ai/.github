@@ -40,9 +40,9 @@
         "rector/rector": "^2.0",
         "phpspec/prophecy-phpunit": "^2.1@stable",
         "jangregor/phpstan-prophecy": "^2.0",
-        "symfony/dotenv": "^7.1",
+        "symfony/dotenv": "^7.1 || ^8.0",
         "asapo/remove-vendor-plugin": "^0.1",
-        "symfony/cache": "^7.4"
+        "symfony/cache": "^7.4 || ^8.0"
     },
     "suggest": {
         "modelflow-ai/embeddings": "To use the embeddings."

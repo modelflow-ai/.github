@@ -32,7 +32,7 @@
     ],
     "require": {
         "php": "^8.2",
-        "symfony/http-client": "^6.4 || ^7.0"
+        "symfony/http-client": "^6.4 || ^7.0 || ^8.0"
     },
     "require-dev": {
         "php-cs-fixer/shim": "^3.15",

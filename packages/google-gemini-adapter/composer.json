@@ -42,10 +42,10 @@
         "rector/rector": "^2.0",
         "phpspec/prophecy-phpunit": "^2.1@stable",
         "jangregor/phpstan-prophecy": "^2.0",
-        "symfony/dotenv": "^7.1",
+        "symfony/dotenv": "^7.1 || ^8.0",
         "modelflow-ai/prompt-template": "^0.4",
         "asapo/remove-vendor-plugin": "^0.1",
-        "symfony/http-client": "^7.0"
+        "symfony/http-client": "^7.0 || ^8.0"
     },
     "scripts": {
         "test-with-coverage": "@test --coverage-php var/reports/coverage.cov --coverage-cobertura=var/cobertura-coverage.xml --coverage-html var/reports/html --log-junit var/reports/junit.xml",

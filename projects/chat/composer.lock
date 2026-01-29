@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "809131e4a01f26201b4c7eced524d696",
+    "content-hash": "7e4ef2b4ddcf391ce62a848179cc27f7",
     "packages": [
         {
             "name": "brick/math",
@@ -1321,7 +1321,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/anthropic",
-                "reference": "b544f7c0f5aa6e05b6b62efca22842eef7aa5d15"
+                "reference": "3b66c54b09d83e55e69326530e71b16c1550d73a"
             },
             "require": {
                 "modelflow-ai/api-client": "^0.4",
@@ -1336,9 +1336,9 @@
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
-                "phpunit/phpunit": "^11.0 || ^12.0",
+                "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/dotenv": "^6.4 || ^7.0 || ^8.0"
+                "symfony/dotenv": "^6.4 || ^7.0"
             },
             "type": "library",
             "extra": {
@@ -1420,7 +1420,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/anthropic-adapter",
-                "reference": "8f29235133d738e64ee2d74c0f87f403e04d4827"
+                "reference": "d337a8f4d475c8f45b4fd63b394037a557f5e5df"
             },
             "require": {
                 "modelflow-ai/anthropic": "^0.4",
@@ -1432,13 +1432,13 @@
                 "modelflow-ai/chat": "^0.4",
                 "modelflow-ai/prompt-template": "^0.4",
                 "php-cs-fixer/shim": "^3.15",
-                "phpspec/prophecy-phpunit": "^2.1@stable",
+                "phpspec/prophecy-phpunit": "^2.2",
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
-                "phpunit/phpunit": "^11.0 || ^12.0",
+                "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/dotenv": "^7.1 || ^8.0"
+                "symfony/dotenv": "^7.1"
             },
             "type": "library",
             "extra": {
@@ -1519,7 +1519,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/api-client",
-                "reference": "261b12b4d8cd1fd30875fca915a7cd97e29b7960"
+                "reference": "9adb5673aaf0c41b72ceb599e1526cdac8860a0b"
             },
             "require": {
                 "php": "^8.2",
@@ -1530,11 +1530,11 @@
                 "asapo/remove-vendor-plugin": "^0.1",
                 "jangregor/phpstan-prophecy": "^2.0",
                 "php-cs-fixer/shim": "^3.15",
-                "phpspec/prophecy-phpunit": "^2.0@dev",
+                "phpspec/prophecy-phpunit": "^2.2",
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
-                "phpunit/phpunit": "^11.0 || ^12.0",
+                "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0"
             },
             "type": "library",
@@ -1615,7 +1615,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/chat",
-                "reference": "94a0f62fc4cfbe8020ee02fdc2d166bea1e3525a"
+                "reference": "4ad564909bb8ce5a3c974f628536f6db388135c8"
             },
             "require": {
                 "ext-fileinfo": "*",
@@ -1633,9 +1633,9 @@
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
-                "phpunit/phpunit": "^11.0 || ^12.0",
+                "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/dotenv": "^7.2 || ^8.0"
+                "symfony/dotenv": "^7.2"
             },
             "type": "library",
             "extra": {
@@ -1727,7 +1727,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/decision-tree",
-                "reference": "037d4aa7ba91ed909ed1b5ca421a9479ea50bda3"
+                "reference": "7fcbf840979f8cf2f838f1e5a3a13af4944388e5"
             },
             "require": {
                 "php": "^8.2"
@@ -1736,13 +1736,13 @@
                 "asapo/remove-vendor-plugin": "^0.1",
                 "jangregor/phpstan-prophecy": "^2.0",
                 "php-cs-fixer/shim": "^3.15",
-                "phpspec/prophecy-phpunit": "^2.1@stable",
+                "phpspec/prophecy-phpunit": "^2.2",
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
-                "phpunit/phpunit": "^11.0 || ^12.0",
+                "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/console": "^7.1 || ^8.0"
+                "symfony/console": "^7.1"
             },
             "type": "library",
             "extra": {
@@ -1821,7 +1821,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/fireworksai-adapter",
-                "reference": "06f1fbe2f62612b6f1043e65c956deab14c85707"
+                "reference": "0a8f1df90895ac9410cf4da066f4022ba59ba83c"
             },
             "require": {
                 "nyholm/psr7": "^1.8",
@@ -1839,15 +1839,15 @@
                 "modelflow-ai/prompt-template": "^0.4",
                 "php-cs-fixer/shim": "^3.15",
                 "phpspec/prophecy": "^1.0@dev",
-                "phpspec/prophecy-phpunit": "^2.1@stable",
+                "phpspec/prophecy-phpunit": "^2.2",
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
-                "phpunit/phpunit": "^11.0 || ^12.0",
+                "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/cache": "^7.1 || ^8.0",
-                "symfony/console": "^7.1 || ^8.0",
-                "symfony/dotenv": "^7.1 || ^8.0"
+                "symfony/cache": "^7.1",
+                "symfony/console": "^7.1",
+                "symfony/dotenv": "^7.1"
             },
             "suggest": {
                 "modelflow-ai/chat": "To use the chat-completion.",
@@ -1934,7 +1934,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/google-gemini-adapter",
-                "reference": "c4f05da638f57578acebefc671319ec2c2bfcc24"
+                "reference": "4739d49e86f484a6f0d699d205bb7bbeda38cede"
             },
             "require": {
                 "google-gemini-php/client": "^1.0.14",
@@ -1954,10 +1954,10 @@
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
-                "phpunit/phpunit": "^11.0 || ^12.0",
+                "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/dotenv": "^7.1 || ^8.0",
-                "symfony/http-client": "^7.0 || ^8.0"
+                "symfony/dotenv": "^7.1",
+                "symfony/http-client": "^7.0"
             },
             "type": "library",
             "extra": {
@@ -2038,7 +2038,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/image",
-                "reference": "1e88f28691d43652c9d1ca095a6dfcc0e01bff24"
+                "reference": "8a54d2777cc6db72839d8695a02bb6da6bc9895d"
             },
             "require": {
                 "modelflow-ai/decision-tree": "^0.4",
@@ -2053,9 +2053,9 @@
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
-                "phpunit/phpunit": "^11.0 || ^12.0",
+                "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/console": "^7.1 || ^8.0"
+                "symfony/console": "^7.1"
             },
             "suggest": {
                 "modelflow-ai/openai-adapter": "Adapter to integrate openai",
@@ -2141,7 +2141,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/mistral",
-                "reference": "df8c67847573bc257e389316a8b1bcd293196b33"
+                "reference": "a51bb68c7638847c5d491d1ef3e81a17f08f919c"
             },
             "require": {
                 "modelflow-ai/api-client": "^0.4",
@@ -2156,9 +2156,9 @@
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
-                "phpunit/phpunit": "^11.0 || ^12.0",
+                "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/dotenv": "^6.4 || ^7.0 || ^8.0"
+                "symfony/dotenv": "^6.4 || ^7.0"
             },
             "type": "library",
             "extra": {
@@ -2240,7 +2240,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/mistral-adapter",
-                "reference": "83e5d134056aaf404b77a6a430c25a16a000472f"
+                "reference": "ccf9a8322d3595b6408a36e689b6080c8547d6c3"
             },
             "require": {
                 "modelflow-ai/mistral": "^0.4",
@@ -2257,10 +2257,10 @@
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
-                "phpunit/phpunit": "^11.0 || ^12.0",
+                "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/cache": "^7.4 || ^8.0",
-                "symfony/dotenv": "^7.1 || ^8.0"
+                "symfony/cache": "^7.4",
+                "symfony/dotenv": "^7.1"
             },
             "suggest": {
                 "modelflow-ai/embeddings": "To use the embeddings."
@@ -2344,7 +2344,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/ollama",
-                "reference": "fa2bd304c5457c91ab768b78c98703e27439bd68"
+                "reference": "15a54a8ca87836f06a5ca32e8bd254a29497efae"
             },
             "require": {
                 "modelflow-ai/api-client": "^0.4",
@@ -2359,7 +2359,7 @@
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
-                "phpunit/phpunit": "^11.0 || ^12.0",
+                "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0"
             },
             "type": "library",
@@ -2442,7 +2442,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/ollama-adapter",
-                "reference": "4057e3f1baed4df487dababfbe19408294ccbed6"
+                "reference": "9b24df51f50a9f45723aeba62cca3ff9c91d552d"
             },
             "require": {
                 "modelflow-ai/ollama": "^0.4",
@@ -2461,10 +2461,10 @@
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
-                "phpunit/phpunit": "^11.0 || ^12.0",
+                "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/cache": "^7.4 || ^8.0",
-                "symfony/dotenv": "^7.2 || ^8.0"
+                "symfony/cache": "^7.4",
+                "symfony/dotenv": "^7.2"
             },
             "suggest": {
                 "modelflow-ai/embeddings": "To use the embeddings."
@@ -2549,7 +2549,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/openai-adapter",
-                "reference": "83e5b4293c70aace77a26a17088d1176ba64cd63"
+                "reference": "f4a71c579da9fe2b179821bb8617e9e54d69ffab"
             },
             "require": {
                 "nyholm/psr7": "^1.8",
@@ -2570,11 +2570,11 @@
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
-                "phpunit/phpunit": "^11.0 || ^12.0",
+                "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0",
-                "symfony/cache": "^7.4 || ^8.0",
-                "symfony/console": "^7.1 || ^8.0",
-                "symfony/dotenv": "^7.1 || ^8.0"
+                "symfony/cache": "^7.4",
+                "symfony/console": "^7.1",
+                "symfony/dotenv": "^7.1"
             },
             "suggest": {
                 "modelflow-ai/chat": "To use the chat-completion.",
@@ -2798,7 +2798,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../../packages/tools",
-                "reference": "1caf1387358bed7189d382b82d526b9063b93be5"
+                "reference": "c88b72aeda5b590ac1a89498790fd6b71975e37c"
             },
             "require": {
                 "php": "^8.2",
@@ -2812,7 +2812,7 @@
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
-                "phpunit/phpunit": "^11.0 || ^12.0",
+                "phpunit/phpunit": "^11.0",
                 "rector/rector": "^2.0"
             },
             "type": "library",
@@ -11128,7 +11128,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.2",
+        "php": ">=8.4",
         "ext-ctype": "*",
         "ext-iconv": "*"
     },

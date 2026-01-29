@@ -28,7 +28,7 @@
     "require": {
         "php": "^8.2",
         "openai-php/client": "^0.10",
-        "symfony/http-client": "^6.4 || ^7.0",
+        "symfony/http-client": "^6.4 || ^7.0 || ^8.0",
         "nyholm/psr7": "^1.8"
     },
     "require-dev": {
