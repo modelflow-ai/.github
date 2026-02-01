@@ -204,4 +204,44 @@ class ElasticsearchEmbeddingsStore implements EmbeddingsStoreInterface
         ]);
         $this->vectorDimSet = true;
     }
+
+    public function removeDocument(string $identifier): void
+    {
+        try {
+            $this->client->delete([
+                'index' => $this->indexName,
+                'id' => $identifier,
+            ]);
+
+            $this->client->indices()->refresh(['index' => $this->indexName]);
+        } catch (\Elastic\Elasticsearch\Exception\ClientResponseException $e) {
+            if (404 !== $e->getCode()) {
+                throw $e;
+            }
+        }
+    }
+
+    /**
+     * @param string[] $identifiers
+     */
+    public function removeDocuments(array $identifiers): void
+    {
+        if ([] === $identifiers) {
+            return;
+        }
+
+        $body = [];
+        foreach ($identifiers as $identifier) {
+            $body[] = ['delete' => ['_index' => $this->indexName, '_id' => $identifier]];
+        }
+
+        try {
+            $this->client->bulk(['body' => $body]);
+            $this->client->indices()->refresh(['index' => $this->indexName]);
+        } catch (\Elastic\Elasticsearch\Exception\ClientResponseException $e) {
+            if (!\str_contains($e->getMessage(), 'not_found') && 404 !== $e->getCode()) {
+                throw $e;
+            }
+        }
+    }
 }

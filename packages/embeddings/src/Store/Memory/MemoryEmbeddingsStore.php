@@ -88,4 +88,37 @@ class MemoryEmbeddingsStore implements EmbeddingsStoreInterface
 
         return $results;
     }
+
+    public function removeDocument(string $identifier): void
+    {
+        foreach ($this->embeddings as $index => $embedding) {
+            if ($embedding->getIdentifier() === $identifier) {
+                unset($this->embeddings[$index]);
+                $this->embeddings = \array_values($this->embeddings);
+
+                return;
+            }
+        }
+    }
+
+    public function removeDocuments(array $identifiers): void
+    {
+        if ([] === $identifiers) {
+            return;
+        }
+
+        $identifierSet = \array_flip($identifiers);
+        $modified = false;
+
+        foreach ($this->embeddings as $index => $embedding) {
+            if (isset($identifierSet[$embedding->getIdentifier()])) {
+                unset($this->embeddings[$index]);
+                $modified = true;
+            }
+        }
+
+        if ($modified) {
+            $this->embeddings = \array_values($this->embeddings);
+        }
+    }
 }

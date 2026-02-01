@@ -175,4 +175,41 @@ class QdrantEmbeddingsStore implements EmbeddingsStoreInterface
             ),
         );
     }
+
+    public function removeDocument(string $identifier): void
+    {
+        try {
+            $this->client
+                ->collections($this->collectionName)
+                ->points()
+                ->delete([$identifier]);
+        } catch (InvalidArgumentException $e) {
+            if (404 !== $e->getCode()) {
+                throw $e;
+            }
+            // 404: point doesn't exist, silent success (idempotent)
+        }
+    }
+
+    /**
+     * @param string[] $identifiers
+     */
+    public function removeDocuments(array $identifiers): void
+    {
+        if ([] === $identifiers) {
+            return;
+        }
+
+        try {
+            $this->client
+                ->collections($this->collectionName)
+                ->points()
+                ->delete($identifiers);
+        } catch (InvalidArgumentException $e) {
+            if (404 !== $e->getCode()) {
+                throw $e;
+            }
+            // 404: points don't exist, silent success (idempotent)
+        }
+    }
 }
