@@ -393,6 +393,30 @@ class MemoryEmbeddingsStoreTest extends TestCase
         $this->assertCount(1, $results);
         $this->assertSame($embedding2->getContent(), $results[0]->getContent());
     }
+
+    public function testRemoveDocumentWithEmptyString(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Document identifier cannot be empty');
+
+        $this->store->removeDocument('');
+    }
+
+    public function testRemoveDocumentsWithEmptyString(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Document identifier cannot be empty');
+
+        $this->store->removeDocuments(['valid-id', '', 'another-id']);
+    }
+
+    public function testRemoveDocumentsWithOnlyEmptyString(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Document identifier cannot be empty');
+
+        $this->store->removeDocuments(['']);
+    }
 }
 
 class TestEmbedding implements EmbeddingInterface

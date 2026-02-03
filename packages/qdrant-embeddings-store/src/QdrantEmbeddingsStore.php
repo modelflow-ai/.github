@@ -26,6 +26,7 @@ use Qdrant\Models\Request\SearchRequest;
 use Qdrant\Models\Request\VectorParams;
 use Qdrant\Models\VectorStruct;
 use Qdrant\Qdrant;
+use Webmozart\Assert\Assert;
 
 class QdrantEmbeddingsStore implements EmbeddingsStoreInterface
 {
@@ -178,6 +179,8 @@ class QdrantEmbeddingsStore implements EmbeddingsStoreInterface
 
     public function removeDocument(string $identifier): void
     {
+        Assert::stringNotEmpty($identifier, 'Document identifier cannot be empty');
+
         try {
             $this->client
                 ->collections($this->collectionName)
@@ -198,6 +201,10 @@ class QdrantEmbeddingsStore implements EmbeddingsStoreInterface
     {
         if ([] === $identifiers) {
             return;
+        }
+
+        foreach ($identifiers as $identifier) {
+            Assert::stringNotEmpty($identifier, 'Document identifier cannot be empty');
         }
 
         try {
