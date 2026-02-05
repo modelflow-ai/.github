@@ -119,4 +119,40 @@ class FilesystemEmbeddingsStore implements EmbeddingsStoreInterface
     {
         \file_put_contents($this->filePath, \serialize($embeddings));
     }
+
+    public function removeDocument(string $identifier): void
+    {
+        $embeddings = $this->readDocumentsFromFile();
+
+        foreach ($embeddings as $index => $embedding) {
+            if ($embedding->getIdentifier() === $identifier) {
+                unset($embeddings[$index]);
+                $this->saveDocumentsToFile(\array_values($embeddings));
+
+                return;
+            }
+        }
+    }
+
+    public function removeDocuments(array $identifiers): void
+    {
+        if ([] === $identifiers) {
+            return;
+        }
+
+        $embeddings = $this->readDocumentsFromFile();
+        $identifierSet = \array_flip($identifiers);
+        $modified = false;
+
+        foreach ($embeddings as $index => $embedding) {
+            if (isset($identifierSet[$embedding->getIdentifier()])) {
+                unset($embeddings[$index]);
+                $modified = true;
+            }
+        }
+
+        if ($modified) {
+            $this->saveDocumentsToFile(\array_values($embeddings));
+        }
+    }
 }

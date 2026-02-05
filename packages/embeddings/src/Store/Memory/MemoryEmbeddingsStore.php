@@ -18,6 +18,7 @@ use ModelflowAi\Embeddings\Model\EmbeddingInterface;
 use ModelflowAi\Embeddings\Store\EmbeddingsStoreInterface;
 use ModelflowAi\Embeddings\Store\ScoreAssignmentTrait;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Webmozart\Assert\Assert;
 
 class MemoryEmbeddingsStore implements EmbeddingsStoreInterface
 {
@@ -87,5 +88,44 @@ class MemoryEmbeddingsStore implements EmbeddingsStoreInterface
         }
 
         return $results;
+    }
+
+    public function removeDocument(string $identifier): void
+    {
+        Assert::stringNotEmpty($identifier, 'Document identifier cannot be empty');
+
+        foreach ($this->embeddings as $index => $embedding) {
+            if ($embedding->getIdentifier() === $identifier) {
+                unset($this->embeddings[$index]);
+                $this->embeddings = \array_values($this->embeddings);
+
+                return;
+            }
+        }
+    }
+
+    public function removeDocuments(array $identifiers): void
+    {
+        if ([] === $identifiers) {
+            return;
+        }
+
+        foreach ($identifiers as $identifier) {
+            Assert::stringNotEmpty($identifier, 'Document identifier cannot be empty');
+        }
+
+        $identifierSet = \array_flip($identifiers);
+        $modified = false;
+
+        foreach ($this->embeddings as $index => $embedding) {
+            if (isset($identifierSet[$embedding->getIdentifier()])) {
+                unset($this->embeddings[$index]);
+                $modified = true;
+            }
+        }
+
+        if ($modified) {
+            $this->embeddings = \array_values($this->embeddings);
+        }
     }
 }

@@ -31,4 +31,11 @@ interface EmbeddingsStoreInterface
      * @return EmbeddingInterface[]
      */
     public function similaritySearch(array $vector, int $k = 4, array $additionalArguments = []): array;
+
+    public function removeDocument(string $identifier): void;
+
+    /**
+     * @param string[] $identifiers
+     */
+    public function removeDocuments(array $identifiers): void;
 }

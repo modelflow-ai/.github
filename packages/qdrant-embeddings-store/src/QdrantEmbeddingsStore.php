@@ -26,6 +26,7 @@ use Qdrant\Models\Request\SearchRequest;
 use Qdrant\Models\Request\VectorParams;
 use Qdrant\Models\VectorStruct;
 use Qdrant\Qdrant;
+use Webmozart\Assert\Assert;
 
 class QdrantEmbeddingsStore implements EmbeddingsStoreInterface
 {
@@ -174,5 +175,48 @@ class QdrantEmbeddingsStore implements EmbeddingsStoreInterface
                 $payload,
             ),
         );
+    }
+
+    public function removeDocument(string $identifier): void
+    {
+        Assert::stringNotEmpty($identifier, 'Document identifier cannot be empty');
+
+        try {
+            $this->client
+                ->collections($this->collectionName)
+                ->points()
+                ->delete([$identifier]);
+        } catch (InvalidArgumentException $e) {
+            if (404 !== $e->getCode()) {
+                throw $e;
+            }
+            // 404: point doesn't exist, silent success (idempotent)
+        }
+    }
+
+    /**
+     * @param string[] $identifiers
+     */
+    public function removeDocuments(array $identifiers): void
+    {
+        if ([] === $identifiers) {
+            return;
+        }
+
+        foreach ($identifiers as $identifier) {
+            Assert::stringNotEmpty($identifier, 'Document identifier cannot be empty');
+        }
+
+        try {
+            $this->client
+                ->collections($this->collectionName)
+                ->points()
+                ->delete($identifiers);
+        } catch (InvalidArgumentException $e) {
+            if (404 !== $e->getCode()) {
+                throw $e;
+            }
+            // 404: points don't exist, silent success (idempotent)
+        }
     }
 }

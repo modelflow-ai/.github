@@ -17,6 +17,7 @@ use Elastic\Elasticsearch\Client;
 use Elastic\Elasticsearch\Response\Elasticsearch;
 use ModelflowAi\Embeddings\Model\EmbeddingInterface;
 use ModelflowAi\Embeddings\Store\EmbeddingsStoreInterface;
+use Webmozart\Assert\Assert;
 
 /**
  * Heavenly inspired by LLPhant
@@ -203,5 +204,87 @@ class ElasticsearchEmbeddingsStore implements EmbeddingsStoreInterface
             ],
         ]);
         $this->vectorDimSet = true;
+    }
+
+    public function removeDocument(string $identifier): void
+    {
+        Assert::stringNotEmpty($identifier, 'Document identifier cannot be empty');
+
+        try {
+            $this->client->delete([
+                'index' => $this->indexName,
+                'id' => $identifier,
+            ]);
+
+            $this->client->indices()->refresh(['index' => $this->indexName]);
+        } catch (\Elastic\Elasticsearch\Exception\ClientResponseException $e) {
+            if (404 !== $e->getCode()) {
+                throw $e;
+            }
+        }
+    }
+
+    /**
+     * @param string[] $identifiers
+     */
+    public function removeDocuments(array $identifiers): void
+    {
+        if ([] === $identifiers) {
+            return;
+        }
+
+        foreach ($identifiers as $identifier) {
+            Assert::stringNotEmpty($identifier, 'Document identifier cannot be empty');
+        }
+
+        $body = [];
+        foreach ($identifiers as $identifier) {
+            $body[] = ['delete' => ['_index' => $this->indexName, '_id' => $identifier]];
+        }
+
+        try {
+            /** @var Elasticsearch $bulkResponse */
+            $bulkResponse = $this->client->bulk(['body' => $body]);
+            $response = $bulkResponse->asArray();
+
+            // Check bulk response for per-item failures
+            if (isset($response['errors']) && true === $response['errors']) {
+                $items = $response['items'] ?? [];
+                if (!\is_array($items)) {
+                    $items = [];
+                }
+
+                foreach ($items as $item) {
+                    if (!\is_array($item)) {
+                        continue;
+                    }
+
+                    $operation = $item['delete'] ?? $item['index'] ?? $item['create'] ?? $item['update'] ?? null;
+                    if (!\is_array($operation)) {
+                        continue;
+                    }
+
+                    // Allow 404 (document not found) - idempotent deletion
+                    $hasError = isset($operation['error']);
+                    $status = $operation['status'] ?? 0;
+
+                    if ($hasError && 404 !== $status) {
+                        $errorReason = 'Unknown error';
+                        if (\is_array($operation['error']) && isset($operation['error']['reason'])) {
+                            $reason = $operation['error']['reason'];
+                            $errorReason = \is_string($reason) ? $reason : 'Unknown error';
+                        }
+
+                        throw new \RuntimeException('Bulk delete operation failed: ' . $errorReason);
+                    }
+                }
+            }
+
+            $this->client->indices()->refresh(['index' => $this->indexName]);
+        } catch (\Elastic\Elasticsearch\Exception\ClientResponseException $e) {
+            if (!\str_contains($e->getMessage(), 'not_found') && 404 !== $e->getCode()) {
+                throw $e;
+            }
+        }
     }
 }

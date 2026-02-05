@@ -393,7 +393,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../embeddings",
-                "reference": "825b51cd5ea7282804d95b3b7996eb255be1a00b"
+                "reference": "b9e6dd3b8469574414564f8db320ce7fae919f0f"
             },
             "require": {
                 "php": "^8.2",
@@ -405,7 +405,7 @@
                 "jangregor/phpstan-prophecy": "^2.0",
                 "modelflow-ai/ollama-adapter": "^0.4",
                 "php-cs-fixer/shim": "^3.15",
-                "phpspec/prophecy-phpunit": "^2.1@stable",
+                "phpspec/prophecy-phpunit": "^2.2",
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
@@ -1437,12 +1437,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-info.git",
-                "reference": "e22a72491aeea999d444bb1e5718fa6608dbca51"
+                "reference": "90d0174a7bfcbbdf1e42beb15cd67d22cf5efec7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-info/zipball/e22a72491aeea999d444bb1e5718fa6608dbca51",
-                "reference": "e22a72491aeea999d444bb1e5718fa6608dbca51",
+                "url": "https://api.github.com/repos/symfony/property-info/zipball/90d0174a7bfcbbdf1e42beb15cd67d22cf5efec7",
+                "reference": "90d0174a7bfcbbdf1e42beb15cd67d22cf5efec7",
                 "shasum": ""
             },
             "require": {
@@ -1516,7 +1516,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-27T16:18:35+00:00"
+            "time": "2026-01-30T15:36:26+00:00"
         },
         {
             "name": "symfony/string",
@@ -1615,12 +1615,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/type-info.git",
-                "reference": "ccecf52f4dcd9e1c731ec887c6822b16e0d877ad"
+                "reference": "7f1f93e71ff24ac7a716cd7624bba473f3d5c311"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/type-info/zipball/ccecf52f4dcd9e1c731ec887c6822b16e0d877ad",
-                "reference": "ccecf52f4dcd9e1c731ec887c6822b16e0d877ad",
+                "url": "https://api.github.com/repos/symfony/type-info/zipball/7f1f93e71ff24ac7a716cd7624bba473f3d5c311",
+                "reference": "7f1f93e71ff24ac7a716cd7624bba473f3d5c311",
                 "shasum": ""
             },
             "require": {
@@ -1690,7 +1690,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-29T15:13:09+00:00"
+            "time": "2026-01-30T15:36:26+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -1794,16 +1794,16 @@
         },
         {
             "name": "brick/math",
-            "version": "v0.14.x-dev",
+            "version": "0.14.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brick/math.git",
-                "reference": "3ae4696b0f3830168065405eaf61ac008e8fa926"
+                "reference": "618a8077b3c326045e10d5788ed713b341fcfe40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/3ae4696b0f3830168065405eaf61ac008e8fa926",
-                "reference": "3ae4696b0f3830168065405eaf61ac008e8fa926",
+                "url": "https://api.github.com/repos/brick/math/zipball/618a8077b3c326045e10d5788ed713b341fcfe40",
+                "reference": "618a8077b3c326045e10d5788ed713b341fcfe40",
                 "shasum": ""
             },
             "require": {
@@ -1842,7 +1842,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brick/math/issues",
-                "source": "https://github.com/brick/math/tree/v0.14"
+                "source": "https://github.com/brick/math/tree/0.14.5"
             },
             "funding": [
                 {
@@ -1850,7 +1850,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-01-29T15:56:21+00:00"
+            "time": "2026-02-03T18:06:51+00:00"
         },
         {
             "name": "modelflow-ai/api-client",
@@ -1954,7 +1954,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../ollama",
-                "reference": "15a54a8ca87836f06a5ca32e8bd254a29497efae"
+                "reference": "8a31f2e635c62306403e6ffef2acfdce61d9bd50"
             },
             "require": {
                 "modelflow-ai/api-client": "^0.4",
@@ -1965,7 +1965,7 @@
                 "asapo/remove-vendor-plugin": "^0.1",
                 "jangregor/phpstan-prophecy": "^2.0",
                 "php-cs-fixer/shim": "^3.15",
-                "phpspec/prophecy-phpunit": "^2.1@stable",
+                "phpspec/prophecy-phpunit": "^2.2",
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
@@ -2052,7 +2052,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../ollama-adapter",
-                "reference": "9cced75846081f1d8728239a0fcbb1c9dce5f97a"
+                "reference": "92858069e82c52d17a2e31ddb8a5597bb2d92be9"
             },
             "require": {
                 "modelflow-ai/ollama": "^0.4",
@@ -2067,7 +2067,7 @@
                 "modelflow-ai/embeddings": "^0.4",
                 "modelflow-ai/prompt-template": "^0.4",
                 "php-cs-fixer/shim": "^3.15",
-                "phpspec/prophecy-phpunit": "^2.1@stable",
+                "phpspec/prophecy-phpunit": "^2.2",
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
@@ -2498,8 +2498,8 @@
             "version": "2.1.x-dev",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/861cd9a1257fc5deaebb655d9d1d7cfb7830fc89",
-                "reference": "861cd9a1257fc5deaebb655d9d1d7cfb7830fc89",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9299f0e10109e98a97fb65fb7c554e3d8947f44f",
+                "reference": "9299f0e10109e98a97fb65fb7c554e3d8947f44f",
                 "shasum": ""
             },
             "require": {
@@ -2545,7 +2545,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-01-29T16:51:43+00:00"
+            "time": "2026-02-03T20:57:24+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
@@ -2553,12 +2553,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-phpunit.git",
-                "reference": "e4c5a22bf43d3d2bd5a780ad261a622ff62c49a4"
+                "reference": "4d1d77610d68c8ff059ab17c76e0aaea2615d7c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/e4c5a22bf43d3d2bd5a780ad261a622ff62c49a4",
-                "reference": "e4c5a22bf43d3d2bd5a780ad261a622ff62c49a4",
+                "url": "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/4d1d77610d68c8ff059ab17c76e0aaea2615d7c6",
+                "reference": "4d1d77610d68c8ff059ab17c76e0aaea2615d7c6",
                 "shasum": ""
             },
             "require": {
@@ -2595,11 +2595,14 @@
                 "MIT"
             ],
             "description": "PHPUnit extensions and rules for PHPStan",
+            "keywords": [
+                "static analysis"
+            ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-phpunit/issues",
                 "source": "https://github.com/phpstan/phpstan-phpunit/tree/2.0.x"
             },
-            "time": "2026-01-22T13:40:00+00:00"
+            "time": "2026-02-03T10:16:20+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -2697,12 +2700,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-file-iterator.git",
-                "reference": "18a3d4f3af59807625ae982d88b27085ad38c367"
+                "reference": "2f3a64888c814fc235386b7387dd5b5ed92ad903"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/18a3d4f3af59807625ae982d88b27085ad38c367",
-                "reference": "18a3d4f3af59807625ae982d88b27085ad38c367",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/2f3a64888c814fc235386b7387dd5b5ed92ad903",
+                "reference": "2f3a64888c814fc235386b7387dd5b5ed92ad903",
                 "shasum": ""
             },
             "require": {
@@ -2742,7 +2745,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-file-iterator/issues",
                 "security": "https://github.com/sebastianbergmann/php-file-iterator/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-file-iterator/tree/5.1"
+                "source": "https://github.com/sebastianbergmann/php-file-iterator/tree/5.1.1"
             },
             "funding": [
                 {
@@ -2762,7 +2765,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-09-26T11:52:35+00:00"
+            "time": "2026-02-02T13:52:54+00:00"
         },
         {
             "name": "phpunit/php-invoker",
@@ -2990,12 +2993,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "0df37f7891fc7b3d3d66e14aaff859d4d768855a"
+                "reference": "debf1b7b0baa8931f559120211cf7aeeecb75a38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0df37f7891fc7b3d3d66e14aaff859d4d768855a",
-                "reference": "0df37f7891fc7b3d3d66e14aaff859d4d768855a",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/debf1b7b0baa8931f559120211cf7aeeecb75a38",
+                "reference": "debf1b7b0baa8931f559120211cf7aeeecb75a38",
                 "shasum": ""
             },
             "require": {
@@ -3010,7 +3013,7 @@
                 "phar-io/version": "^3.2.1",
                 "php": ">=8.2",
                 "phpunit/php-code-coverage": "^11.0.12",
-                "phpunit/php-file-iterator": "^5.1.0",
+                "phpunit/php-file-iterator": "^5.1.1",
                 "phpunit/php-invoker": "^5.0.1",
                 "phpunit/php-text-template": "^4.0.1",
                 "phpunit/php-timer": "^7.0.1",
@@ -3022,6 +3025,7 @@
                 "sebastian/exporter": "^6.3.2",
                 "sebastian/global-state": "^7.0.2",
                 "sebastian/object-enumerator": "^6.0.1",
+                "sebastian/recursion-context": "^6.0.3",
                 "sebastian/type": "^5.1.3",
                 "sebastian/version": "^5.0.2",
                 "staabm/side-effects-detector": "^1.0.5"
@@ -3091,7 +3095,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-27T06:31:16+00:00"
+            "time": "2026-02-03T14:30:47+00:00"
         },
         {
             "name": "ramsey/collection",
@@ -5136,5 +5140,5 @@
         "php": "^8.2"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

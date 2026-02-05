@@ -243,6 +243,148 @@ class FilesystemEmbeddingsStoreTest extends TestCase
 
         $this->store->similaritySearch([0.1, 0.1, 0.1], 1, ['category' => 123]);
     }
+
+    public function testRemoveDocument(): void
+    {
+        $embedding1 = new TestEmbedding('content1', [0.1, 0.2, 0.3]);
+        $embedding2 = new TestEmbedding('content2', [0.4, 0.5, 0.6]);
+        $embedding3 = new TestEmbedding('content3', [0.7, 0.8, 0.9]);
+
+        $this->store->addDocuments([$embedding1, $embedding2, $embedding3]);
+
+        $this->store->removeDocument($embedding2->getIdentifier());
+
+        $results = $this->store->similaritySearch([0.4, 0.5, 0.6], 10);
+
+        $this->assertCount(2, $results);
+        $contents = [$results[0]->getContent(), $results[1]->getContent()];
+        $this->assertContains($embedding1->getContent(), $contents);
+        $this->assertContains($embedding3->getContent(), $contents);
+        $this->assertNotContains($embedding2->getContent(), $contents);
+    }
+
+    public function testRemoveDocuments(): void
+    {
+        $embeddings = [];
+        for ($i = 1; $i <= 5; ++$i) {
+            $embeddings[] = new TestEmbedding("content$i", [$i / 10, $i / 10, $i / 10]);
+        }
+
+        $this->store->addDocuments($embeddings);
+
+        $identifiers = [
+            $embeddings[1]->getIdentifier(),
+            $embeddings[3]->getIdentifier(),
+        ];
+
+        $this->store->removeDocuments($identifiers);
+
+        $results = $this->store->similaritySearch([0.3, 0.3, 0.3], 10);
+
+        $this->assertCount(3, $results);
+        $contents = [$results[0]->getContent(), $results[1]->getContent(), $results[2]->getContent()];
+        $this->assertContains($embeddings[0]->getContent(), $contents);
+        $this->assertContains($embeddings[2]->getContent(), $contents);
+        $this->assertContains($embeddings[4]->getContent(), $contents);
+    }
+
+    public function testRemoveNonExistentDocument(): void
+    {
+        $embedding1 = new TestEmbedding('content1', [0.1, 0.2, 0.3]);
+        $this->store->addDocument($embedding1);
+
+        $this->store->removeDocument('non-existent-id');
+
+        $results = $this->store->similaritySearch([0.1, 0.2, 0.3], 10);
+        $this->assertCount(1, $results);
+    }
+
+    public function testRemoveFromEmptyStore(): void
+    {
+        $this->store->removeDocument('non-existent-id');
+
+        $results = $this->store->similaritySearch([0.1, 0.2, 0.3], 10);
+        $this->assertEmpty($results);
+        $this->assertFileDoesNotExist($this->testFilePath);
+    }
+
+    public function testRemoveDocumentsEmptyArray(): void
+    {
+        $embedding1 = new TestEmbedding('content1', [0.1, 0.2, 0.3]);
+        $this->store->addDocument($embedding1);
+
+        $this->store->removeDocuments([]);
+
+        $results = $this->store->similaritySearch([0.1, 0.2, 0.3], 10);
+        $this->assertCount(1, $results);
+    }
+
+    public function testRemoveAndReAdd(): void
+    {
+        $embedding1 = new TestEmbedding('content1', [0.1, 0.2, 0.3]);
+        $this->store->addDocument($embedding1);
+
+        $this->store->removeDocument($embedding1->getIdentifier());
+
+        $results = $this->store->similaritySearch([0.1, 0.2, 0.3], 10);
+        $this->assertEmpty($results);
+
+        $this->store->addDocument($embedding1);
+
+        $results = $this->store->similaritySearch([0.1, 0.2, 0.3], 10);
+        $this->assertCount(1, $results);
+        $this->assertSame($embedding1->getContent(), $results[0]->getContent());
+    }
+
+    public function testRemoveDocumentPersistence(): void
+    {
+        $embedding1 = new TestEmbedding('content1', [0.1, 0.2, 0.3]);
+        $embedding2 = new TestEmbedding('content2', [0.4, 0.5, 0.6]);
+
+        $this->store->addDocuments([$embedding1, $embedding2]);
+
+        $this->store->removeDocument($embedding1->getIdentifier());
+
+        $newStore = new FilesystemEmbeddingsStore($this->testFilePath);
+        $results = $newStore->similaritySearch([0.3, 0.4, 0.5], 10);
+
+        $this->assertCount(1, $results);
+        $this->assertSame($embedding2->getContent(), $results[0]->getContent());
+    }
+
+    public function testSimilaritySearchAfterRemove(): void
+    {
+        $embedding1 = new TestEmbedding('content1', [0.1, 0.1, 0.1]);
+        $embedding2 = new TestEmbedding('content2', [0.2, 0.2, 0.2]);
+        $embedding3 = new TestEmbedding('content3', [0.3, 0.3, 0.3]);
+
+        $this->store->addDocuments([$embedding1, $embedding2, $embedding3]);
+
+        $this->store->removeDocument($embedding2->getIdentifier());
+
+        $results = $this->store->similaritySearch([0.2, 0.2, 0.2], 3);
+
+        $this->assertCount(2, $results);
+        $this->assertSame($embedding3->getContent(), $results[0]->getContent());
+        $this->assertSame($embedding1->getContent(), $results[1]->getContent());
+    }
+
+    public function testRemoveDocumentsWithDuplicates(): void
+    {
+        $embedding1 = new TestEmbedding('content1', [0.1, 0.2, 0.3]);
+        $embedding2 = new TestEmbedding('content2', [0.4, 0.5, 0.6]);
+
+        $this->store->addDocuments([$embedding1, $embedding2]);
+
+        $this->store->removeDocuments([
+            $embedding1->getIdentifier(),
+            $embedding1->getIdentifier(),
+        ]);
+
+        $results = $this->store->similaritySearch([0.3, 0.4, 0.5], 10);
+        $this->assertCount(1, $results);
+        $this->assertSame($embedding2->getContent(), $results[0]->getContent());
+    }
 }
 
 class TestEmbedding implements EmbeddingInterface
