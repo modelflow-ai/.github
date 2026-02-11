@@ -28,7 +28,8 @@ use ModelflowAi\Anthropic\Responses\Messages\CreateStreamedResponse;
  *     description: string,
  *     input_schema: array{
  *         type: string,
- *         properties: array<string, array{type: string, description: string}>,
+ *         properties: array<string, array<string, mixed>>,
+ *         required?: string[],
  *     }
  * }
  * @phpstan-type OutputConfig array{

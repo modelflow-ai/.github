@@ -23,14 +23,18 @@ use ModelflowAi\Chat\Request\Message\AIChatMessage;
 use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Chat\Request\Message\ImageBase64Part;
 use ModelflowAi\Chat\Request\Message\TextPart;
+use ModelflowAi\Chat\Request\Message\ToolCallPart;
+use ModelflowAi\Chat\Request\Message\ToolCallsPart;
 use ModelflowAi\Chat\Request\ResponseFormat\JsonSchemaResponseFormat;
 use ModelflowAi\Chat\Request\ResponseFormat\ResponseFormatInterface;
 use ModelflowAi\Chat\Request\ResponseFormat\SupportsResponseFormatInterface;
 use ModelflowAi\Chat\Response\AIChatResponse;
 use ModelflowAi\Chat\Response\AIChatResponseMessage;
 use ModelflowAi\Chat\Response\AIChatResponseStream;
+use ModelflowAi\Chat\Response\AIChatToolCall;
 use ModelflowAi\Chat\Response\StreamingUsageTracker;
 use ModelflowAi\Chat\Response\Usage;
+use ModelflowAi\Chat\ToolInfo\ToolTypeEnum;
 
 /**
  * @phpstan-import-type Parameters from MessagesInterface
@@ -41,6 +45,7 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
         AIChatMessageRoleEnum::SYSTEM,
         AIChatMessageRoleEnum::ASSISTANT,
         AIChatMessageRoleEnum::USER,
+        AIChatMessageRoleEnum::TOOL,
     ];
 
     /**
@@ -87,6 +92,10 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
             $parameters['temperature'] = $temperature;
         }
 
+        if ($request->hasTools()) {
+            $parameters['tools'] = ToolFormatter::formatTools($request->getToolInfos());
+        }
+
         $messages = [];
         /** @var AIChatMessage $aiMessage */
         foreach ($request->getMessages() as $aiMessage) {
@@ -94,8 +103,16 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
                 throw new \Exception('Not supported message role.');
             }
 
+            // Anthropic has no dedicated "tool" role; tool results are sent as a user message
+            // containing tool_result content blocks.
+            $role = match ($aiMessage->role) {
+                AIChatMessageRoleEnum::USER, AIChatMessageRoleEnum::TOOL => 'user',
+                AIChatMessageRoleEnum::ASSISTANT => 'assistant',
+                AIChatMessageRoleEnum::SYSTEM => 'system',
+            };
+
             $message = [
-                'role' => $aiMessage->role->value,
+                'role' => $role,
                 'content' => [],
             ];
 
@@ -112,6 +129,26 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
                             'type' => 'base64',
                             'media_type' => $part->mimeType,
                             'data' => $part->content,
+                        ],
+                    ];
+                } elseif ($part instanceof ToolCallsPart) {
+                    foreach ($part->toolCalls as $toolCall) {
+                        $message['content'][] = [
+                            'type' => 'tool_use',
+                            'id' => $toolCall->id,
+                            'name' => $toolCall->name,
+                            'input' => $toolCall->arguments,
+                        ];
+                    }
+                } elseif ($part instanceof ToolCallPart) {
+                    $message['content'][] = [
+                        'type' => 'tool_result',
+                        'tool_use_id' => $part->toolCallId,
+                        'content' => [
+                            [
+                                'type' => 'text',
+                                'text' => $part->content,
+                            ],
                         ],
                     ];
                 } else {
@@ -149,6 +186,7 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
             ];
         }
 
+        /** @var Parameters $parameters */
         if ($request instanceof AIChatStreamedRequest) {
             return $this->createStreamed($request, $parameters);
         }
@@ -163,7 +201,22 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
     {
         $result = $this->client->messages()->create($parameters);
 
-        $content = $result->content[0]->text ?? '';
+        $content = '';
+        $toolCalls = [];
+
+        foreach ($result->content as $contentBlock) {
+            if ('text' === $contentBlock->type) {
+                $content .= $contentBlock->text ?? '';
+            } elseif ('tool_use' === $contentBlock->type && null !== $contentBlock->toolUse) {
+                $toolCalls[] = new AIChatToolCall(
+                    ToolTypeEnum::FUNCTION,
+                    $contentBlock->toolUse->id,
+                    $contentBlock->toolUse->name,
+                    $contentBlock->toolUse->input,
+                );
+            }
+        }
+
         if ('json' === $request->getFormat() && \str_ends_with($content, '}')) {
             $content = '{' . $content;
         }
@@ -173,6 +226,7 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
             new AIChatResponseMessage(
                 AIChatMessageRoleEnum::from($result->role),
                 $content,
+                [] !== $toolCalls ? $toolCalls : null,
             ),
             new Usage(
                 $result->usage->promptTokens,
@@ -243,8 +297,7 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
 
     public function supports(object $request): bool
     {
-        return $request instanceof AIChatRequest
-            && !$request->hasTools();
+        return $request instanceof AIChatRequest;
     }
 
     public function supportsResponseFormat(ResponseFormatInterface $responseFormat): bool
