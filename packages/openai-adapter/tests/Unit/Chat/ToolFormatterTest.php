@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace ModelflowAi\OpenaiAdapter\Tests\Unit\Chat;
 
+use ModelflowAi\Chat\ToolInfo\Parameter;
+use ModelflowAi\Chat\ToolInfo\ToolInfo;
 use ModelflowAi\Chat\ToolInfo\ToolInfoBuilder;
+use ModelflowAi\Chat\ToolInfo\ToolTypeEnum;
 use ModelflowAi\OpenaiAdapter\Chat\ToolFormatter;
 use PHPUnit\Framework\TestCase;
 
@@ -115,5 +118,144 @@ class ToolFormatterTest extends TestCase
 
     public function toolMethod2(string $test): void
     {
+    }
+
+    public function testFormatToolWithNestedObjectRequired(): void
+    {
+        $nestedProperties = [
+            new Parameter('id', 'integer', 'The ID'),
+            new Parameter('name', 'string', 'The name'),
+            new Parameter('optional', 'string', 'Optional field'),
+        ];
+
+        $objectParam = new Parameter(
+            name: 'user',
+            type: 'object',
+            description: 'User object',
+            itemsOrProperties: $nestedProperties,
+            required: ['id', 'name'],
+        );
+
+        $tool = new ToolInfo(
+            type: ToolTypeEnum::FUNCTION,
+            name: 'create_user',
+            description: 'Create a user',
+            parameters: [$objectParam],
+            requiredParameters: [$objectParam],
+        );
+
+        $formatted = ToolFormatter::formatTool($tool);
+
+        $this->assertSame([
+            'name' => 'create_user',
+            'description' => 'Create a user',
+            'parameters' => [
+                'type' => 'object',
+                'properties' => [
+                    'user' => [
+                        'type' => 'object',
+                        'description' => 'User object',
+                        'properties' => [
+                            'id' => [
+                                'type' => 'integer',
+                                'description' => 'The ID',
+                            ],
+                            'name' => [
+                                'type' => 'string',
+                                'description' => 'The name',
+                            ],
+                            'optional' => [
+                                'type' => 'string',
+                                'description' => 'Optional field',
+                            ],
+                        ],
+                        'required' => ['id', 'name'],
+                    ],
+                ],
+                'required' => ['user'],
+            ],
+        ], $formatted);
+    }
+
+    public function testFormatToolWithArrayOfObjectsRequired(): void
+    {
+        $nestedProperties = [
+            new Parameter('id', 'integer', 'Item ID'),
+            new Parameter('name', 'string', 'Item name'),
+        ];
+
+        $arrayParam = new Parameter(
+            name: 'items',
+            type: 'array',
+            description: 'List of items',
+            itemsOrProperties: $nestedProperties,
+            required: ['id'],
+        );
+
+        $tool = new ToolInfo(
+            type: ToolTypeEnum::FUNCTION,
+            name: 'process_items',
+            description: 'Process items',
+            parameters: [$arrayParam],
+            requiredParameters: [$arrayParam],
+        );
+
+        $formatted = ToolFormatter::formatTool($tool);
+
+        $this->assertSame([
+            'name' => 'process_items',
+            'description' => 'Process items',
+            'parameters' => [
+                'type' => 'object',
+                'properties' => [
+                    'items' => [
+                        'type' => 'array',
+                        'description' => 'List of items',
+                        'items' => [
+                            'type' => 'object',
+                            'properties' => [
+                                'id' => [
+                                    'type' => 'integer',
+                                    'description' => 'Item ID',
+                                ],
+                                'name' => [
+                                    'type' => 'string',
+                                    'description' => 'Item name',
+                                ],
+                            ],
+                            'required' => ['id'],
+                        ],
+                    ],
+                ],
+                'required' => ['items'],
+            ],
+        ], $formatted);
+    }
+
+    public function testFormatToolWithEmptyNestedRequired(): void
+    {
+        $nestedProperties = [
+            new Parameter('id', 'integer', 'The ID'),
+        ];
+
+        $objectParam = new Parameter(
+            name: 'data',
+            type: 'object',
+            description: 'Data object',
+            itemsOrProperties: $nestedProperties,
+            required: [],
+        );
+
+        $tool = new ToolInfo(
+            type: ToolTypeEnum::FUNCTION,
+            name: 'test',
+            description: 'Test',
+            parameters: [$objectParam],
+            requiredParameters: [],
+        );
+
+        $formatted = ToolFormatter::formatTool($tool);
+
+        $this->assertArrayNotHasKey('required', $formatted['parameters']['properties']['data']);
     }
 }

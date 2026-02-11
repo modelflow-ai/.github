@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "06f71d1577f46819a9e5fef5ab9dd076",
+    "content-hash": "c0175f4618ecebf26f3a38c6a3d64d38",
     "packages": [
         {
             "name": "modelflow-ai/api-client",
@@ -931,7 +931,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../chat",
-                "reference": "0c62dbd239bd56014c53e05c96d985e63de69bdc"
+                "reference": "dbf738ea4388be5e3291deef3a3f61545132f123"
             },
             "require": {
                 "ext-fileinfo": "*",
@@ -945,7 +945,7 @@
                 "jangregor/phpstan-prophecy": "^2.0",
                 "modelflow-ai/prompt-template": "^0.4",
                 "php-cs-fixer/shim": "^3.15",
-                "phpspec/prophecy-phpunit": "^2.1@stable",
+                "phpspec/prophecy-phpunit": "^2.2",
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
@@ -4970,14 +4970,12 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "phpspec/prophecy-phpunit": 0
-    },
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.2"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

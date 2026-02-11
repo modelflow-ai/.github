@@ -1147,7 +1147,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../chat",
-                "reference": "0c62dbd239bd56014c53e05c96d985e63de69bdc"
+                "reference": "dbf738ea4388be5e3291deef3a3f61545132f123"
             },
             "require": {
                 "ext-fileinfo": "*",
@@ -1161,7 +1161,7 @@
                 "jangregor/phpstan-prophecy": "^2.0",
                 "modelflow-ai/prompt-template": "^0.4",
                 "php-cs-fixer/shim": "^3.15",
-                "phpspec/prophecy-phpunit": "^2.1@stable",
+                "phpspec/prophecy-phpunit": "^2.2",
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
@@ -5566,5 +5566,5 @@
         "php": "^8.2"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

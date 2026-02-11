@@ -84,26 +84,25 @@ final class ToolFormatter
      * @throws \Exception
      *
      * @return array{
-     *     type: string,
+     *     type: string|string[],
      *     description: string,
      *     items?: array{
-     *         type: string,
-     *         properties?: array<string, array{
-     *             type: string, description: string,
-     *         }>
+     *         type: string|string[],
+     *         properties?: array<string, mixed>,
+     *         required?: string[],
      *     },
-     *     properties?: array<string, array{
-     *         type: string,
-     *          description: string,
-     *     }>,
+     *     properties?: array<string, mixed>,
+     *     required?: string[],
      *     enum?: mixed[],
      *     format?: string,
      * }
      */
     private static function formatParameter(Parameter $parameter): array
     {
+        $type = $parameter->nullable ? [$parameter->type, 'null'] : $parameter->type;
+
         $param = [
-            'type' => $parameter->type,
+            'type' => $type,
             'description' => $parameter->description,
         ];
 
@@ -120,16 +119,19 @@ final class ToolFormatter
                 $properties = [];
                 /** @var Parameter $property */
                 foreach ($parameter->itemsOrProperties as $property) {
-                    $properties[$property->name] = [
-                        'type' => $property->type,
-                        'description' => $property->description,
-                    ];
+                    $properties[$property->name] = self::formatParameter($property);
                 }
 
-                $param['items'] = [
+                $items = [
                     'type' => 'object',
                     'properties' => $properties,
                 ];
+
+                if ([] !== $parameter->required) {
+                    $items['required'] = $parameter->required;
+                }
+
+                $param['items'] = $items;
             }
         }
 
@@ -141,13 +143,14 @@ final class ToolFormatter
             $properties = [];
             /** @var Parameter $item */
             foreach ($parameter->itemsOrProperties as $item) {
-                $properties[$item->name] = [
-                    'type' => $item->type,
-                    'description' => $item->description,
-                ];
+                $properties[$item->name] = self::formatParameter($item);
             }
 
             $param['properties'] = $properties;
+
+            if ([] !== $parameter->required) {
+                $param['required'] = $parameter->required;
+            }
         }
 
         if ($parameter->enum) {

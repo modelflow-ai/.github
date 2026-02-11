@@ -39,9 +39,10 @@ class ToolInfoBuilder
             \preg_match(\sprintf('/\* @param [^\$]* \$%s (?<description>.*)/', $param->getName()), $docComment, $matches);
 
             $newParameter = new Parameter(
-                $param->getName(),
-                Types::mapPhpTypeToJsonSchemaType($reflectionType),
-                $matches['description'] ?? '',
+                name: $param->getName(),
+                type: Types::mapPhpTypeToJsonSchemaType($reflectionType),
+                description: $matches['description'] ?? '',
+                nullable: $reflectionType->allowsNull(),
             );
 
             if ('array' === $newParameter->type) {
