@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace ModelflowAi\FireworksAiAdapter\Tests\Unit\Chat;
 
+use ModelflowAi\Chat\ToolInfo\Parameter;
+use ModelflowAi\Chat\ToolInfo\ToolInfo;
 use ModelflowAi\Chat\ToolInfo\ToolInfoBuilder;
+use ModelflowAi\Chat\ToolInfo\ToolTypeEnum;
 use ModelflowAi\FireworksAiAdapter\Chat\ToolFormatter;
 use PHPUnit\Framework\TestCase;
 
@@ -115,5 +118,62 @@ class ToolFormatterTest extends TestCase
 
     public function toolMethod2(string $test): void
     {
+    }
+
+    public function testFormatToolWithNestedObjectRequired(): void
+    {
+        $nestedProperties = [
+            new Parameter('id', 'integer', 'The ID'),
+            new Parameter('name', 'string', 'The name'),
+        ];
+
+        $objectParam = new Parameter(
+            name: 'user',
+            type: 'object',
+            description: 'User object',
+            itemsOrProperties: $nestedProperties,
+            required: ['id', 'name'],
+        );
+
+        $tool = new ToolInfo(
+            type: ToolTypeEnum::FUNCTION,
+            name: 'create_user',
+            description: 'Create a user',
+            parameters: [$objectParam],
+            requiredParameters: [$objectParam],
+        );
+
+        $formatted = ToolFormatter::formatTool($tool);
+
+        $this->assertSame(['id', 'name'], $formatted['parameters']['properties']['user']['required']);
+    }
+
+    public function testFormatToolWithArrayOfObjectsRequired(): void
+    {
+        $nestedProperties = [
+            new Parameter('id', 'integer', 'Item ID'),
+        ];
+
+        $arrayParam = new Parameter(
+            name: 'items',
+            type: 'array',
+            description: 'List of items',
+            itemsOrProperties: $nestedProperties,
+            required: ['id'],
+        );
+
+        $tool = new ToolInfo(
+            type: ToolTypeEnum::FUNCTION,
+            name: 'process_items',
+            description: 'Process items',
+            parameters: [$arrayParam],
+            requiredParameters: [],
+        );
+
+        $formatted = ToolFormatter::formatTool($tool);
+
+        /** @var array{items: array{required: string[]}} $itemsParam */
+        $itemsParam = $formatted['parameters']['properties']['items'];
+        $this->assertSame(['id'], $itemsParam['items']['required']);
     }
 }

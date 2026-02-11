@@ -22,10 +22,11 @@ class WeatherTool
      * Get the current weather for a city.
      *
      * @param string $city The city name
+     * @param string|null $unit The temperature unit (celsius or fahrenheit)
      *
      * @return array The weather information
      */
-    public function getCurrentWeather(string $city): array
+    public function getCurrentWeather(string $city, ?string $unit = null): array
     {
         // In a real application, this would make an API call to a weather service
         // For demo purposes, we'll just return some fake data
@@ -53,12 +54,22 @@ class WeatherTool
         // Convert city name to lowercase for case-insensitive lookup
         $cityLower = \strtolower($city);
 
-        // Return data for the requested city, or default data if not found
-        return $weatherData[$cityLower] ?? [
+        // Get data for the requested city, or default data if not found
+        $data = $weatherData[$cityLower] ?? [
             'temperature' => 20,
             'condition' => 'unknown',
             'humidity' => 60,
             'wind_speed' => 8,
         ];
+
+        // Convert temperature to fahrenheit if requested
+        if ('fahrenheit' === $unit) {
+            $data['temperature'] = (int) ($data['temperature'] * 9 / 5 + 32);
+            $data['unit'] = 'fahrenheit';
+        } else {
+            $data['unit'] = 'celsius';
+        }
+
+        return $data;
     }
 }

@@ -34,6 +34,72 @@ final readonly class ToolInfo
     }
 
     /**
+     * @param array<string, mixed> $definition
+     */
+    public static function fromJsonSchema(array $definition): self
+    {
+        // Support both OpenAI format (with 'function' wrapper) and direct format
+        /** @var mixed $function */
+        $function = $definition['function'] ?? $definition;
+
+        if (!\is_array($function)) {
+            throw new \InvalidArgumentException('Tool definition must contain a function definition');
+        }
+
+        /** @var mixed $name */
+        $name = $function['name'] ?? null;
+        /** @var mixed $description */
+        $description = $function['description'] ?? '';
+
+        if (!\is_string($name)) {
+            throw new \InvalidArgumentException('Tool function must have a name');
+        }
+
+        if (!\is_string($description)) {
+            $description = '';
+        }
+
+        /** @var mixed $paramsSchema */
+        $paramsSchema = $function['parameters'] ?? [];
+        $parameters = [];
+        $requiredParams = [];
+        /** @var array<string> $requiredNames */
+        $requiredNames = [];
+
+        if (\is_array($paramsSchema)) {
+            /** @var mixed $required */
+            $required = $paramsSchema['required'] ?? [];
+            $requiredNames = \is_array($required) ? $required : [];
+
+            /** @var mixed $properties */
+            $properties = $paramsSchema['properties'] ?? null;
+            if (\is_array($properties)) {
+                /** @var mixed $paramSchema */
+                foreach ($properties as $paramName => $paramSchema) {
+                    if (!\is_string($paramName) || !\is_array($paramSchema)) {
+                        continue;
+                    }
+
+                    $parameter = Parameter::fromJsonSchema($paramName, $paramSchema);
+                    $parameters[] = $parameter;
+
+                    if (\in_array($paramName, $requiredNames, true)) {
+                        $requiredParams[] = $parameter;
+                    }
+                }
+            }
+        }
+
+        return new self(
+            type: ToolTypeEnum::FUNCTION,
+            name: $name,
+            description: $description,
+            parameters: $parameters,
+            requiredParameters: $requiredParams,
+        );
+    }
+
+    /**
      * @return array{
      *     type: string,
      *     name: string,
