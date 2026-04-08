@@ -39,7 +39,7 @@ interface ChatInterface
      *     max_tokens?: int,
      *     safe_mode?: bool,
      *     random_seed?: int,
-     *     response_format?: array{ type: "json_object" },
+     *     response_format?: array{ type: "json_object" }|array{ type: "json_schema", json_schema: array<string, mixed> },
      * } $parameters
      */
     public function create(array $parameters): CreateResponse;
@@ -65,7 +65,7 @@ interface ChatInterface
      *     max_tokens?: int,
      *     safe_mode?: bool,
      *     random_seed?: int,
-     *     response_format?: array{ type: "json_object" },
+     *     response_format?: array{ type: "json_object" }|array{ type: "json_schema", json_schema: array<string, mixed> },
      * } $parameters
      *
      * @return \Iterator<int, CreateStreamedResponse>

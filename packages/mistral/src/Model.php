@@ -25,7 +25,7 @@ enum Model: string
 
     public function jsonSupported(): bool
     {
-        return self::LARGE === $this;
+        return \in_array($this, [self::SMALL, self::LARGE], true);
     }
 
     public function toolsSupported(): bool

@@ -13,18 +13,6 @@ parameters:
 			path: examples/bootstrap.php
 
 		-
-			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
-			identifier: binaryOp.invalid
-			count: 1
-			path: examples/chat-response-format.php
-
-		-
-			message: '#^Call to function is_array\(\) with array\<string, mixed\> will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 1
-			path: examples/chat-response-format.php
-
-		-
 			message: '#^Instanceof between Gemini\\Resources\\GenerativeModel and Gemini\\Resources\\GenerativeModel will always evaluate to true\.$#'
 			identifier: instanceof.alwaysTrue
 			count: 1

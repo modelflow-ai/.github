@@ -24,6 +24,7 @@ use ModelflowAi\Chat\Request\Message\TextPart;
 use ModelflowAi\Chat\Request\Message\ToolCallPart;
 use ModelflowAi\Chat\Request\Message\ToolCallsPart;
 use ModelflowAi\Chat\Request\ResponseFormat\JsonResponseFormat;
+use ModelflowAi\Chat\Request\ResponseFormat\JsonSchemaResponseFormat;
 use ModelflowAi\Chat\Response\AIChatResponse;
 use ModelflowAi\Chat\Response\AIChatResponseStream;
 use ModelflowAi\Chat\Response\AIChatToolCall;
@@ -759,6 +760,57 @@ final class MistralChatAdapterTest extends TestCase
             $this->assertSame($contents[$i]['name'], $toolCall->name);
             $this->assertSame($contents[$i]['arguments'], $toolCall->arguments);
         }
+    }
+
+    public function testSupportsResponseFormatJsonWhenModelSupportsJson(): void
+    {
+        $client = $this->prophesize(ClientInterface::class);
+
+        $adapter = new MistralChatAdapter($client->reveal(), Model::LARGE->value);
+
+        $this->assertTrue($adapter->supportsResponseFormat(new JsonResponseFormat()));
+    }
+
+    public function testSupportsResponseFormatJsonWhenModelDoesNotSupportJson(): void
+    {
+        $client = $this->prophesize(ClientInterface::class);
+
+        $adapter = new MistralChatAdapter($client->reveal(), Model::TINY->value);
+
+        $this->assertFalse($adapter->supportsResponseFormat(new JsonResponseFormat()));
+    }
+
+    public function testSupportsResponseFormatJsonSchemaWhenModelSupportsJson(): void
+    {
+        $client = $this->prophesize(ClientInterface::class);
+
+        $adapter = new MistralChatAdapter($client->reveal(), Model::LARGE->value);
+
+        $this->assertTrue($adapter->supportsResponseFormat(new JsonSchemaResponseFormat([
+            'type' => 'object',
+            'properties' => [],
+        ])));
+    }
+
+    public function testSupportsResponseFormatJsonWhenSmallModelSupportsJson(): void
+    {
+        $client = $this->prophesize(ClientInterface::class);
+
+        $adapter = new MistralChatAdapter($client->reveal(), Model::SMALL->value);
+
+        $this->assertTrue($adapter->supportsResponseFormat(new JsonResponseFormat()));
+    }
+
+    public function testSupportsResponseFormatJsonSchemaWhenSmallModelSupportsJson(): void
+    {
+        $client = $this->prophesize(ClientInterface::class);
+
+        $adapter = new MistralChatAdapter($client->reveal(), Model::SMALL->value);
+
+        $this->assertTrue($adapter->supportsResponseFormat(new JsonSchemaResponseFormat([
+            'type' => 'object',
+            'properties' => [],
+        ])));
     }
 
     /**

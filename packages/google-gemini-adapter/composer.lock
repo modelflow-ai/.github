@@ -4,33 +4,38 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7bb41f5f3c58e5c4505a9332426c0943",
+    "content-hash": "00c7ef46e6f62868f8f963e52b95eafa",
     "packages": [
         {
             "name": "google-gemini-php/client",
-            "version": "1.0.15",
+            "version": "2.7.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/google-gemini-php/client.git",
-                "reference": "6dca9a5e6a6de39b230fe4593a8d041efd02e34e"
+                "reference": "d61ebe8e8f7acc2aa66ce2e8a57c23bf32e1e340"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google-gemini-php/client/zipball/6dca9a5e6a6de39b230fe4593a8d041efd02e34e",
-                "reference": "6dca9a5e6a6de39b230fe4593a8d041efd02e34e",
+                "url": "https://api.github.com/repos/google-gemini-php/client/zipball/d61ebe8e8f7acc2aa66ce2e8a57c23bf32e1e340",
+                "reference": "d61ebe8e8f7acc2aa66ce2e8a57c23bf32e1e340",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.1.0",
-                "php-http/discovery": "^1.19.2"
+                "php-http/discovery": "^1.19.2",
+                "psr/http-client-implementation": "*",
+                "psr/http-factory-implementation": "*"
             },
             "require-dev": {
                 "guzzlehttp/guzzle": "^7.8.1",
                 "guzzlehttp/psr7": "^2.6.2",
                 "laravel/pint": "^1.18.1",
                 "mockery/mockery": "^1.6.7",
-                "pestphp/pest": "^2.30",
-                "phpstan/phpstan": "^1.10"
+                "pestphp/pest": "^2.32.3",
+                "phpstan/phpstan": "^2.1.32"
+            },
+            "suggest": {
+                "ext-fileinfo": "Reads upload file size and mime type if not provided"
             },
             "type": "library",
             "autoload": {
@@ -54,8 +59,10 @@
             "description": "Gemini API is a supercharged PHP API client that allows you to interact with the Gemini API",
             "keywords": [
                 "Gemini",
+                "banana",
                 "client",
                 "gemini-pro",
+                "google",
                 "language",
                 "natural",
                 "nlp",
@@ -65,9 +72,19 @@
             ],
             "support": {
                 "issues": "https://github.com/google-gemini-php/client/issues",
-                "source": "https://github.com/google-gemini-php/client/tree/1.0.15"
+                "source": "https://github.com/google-gemini-php/client/tree/2.7.4"
             },
-            "time": "2024-12-29T12:53:49+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/Plytas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/aydinfatih",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-12-29T17:51:16+00:00"
         },
         {
             "name": "nyholm/psr7",
@@ -4053,14 +4070,12 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "phpspec/prophecy-phpunit": 0
-    },
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.2"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

@@ -19,9 +19,8 @@ use ModelflowAi\DecisionTree\Criteria\CapabilityCriteria;
 /** @var AIChatRequestHandlerInterface $handler */
 $handler = require_once __DIR__ . '/bootstrap.php';
 
-// Mistral supports provider-enforced structured output with JSON schema
-// for models that support JSON (e.g., SMALL, LARGE).
-// The response is guaranteed to match the schema.
+// OpenAI supports provider-enforced structured output with JSON schema.
+// The response is guaranteed to match the schema - no prompt engineering needed.
 
 $response = $handler->createRequest(
     new AIChatMessage(
@@ -40,6 +39,8 @@ $response = $handler->createRequest(
             'projects' => [
                 'type' => 'array',
                 'description' => 'List of 5 project ideas',
+                'minItems' => 5,
+                'maxItems' => 5,
                 'items' => [
                     'type' => 'object',
                     'properties' => [

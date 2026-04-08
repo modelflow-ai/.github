@@ -31,6 +31,12 @@ use ModelflowAi\Anthropic\Responses\Messages\CreateStreamedResponse;
  *         properties: array<string, array{type: string, description: string}>,
  *     }
  * }
+ * @phpstan-type OutputConfig array{
+ *     format: array{
+ *         type: "json_schema",
+ *         schema: array<string, mixed>,
+ *     }
+ * }
  * @phpstan-type Parameters array{
  *     model: string,
  *     messages: Message[],
@@ -41,6 +47,7 @@ use ModelflowAi\Anthropic\Responses\Messages\CreateStreamedResponse;
  *     temperature?: float,
  *     top_k?: int,
  *     top_p?: float,
+ *     output_config?: OutputConfig,
  * }
  */
 interface MessagesInterface

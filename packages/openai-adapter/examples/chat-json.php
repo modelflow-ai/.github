@@ -19,13 +19,15 @@ use ModelflowAi\DecisionTree\Criteria\CapabilityCriteria;
 /** @var AIChatRequestHandlerInterface $handler */
 $handler = require_once __DIR__ . '/bootstrap.php';
 
-// Mistral supports plain JSON mode (json_object) for models that advertise JSON output.
-// The response will be valid JSON but without strict schema enforcement.
+// OpenAI supports plain JSON mode (json_object) which outputs valid JSON
+// but without strict schema enforcement. The model will produce JSON
+// but may include additional fields or omit optional ones.
 
 $response = $handler->createRequest(
     new AIChatMessage(
         AIChatMessageRoleEnum::USER,
-        'List 3 fruits with their color and taste. Return the result as JSON.',
+        'List 3 programming languages with their year of creation and main paradigm. '
+            . 'Return the result as a JSON array.',
     ),
 )
     ->asJson()

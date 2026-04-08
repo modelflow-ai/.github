@@ -23,6 +23,9 @@ use ModelflowAi\Chat\Request\Message\AIChatMessage;
 use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Chat\Request\Message\ImageBase64Part;
 use ModelflowAi\Chat\Request\Message\TextPart;
+use ModelflowAi\Chat\Request\ResponseFormat\JsonSchemaResponseFormat;
+use ModelflowAi\Chat\Request\ResponseFormat\ResponseFormatInterface;
+use ModelflowAi\Chat\Request\ResponseFormat\SupportsResponseFormatInterface;
 use ModelflowAi\Chat\Response\AIChatResponse;
 use ModelflowAi\Chat\Response\AIChatResponseMessage;
 use ModelflowAi\Chat\Response\AIChatResponseStream;
@@ -32,7 +35,7 @@ use ModelflowAi\Chat\Response\Usage;
 /**
  * @phpstan-import-type Parameters from MessagesInterface
  */
-final readonly class AnthropicChatAdapter implements AIChatAdapterInterface
+final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, SupportsResponseFormatInterface
 {
     public const EXPECTED_ROLES = [
         AIChatMessageRoleEnum::SYSTEM,
@@ -105,6 +108,15 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface
         }
 
         $parameters['messages'] = $messages;
+
+        if ($request->getResponseFormat() instanceof JsonSchemaResponseFormat) {
+            $parameters['output_config'] = [
+                'format' => [
+                    'type' => 'json_schema',
+                    'schema' => $request->getResponseFormat()->schema,
+                ],
+            ];
+        }
 
         if ('json' === $request->getFormat()) {
             $parameters['messages'][] = [
@@ -214,5 +226,10 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface
     {
         return $request instanceof AIChatRequest
             && !$request->hasTools();
+    }
+
+    public function supportsResponseFormat(ResponseFormatInterface $responseFormat): bool
+    {
+        return $responseFormat instanceof JsonSchemaResponseFormat;
     }
 }
