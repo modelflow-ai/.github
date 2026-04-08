@@ -1,8 +1,8 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Parameter \#1 \$apiKey of static method OpenAI\:\:client\(\) expects string, mixed given\.$#'
-			identifier: argument.type
+			message: '#^PHPDoc tag @var with type ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Chat\\Request\\AIChatRequest, ModelflowAi\\Chat\\Adapter\\AIChatAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\OpenaiAdapter\\Chat\\OpenaiChatAdapter\>\.$#'
+			identifier: varTag.nativeType
 			count: 1
 			path: examples/bootstrap.php
 

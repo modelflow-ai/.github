@@ -16,7 +16,6 @@ namespace ModelflowAi\Chat\Tests\Unit;
 use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;
 use ModelflowAi\Chat\AIChatRequestHandler;
 use ModelflowAi\Chat\Exception\UnsupportedResponseFormatException;
-use ModelflowAi\Chat\Request\AIChatMessageCollection;
 use ModelflowAi\Chat\Request\AIChatRequest;
 use ModelflowAi\Chat\Request\AIChatStreamedRequest;
 use ModelflowAi\Chat\Request\Builder\AIChatRequestBuilder;

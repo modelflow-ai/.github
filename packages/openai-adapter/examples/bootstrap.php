@@ -27,7 +27,7 @@ use Symfony\Component\Dotenv\Dotenv;
 
 $openaiApiKey = $_ENV['OPENAI_API_KEY'] ?? null;
 if (!\is_string($openaiApiKey) || '' === \trim($openaiApiKey)) {
-    throw new \RuntimeException('OpenAI API key is required');
+    throw new RuntimeException('OpenAI API key is required');
 }
 
 $openaiClient = OpenAI::client($openaiApiKey);

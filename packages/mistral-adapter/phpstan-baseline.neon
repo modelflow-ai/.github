@@ -4,18 +4,6 @@ parameters:
 			message: '#^PHPDoc tag @var with type ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Chat\\Request\\AIChatRequest, ModelflowAi\\Chat\\Adapter\\AIChatAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\MistralAdapter\\Chat\\MistralChatAdapter\>\.$#'
 			identifier: varTag.nativeType
 			count: 1
-			path: examples/bootstrap.php
-
-		-
-			message: '#^Parameter \#1 \$apiKey of static method ModelflowAi\\Mistral\\Mistral\:\:client\(\) expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: examples/bootstrap.php
-
-		-
-			message: '#^PHPDoc tag @var with type ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Chat\\Request\\AIChatRequest, ModelflowAi\\Chat\\Adapter\\AIChatAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\MistralAdapter\\Chat\\MistralChatAdapter\>\.$#'
-			identifier: varTag.nativeType
-			count: 1
 			path: examples/chat/bootstrap.php
 
 		-
@@ -23,24 +11,6 @@ parameters:
 			identifier: argument.type
 			count: 4
 			path: examples/chat/bootstrap.php
-
-		-
-			message: '#^Using nullsafe property access "\?\-\>totalTokens" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
-			identifier: nullsafe.neverNull
-			count: 1
-			path: examples/chat/chat-json.php
-
-		-
-			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
-			identifier: binaryOp.invalid
-			count: 1
-			path: examples/chat/chat-response-format.php
-
-		-
-			message: '#^Call to function is_array\(\) with array\<string, mixed\> will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 1
-			path: examples/chat/chat-response-format.php
 
 		-
 			message: '#^Using nullsafe property access "\?\-\>totalTokens" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
