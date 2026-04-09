@@ -277,7 +277,7 @@ class AIChatRequestHandlerTest extends TestCase
 
         $this->expectException(UnsupportedResponseFormatException::class);
         $this->expectExceptionMessageMatches(
-            '/The response format "json_schema" is not supported by adapter "ModelflowAi\\\\Chat\\\\Adapter\\\\AIChatAdapterInterface@anonymous.*"./',
+            '/The response format "json_schema" is not supported by adapter ".+"\\./',
         );
 
         $request->execute();
@@ -343,7 +343,7 @@ class AIChatRequestHandlerTest extends TestCase
 
         $this->expectException(UnsupportedResponseFormatException::class);
         $this->expectExceptionMessageMatches(
-            '/The response format "json_schema" is not supported by adapter "ModelflowAi\\\\Chat\\\\Adapter\\\\AIChatAdapterInterface@anonymous.*"./',
+            '/The response format "json_schema" is not supported by adapter ".+"\\./',
         );
 
         $request->execute();

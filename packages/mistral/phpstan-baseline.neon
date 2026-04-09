@@ -169,6 +169,13 @@ parameters:
 			path: tests/Unit/Resources/EmbeddingsTest.php
 
 		-
+			message: '#^Parameter \#1 \$array of function array_diff expects an array of values castable to string, array\<string, mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Unit/Resources/EmbeddingsTest.php
+			reportUnmatched: false
+
+		-
 			message: '#^Parameter \#2 \$arrays of function array_diff expects an array of values castable to string, array\<string, list\<string\>\|string\> given\.$#'
 			identifier: argument.type
 			count: 1

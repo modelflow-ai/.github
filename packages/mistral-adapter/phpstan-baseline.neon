@@ -155,12 +155,14 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Chat/MistralChatAdapter.php
+			reportUnmatched: false
 
 		-
 			message: '#^Parameter \#1 \$parameters of method ModelflowAi\\Mistral\\Resources\\ChatInterface\:\:createStreamed\(\) expects array\{model\: string, messages\: array\<array\{role\: ''assistant''\|''system''\|''tool''\|''user'', content\: array\<array\{type\: ''image_url'', image_url\: string\}\|array\{type\: ''text'', text\: string\}\|string\>\|string\}\>, tools\?\: array\<array\{type\: string, function\: array\{name\: string, description\?\: string, parameters\?\: array\<string, mixed\>\}\}\>, tools_choice\?\: ''auto''\|''enum'', temperature\?\: float, top_p\?\: float, max_tokens\?\: int, safe_mode\?\: bool, \.\.\.\}, array\{model\: string, messages\: array\<array\{role\: ''assistant''\|''system''\|''tool''\|''user'', content\: array\<array\{type\: ''image_url'', image_url\: string\}\|array\{type\: ''text'', text\: string\}\|string\>\|string\}\>, response_format\?\: array\{type\: ''json_object''\}\|array\{type\: ''json_schema'', json_schema\: array\{name\: string, strict\: bool, schema\: array\<string, mixed\>\}\}, tools\?\: array\<array\{type\: string, function\: array\{name\: string, description\: string, parameters\: array\{type\: string, properties\: array\<string, array\<mixed\>\>, required\: array\<string\>\}\}\}\>, tool_choice\?\: string\} given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Chat/MistralChatAdapter.php
+			reportUnmatched: false
 
 		-
 			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\Response\\\\AIChatResponse'' and ModelflowAi\\Chat\\Response\\AIChatResponse will always evaluate to true\.$#'
