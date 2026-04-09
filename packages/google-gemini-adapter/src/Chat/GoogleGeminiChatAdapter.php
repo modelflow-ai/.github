@@ -23,7 +23,6 @@ use Gemini\Enums\DataType;
 use Gemini\Enums\MimeType;
 use Gemini\Enums\ResponseMimeType;
 use Gemini\Enums\Role;
-use Gemini\Resources\GenerativeModel;
 use Gemini\Responses\GenerativeModel\GenerateContentResponse;
 use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;
 use ModelflowAi\Chat\Request\AIChatRequest;
@@ -93,11 +92,8 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface, 
         $responseFormat = $request->getResponseFormat();
         $config = $this->buildGenerationConfig($request, $responseFormat);
 
-        /** @var GenerativeModel $model */
         $model = $this->client->generativeModel($this->model);
-        if ($model instanceof GenerativeModel) {
-            $model = $model->withGenerationConfig($config);
-        }
+        $model = $model->withGenerationConfig($config);
 
         if ($request instanceof AIChatStreamedRequest) {
             return $this->createStreamed($request, $messages, $model);
