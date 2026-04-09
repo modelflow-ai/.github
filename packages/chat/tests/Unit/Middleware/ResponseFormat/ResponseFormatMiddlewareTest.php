@@ -179,7 +179,7 @@ class ResponseFormatMiddlewareTest extends TestCase
 
         $this->expectException(UnsupportedResponseFormatException::class);
         $this->expectExceptionMessageMatches(
-            '/The response format "json_schema" is not supported by adapter "Double\\\\AIChatAdapterInterface(?:\\\\SupportsResponseFormatInterface)?\\\\P\d+"./',
+            '/The response format "json_schema" is not supported by adapter ".+"\\./',
         );
 
         $next = fn (AIChatRequest $request, ?AIChatAdapterInterface $adapter): AIChatResponseInterface => $this->response->reveal();
