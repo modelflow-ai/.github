@@ -249,6 +249,68 @@ final class AnthropicChatAdapterTest extends TestCase
         $this->assertSame(DataFixtures::MESSAGES_CREATE_RESPONSE['content'][0]['text'], $result->getMessage()->content);
     }
 
+    public function testHandleRequestWithJsonSchemaStripsUnsupportedKeywords(): void
+    {
+        $responseFormat = new JsonSchemaResponseFormat([
+            'type' => 'object',
+            'properties' => [
+                'items' => [
+                    'type' => 'array',
+                    'items' => ['type' => 'string'],
+                    'minItems' => 1,
+                    'maxItems' => 5,
+                    'uniqueItems' => true,
+                ],
+                'count' => [
+                    'type' => 'integer',
+                    'minimum' => 0,
+                    'maximum' => 10,
+                ],
+            ],
+            'required' => ['items', 'count'],
+        ]);
+
+        // Anthropic rejects maxItems/uniqueItems/minimum/maximum; minItems must survive.
+        $payload = DataFixtures::MESSAGES_CREATE_REQUEST;
+        $payload['output_config'] = [
+            'format' => [
+                'type' => 'json_schema',
+                'schema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'items' => [
+                            'type' => 'array',
+                            'items' => ['type' => 'string'],
+                            'minItems' => 1,
+                        ],
+                        'count' => [
+                            'type' => 'integer',
+                        ],
+                    ],
+                    'required' => ['items', 'count'],
+                ],
+            ],
+        ];
+
+        $mockResponseMatcher = new MockResponseMatcher();
+        $mockResponseMatcher->addResponse(PartialPayload::create(
+            'messages',
+            $payload,
+        ), new ObjectResponse(DataFixtures::MESSAGES_CREATE_RESPONSE, MetaInformation::empty()));
+
+        $client = new Client(new MockTransport($mockResponseMatcher));
+
+        $request = new AIChatRequest(new AIChatMessageCollection(
+            new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, DataFixtures::MESSAGES_CREATE_REQUEST_RAW['messages'][0]['content']),
+            new AIChatMessage(AIChatMessageRoleEnum::USER, DataFixtures::MESSAGES_CREATE_REQUEST_RAW['messages'][1]['content']),
+        ), new CriteriaCollection(), [], [], [], static fn () => null, responseFormat: $responseFormat);
+
+        $adapter = new AnthropicChatAdapter($client, Model::CLAUDE_3_HAIKU->value, 100);
+        $result = $adapter->handleRequest($request);
+
+        $this->assertInstanceOf(AIChatResponse::class, $result);
+    }
+
     public function testHandleRequestStreamed(): void
     {
         $mockResponseMatcher = new MockResponseMatcher();

@@ -113,7 +113,7 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
             $parameters['output_config'] = [
                 'format' => [
                     'type' => 'json_schema',
-                    'schema' => $request->getResponseFormat()->schema,
+                    'schema' => self::sanitizeSchema($request->getResponseFormat()->schema),
                 ],
             ];
         }
@@ -231,5 +231,74 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
     public function supportsResponseFormat(ResponseFormatInterface $responseFormat): bool
     {
         return $responseFormat instanceof JsonSchemaResponseFormat;
+    }
+
+    /**
+     * Anthropic structured outputs only accept a subset of JSON Schema. Recursively drop the
+     * validation keywords the API rejects (e.g. maxItems, minimum, maximum, uniqueItems) so a
+     * schema written for the stricter OpenAI/Gemini dialects is still accepted here.
+     *
+     * @see https://docs.anthropic.com/en/docs/build-with-claude/structured-outputs
+     *
+     * @param array<string, mixed> $schema
+     *
+     * @return array<string, mixed>
+     */
+    private static function sanitizeSchema(array $schema): array
+    {
+        static $unsupportedKeywords = [
+            'maxItems',
+            'minimum',
+            'maximum',
+            'exclusiveMinimum',
+            'exclusiveMaximum',
+            'multipleOf',
+            'uniqueItems',
+            'minProperties',
+            'maxProperties',
+        ];
+
+        foreach ($unsupportedKeywords as $keyword) {
+            unset($schema[$keyword]);
+        }
+
+        // Keys whose values hold nested schema definitions keyed by an arbitrary name
+        // (property/definition names must never be treated as schema keywords).
+        foreach (['properties', '$defs', 'definitions'] as $mapKey) {
+            if (isset($schema[$mapKey]) && \is_array($schema[$mapKey])) {
+                /** @var array<string, mixed> $map */
+                $map = $schema[$mapKey];
+                foreach ($map as $name => $child) {
+                    if (\is_array($child)) {
+                        /** @var array<string, mixed> $child */
+                        $map[$name] = self::sanitizeSchema($child);
+                    }
+                }
+                $schema[$mapKey] = $map;
+            }
+        }
+
+        // Keys whose value is a single nested schema.
+        foreach (['items', 'additionalProperties', 'not'] as $schemaKey) {
+            if (isset($schema[$schemaKey]) && \is_array($schema[$schemaKey])) {
+                /** @var array<string, mixed> $child */
+                $child = $schema[$schemaKey];
+                $schema[$schemaKey] = self::sanitizeSchema($child);
+            }
+        }
+
+        // Keys whose value is a list of nested schemas.
+        foreach (['allOf', 'anyOf', 'oneOf', 'prefixItems'] as $listKey) {
+            if (isset($schema[$listKey]) && \is_array($schema[$listKey])) {
+                /** @var list<mixed> $list */
+                $list = $schema[$listKey];
+                $schema[$listKey] = array_map(
+                    static fn (mixed $child): mixed => \is_array($child) ? self::sanitizeSchema($child) : $child,
+                    $list,
+                );
+            }
+        }
+
+        return $schema;
     }
 }
