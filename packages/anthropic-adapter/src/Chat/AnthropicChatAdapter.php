@@ -221,7 +221,7 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
             $delta = $response->content;
 
             if (!$role instanceof AIChatMessageRoleEnum) {
-                $role = AIChatMessageRoleEnum::from($response->role ?? 'assistant');
+                $role = AIChatMessageRoleEnum::from($response->role ?: 'assistant');
                 if ('' !== $prefix) {
                     yield new AIChatResponseMessage($role, $prefix);
                 }
