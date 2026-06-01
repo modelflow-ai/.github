@@ -21,19 +21,43 @@ parameters:
 		-
 			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\Response\\\\AIChatResponse'' and ModelflowAi\\Chat\\Response\\AIChatResponse will always evaluate to true\.$#'
 			identifier: method.alreadyNarrowedType
-			count: 4
+			count: 5
+			path: tests/Unit/Chat/GoogleGeminiChatAdapterTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertSame\(\) with ModelflowAi\\Chat\\ToolInfo\\ToolTypeEnum\:\:FUNCTION and ModelflowAi\\Chat\\ToolInfo\\ToolTypeEnum will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
 			path: tests/Unit/Chat/GoogleGeminiChatAdapterTest.php
 
 		-
 			message: '#^Cannot access offset 0 on mixed\.$#'
 			identifier: offsetAccess.nonOffsetAccessible
-			count: 4
+			count: 6
+			path: tests/Unit/Chat/GoogleGeminiChatAdapterTest.php
+
+		-
+			message: '#^Cannot access property \$functionCall on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Unit/Chat/GoogleGeminiChatAdapterTest.php
+
+		-
+			message: '#^Cannot access property \$functionResponse on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
 			path: tests/Unit/Chat/GoogleGeminiChatAdapterTest.php
 
 		-
 			message: '#^Cannot access property \$parts on mixed\.$#'
 			identifier: property.nonObject
-			count: 4
+			count: 6
+			path: tests/Unit/Chat/GoogleGeminiChatAdapterTest.php
+
+		-
+			message: '#^Cannot access property \$role on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
 			path: tests/Unit/Chat/GoogleGeminiChatAdapterTest.php
 
 		-
