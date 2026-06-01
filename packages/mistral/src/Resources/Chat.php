@@ -165,7 +165,12 @@ final readonly class Chat implements ChatInterface
             Assert::keyExists($parameters, 'response_format');
             Assert::isArray($parameters['response_format']);
             Assert::keyExists($parameters['response_format'], 'type');
-            Assert::inArray($parameters['response_format']['type'], ['json_object']);
+            Assert::inArray($parameters['response_format']['type'], ['json_object', 'json_schema']);
+
+            if ('json_schema' === $parameters['response_format']['type']) {
+                Assert::keyExists($parameters['response_format'], 'json_schema');
+                Assert::isArray($parameters['response_format']['json_schema']);
+            }
         }
     }
 }

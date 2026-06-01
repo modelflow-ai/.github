@@ -80,10 +80,17 @@ final class EmbeddingsTest extends TestCase
 
         $response = new ObjectResponse(DataFixtures::EMBEDDINGS_CREATE_RESPONSE, MetaInformation::from([]));
         $this->transport->requestObject(
-            Argument::that(static fn (Payload $payload) => 'embeddings' === $payload->resourceUri->uri
-                && Method::POST === $payload->method
-                && ContentType::JSON === $payload->contentType
-                && @\array_diff($payload->parameters, DataFixtures::EMBEDDINGS_CREATE_REQUEST) === ['encoding_format' => 'float']),
+            Argument::that(static function (Payload $payload): bool {
+                $expected = \array_merge(DataFixtures::EMBEDDINGS_CREATE_REQUEST, ['encoding_format' => 'float']);
+                \ksort($expected);
+                $actual = $payload->parameters;
+                \ksort($actual);
+
+                return 'embeddings' === $payload->resourceUri->uri
+                    && Method::POST === $payload->method
+                    && ContentType::JSON === $payload->contentType
+                    && $actual === $expected;
+            }),
         )->willReturn($response);
 
         $embeddings = $this->createInstance($this->transport->reveal());

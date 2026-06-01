@@ -14,8 +14,10 @@ declare(strict_types=1);
 namespace ModelflowAi\Chat\Middleware\ResponseFormat;
 
 use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;
+use ModelflowAi\Chat\Exception\UnsupportedResponseFormatException;
 use ModelflowAi\Chat\Middleware\AIChatMiddlewareInterface;
 use ModelflowAi\Chat\Request\AIChatRequest;
+use ModelflowAi\Chat\Request\ResponseFormat\JsonSchemaResponseFormat;
 use ModelflowAi\Chat\Request\ResponseFormat\ResponseFormatInterface;
 use ModelflowAi\Chat\Request\ResponseFormat\SupportsResponseFormatInterface;
 use ModelflowAi\Chat\Response\AIChatResponseInterface;
@@ -39,6 +41,10 @@ final readonly class ResponseFormatMiddleware implements AIChatMiddlewareInterfa
             if (!$adapter instanceof SupportsResponseFormatInterface
                 || !$adapter->supportsResponseFormat($responseFormat)
             ) {
+                if ($responseFormat instanceof JsonSchemaResponseFormat) {
+                    throw UnsupportedResponseFormatException::forAdapter($responseFormat, $adapter);
+                }
+
                 $request->getMessages()->addResponseFormat($responseFormat);
             }
         }

@@ -108,7 +108,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../mistral",
-                "reference": "1e8225c9074b07956fa0cee362492acdcd79e8c0"
+                "reference": "7068ca161d9dd1acc08ea9c7b7a49da9aa60ea4b"
             },
             "require": {
                 "modelflow-ai/api-client": "^0.4",
@@ -119,7 +119,7 @@
                 "asapo/remove-vendor-plugin": "^0.1",
                 "jangregor/phpstan-prophecy": "^2.0",
                 "php-cs-fixer/shim": "^3.15",
-                "phpspec/prophecy-phpunit": "^2.1@stable",
+                "phpspec/prophecy-phpunit": "^2.2",
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
@@ -384,17 +384,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "690ffeed604b23211efbb172e8eea24804787d6a"
+                "reference": "0542deecd2fa688bf8019256425de058fae6e405"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/690ffeed604b23211efbb172e8eea24804787d6a",
-                "reference": "690ffeed604b23211efbb172e8eea24804787d6a",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/0542deecd2fa688bf8019256425de058fae6e405",
+                "reference": "0542deecd2fa688bf8019256425de058fae6e405",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.4",
+                "php": ">=8.4.1",
                 "psr/log": "^1|^2|^3",
+                "symfony/deprecation-contracts": "^2.5|^3.0",
                 "symfony/http-client-contracts": "^3.7",
                 "symfony/service-contracts": "^2.5|^3"
             },
@@ -411,7 +412,7 @@
             "require-dev": {
                 "amphp/http-client": "^5.3.2",
                 "amphp/http-tunnel": "^2.0",
-                "guzzlehttp/promises": "^1.4|^2.0",
+                "guzzlehttp/guzzle": "^7.10",
                 "nyholm/psr7": "^1.0",
                 "php-http/httplug": "^1.0|^2.0",
                 "psr/http-client": "^1.0",
@@ -473,7 +474,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-29T09:42:48+00:00"
+            "time": "2026-04-07T06:26:27+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
@@ -481,12 +482,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client-contracts.git",
-                "reference": "402a972e29ca7f0596dcbe072b8d2c1ff9f2dd78"
+                "reference": "4a2d00c37651c0bdc2b9e1c773487a8bf4edb12d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client-contracts/zipball/402a972e29ca7f0596dcbe072b8d2c1ff9f2dd78",
-                "reference": "402a972e29ca7f0596dcbe072b8d2c1ff9f2dd78",
+                "url": "https://api.github.com/repos/symfony/http-client-contracts/zipball/4a2d00c37651c0bdc2b9e1c773487a8bf4edb12d",
+                "reference": "4a2d00c37651c0bdc2b9e1c773487a8bf4edb12d",
                 "shasum": ""
             },
             "require": {
@@ -556,7 +557,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-29T09:42:44+00:00"
+            "time": "2026-03-06T13:17:50+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -564,12 +565,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/service-contracts.git",
-                "reference": "09dd242537543ad34254b0e173ab287a7e39900b"
+                "reference": "d25d82433a80eba6aa0e6c24b61d7370d99e444a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/09dd242537543ad34254b0e173ab287a7e39900b",
-                "reference": "09dd242537543ad34254b0e173ab287a7e39900b",
+                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/d25d82433a80eba6aa0e6c24b61d7370d99e444a",
+                "reference": "d25d82433a80eba6aa0e6c24b61d7370d99e444a",
                 "shasum": ""
             },
             "require": {
@@ -644,7 +645,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-05T13:30:16+00:00"
+            "time": "2026-03-28T09:44:51+00:00"
         },
         {
             "name": "webmozart/assert",

@@ -23,6 +23,9 @@ use ModelflowAi\Chat\Request\Message\AIChatMessage;
 use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Chat\Request\Message\ImageBase64Part;
 use ModelflowAi\Chat\Request\Message\TextPart;
+use ModelflowAi\Chat\Request\ResponseFormat\JsonSchemaResponseFormat;
+use ModelflowAi\Chat\Request\ResponseFormat\ResponseFormatInterface;
+use ModelflowAi\Chat\Request\ResponseFormat\SupportsResponseFormatInterface;
 use ModelflowAi\Chat\Response\AIChatResponse;
 use ModelflowAi\Chat\Response\AIChatResponseMessage;
 use ModelflowAi\Chat\Response\AIChatResponseStream;
@@ -32,12 +35,31 @@ use ModelflowAi\Chat\Response\Usage;
 /**
  * @phpstan-import-type Parameters from MessagesInterface
  */
-final readonly class AnthropicChatAdapter implements AIChatAdapterInterface
+final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, SupportsResponseFormatInterface
 {
     public const EXPECTED_ROLES = [
         AIChatMessageRoleEnum::SYSTEM,
         AIChatMessageRoleEnum::ASSISTANT,
         AIChatMessageRoleEnum::USER,
+    ];
+
+    /**
+     * JSON Schema keywords Anthropic does not support in structured output schemas.
+     *
+     * @see https://docs.anthropic.com/en/docs/build-with-claude/structured-outputs
+     *
+     * @var list<string>
+     */
+    private const UNSUPPORTED_SCHEMA_KEYWORDS = [
+        'maxItems',
+        'minimum',
+        'maximum',
+        'exclusiveMinimum',
+        'exclusiveMaximum',
+        'multipleOf',
+        'uniqueItems',
+        'minProperties',
+        'maxProperties',
     ];
 
     public function __construct(
@@ -105,6 +127,15 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface
         }
 
         $parameters['messages'] = $messages;
+
+        if ($request->getResponseFormat() instanceof JsonSchemaResponseFormat) {
+            $parameters['output_config'] = [
+                'format' => [
+                    'type' => 'json_schema',
+                    'schema' => self::sanitizeSchema($request->getResponseFormat()->schema),
+                ],
+            ];
+        }
 
         if ('json' === $request->getFormat()) {
             $parameters['messages'][] = [
@@ -190,7 +221,7 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface
             $delta = $response->content;
 
             if (!$role instanceof AIChatMessageRoleEnum) {
-                $role = AIChatMessageRoleEnum::from($response->role ?? 'assistant');
+                $role = AIChatMessageRoleEnum::from($response->role ?: 'assistant');
                 if ('' !== $prefix) {
                     yield new AIChatResponseMessage($role, $prefix);
                 }
@@ -214,5 +245,74 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface
     {
         return $request instanceof AIChatRequest
             && !$request->hasTools();
+    }
+
+    public function supportsResponseFormat(ResponseFormatInterface $responseFormat): bool
+    {
+        return $responseFormat instanceof JsonSchemaResponseFormat;
+    }
+
+    /**
+     * Anthropic structured outputs only accept a subset of JSON Schema. Recursively drop the
+     * validation keywords the API rejects (e.g. maxItems, minimum, maximum, uniqueItems) so a
+     * schema written for the stricter OpenAI/Gemini dialects is still accepted here.
+     *
+     * @see https://docs.anthropic.com/en/docs/build-with-claude/structured-outputs
+     *
+     * @param array<string, mixed> $schema
+     *
+     * @return array<string, mixed>
+     */
+    private static function sanitizeSchema(array $schema): array
+    {
+        foreach (self::UNSUPPORTED_SCHEMA_KEYWORDS as $keyword) {
+            unset($schema[$keyword]);
+        }
+
+        // Keys whose values hold nested schema definitions keyed by an arbitrary name
+        // (property/definition names must never be treated as schema keywords).
+        foreach (['properties', '$defs', 'definitions'] as $mapKey) {
+            if (isset($schema[$mapKey]) && \is_array($schema[$mapKey])) {
+                /** @var array<string, mixed> $map */
+                $map = $schema[$mapKey];
+                foreach ($map as $name => $child) {
+                    if (\is_array($child)) {
+                        /** @var array<string, mixed> $child */
+                        $map[$name] = self::sanitizeSchema($child);
+                    }
+                }
+                $schema[$mapKey] = $map;
+            }
+        }
+
+        // Keys whose value is a single nested schema.
+        foreach (['items', 'additionalProperties', 'not'] as $schemaKey) {
+            if (isset($schema[$schemaKey]) && \is_array($schema[$schemaKey])) {
+                /** @var array<string, mixed> $child */
+                $child = $schema[$schemaKey];
+                $schema[$schemaKey] = self::sanitizeSchema($child);
+            }
+        }
+
+        // Keys whose value is a list of nested schemas.
+        foreach (['allOf', 'anyOf', 'oneOf', 'prefixItems'] as $listKey) {
+            if (isset($schema[$listKey]) && \is_array($schema[$listKey])) {
+                /** @var list<mixed> $list */
+                $list = $schema[$listKey];
+                $schema[$listKey] = \array_map(
+                    static function (mixed $child): mixed {
+                        if (\is_array($child)) {
+                            /** @var array<string, mixed> $child */
+                            return self::sanitizeSchema($child);
+                        }
+
+                        return $child;
+                    },
+                    $list,
+                );
+            }
+        }
+
+        return $schema;
     }
 }

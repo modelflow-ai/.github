@@ -33,5 +33,5 @@ parameters:
 		-
 			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\Response\\\\AIChatResponse'' and ModelflowAi\\Chat\\Response\\AIChatResponse will always evaluate to true\.$#'
 			identifier: method.alreadyNarrowedType
-			count: 3
+			count: 4
 			path: tests/Unit/Chat/AnthropicChatAdapterTest.php

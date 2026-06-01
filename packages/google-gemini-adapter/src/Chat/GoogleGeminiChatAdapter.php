@@ -18,9 +18,11 @@ use Gemini\Contracts\Resources\GenerativeModelContract;
 use Gemini\Data\Blob;
 use Gemini\Data\Content;
 use Gemini\Data\GenerationConfig;
+use Gemini\Data\Schema;
+use Gemini\Enums\DataType;
 use Gemini\Enums\MimeType;
+use Gemini\Enums\ResponseMimeType;
 use Gemini\Enums\Role;
-use Gemini\Resources\GenerativeModel;
 use Gemini\Responses\GenerativeModel\GenerateContentResponse;
 use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;
 use ModelflowAi\Chat\Request\AIChatRequest;
@@ -29,6 +31,10 @@ use ModelflowAi\Chat\Request\Message\AIChatMessage;
 use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Chat\Request\Message\ImageBase64Part;
 use ModelflowAi\Chat\Request\Message\TextPart;
+use ModelflowAi\Chat\Request\ResponseFormat\JsonResponseFormat;
+use ModelflowAi\Chat\Request\ResponseFormat\JsonSchemaResponseFormat;
+use ModelflowAi\Chat\Request\ResponseFormat\ResponseFormatInterface;
+use ModelflowAi\Chat\Request\ResponseFormat\SupportsResponseFormatInterface;
 use ModelflowAi\Chat\Response\AIChatResponse;
 use ModelflowAi\Chat\Response\AIChatResponseMessage;
 use ModelflowAi\Chat\Response\AIChatResponseStream;
@@ -36,7 +42,7 @@ use ModelflowAi\Chat\Response\StreamingUsageTracker;
 use ModelflowAi\Chat\Response\Usage;
 use Webmozart\Assert\Assert;
 
-final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface
+final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface, SupportsResponseFormatInterface
 {
     public const EXPECTED_ROLES = [
         AIChatMessageRoleEnum::SYSTEM,
@@ -83,27 +89,90 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface
             $messages[] = Content::parse($message, $geminiRole);
         }
 
-        $config = new GenerationConfig();
-        if ($request->getOption('temperature')) {
-            $temperature = $request->getOption('temperature');
-            Assert::float($temperature);
+        $responseFormat = $request->getResponseFormat();
+        $config = $this->buildGenerationConfig($request, $responseFormat);
 
-            $config = new GenerationConfig(temperature: $temperature);
-        }
-
-        /** @var GenerativeModel $model */
         $model = $this->client->generativeModel($this->model);
-        if ($model instanceof GenerativeModel) {
-            // TODO: Remove this workaround once the mock class implements withGenerationConfig
-            // This is a temporary workaround because the mock class doesn't implement withGenerationConfig
-            $model = $model->withGenerationConfig($config);
-        }
+        $model = $model->withGenerationConfig($config);
 
         if ($request instanceof AIChatStreamedRequest) {
             return $this->createStreamed($request, $messages, $model);
         }
 
         return $this->create($request, $messages, $model);
+    }
+
+    private function buildGenerationConfig(AIChatRequest $request, ?ResponseFormatInterface $responseFormat): GenerationConfig
+    {
+        $temperature = $request->getOption('temperature');
+        $responseMimeType = null;
+        $responseSchema = null;
+
+        if ($responseFormat instanceof JsonSchemaResponseFormat) {
+            $responseMimeType = ResponseMimeType::APPLICATION_JSON;
+            $responseSchema = $this->convertSchema($responseFormat->schema);
+        } elseif ($responseFormat instanceof JsonResponseFormat) {
+            $responseMimeType = ResponseMimeType::APPLICATION_JSON;
+        }
+
+        if (null !== $temperature) {
+            Assert::float($temperature);
+
+            return new GenerationConfig(
+                temperature: $temperature,
+                responseMimeType: $responseMimeType,
+                responseSchema: $responseSchema,
+            );
+        }
+
+        if ($responseMimeType instanceof ResponseMimeType || $responseSchema instanceof Schema) {
+            return new GenerationConfig(
+                responseMimeType: $responseMimeType,
+                responseSchema: $responseSchema,
+            );
+        }
+
+        return new GenerationConfig();
+    }
+
+    /**
+     * @param array<string, mixed> $schema
+     */
+    private function convertSchema(array $schema): Schema
+    {
+        $typeValue = \is_string($schema['type'] ?? null) ? $schema['type'] : 'object';
+        $type = DataType::from(\strtoupper($typeValue));
+        $description = \is_string($schema['description'] ?? null) ? $schema['description'] : null;
+        /** @var array<string>|null $required */
+        $required = \is_array($schema['required'] ?? null) ? $schema['required'] : null;
+        $properties = null;
+        $itemsSchema = null;
+
+        if (isset($schema['properties']) && \is_array($schema['properties'])) {
+            /** @var array<string, mixed> $schemaProperties */
+            $schemaProperties = $schema['properties'];
+            $properties = [];
+            foreach ($schemaProperties as $name => $property) {
+                if (\is_array($property)) {
+                    /** @var array<string, mixed> $property */
+                    $properties[$name] = $this->convertSchema($property);
+                }
+            }
+        }
+
+        if (isset($schema['items']) && \is_array($schema['items'])) {
+            /** @var array<string, mixed> $schemaItems */
+            $schemaItems = $schema['items'];
+            $itemsSchema = $this->convertSchema($schemaItems);
+        }
+
+        return new Schema(
+            type: $type,
+            description: $description,
+            properties: $properties,
+            required: $required,
+            items: $itemsSchema,
+        );
     }
 
     /**
@@ -203,5 +272,11 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface
     public function supports(object $request): bool
     {
         return $request instanceof AIChatRequest;
+    }
+
+    public function supportsResponseFormat(ResponseFormatInterface $responseFormat): bool
+    {
+        return $responseFormat instanceof JsonResponseFormat
+            || $responseFormat instanceof JsonSchemaResponseFormat;
     }
 }

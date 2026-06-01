@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Parameter \#1 \$apiKey of static method ModelflowAi\\Mistral\\Mistral\:\:client\(\) expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: examples/bootstrap.php
-
-		-
 			message: '#^PHPDoc tag @var with type ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Chat\\Request\\AIChatRequest, ModelflowAi\\Chat\\Adapter\\AIChatAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\MistralAdapter\\Chat\\MistralChatAdapter\>\.$#'
 			identifier: varTag.nativeType
 			count: 1
@@ -17,24 +11,6 @@ parameters:
 			identifier: argument.type
 			count: 4
 			path: examples/chat/bootstrap.php
-
-		-
-			message: '#^Using nullsafe property access "\?\-\>totalTokens" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
-			identifier: nullsafe.neverNull
-			count: 1
-			path: examples/chat/chat-json.php
-
-		-
-			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
-			identifier: binaryOp.invalid
-			count: 1
-			path: examples/chat/chat-response-format.php
-
-		-
-			message: '#^Call to function is_array\(\) with array\<string, mixed\> will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 1
-			path: examples/chat/chat-response-format.php
 
 		-
 			message: '#^Using nullsafe property access "\?\-\>totalTokens" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
@@ -173,6 +149,20 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: examples/embeddings/simple-embeddings.php
+
+		-
+			message: '#^Parameter \#1 \$parameters of method ModelflowAi\\Mistral\\Resources\\ChatInterface\:\:create\(\) expects array\{model\: string, messages\: array\<array\{role\: ''assistant''\|''system''\|''tool''\|''user'', content\: array\<array\{type\: ''image_url'', image_url\: string\}\|array\{type\: ''text'', text\: string\}\|string\>\|string\}\>, tools\?\: array\<array\{type\: string, function\: array\{name\: string, description\?\: string, parameters\?\: array\<string, mixed\>\}\}\>, tools_choice\?\: ''auto''\|''enum'', temperature\?\: float, top_p\?\: float, max_tokens\?\: int, safe_mode\?\: bool, \.\.\.\}, array\{model\: string, messages\: array\<array\{role\: ''assistant''\|''system''\|''tool''\|''user'', content\: array\<array\{type\: ''image_url'', image_url\: string\}\|array\{type\: ''text'', text\: string\}\|string\>\|string\}\>, response_format\?\: array\{type\: ''json_object''\}\|array\{type\: ''json_schema'', json_schema\: array\{name\: string, strict\: bool, schema\: array\<string, mixed\>\}\}, tools\?\: array\<array\{type\: string, function\: array\{name\: string, description\: string, parameters\: array\{type\: string, properties\: array\<string, array\<mixed\>\>, required\: array\<string\>\}\}\}\>, tool_choice\?\: string\} given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Chat/MistralChatAdapter.php
+			reportUnmatched: false
+
+		-
+			message: '#^Parameter \#1 \$parameters of method ModelflowAi\\Mistral\\Resources\\ChatInterface\:\:createStreamed\(\) expects array\{model\: string, messages\: array\<array\{role\: ''assistant''\|''system''\|''tool''\|''user'', content\: array\<array\{type\: ''image_url'', image_url\: string\}\|array\{type\: ''text'', text\: string\}\|string\>\|string\}\>, tools\?\: array\<array\{type\: string, function\: array\{name\: string, description\?\: string, parameters\?\: array\<string, mixed\>\}\}\>, tools_choice\?\: ''auto''\|''enum'', temperature\?\: float, top_p\?\: float, max_tokens\?\: int, safe_mode\?\: bool, \.\.\.\}, array\{model\: string, messages\: array\<array\{role\: ''assistant''\|''system''\|''tool''\|''user'', content\: array\<array\{type\: ''image_url'', image_url\: string\}\|array\{type\: ''text'', text\: string\}\|string\>\|string\}\>, response_format\?\: array\{type\: ''json_object''\}\|array\{type\: ''json_schema'', json_schema\: array\{name\: string, strict\: bool, schema\: array\<string, mixed\>\}\}, tools\?\: array\<array\{type\: string, function\: array\{name\: string, description\: string, parameters\: array\{type\: string, properties\: array\<string, array\<mixed\>\>, required\: array\<string\>\}\}\}\>, tool_choice\?\: string\} given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Chat/MistralChatAdapter.php
+			reportUnmatched: false
 
 		-
 			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\Response\\\\AIChatResponse'' and ModelflowAi\\Chat\\Response\\AIChatResponse will always evaluate to true\.$#'

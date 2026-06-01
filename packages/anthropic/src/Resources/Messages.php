@@ -167,6 +167,12 @@ final readonly class Messages implements MessagesInterface
      *       temperature?: float,
      *       top_k?: int,
      *       top_p?: float,
+     *       output_config?: array{
+     *           format: array{
+     *               type: "json_schema",
+     *               schema: array<string, mixed>,
+     *           }
+     *       },
      *  } $parameters
      *
      * @return array{
@@ -226,6 +232,17 @@ final readonly class Messages implements MessagesInterface
 
         Assert::keyExists($parameters, 'messages');
         Assert::isArray($parameters['messages']);
+
+        if (isset($parameters['output_config'])) {
+            Assert::isArray($parameters['output_config']);
+            Assert::keyExists($parameters['output_config'], 'format');
+            Assert::isArray($parameters['output_config']['format']);
+            Assert::keyExists($parameters['output_config']['format'], 'type');
+            Assert::same($parameters['output_config']['format']['type'], 'json_schema');
+            Assert::keyExists($parameters['output_config']['format'], 'schema');
+            Assert::isArray($parameters['output_config']['format']['schema']);
+        }
+
         foreach ($parameters['messages'] as $message) {
             Assert::keyExists($message, 'role');
             Assert::string($message['role']);

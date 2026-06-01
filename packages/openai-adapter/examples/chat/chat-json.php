@@ -19,9 +19,22 @@ use ModelflowAi\DecisionTree\Criteria\CapabilityCriteria;
 /** @var AIChatRequestHandlerInterface $handler */
 $handler = require_once __DIR__ . '/bootstrap.php';
 
-$response = $handler->createRequest(new AIChatMessage(AIChatMessageRoleEnum::USER, 'Give me project ideas'))
-    ->addCriteria(CapabilityCriteria::BASIC)
+// OpenAI supports plain JSON mode (json_object) which outputs valid JSON
+// but without strict schema enforcement. The model will produce JSON
+// but may include additional fields or omit optional ones.
+
+$response = $handler->createRequest(
+    new AIChatMessage(
+        AIChatMessageRoleEnum::USER,
+        'List 3 programming languages with their year of creation and main paradigm. '
+            . 'Return the result as a JSON array.',
+    ),
+)
     ->asJson()
+    ->addCriteria(CapabilityCriteria::BASIC)
     ->execute();
 
-echo \sprintf('%s: %s', $response->getMessage()->role->value, $response->getMessage()->content);
+$content = \json_decode($response->getMessage()->content, true, 512, \JSON_THROW_ON_ERROR);
+
+echo "Response:\n";
+echo \json_encode($content, \JSON_PRETTY_PRINT | \JSON_THROW_ON_ERROR);

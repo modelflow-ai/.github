@@ -61,6 +61,13 @@ parameters:
 			path: src/Request/ResponseFormat/JsonSchemaResponseFormat.php
 
 		-
+			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, array\<mixed, mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Request/ResponseFormat/JsonSchemaResponseFormat.php
+			reportUnmatched: false
+
+		-
 			message: '#^Strict comparison using \!\=\= between null and string will always evaluate to true\.$#'
 			identifier: notIdentical.alwaysTrue
 			count: 1
@@ -77,12 +84,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/ToolInfo/ToolInfo.php
-
-		-
-			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\Request\\\\AIChatMessageCollection'' and ModelflowAi\\Chat\\Request\\AIChatMessageCollection will always evaluate to true\.$#'
-			identifier: method.alreadyNarrowedType
-			count: 2
-			path: tests/Unit/AIChatRequestHandlerTest.php
 
 		-
 			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\Request\\\\Builder\\\\AIChatRequestBuilder'' and ModelflowAi\\Chat\\Request\\Builder\\AIChatRequestBuilder will always evaluate to true\.$#'

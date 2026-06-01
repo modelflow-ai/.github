@@ -19,8 +19,15 @@ use ModelflowAi\DecisionTree\Criteria\CapabilityCriteria;
 /** @var AIChatRequestHandlerInterface $handler */
 $handler = require_once __DIR__ . '/bootstrap.php';
 
+// Google Gemini supports provider-enforced structured output with JSON schema.
+// The response is guaranteed to match the schema.
+
 $response = $handler->createRequest(
-    new AIChatMessage(AIChatMessageRoleEnum::USER, 'You are a BOT that help me to generate ideas for my project.'),
+    new AIChatMessage(
+        AIChatMessageRoleEnum::USER,
+        'You are a helpful assistant that generates project ideas. '
+            . 'Analyze the following topic and suggest 5 related project ideas: "web development"',
+    ),
 )
     ->asJson([
         'type' => 'object',
@@ -31,7 +38,9 @@ $response = $handler->createRequest(
             ],
             'projects' => [
                 'type' => 'array',
-                'description' => 'Should contains 5 projects',
+                'description' => 'List of 5 project ideas',
+                'minItems' => 5,
+                'maxItems' => 5,
                 'items' => [
                     'type' => 'object',
                     'properties' => [
@@ -53,40 +62,7 @@ $response = $handler->createRequest(
     ->addCriteria(CapabilityCriteria::BASIC)
     ->execute();
 
-/**
- * @param array<string, string|mixed> $data
- */
-function formatOutput(array $data, int $indent = 0): string
-{
-    $output = '';
-    foreach ($data as $key => $value) {
-        $output .= \str_repeat('  ', $indent);
-        if (\is_array($value)) {
-            $output .= $key . ":\n";
-            /** @var array<string, mixed> $value */
-            $output .= formatOutput($value, $indent + 1);
-        } else {
-            $output .= $key . ': ' . $value . "\n";
-        }
-    }
-
-    return $output;
-}
-
 $content = \json_decode($response->getMessage()->content, true, 512, \JSON_THROW_ON_ERROR);
-try {
-    /** @var array<string, mixed>|null $content */
-    if (null === $content) {
-        throw new RuntimeException('Failed to decode JSON response');
-    }
-    if (!\is_array($content)) {
-        throw new RuntimeException('Response is not an array');
-    }
-    if ([] === $content) {
-        throw new RuntimeException('Response is empty');
-    }
 
-    echo formatOutput($content);
-} catch (JsonException $e) {
-    throw new RuntimeException('Failed to decode response: ' . $e->getMessage(), 0, $e);
-}
+echo "Response:\n";
+echo \json_encode($content, \JSON_PRETTY_PRINT | \JSON_THROW_ON_ERROR);

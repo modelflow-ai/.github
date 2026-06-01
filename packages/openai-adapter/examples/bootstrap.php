@@ -17,9 +17,9 @@ use Symfony\Component\Dotenv\Dotenv;
 
 (new Dotenv())->bootEnv(__DIR__ . '/.env');
 
-$openaiApiKey = $_ENV['OPENAI_API_KEY'];
-if (!$openaiApiKey) {
-    throw new RuntimeException('Openai API key is required');
+$openaiApiKey = $_ENV['OPENAI_API_KEY'] ?? null;
+if (!\is_string($openaiApiKey) || '' === \trim($openaiApiKey)) {
+    throw new RuntimeException('OpenAI API key is required');
 }
 
 return OpenAI::client($openaiApiKey);

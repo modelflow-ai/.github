@@ -22,6 +22,10 @@ use ModelflowAi\Chat\Request\Message\ImageBase64Part;
 use ModelflowAi\Chat\Request\Message\TextPart;
 use ModelflowAi\Chat\Request\Message\ToolCallPart;
 use ModelflowAi\Chat\Request\Message\ToolCallsPart;
+use ModelflowAi\Chat\Request\ResponseFormat\JsonResponseFormat;
+use ModelflowAi\Chat\Request\ResponseFormat\JsonSchemaResponseFormat;
+use ModelflowAi\Chat\Request\ResponseFormat\ResponseFormatInterface;
+use ModelflowAi\Chat\Request\ResponseFormat\SupportsResponseFormatInterface;
 use ModelflowAi\Chat\Response\AIChatResponse;
 use ModelflowAi\Chat\Response\AIChatResponseMessage;
 use ModelflowAi\Chat\Response\AIChatResponseStream;
@@ -33,9 +37,8 @@ use ModelflowAi\Mistral\ClientInterface;
 use ModelflowAi\Mistral\Model;
 use ModelflowAi\Mistral\Responses\Chat\CreateResponseToolCall;
 use ModelflowAi\Mistral\Responses\Chat\CreateStreamedResponse;
-use Webmozart\Assert\Assert;
 
-final readonly class MistralChatAdapter implements AIChatAdapterInterface
+final readonly class MistralChatAdapter implements AIChatAdapterInterface, SupportsResponseFormatInterface
 {
     public function __construct(
         private ClientInterface $client,
@@ -103,10 +106,18 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface
         ];
 
         if (Model::from($this->model)->jsonSupported()) {
-            $format = $request->getFormat();
-            Assert::inArray($format, [null, 'json', 'json_schema'], \sprintf('Invalid format "%s" given.', $format));
+            $responseFormat = $request->getResponseFormat();
 
-            if ('json' === $format || 'json_schema' === $format) {
+            if ($responseFormat instanceof JsonSchemaResponseFormat) {
+                $parameters['response_format'] = [
+                    'type' => 'json_schema',
+                    'json_schema' => [
+                        'name' => 'response',
+                        'strict' => true,
+                        'schema' => $responseFormat->schema,
+                    ],
+                ];
+            } elseif ('json' === $request->getFormat() || 'json_schema' === $request->getFormat() || $responseFormat instanceof JsonResponseFormat) {
                 $parameters['response_format'] = ['type' => 'json_object'];
             }
         }
@@ -141,6 +152,9 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface
      *     }>,
      *     response_format?: array{
      *         type: "json_object",
+     *     }|array{
+     *         type: "json_schema",
+     *         json_schema: array{name: string, strict: bool, schema: array<string, mixed>},
      *     },
      *     tools?: array<array{
      *         type: string,
@@ -209,6 +223,9 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface
      *     }>,
      *     response_format?: array{
      *         type: "json_object",
+     *     }|array{
+     *         type: "json_schema",
+     *         json_schema: array{name: string, strict: bool, schema: array<string, mixed>},
      *     },
      *     tools?: array<array{
      *         type: string,
@@ -306,6 +323,19 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface
         $result = \json_decode($arguments, true);
 
         return $result;
+    }
+
+    public function supportsResponseFormat(ResponseFormatInterface $responseFormat): bool
+    {
+        if ($responseFormat instanceof JsonResponseFormat) {
+            return Model::from($this->model)->jsonSupported();
+        }
+
+        if ($responseFormat instanceof JsonSchemaResponseFormat) {
+            return Model::from($this->model)->jsonSupported();
+        }
+
+        return false;
     }
 
     public function supports(object $request): bool

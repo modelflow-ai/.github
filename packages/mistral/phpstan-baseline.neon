@@ -169,12 +169,6 @@ parameters:
 			path: tests/Unit/Resources/EmbeddingsTest.php
 
 		-
-			message: '#^Parameter \#2 \$arrays of function array_diff expects an array of values castable to string, array\<string, list\<string\>\|string\> given\.$#'
-			identifier: argument.type
-			count: 1
-			path: tests/Unit/Resources/EmbeddingsTest.php
-
-		-
 			message: '#^Strict comparison using \=\=\= between ModelflowAi\\ApiClient\\Transport\\Enums\\ContentType\:\:JSON and ModelflowAi\\ApiClient\\Transport\\Enums\\ContentType will always evaluate to true\.$#'
 			identifier: identical.alwaysTrue
 			count: 2

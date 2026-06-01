@@ -14,9 +14,11 @@ declare(strict_types=1);
 namespace ModelflowAi\Chat\Tests\Unit\Middleware\ResponseFormat;
 
 use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;
+use ModelflowAi\Chat\Exception\UnsupportedResponseFormatException;
 use ModelflowAi\Chat\Middleware\ResponseFormat\ResponseFormatMiddleware;
 use ModelflowAi\Chat\Request\AIChatMessageCollection;
 use ModelflowAi\Chat\Request\AIChatRequest;
+use ModelflowAi\Chat\Request\ResponseFormat\JsonSchemaResponseFormat;
 use ModelflowAi\Chat\Request\ResponseFormat\ResponseFormatInterface;
 use ModelflowAi\Chat\Request\ResponseFormat\SupportsResponseFormatInterface;
 use ModelflowAi\Chat\Response\AIChatResponseInterface;
@@ -111,24 +113,18 @@ class ResponseFormatMiddlewareTest extends TestCase
 
     public function testProcessWithUnsupportedResponseFormat(): void
     {
-        // Create a response format
         $responseFormat = $this->prophesize(ResponseFormatInterface::class);
 
-        // Request has a response format
         $this->request->getResponseFormat()->willReturn($responseFormat->reveal());
         $this->request->getMessages()->willReturn($this->messageCollection->reveal());
 
-        // Create an adapter that implements SupportsResponseFormatInterface
         $unsupportingAdapter = $this->prophesize(AIChatAdapterInterface::class)
             ->willImplement(SupportsResponseFormatInterface::class);
 
-        // Adapter does NOT support the response format
         $unsupportingAdapter->supportsResponseFormat($responseFormat->reveal())->willReturn(false);
 
-        // Messages collection should be modified to add response format
         $this->messageCollection->addResponseFormat($responseFormat->reveal())->shouldBeCalled();
 
-        // Next middleware should be called
         $next = fn (AIChatRequest $request, ?AIChatAdapterInterface $adapter): AIChatResponseInterface => $this->response->reveal();
 
         $result = $this->middleware->process($this->request->reveal(), $unsupportingAdapter->reveal(), $next);
@@ -138,19 +134,13 @@ class ResponseFormatMiddlewareTest extends TestCase
 
     public function testProcessWithNonSupportingAdapter(): void
     {
-        // Create a response format
         $responseFormat = $this->prophesize(ResponseFormatInterface::class);
 
-        // Request has a response format
         $this->request->getResponseFormat()->willReturn($responseFormat->reveal());
         $this->request->getMessages()->willReturn($this->messageCollection->reveal());
 
-        // Standard adapter doesn't implement SupportsResponseFormatInterface
-
-        // Messages collection should be modified to add response format
         $this->messageCollection->addResponseFormat($responseFormat->reveal())->shouldBeCalled();
 
-        // Next middleware should be called
         $next = fn (AIChatRequest $request, ?AIChatAdapterInterface $adapter): AIChatResponseInterface => $this->response->reveal();
 
         $result = $this->middleware->process($this->request->reveal(), $this->adapter->reveal(), $next);
@@ -160,7 +150,6 @@ class ResponseFormatMiddlewareTest extends TestCase
 
     public function testProcessWithNullAdapter(): void
     {
-        // Next middleware should be called with unchanged request and null adapter
         $next = function (AIChatRequest $request, ?AIChatAdapterInterface $adapter): AIChatResponseInterface {
             $this->assertSame($this->request->reveal(), $request);
             $this->assertNull($adapter);
@@ -171,5 +160,30 @@ class ResponseFormatMiddlewareTest extends TestCase
         $result = $this->middleware->process($this->request->reveal(), null, $next);
 
         $this->assertSame($this->response->reveal(), $result);
+    }
+
+    public function testProcessWithUnsupportedJsonSchemaResponseFormatThrows(): void
+    {
+        $responseFormat = new JsonSchemaResponseFormat([
+            'type' => 'object',
+            'properties' => [
+                'foo' => ['type' => 'string'],
+            ],
+        ]);
+
+        $this->request->getResponseFormat()->willReturn($responseFormat);
+
+        $unsupportingAdapter = $this->prophesize(AIChatAdapterInterface::class)
+            ->willImplement(SupportsResponseFormatInterface::class);
+        $unsupportingAdapter->supportsResponseFormat($responseFormat)->willReturn(false);
+
+        $this->expectException(UnsupportedResponseFormatException::class);
+        $this->expectExceptionMessageMatches(
+            '/The response format "json_schema" is not supported by adapter ".+"\\./',
+        );
+
+        $next = fn (AIChatRequest $request, ?AIChatAdapterInterface $adapter): AIChatResponseInterface => $this->response->reveal();
+
+        $this->middleware->process($this->request->reveal(), $unsupportingAdapter->reveal(), $next);
     }
 }

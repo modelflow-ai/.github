@@ -13,24 +13,6 @@ parameters:
 			path: examples/bootstrap.php
 
 		-
-			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
-			identifier: binaryOp.invalid
-			count: 1
-			path: examples/chat-response-format.php
-
-		-
-			message: '#^Call to function is_array\(\) with array\<string, mixed\> will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 1
-			path: examples/chat-response-format.php
-
-		-
-			message: '#^Instanceof between Gemini\\Resources\\GenerativeModel and Gemini\\Resources\\GenerativeModel will always evaluate to true\.$#'
-			identifier: instanceof.alwaysTrue
-			count: 1
-			path: src/Chat/GoogleGeminiChatAdapter.php
-
-		-
 			message: '#^Strict comparison using \!\=\= between null and Gemini\\Data\\UsageMetadata will always evaluate to true\.$#'
 			identifier: notIdentical.alwaysTrue
 			count: 1
@@ -39,7 +21,7 @@ parameters:
 		-
 			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\Response\\\\AIChatResponse'' and ModelflowAi\\Chat\\Response\\AIChatResponse will always evaluate to true\.$#'
 			identifier: method.alreadyNarrowedType
-			count: 2
+			count: 4
 			path: tests/Unit/Chat/GoogleGeminiChatAdapterTest.php
 
 		-

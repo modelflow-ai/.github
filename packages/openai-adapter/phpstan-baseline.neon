@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Parameter \#1 \$apiKey of static method OpenAI\:\:client\(\) expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: examples/bootstrap.php
-
-		-
 			message: '#^PHPDoc tag @var for variable \$decisionTree contains unknown class AIChatAdapterInterface\.$#'
 			identifier: class.notFound
 			count: 1
@@ -41,18 +35,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: examples/chat/bootstrap.php
-
-		-
-			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
-			identifier: binaryOp.invalid
-			count: 1
-			path: examples/chat/chat-response-format.php
-
-		-
-			message: '#^Call to function is_array\(\) with array\<string, mixed\> will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 1
-			path: examples/chat/chat-response-format.php
 
 		-
 			message: '#^Using nullsafe property access "\?\-\>totalTokens" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'

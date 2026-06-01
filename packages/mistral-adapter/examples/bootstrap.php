@@ -20,8 +20,8 @@ use Symfony\Component\Dotenv\Dotenv;
 
 (new Dotenv())->bootEnv(__DIR__ . '/.env');
 
-$mistralApiKey = $_ENV['MISTRAL_API_KEY'];
-if (!$mistralApiKey) {
+$mistralApiKey = $_ENV['MISTRAL_API_KEY'] ?? null;
+if (!\is_string($mistralApiKey) || '' === \trim($mistralApiKey)) {
     throw new \RuntimeException('Mistral API key is required');
 }
 
