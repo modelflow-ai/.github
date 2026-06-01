@@ -33,5 +33,11 @@ parameters:
 		-
 			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ModelflowAi\\\\Chat\\\\Response\\\\AIChatResponse'' and ModelflowAi\\Chat\\Response\\AIChatResponse will always evaluate to true\.$#'
 			identifier: method.alreadyNarrowedType
-			count: 4
+			count: 8
+			path: tests/Unit/Chat/AnthropicChatAdapterTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertSame\(\) with ModelflowAi\\Chat\\ToolInfo\\ToolTypeEnum\:\:FUNCTION and ModelflowAi\\Chat\\ToolInfo\\ToolTypeEnum will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
 			path: tests/Unit/Chat/AnthropicChatAdapterTest.php

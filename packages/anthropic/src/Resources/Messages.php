@@ -50,8 +50,6 @@ final readonly class Messages implements MessagesInterface
 
     public function createStreamed(array $parameters): \Iterator
     {
-        Assert::keyNotExists($parameters, 'tools');
-
         $this->validateParameters($parameters);
         $parameters['stream'] = true;
 
@@ -98,8 +96,11 @@ final readonly class Messages implements MessagesInterface
                     /** @var array{
                      *     index: int,
                      *     content_block: array{
-                     *         type: "text",
-                     *         text: string,
+                     *         type: "text"|"tool_use",
+                     *         text?: string,
+                     *         id?: string,
+                     *         name?: string,
+                     *         input?: array<string, mixed>,
                      *     },
                      * } $object
                      */
@@ -112,8 +113,9 @@ final readonly class Messages implements MessagesInterface
                     /** @var array{
                      *     index: int,
                      *     delta: array{
-                     *         type: "text_delta",
-                     *         text: string,
+                     *         type: "text_delta"|"input_json_delta",
+                     *         text?: string,
+                     *         partial_json?: string,
                      *     },
                      * } $object
                      */
@@ -246,7 +248,7 @@ final readonly class Messages implements MessagesInterface
         foreach ($parameters['messages'] as $message) {
             Assert::keyExists($message, 'role');
             Assert::string($message['role']);
-            Assert::inArray($message['role'], ['system', 'user', 'assistant', 'tool']);
+            Assert::inArray($message['role'], ['system', 'user', 'assistant']);
             Assert::keyExists($message, 'content');
 
             if (\is_string($message['content'])) {

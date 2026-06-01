@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "477c8fd33925276c6a62536c851e27a8",
+    "content-hash": "4bb8db8ac667ea187815c92218f71962",
     "packages": [
         {
             "name": "modelflow-ai/api-client",
@@ -1521,8 +1521,8 @@
             "version": "2.1.x-dev",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/861cd9a1257fc5deaebb655d9d1d7cfb7830fc89",
-                "reference": "861cd9a1257fc5deaebb655d9d1d7cfb7830fc89",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/b148e11fc2e55696915c118e3f028eddc7facf32",
+                "reference": "b148e11fc2e55696915c118e3f028eddc7facf32",
                 "shasum": ""
             },
             "require": {
@@ -1568,7 +1568,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-01-29T16:51:43+00:00"
+            "time": "2026-02-11T17:38:58+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
@@ -3464,14 +3464,12 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "phpspec/prophecy-phpunit": 0
-    },
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.2"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

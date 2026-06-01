@@ -37,7 +37,7 @@ parameters:
 			path: src/Resources/Messages.php
 
 		-
-			message: '#^Call to static method Webmozart\\Assert\\Assert\:\:isArray\(\) with array\{type\: ''text'', text\: string\} will always evaluate to true\.$#'
+			message: '#^Call to static method Webmozart\\Assert\\Assert\:\:isArray\(\) with array\{type\: ''text''\|''tool_use''.*\} will always evaluate to true\.$#'
 			identifier: staticMethod.alreadyNarrowedType
 			count: 1
 			path: src/Resources/Messages.php
