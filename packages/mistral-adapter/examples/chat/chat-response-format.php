@@ -60,7 +60,7 @@ $response = $handler->createRequest(
         ],
         'required' => ['bestIdeaTitle', 'projects'],
     ])
-    ->addCriteria(CapabilityCriteria::BASIC)
+    ->addCriteria(CapabilityCriteria::INTERMEDIATE)
     ->execute();
 
 $content = \json_decode($response->getMessage()->content, true, 512, \JSON_THROW_ON_ERROR);

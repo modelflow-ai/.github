@@ -127,7 +127,7 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface, 
 
         if ($responseMimeType instanceof ResponseMimeType || $responseSchema instanceof Schema) {
             return new GenerationConfig(
-                responseMimeType: $responseMimeType ?? ResponseMimeType::TEXT_PLAIN,
+                responseMimeType: $responseMimeType,
                 responseSchema: $responseSchema,
             );
         }

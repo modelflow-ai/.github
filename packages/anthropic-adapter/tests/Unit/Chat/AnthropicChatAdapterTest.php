@@ -271,6 +271,8 @@ final class AnthropicChatAdapterTest extends TestCase
         ]);
 
         // Anthropic rejects maxItems/uniqueItems/minimum/maximum; minItems must survive.
+        // JsonSchemaResponseFormat also normalizes the schema by adding empty descriptions
+        // and additionalProperties: false, which are forwarded to the payload.
         $payload = DataFixtures::MESSAGES_CREATE_REQUEST;
         $payload['output_config'] = [
             'format' => [
@@ -282,12 +284,16 @@ final class AnthropicChatAdapterTest extends TestCase
                             'type' => 'array',
                             'items' => ['type' => 'string'],
                             'minItems' => 1,
+                            'description' => '',
                         ],
                         'count' => [
                             'type' => 'integer',
+                            'description' => '',
                         ],
                     ],
                     'required' => ['items', 'count'],
+                    'description' => '',
+                    'additionalProperties' => false,
                 ],
             ],
         ];
@@ -308,7 +314,11 @@ final class AnthropicChatAdapterTest extends TestCase
         $adapter = new AnthropicChatAdapter($client, Model::CLAUDE_3_HAIKU->value, 100);
         $result = $adapter->handleRequest($request);
 
-        $this->assertInstanceOf(AIChatResponse::class, $result);
+        // Reaching this point proves the sanitized payload matched the mock expectation.
+        $this->assertSame(
+            DataFixtures::MESSAGES_CREATE_RESPONSE['content'][0]['text'],
+            $result->getMessage()->content,
+        );
     }
 
     public function testHandleRequestStreamed(): void

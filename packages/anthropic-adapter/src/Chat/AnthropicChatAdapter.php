@@ -43,6 +43,25 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
         AIChatMessageRoleEnum::USER,
     ];
 
+    /**
+     * JSON Schema keywords Anthropic does not support in structured output schemas.
+     *
+     * @see https://docs.anthropic.com/en/docs/build-with-claude/structured-outputs
+     *
+     * @var list<string>
+     */
+    private const UNSUPPORTED_SCHEMA_KEYWORDS = [
+        'maxItems',
+        'minimum',
+        'maximum',
+        'exclusiveMinimum',
+        'exclusiveMaximum',
+        'multipleOf',
+        'uniqueItems',
+        'minProperties',
+        'maxProperties',
+    ];
+
     public function __construct(
         private ClientInterface $client,
         private string $model,
@@ -246,19 +265,7 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
      */
     private static function sanitizeSchema(array $schema): array
     {
-        static $unsupportedKeywords = [
-            'maxItems',
-            'minimum',
-            'maximum',
-            'exclusiveMinimum',
-            'exclusiveMaximum',
-            'multipleOf',
-            'uniqueItems',
-            'minProperties',
-            'maxProperties',
-        ];
-
-        foreach ($unsupportedKeywords as $keyword) {
+        foreach (self::UNSUPPORTED_SCHEMA_KEYWORDS as $keyword) {
             unset($schema[$keyword]);
         }
 
@@ -292,8 +299,15 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
             if (isset($schema[$listKey]) && \is_array($schema[$listKey])) {
                 /** @var list<mixed> $list */
                 $list = $schema[$listKey];
-                $schema[$listKey] = array_map(
-                    static fn (mixed $child): mixed => \is_array($child) ? self::sanitizeSchema($child) : $child,
+                $schema[$listKey] = \array_map(
+                    static function (mixed $child): mixed {
+                        if (\is_array($child)) {
+                            /** @var array<string, mixed> $child */
+                            return self::sanitizeSchema($child);
+                        }
+
+                        return $child;
+                    },
                     $list,
                 );
             }
