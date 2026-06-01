@@ -14,10 +14,14 @@ declare(strict_types=1);
 namespace ModelflowAi\GoogleGeminiAdapter\Tests\Unit\Chat;
 
 use Gemini\Contracts\ClientContract;
+use Gemini\Data\FunctionCall;
+use Gemini\Data\FunctionResponse;
 use Gemini\Data\GenerationConfig;
+use Gemini\Data\Tool;
 use Gemini\Enums\DataType;
 use Gemini\Enums\ModelType;
 use Gemini\Enums\ResponseMimeType;
+use Gemini\Enums\Role;
 use Gemini\Responses\GenerativeModel\GenerateContentResponse;
 use Gemini\Testing\ClientFake;
 use ModelflowAi\Chat\Request\AIChatMessageCollection;
@@ -25,11 +29,17 @@ use ModelflowAi\Chat\Request\AIChatRequest;
 use ModelflowAi\Chat\Request\AIChatStreamedRequest;
 use ModelflowAi\Chat\Request\Message\AIChatMessage;
 use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
+use ModelflowAi\Chat\Request\Message\ToolCallPart;
+use ModelflowAi\Chat\Request\Message\ToolCallsPart;
 use ModelflowAi\Chat\Request\ResponseFormat\JsonResponseFormat;
 use ModelflowAi\Chat\Request\ResponseFormat\JsonSchemaResponseFormat;
 use ModelflowAi\Chat\Request\ResponseFormat\ResponseFormatInterface;
 use ModelflowAi\Chat\Response\AIChatResponse;
 use ModelflowAi\Chat\Response\AIChatResponseStream;
+use ModelflowAi\Chat\Response\AIChatToolCall;
+use ModelflowAi\Chat\ToolInfo\Parameter;
+use ModelflowAi\Chat\ToolInfo\ToolInfo;
+use ModelflowAi\Chat\ToolInfo\ToolTypeEnum;
 use ModelflowAi\DecisionTree\Criteria\CriteriaCollection;
 use ModelflowAi\GoogleGeminiAdapter\Chat\GoogleGeminiChatAdapter;
 use PHPUnit\Framework\TestCase;
@@ -319,5 +329,137 @@ final class GoogleGeminiChatAdapterTest extends TestCase
 
         $format = $this->prophesize(ResponseFormatInterface::class);
         $this->assertFalse($adapter->supportsResponseFormat($format->reveal()));
+    }
+
+    public function testHandleRequestWithToolCallResponse(): void
+    {
+        $client = new ClientFake([
+            GenerateContentResponse::fake([
+                'candidates' => [
+                    [
+                        'content' => [
+                            'parts' => [
+                                // Blank the fixture text part, then append the function call as a new part.
+                                ['text' => ''],
+                                [
+                                    'functionCall' => [
+                                        'name' => 'get_weather',
+                                        'args' => ['location' => 'Berlin'],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ]),
+        ]);
+
+        $request = new AIChatRequest(
+            new AIChatMessageCollection(
+                new AIChatMessage(AIChatMessageRoleEnum::USER, 'What is the weather in Berlin?'),
+            ),
+            new CriteriaCollection(),
+            [],
+            [
+                new ToolInfo(
+                    ToolTypeEnum::FUNCTION,
+                    'get_weather',
+                    'Get the current weather',
+                    [new Parameter('location', 'string', 'The location')],
+                    [new Parameter('location', 'string', 'The location')],
+                ),
+            ],
+            [],
+            static fn () => null,
+        );
+
+        $adapter = new GoogleGeminiChatAdapter($client, ModelType::GEMINI_FLASH->value);
+        $result = $adapter->handleRequest($request);
+
+        $this->assertInstanceOf(AIChatResponse::class, $result);
+        $this->assertSame('', $result->getMessage()->content);
+
+        $toolCalls = $result->getMessage()->toolCalls;
+        $this->assertNotNull($toolCalls);
+        $this->assertCount(1, $toolCalls);
+        $this->assertSame(ToolTypeEnum::FUNCTION, $toolCalls[0]->type);
+        $this->assertSame('get_weather', $toolCalls[0]->name);
+        $this->assertSame('get_weather', $toolCalls[0]->id);
+        $this->assertSame(['location' => 'Berlin'], $toolCalls[0]->arguments);
+
+        $client->generativeModel(ModelType::GEMINI_FLASH->value)
+            ->assertFunctionCalled(
+                static fn (string $method, array $args): bool => 'withTool' === $method
+                    && $args[0] instanceof Tool
+                    && null !== $args[0]->functionDeclarations
+                    && 'get_weather' === $args[0]->functionDeclarations[0]->name,
+            );
+    }
+
+    public function testHandleRequestSerializesToolCallAndToolResultMessages(): void
+    {
+        $client = new ClientFake([
+            GenerateContentResponse::fake([
+                'candidates' => [
+                    [
+                        'content' => [
+                            'parts' => [
+                                [
+                                    'text' => 'It is sunny.',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ]),
+        ]);
+
+        $request = new AIChatRequest(
+            new AIChatMessageCollection(
+                new AIChatMessage(AIChatMessageRoleEnum::USER, 'What is the weather in Berlin?'),
+                new AIChatMessage(
+                    AIChatMessageRoleEnum::ASSISTANT,
+                    ToolCallsPart::create([
+                        new AIChatToolCall(ToolTypeEnum::FUNCTION, 'call_1', 'get_weather', ['location' => 'Berlin']),
+                    ]),
+                ),
+                new AIChatMessage(
+                    AIChatMessageRoleEnum::TOOL,
+                    ToolCallPart::create('call_1', 'get_weather', '{"temperature":21}'),
+                ),
+            ),
+            new CriteriaCollection(),
+            [],
+            [],
+            [],
+            static fn () => null,
+        );
+
+        $adapter = new GoogleGeminiChatAdapter($client, ModelType::GEMINI_FLASH->value);
+        $result = $adapter->handleRequest($request);
+
+        $this->assertSame('It is sunny.', $result->getMessage()->content);
+
+        $client->generativeModel(ModelType::GEMINI_FLASH->value)
+            ->assertSent(
+                static function (string $method, array $args): bool {
+                    if ('generateContent' !== $method) {
+                        return false;
+                    }
+
+                    $functionCall = $args[1]->parts[0]->functionCall;
+                    $functionResponse = $args[2]->parts[0]->functionResponse;
+
+                    return $functionCall instanceof FunctionCall
+                        && 'get_weather' === $functionCall->name
+                        && ['location' => 'Berlin'] === $functionCall->args
+                        && 'call_1' === $functionCall->id
+                        && Role::MODEL === $args[1]->role
+                        && $functionResponse instanceof FunctionResponse
+                        && 'get_weather' === $functionResponse->name
+                        && ['temperature' => 21] === $functionResponse->response
+                        && Role::USER === $args[2]->role;
+                },
+            );
     }
 }

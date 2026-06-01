@@ -17,10 +17,16 @@ use Gemini\Contracts\ClientContract;
 use Gemini\Contracts\Resources\GenerativeModelContract;
 use Gemini\Data\Blob;
 use Gemini\Data\Content;
+use Gemini\Data\FunctionCall;
+use Gemini\Data\FunctionCallingConfig;
+use Gemini\Data\FunctionResponse;
 use Gemini\Data\GenerationConfig;
+use Gemini\Data\Part;
 use Gemini\Data\Schema;
+use Gemini\Data\ToolConfig;
 use Gemini\Enums\DataType;
 use Gemini\Enums\MimeType;
+use Gemini\Enums\Mode;
 use Gemini\Enums\ResponseMimeType;
 use Gemini\Enums\Role;
 use Gemini\Responses\GenerativeModel\GenerateContentResponse;
@@ -31,6 +37,8 @@ use ModelflowAi\Chat\Request\Message\AIChatMessage;
 use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
 use ModelflowAi\Chat\Request\Message\ImageBase64Part;
 use ModelflowAi\Chat\Request\Message\TextPart;
+use ModelflowAi\Chat\Request\Message\ToolCallPart;
+use ModelflowAi\Chat\Request\Message\ToolCallsPart;
 use ModelflowAi\Chat\Request\ResponseFormat\JsonResponseFormat;
 use ModelflowAi\Chat\Request\ResponseFormat\JsonSchemaResponseFormat;
 use ModelflowAi\Chat\Request\ResponseFormat\ResponseFormatInterface;
@@ -38,8 +46,11 @@ use ModelflowAi\Chat\Request\ResponseFormat\SupportsResponseFormatInterface;
 use ModelflowAi\Chat\Response\AIChatResponse;
 use ModelflowAi\Chat\Response\AIChatResponseMessage;
 use ModelflowAi\Chat\Response\AIChatResponseStream;
+use ModelflowAi\Chat\Response\AIChatToolCall;
 use ModelflowAi\Chat\Response\StreamingUsageTracker;
 use ModelflowAi\Chat\Response\Usage;
+use ModelflowAi\Chat\ToolInfo\ToolChoiceEnum;
+use ModelflowAi\Chat\ToolInfo\ToolTypeEnum;
 use Webmozart\Assert\Assert;
 
 final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface, SupportsResponseFormatInterface
@@ -48,6 +59,7 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface, 
         AIChatMessageRoleEnum::SYSTEM,
         AIChatMessageRoleEnum::ASSISTANT,
         AIChatMessageRoleEnum::USER,
+        AIChatMessageRoleEnum::TOOL,
     ];
 
     public function __construct(
@@ -69,24 +81,38 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface, 
                 throw new \Exception('Not supported message role.');
             }
 
-            $message = [];
+            $parts = [];
 
             foreach ($aiMessage->parts as $part) {
                 if ($part instanceof TextPart) {
-                    $message[] = $part->text;
+                    $parts[] = new Part(text: $part->text);
                 } elseif ($part instanceof ImageBase64Part) {
-                    $message[] = new Blob(MimeType::from($part->mimeType), $part->content);
+                    $parts[] = new Part(inlineData: new Blob(MimeType::from($part->mimeType), $part->content));
+                } elseif ($part instanceof ToolCallsPart) {
+                    foreach ($part->toolCalls as $toolCall) {
+                        $parts[] = new Part(functionCall: new FunctionCall(
+                            name: $toolCall->name,
+                            args: $toolCall->arguments,
+                            id: '' !== $toolCall->id ? $toolCall->id : null,
+                        ));
+                    }
+                } elseif ($part instanceof ToolCallPart) {
+                    $parts[] = new Part(functionResponse: new FunctionResponse(
+                        name: $part->toolName,
+                        response: $this->decodeToolResult($part->content),
+                        id: '' !== $part->toolCallId ? $part->toolCallId : null,
+                    ));
                 } else {
                     throw new \Exception('Not supported message part type.');
                 }
             }
 
             $geminiRole = match ($aiMessage->role) {
-                AIChatMessageRoleEnum::USER => Role::USER,
+                AIChatMessageRoleEnum::USER, AIChatMessageRoleEnum::TOOL => Role::USER,
                 default => Role::MODEL,
             };
 
-            $messages[] = Content::parse($message, $geminiRole);
+            $messages[] = new Content(parts: $parts, role: $geminiRole);
         }
 
         $responseFormat = $request->getResponseFormat();
@@ -94,6 +120,15 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface, 
 
         $model = $this->client->generativeModel($this->model);
         $model = $model->withGenerationConfig($config);
+
+        if ($request->hasTools()) {
+            $model = $model->withTool(ToolFormatter::formatTools($request->getToolInfos()));
+            $model = $model->withToolConfig(new ToolConfig(
+                functionCallingConfig: new FunctionCallingConfig(
+                    mode: ToolChoiceEnum::NONE === $request->getToolChoice() ? Mode::NONE : Mode::AUTO,
+                ),
+            ));
+        }
 
         if ($request instanceof AIChatStreamedRequest) {
             return $this->createStreamed($request, $messages, $model);
@@ -182,14 +217,23 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface, 
     {
         $result = $model->generateContent(...$messages);
 
-        try {
-            $text = $result->text();
-        } catch (\ValueError $exception) {
-            throw new \RuntimeException(
-                message: \sprintf('Request blocked by safety settings: %s', $exception->getMessage()),
-                code: $exception->getCode(),
-                previous: $exception,
-            );
+        $toolCalls = $this->extractToolCalls($result);
+
+        if ([] === $toolCalls) {
+            // Pure text response: keep the strict single-part accessor so blocked prompts still surface.
+            try {
+                $text = $result->text();
+            } catch (\ValueError $exception) {
+                throw new \RuntimeException(
+                    message: \sprintf('Request blocked by safety settings: %s', $exception->getMessage()),
+                    code: $exception->getCode(),
+                    previous: $exception,
+                );
+            }
+        } else {
+            // Tool-call responses are not simple text (functionCall parts, optionally mixed with text),
+            // so gather any text parts without tripping the single-part accessor.
+            $text = $this->extractText($result);
         }
 
         if (\str_starts_with($text, '```json') && \str_ends_with($text, '```')) {
@@ -201,6 +245,7 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface, 
             new AIChatResponseMessage(
                 AIChatMessageRoleEnum::ASSISTANT,
                 $text,
+                $toolCalls,
             ),
             new Usage(
                 $result->usageMetadata->promptTokenCount,
@@ -208,6 +253,81 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface, 
                 $result->usageMetadata->totalTokenCount,
             ),
         );
+    }
+
+    /**
+     * Extract function calls from the first candidate of the response.
+     *
+     * Gemini does not always return an id for a function call; fall back to the function name,
+     * which is also what the API uses to correlate the matching functionResponse.
+     *
+     * @return AIChatToolCall[]
+     */
+    private function extractToolCalls(GenerateContentResponse $result): array
+    {
+        $toolCalls = [];
+        foreach ($result->candidates as $candidate) {
+            foreach ($candidate->content->parts as $part) {
+                if (!$part->functionCall instanceof FunctionCall) {
+                    continue;
+                }
+
+                $toolCalls[] = new AIChatToolCall(
+                    ToolTypeEnum::FUNCTION,
+                    $part->functionCall->id ?? $part->functionCall->name,
+                    $part->functionCall->name,
+                    $part->functionCall->args,
+                );
+            }
+
+            // The quick accessors only consider the first candidate, mirror that here.
+            break;
+        }
+
+        return $toolCalls;
+    }
+
+    /**
+     * Concatenate the text parts of the first candidate without throwing when the response
+     * also contains non-text parts (e.g. function calls).
+     */
+    private function extractText(GenerateContentResponse $result): string
+    {
+        $text = '';
+        foreach ($result->candidates as $candidate) {
+            foreach ($candidate->content->parts as $part) {
+                if (null !== $part->text) {
+                    $text .= $part->text;
+                }
+            }
+
+            break;
+        }
+
+        return $text;
+    }
+
+    /**
+     * Gemini expects a function response as a JSON object. Decode JSON object results so the
+     * structure is preserved, otherwise wrap the raw content so it is still handed back to the model.
+     *
+     * @return array<string, mixed>
+     */
+    private function decodeToolResult(string $content): array
+    {
+        /** @var mixed $decoded */
+        $decoded = \json_decode($content, true);
+        if (!\is_array($decoded) || \array_is_list($decoded)) {
+            return ['content' => $content];
+        }
+
+        $response = [];
+        /** @var mixed $value */
+        foreach ($decoded as $key => $value) {
+            $response[(string) $key] = $value;
+        }
+
+        return $response;
     }
 
     /**
@@ -246,17 +366,23 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface, 
                     );
                 }
 
-                try {
-                    $text = $response->text();
-                } catch (\ValueError $exception) {
-                    throw new \RuntimeException(
-                        message: \sprintf('Request blocked by safety settings: %s', $exception->getMessage()),
-                        code: $exception->getCode(),
-                        previous: $exception,
-                    );
+                $toolCalls = $this->extractToolCalls($response);
+
+                if ([] === $toolCalls) {
+                    try {
+                        $text = $response->text();
+                    } catch (\ValueError $exception) {
+                        throw new \RuntimeException(
+                            message: \sprintf('Request blocked by safety settings: %s', $exception->getMessage()),
+                            code: $exception->getCode(),
+                            previous: $exception,
+                        );
+                    }
+                } else {
+                    $text = $this->extractText($response);
                 }
 
-                yield new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, $text);
+                yield new AIChatResponseMessage(AIChatMessageRoleEnum::ASSISTANT, $text, $toolCalls);
 
                 $responses->next();
             }
