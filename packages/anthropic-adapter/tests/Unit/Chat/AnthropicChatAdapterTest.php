@@ -356,6 +356,94 @@ final class AnthropicChatAdapterTest extends TestCase
         }
     }
 
+    public function testHandleRequestStreamedWithTools(): void
+    {
+        $mockResponseMatcher = new MockResponseMatcher();
+        $client = new Client(new MockTransport($mockResponseMatcher));
+
+        $responseChunks = [];
+        foreach (DataFixtures::MESSAGES_CREATE_STREAMED_WITH_TOOLS_RESPONSES_RAW as $response) {
+            $responseChunks[] = \implode(\PHP_EOL, $response);
+        }
+
+        $expectedPayload = [
+            'model' => Model::CLAUDE_3_HAIKU->value,
+            'stream' => true,
+            'messages' => [
+                ['role' => 'user', 'content' => 'Hello world!'],
+            ],
+            'tools' => [
+                [
+                    'name' => 'get_weather',
+                    'description' => 'Get the current weather in a given location.',
+                    'input_schema' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'location' => [
+                                'type' => 'string',
+                                'description' => 'the location to get the weather for',
+                            ],
+                            'timestamp' => [
+                                'type' => 'integer',
+                                'description' => 'timestamp to get the weather',
+                            ],
+                        ],
+                        'required' => ['location'],
+                    ],
+                ],
+            ],
+            'max_tokens' => 100,
+            'system' => 'You are an angry bot!',
+        ];
+
+        $mockResponseMatcher->addResponse(
+            PartialPayload::create('messages', $expectedPayload),
+            new StreamedResponse($responseChunks, MetaInformation::empty()),
+        );
+
+        $request = new AIChatStreamedRequest(
+            new AIChatMessageCollection(
+                new AIChatMessage(
+                    AIChatMessageRoleEnum::SYSTEM,
+                    DataFixtures::MESSAGES_CREATE_WITH_TOOLS_REQUEST_RAW['messages'][0]['content'],
+                ),
+                new AIChatMessage(
+                    AIChatMessageRoleEnum::USER,
+                    DataFixtures::MESSAGES_CREATE_WITH_TOOLS_REQUEST_RAW['messages'][1]['content'],
+                ),
+            ),
+            new CriteriaCollection(),
+            [
+                'get_weather' => [$this, 'getWeatherMethod'],
+            ],
+            [
+                ToolInfoBuilder::buildToolInfo($this, 'getWeatherMethod', 'get_weather'),
+            ],
+            [],
+            static fn () => null,
+        );
+
+        $adapter = new AnthropicChatAdapter($client, Model::CLAUDE_3_HAIKU->value, 100);
+        $result = $adapter->handleRequest($request);
+
+        $this->assertInstanceOf(AIChatResponseStream::class, $result);
+
+        $toolCalls = [];
+        foreach ($result->getMessageStream() as $response) {
+            $this->assertSame(AIChatMessageRoleEnum::ASSISTANT, $response->role);
+            if (null !== $response->toolCalls) {
+                $toolCalls = [...$toolCalls, ...$response->toolCalls];
+            }
+        }
+
+        $this->assertCount(1, $toolCalls);
+        $toolCall = $toolCalls[0];
+        $this->assertSame(ToolTypeEnum::FUNCTION, $toolCall->type);
+        $this->assertSame('toolu_01W7iPphiNtxfbEfsisKFGtd', $toolCall->id);
+        $this->assertSame('get_weather', $toolCall->name);
+        $this->assertSame(['location' => 'New York'], $toolCall->arguments);
+    }
+
     public function testHandleRequestWithTools(): void
     {
         $expectedPayload = [

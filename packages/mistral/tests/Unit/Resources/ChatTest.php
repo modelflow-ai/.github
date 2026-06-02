@@ -155,12 +155,12 @@ final class ChatTest extends TestCase
         $this->assertSame($responseData['usage']['total_tokens'], $result->usage->totalTokens);
     }
 
-    public function testCreateWithToolsForNonLargeModel(): void
+    public function testCreateWithToolsForUnsupportedModel(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
         $requestData = DataFixtures::CHAT_CREATE_REQUEST_WITH_TOOLS;
-        $requestData['model'] = Model::MEDIUM->value;
+        $requestData['model'] = Model::TINY->value;
 
         $this->transport->requestObject(Argument::cetera())->shouldNotBeCalled();
 
@@ -311,12 +311,12 @@ final class ChatTest extends TestCase
         }
     }
 
-    public function testCreateStreamedWithToolsForNoneLarge(): void
+    public function testCreateStreamedWithToolsForUnsupportedModel(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
         $requestData = DataFixtures::CHAT_CREATE_REQUEST_WITH_TOOLS;
-        $requestData['model'] = Model::MEDIUM->value;
+        $requestData['model'] = Model::TINY->value;
 
         $chat = $this->createInstance($this->transport->reveal());
 

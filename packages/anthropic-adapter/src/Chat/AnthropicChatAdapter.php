@@ -262,6 +262,11 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
         $role = null;
         $lastUsage = null;
 
+        // Tool calls are streamed as a "tool_use" start block (id + name) followed by
+        // "input_json_delta" fragments that must be concatenated and decoded once complete.
+        /** @var array<int, array{id: string, name: string, json: string}> $toolCalls */
+        $toolCalls = [];
+
         foreach ($responses as $response) {
             // Anthropic sends cumulative usage with each event
             if (null !== $response->usage) {
@@ -281,18 +286,79 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
                 }
             }
 
-            $text = $delta->text ?? '';
-            if ('' === $text) {
-                continue;
+            if (null !== $delta) {
+                if ('tool_use' === $delta->type) {
+                    $toolCalls[$delta->index] = [
+                        'id' => $delta->id ?? '',
+                        'name' => $delta->name ?? '',
+                        'json' => '',
+                    ];
+
+                    continue;
+                }
+
+                if ('input_json_delta' === $delta->type) {
+                    if (isset($toolCalls[$delta->index])) {
+                        $toolCalls[$delta->index]['json'] .= $delta->partialJson ?? '';
+                    }
+
+                    continue;
+                }
+
+                $text = $delta->text ?? '';
+                if ('' !== $text) {
+                    yield new AIChatResponseMessage($role, $text);
+                }
             }
 
-            yield new AIChatResponseMessage($role, $text);
+            // Anthropic signals tool invocation with stop_reason "tool_use" on the final delta event.
+            if ('tool_use' === $response->stopReason && [] !== $toolCalls) {
+                yield new AIChatResponseMessage($role, '', $this->buildToolCalls($toolCalls));
+                $toolCalls = [];
+            }
         }
 
         // Send final usage after stream completes
         if ($lastUsage instanceof Usage) {
             $usageTracker->updateUsage($lastUsage, true);
         }
+    }
+
+    /**
+     * @param array<int, array{id: string, name: string, json: string}> $toolCalls
+     *
+     * @return AIChatToolCall[]
+     */
+    private function buildToolCalls(array $toolCalls): array
+    {
+        $calls = [];
+        foreach ($toolCalls as $toolCall) {
+            $calls[] = new AIChatToolCall(
+                ToolTypeEnum::FUNCTION,
+                $toolCall['id'],
+                $toolCall['name'],
+                $this->decodeArguments($toolCall['json']),
+            );
+        }
+
+        return $calls;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function decodeArguments(string $json): array
+    {
+        // A tool call without arguments streams no input_json_delta fragments at all.
+        if ('' === $json) {
+            return [];
+        }
+
+        // Fail fast on a truncated or malformed stream instead of silently dropping arguments.
+        /** @var array<string, mixed> $arguments */
+        $arguments = \json_decode($json, true, 512, \JSON_THROW_ON_ERROR);
+
+        return $arguments;
     }
 
     public function supports(object $request): bool
