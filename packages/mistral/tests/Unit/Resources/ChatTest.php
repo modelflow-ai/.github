@@ -155,7 +155,7 @@ final class ChatTest extends TestCase
         $this->assertSame($responseData['usage']['total_tokens'], $result->usage->totalTokens);
     }
 
-    public function testCreateWithToolsForNonLargeModel(): void
+    public function testCreateWithToolsForUnsupportedModel(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
@@ -311,7 +311,7 @@ final class ChatTest extends TestCase
         }
     }
 
-    public function testCreateStreamedWithToolsForNoneLarge(): void
+    public function testCreateStreamedWithToolsForUnsupportedModel(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
