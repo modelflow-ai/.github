@@ -47,7 +47,15 @@ final readonly class CreateStreamedResponse
      *         input_tokens: int,
      *         output_tokens: int,
      *     },
-     *     content: array{index:int, type: "text"|"text_delta", text: string},
+     *     content: array{
+     *         index?: int,
+     *         type?: "text"|"text_delta"|"tool_use"|"input_json_delta",
+     *         text?: string,
+     *         id?: string,
+     *         name?: string,
+     *         input?: array<string, mixed>,
+     *         partial_json?: string,
+     *     },
      *     stop_reason: "end_turn"|"max_tokens"|"stop_sequence"|"tool_use"|null,
      * } $attributes
      */

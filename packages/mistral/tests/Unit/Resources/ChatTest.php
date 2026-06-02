@@ -160,7 +160,7 @@ final class ChatTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
 
         $requestData = DataFixtures::CHAT_CREATE_REQUEST_WITH_TOOLS;
-        $requestData['model'] = Model::MEDIUM->value;
+        $requestData['model'] = Model::TINY->value;
 
         $this->transport->requestObject(Argument::cetera())->shouldNotBeCalled();
 
@@ -316,7 +316,7 @@ final class ChatTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
 
         $requestData = DataFixtures::CHAT_CREATE_REQUEST_WITH_TOOLS;
-        $requestData['model'] = Model::MEDIUM->value;
+        $requestData['model'] = Model::TINY->value;
 
         $chat = $this->createInstance($this->transport->reveal());
 

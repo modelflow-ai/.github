@@ -30,6 +30,6 @@ enum Model: string
 
     public function toolsSupported(): bool
     {
-        return self::LARGE === $this;
+        return \in_array($this, [self::SMALL, self::MEDIUM, self::LARGE, self::NEMO, self::PIXTRAL_LARGE], true);
     }
 }

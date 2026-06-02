@@ -124,6 +124,50 @@ final class MessagesTest extends TestCase
         }
     }
 
+    public function testCreateStreamedWithTools(): void
+    {
+        $mockResponseMatcher = new MockResponseMatcher();
+        $instance = $this->createInstance($mockResponseMatcher);
+
+        $responseChunks = [];
+        foreach (DataFixtures::MESSAGES_CREATE_STREAMED_WITH_TOOLS_RESPONSES_RAW as $response) {
+            $responseChunks[] = \implode(\PHP_EOL, $response);
+        }
+
+        $mockResponseMatcher->addResponse(PartialPayload::create(
+            'messages',
+            DataFixtures::MESSAGES_CREATE_STREAMED_REQUEST,
+        ), new StreamedResponse($responseChunks, MetaInformation::empty()));
+
+        $responses = \iterator_to_array($instance->createStreamed(DataFixtures::MESSAGES_CREATE_REQUEST_RAW));
+
+        $toolUse = null;
+        $inputDelta = null;
+        $stopReason = null;
+        foreach ($responses as $response) {
+            if (null !== $response->content && 'tool_use' === $response->content->type) {
+                $toolUse = $response->content;
+            }
+            if (null !== $response->content && 'input_json_delta' === $response->content->type) {
+                $inputDelta = $response->content;
+            }
+            if (null !== $response->stopReason) {
+                $stopReason = $response->stopReason;
+            }
+        }
+
+        $this->assertNotNull($toolUse);
+        $this->assertSame(0, $toolUse->index);
+        $this->assertSame('toolu_01W7iPphiNtxfbEfsisKFGtd', $toolUse->id);
+        $this->assertSame('get_weather', $toolUse->name);
+        $this->assertSame([], $toolUse->input);
+
+        $this->assertNotNull($inputDelta);
+        $this->assertNotNull($inputDelta->partialJson);
+
+        $this->assertSame('tool_use', $stopReason);
+    }
+
     private function createInstance(MockResponseMatcher $responseMatcher): MessagesInterface
     {
         return new Messages(new MockTransport($responseMatcher));
