@@ -18,6 +18,8 @@ use ModelflowAi\Mistral\Resources\Chat;
 use ModelflowAi\Mistral\Resources\ChatInterface;
 use ModelflowAi\Mistral\Resources\Embeddings;
 use ModelflowAi\Mistral\Resources\EmbeddingsInterface;
+use ModelflowAi\Mistral\Resources\Ocr;
+use ModelflowAi\Mistral\Resources\OcrInterface;
 
 final readonly class Client implements ClientInterface
 {
@@ -44,5 +46,15 @@ final readonly class Client implements ClientInterface
     public function embeddings(): EmbeddingsInterface
     {
         return new Embeddings($this->transport);
+    }
+
+    /**
+     * Extract text and structured content from documents and images.
+     *
+     * @see https://docs.mistral.ai/api/endpoint/ocr
+     */
+    public function ocr(): OcrInterface
+    {
+        return new Ocr($this->transport);
     }
 }

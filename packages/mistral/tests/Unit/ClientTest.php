@@ -18,6 +18,7 @@ use ModelflowAi\Mistral\Client;
 use ModelflowAi\Mistral\ClientInterface;
 use ModelflowAi\Mistral\Resources\Chat;
 use ModelflowAi\Mistral\Resources\Embeddings;
+use ModelflowAi\Mistral\Resources\Ocr;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -50,6 +51,14 @@ final class ClientTest extends TestCase
 
         $embeddings = $client->embeddings();
         $this->assertInstanceOf(Embeddings::class, $embeddings);
+    }
+
+    public function testOcr(): void
+    {
+        $client = $this->createInstance($this->transport->reveal());
+
+        $ocr = $client->ocr();
+        $this->assertInstanceOf(Ocr::class, $ocr);
     }
 
     private function createInstance(TransportInterface $transport): ClientInterface
