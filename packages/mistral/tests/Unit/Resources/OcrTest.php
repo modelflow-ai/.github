@@ -136,6 +136,44 @@ final class OcrTest extends TestCase
         $this->assertSame(Model::OCR->value, $result->model);
     }
 
+    public function testProcessWritesDetectedDocumentType(): void
+    {
+        $response = new ObjectResponse([
+            'pages' => [
+                [
+                    'index' => 0,
+                    'markdown' => '# Invoice',
+                    'images' => [],
+                    'dimensions' => null,
+                ],
+            ],
+            'model' => Model::OCR->value,
+            'usage_info' => [
+                'pages_processed' => 1,
+            ],
+        ], MetaInformation::from([]));
+
+        $capturedType = null;
+        $this->transport->requestObject(
+            Argument::that(static function (Payload $payload) use (&$capturedType): bool {
+                $document = $payload->parameters['document'] ?? null;
+                $capturedType = \is_array($document) ? ($document['type'] ?? null) : null;
+
+                return true;
+            }),
+        )->willReturn($response);
+
+        $ocr = $this->createInstance($this->transport->reveal());
+
+        $ocr->process([
+            'document' => [
+                'document_url' => 'https://example.com/invoice.pdf',
+            ],
+        ]);
+
+        $this->assertSame('document_url', $capturedType);
+    }
+
     public function testProcessMissingDocumentSource(): void
     {
         $this->expectException(\InvalidArgumentException::class);

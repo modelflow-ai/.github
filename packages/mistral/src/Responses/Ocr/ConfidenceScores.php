@@ -37,8 +37,10 @@ final readonly class ConfidenceScores
         $minimumPageConfidenceScore = $attributes['minimum_page_confidence_score'];
 
         Assert::isArray($rawWordConfidenceScores);
-        Assert::float($averagePageConfidenceScore);
-        Assert::float($minimumPageConfidenceScore);
+        Assert::numeric($averagePageConfidenceScore);
+        Assert::numeric($minimumPageConfidenceScore);
+        $averagePageConfidenceScore = (float) $averagePageConfidenceScore;
+        $minimumPageConfidenceScore = (float) $minimumPageConfidenceScore;
 
         $wordConfidenceScores = \array_map(
             static function (mixed $score): ConfidenceScore {

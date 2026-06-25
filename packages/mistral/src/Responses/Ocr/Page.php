@@ -44,8 +44,8 @@ final readonly class Page
     {
         $index = $attributes['index'];
         $markdown = $attributes['markdown'];
-        $rawImages = $attributes['images'];
-        $rawDimensions = $attributes['dimensions'];
+        $rawImages = $attributes['images'] ?? [];
+        $rawDimensions = $attributes['dimensions'] ?? null;
         $rawTables = $attributes['tables'] ?? [];
         $hyperlinks = $attributes['hyperlinks'] ?? [];
         $header = $attributes['header'] ?? null;

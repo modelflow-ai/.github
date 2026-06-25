@@ -109,4 +109,64 @@ final class ProcessResponseTest extends TestCase
         $this->assertSame('{"invoice":true}', $instance->documentAnnotation);
         $this->assertSame([], $instance->meta->headers);
     }
+
+    public function testFromAcceptsIntegerConfidenceScores(): void
+    {
+        $instance = ProcessResponse::from([
+            'pages' => [
+                [
+                    'index' => 0,
+                    'markdown' => '# Invoice',
+                    'images' => [],
+                    'dimensions' => null,
+                    'confidence_scores' => [
+                        'word_confidence_scores' => [
+                            [
+                                'text' => 'Invoice',
+                                'confidence' => 1,
+                                'start_index' => 0,
+                            ],
+                        ],
+                        'average_page_confidence_score' => 1,
+                        'minimum_page_confidence_score' => 0,
+                    ],
+                ],
+            ],
+            'model' => Model::OCR->value,
+            'usage_info' => [
+                'pages_processed' => 1,
+            ],
+        ], MetaInformation::from([]));
+
+        $confidenceScores = $instance->pages[0]->confidenceScores;
+        $this->assertNotNull($confidenceScores);
+        $this->assertSame(1.0, $confidenceScores->averagePageConfidenceScore);
+        $this->assertSame(0.0, $confidenceScores->minimumPageConfidenceScore);
+        $this->assertSame(1.0, $confidenceScores->wordConfidenceScores[0]->confidence);
+    }
+
+    public function testFromHandlesMissingOptionalPageAndImageKeys(): void
+    {
+        $instance = ProcessResponse::from([
+            'pages' => [
+                [
+                    'index' => 0,
+                    'markdown' => '# Invoice',
+                    'images' => [
+                        [
+                            'id' => 'img-0.jpeg',
+                        ],
+                    ],
+                ],
+            ],
+            'model' => Model::OCR->value,
+            'usage_info' => [
+                'pages_processed' => 1,
+            ],
+        ], MetaInformation::from([]));
+
+        $this->assertNull($instance->pages[0]->dimensions);
+        $this->assertNull($instance->pages[0]->images[0]->topLeftX);
+        $this->assertNull($instance->pages[0]->images[0]->bottomRightY);
+    }
 }

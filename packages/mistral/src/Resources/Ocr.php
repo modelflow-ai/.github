@@ -30,6 +30,7 @@ final readonly class Ocr implements OcrInterface
     {
         $this->validateParameters($parameters);
         $parameters['model'] ??= Model::OCR->value;
+        $parameters['document']['type'] ??= $this->detectDocumentType($parameters['document']);
 
         $payload = Payload::create('ocr', $parameters);
 

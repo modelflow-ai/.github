@@ -34,10 +34,10 @@ final readonly class Image
     public static function from(array $attributes): self
     {
         $id = $attributes['id'];
-        $topLeftX = $attributes['top_left_x'];
-        $topLeftY = $attributes['top_left_y'];
-        $bottomRightX = $attributes['bottom_right_x'];
-        $bottomRightY = $attributes['bottom_right_y'];
+        $topLeftX = $attributes['top_left_x'] ?? null;
+        $topLeftY = $attributes['top_left_y'] ?? null;
+        $bottomRightX = $attributes['bottom_right_x'] ?? null;
+        $bottomRightY = $attributes['bottom_right_y'] ?? null;
         $imageBase64 = $attributes['image_base64'] ?? null;
         $imageAnnotation = $attributes['image_annotation'] ?? null;
 

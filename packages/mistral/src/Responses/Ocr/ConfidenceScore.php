@@ -34,12 +34,12 @@ final readonly class ConfidenceScore
         $startIndex = $attributes['start_index'];
 
         Assert::string($text);
-        Assert::float($confidence);
+        Assert::numeric($confidence);
         Assert::integer($startIndex);
 
         return new self(
             $text,
-            $confidence,
+            (float) $confidence,
             $startIndex,
         );
     }
