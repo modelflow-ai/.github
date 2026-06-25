@@ -15,6 +15,7 @@ namespace ModelflowAi\Mistral;
 
 use ModelflowAi\Mistral\Resources\ChatInterface;
 use ModelflowAi\Mistral\Resources\EmbeddingsInterface;
+use ModelflowAi\Mistral\Resources\OcrInterface;
 
 interface ClientInterface
 {
@@ -31,4 +32,11 @@ interface ClientInterface
      * @see https://docs.mistral.ai/api/#operation/createEmbedding
      */
     public function embeddings(): EmbeddingsInterface;
+
+    /**
+     * Extract text and structured content from documents and images.
+     *
+     * @see https://docs.mistral.ai/api/endpoint/ocr
+     */
+    public function ocr(): OcrInterface;
 }
