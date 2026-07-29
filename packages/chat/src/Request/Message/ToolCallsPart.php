@@ -39,14 +39,22 @@ readonly class ToolCallsPart extends MessagePart
     {
         $message['content'] = '';
         $message['tool_calls'] = \array_map(
-            static fn (AIChatToolCall $tool) => [
-                'id' => $tool->id,
-                'type' => $tool->type->value,
-                'function' => [
-                    'name' => $tool->name,
-                    'arguments' => (string) \json_encode($tool->arguments),
-                ],
-            ],
+            static function (AIChatToolCall $tool): array {
+                $toolCall = [
+                    'id' => $tool->id,
+                    'type' => $tool->type->value,
+                    'function' => [
+                        'name' => $tool->name,
+                        'arguments' => (string) \json_encode($tool->arguments),
+                    ],
+                ];
+
+                if (null !== $tool->signature) {
+                    $toolCall['signature'] = $tool->signature;
+                }
+
+                return $toolCall;
+            },
             $this->toolCalls,
         );
 

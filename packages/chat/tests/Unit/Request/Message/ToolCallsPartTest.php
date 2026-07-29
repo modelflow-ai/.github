@@ -59,4 +59,34 @@ class ToolCallsPartTest extends TestCase
 
         $this->assertSame($expectedResult, $toolCallsPart->enhanceMessage($result));
     }
+
+    public function testEnhanceMessageWithSignature(): void
+    {
+        $toolCalls = [
+            new AIChatToolCall(ToolTypeEnum::FUNCTION, '123-123-123', 'name', ['test' => 'test'], 'signature-123'),
+        ];
+        $toolCallsPart = new ToolCallsPart($toolCalls);
+
+        $result = [
+            'role' => AIChatMessageRoleEnum::USER->value,
+            'content' => '',
+        ];
+        $expectedResult = [
+            'role' => AIChatMessageRoleEnum::USER->value,
+            'content' => '',
+            'tool_calls' => [
+                [
+                    'id' => '123-123-123',
+                    'type' => ToolTypeEnum::FUNCTION->value,
+                    'function' => [
+                        'name' => 'name',
+                        'arguments' => '{"test":"test"}',
+                    ],
+                    'signature' => 'signature-123',
+                ],
+            ],
+        ];
+
+        $this->assertSame($expectedResult, $toolCallsPart->enhanceMessage($result));
+    }
 }

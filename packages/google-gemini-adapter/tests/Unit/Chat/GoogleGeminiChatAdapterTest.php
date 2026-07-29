@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ModelflowAi\GoogleGeminiAdapter\Tests\Unit\Chat;
 
 use Gemini\Contracts\ClientContract;
+use Gemini\Data\Content;
 use Gemini\Data\FunctionCall;
 use Gemini\Data\FunctionResponse;
 use Gemini\Data\GenerationConfig;
@@ -393,6 +394,116 @@ final class GoogleGeminiChatAdapterTest extends TestCase
                     && $args[0] instanceof Tool
                     && null !== $args[0]->functionDeclarations
                     && 'get_weather' === $args[0]->functionDeclarations[0]->name,
+            );
+    }
+
+    public function testHandleRequestKeepsThoughtSignatureOfToolCall(): void
+    {
+        $client = new ClientFake([
+            GenerateContentResponse::fake([
+                'candidates' => [
+                    [
+                        'content' => [
+                            'parts' => [
+                                ['text' => ''],
+                                [
+                                    'functionCall' => [
+                                        'name' => 'get_weather',
+                                        'args' => ['location' => 'Berlin'],
+                                    ],
+                                    'thoughtSignature' => 'signature-123',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ]),
+        ]);
+
+        $request = new AIChatRequest(
+            new AIChatMessageCollection(
+                new AIChatMessage(AIChatMessageRoleEnum::USER, 'What is the weather in Berlin?'),
+            ),
+            new CriteriaCollection(),
+            [],
+            [
+                new ToolInfo(
+                    ToolTypeEnum::FUNCTION,
+                    'get_weather',
+                    'Get the current weather',
+                    [new Parameter('location', 'string', 'The location')],
+                    [new Parameter('location', 'string', 'The location')],
+                ),
+            ],
+            [],
+            static fn () => null,
+        );
+
+        $adapter = new GoogleGeminiChatAdapter($client, ModelType::GEMINI_FLASH->value);
+        $result = $adapter->handleRequest($request);
+
+        $toolCalls = $result->getMessage()->toolCalls;
+        $this->assertNotNull($toolCalls);
+        $this->assertSame('signature-123', $toolCalls[0]->signature);
+    }
+
+    public function testHandleRequestSendsThoughtSignatureBackWithToolCall(): void
+    {
+        $client = new ClientFake([
+            GenerateContentResponse::fake([
+                'candidates' => [
+                    [
+                        'content' => [
+                            'parts' => [
+                                [
+                                    'text' => 'It is sunny.',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ]),
+        ]);
+
+        $request = new AIChatRequest(
+            new AIChatMessageCollection(
+                new AIChatMessage(AIChatMessageRoleEnum::USER, 'What is the weather in Berlin?'),
+                new AIChatMessage(
+                    AIChatMessageRoleEnum::ASSISTANT,
+                    ToolCallsPart::create([
+                        new AIChatToolCall(
+                            ToolTypeEnum::FUNCTION,
+                            'call_1',
+                            'get_weather',
+                            ['location' => 'Berlin'],
+                            'signature-123',
+                        ),
+                    ]),
+                ),
+                new AIChatMessage(
+                    AIChatMessageRoleEnum::TOOL,
+                    ToolCallPart::create('call_1', 'get_weather', '{"temperature":21}'),
+                ),
+            ),
+            new CriteriaCollection(),
+            [],
+            [],
+            [],
+            static fn () => null,
+        );
+
+        $adapter = new GoogleGeminiChatAdapter($client, ModelType::GEMINI_FLASH->value);
+        $adapter->handleRequest($request);
+
+        $client->generativeModel(ModelType::GEMINI_FLASH->value)
+            ->assertSent(
+                static function (string $method, array $args): bool {
+                    $content = $args[1] ?? null;
+
+                    return 'generateContent' === $method
+                        && $content instanceof Content
+                        && 'signature-123' === $content->parts[0]->thoughtSignature;
+                },
             );
     }
 
