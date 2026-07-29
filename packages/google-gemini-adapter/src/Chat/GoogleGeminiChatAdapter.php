@@ -90,11 +90,16 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface, 
                     $parts[] = new Part(inlineData: new Blob(MimeType::from($part->mimeType), $part->content));
                 } elseif ($part instanceof ToolCallsPart) {
                     foreach ($part->toolCalls as $toolCall) {
-                        $parts[] = new Part(functionCall: new FunctionCall(
-                            name: $toolCall->name,
-                            args: $toolCall->arguments,
-                            id: '' !== $toolCall->id ? $toolCall->id : null,
-                        ));
+                        // Gemini rejects a follow-up request when the thought signature of a function call
+                        // is not sent back with it.
+                        $parts[] = new Part(
+                            functionCall: new FunctionCall(
+                                name: $toolCall->name,
+                                args: $toolCall->arguments,
+                                id: '' !== $toolCall->id ? $toolCall->id : null,
+                            ),
+                            thoughtSignature: $toolCall->signature,
+                        );
                     }
                 } elseif ($part instanceof ToolCallPart) {
                     $parts[] = new Part(functionResponse: new FunctionResponse(
@@ -261,6 +266,9 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface, 
      * Gemini does not always return an id for a function call; fall back to the function name,
      * which is also what the API uses to correlate the matching functionResponse.
      *
+     * The thought signature of the part is kept because Gemini requires it to be sent back with the
+     * function call in a follow-up request.
+     *
      * @return AIChatToolCall[]
      */
     private function extractToolCalls(GenerateContentResponse $result): array
@@ -277,6 +285,7 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface, 
                     $part->functionCall->id ?? $part->functionCall->name,
                     $part->functionCall->name,
                     $part->functionCall->args,
+                    $part->thoughtSignature,
                 );
             }
 

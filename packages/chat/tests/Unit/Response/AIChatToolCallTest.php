@@ -46,4 +46,18 @@ class AIChatToolCallTest extends TestCase
 
         $this->assertSame(['test' => 'test'], $message->arguments);
     }
+
+    public function testSignatureDefaultsToNull(): void
+    {
+        $message = new AIChatToolCall(ToolTypeEnum::FUNCTION, '123-123-123', 'name', ['test' => 'test']);
+
+        $this->assertNull($message->signature);
+    }
+
+    public function testSignature(): void
+    {
+        $message = new AIChatToolCall(ToolTypeEnum::FUNCTION, '123-123-123', 'name', ['test' => 'test'], 'signature-123');
+
+        $this->assertSame('signature-123', $message->signature);
+    }
 }
