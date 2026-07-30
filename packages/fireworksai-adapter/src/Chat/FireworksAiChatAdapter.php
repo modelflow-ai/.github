@@ -165,7 +165,7 @@ final readonly class FireworksAiChatAdapter implements AIChatAdapterInterface
      *             description: string,
      *             parameters: array{
      *                 type: string,
-     *                 properties: array<string, mixed>,
+     *                 properties: array<string, mixed>|\stdClass,
      *                 required: array<string>
      *             }
      *         }
@@ -249,7 +249,7 @@ final readonly class FireworksAiChatAdapter implements AIChatAdapterInterface
      *             description: string,
      *             parameters: array{
      *                 type: string,
-     *                 properties: array<string, mixed>,
+     *                 properties: array<string, mixed>|\stdClass,
      *                 required: array<string>
      *             }
      *         }

@@ -163,7 +163,7 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface, Suppo
      *             description: string,
      *             parameters: array{
      *                 type: string,
-     *                 properties: array<string, mixed[]>,
+     *                 properties: array<string, mixed[]>|\stdClass,
      *                 required: string[],
      *             },
      *         },
@@ -234,7 +234,7 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface, Suppo
      *             description: string,
      *             parameters: array{
      *                 type: string,
-     *                 properties: array<string, mixed[]>,
+     *                 properties: array<string, mixed[]>|\stdClass,
      *                 required: string[],
      *             },
      *         },
