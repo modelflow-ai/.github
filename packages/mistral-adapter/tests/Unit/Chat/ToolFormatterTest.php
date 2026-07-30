@@ -145,7 +145,11 @@ class ToolFormatterTest extends TestCase
 
         $formatted = ToolFormatter::formatTool($tool);
 
-        $this->assertSame(['id', 'name'], $formatted['parameters']['properties']['user']['required']);
+        $properties = $formatted['parameters']['properties'];
+
+        $this->assertIsArray($properties);
+
+        $this->assertSame(['id', 'name'], $properties['user']['required']);
     }
 
     public function testFormatToolWithArrayOfObjectsRequired(): void
@@ -172,8 +176,65 @@ class ToolFormatterTest extends TestCase
 
         $formatted = ToolFormatter::formatTool($tool);
 
+        $properties = $formatted['parameters']['properties'];
+        $this->assertIsArray($properties);
         /** @var array{items: array{required: string[]}} $itemsParam */
-        $itemsParam = $formatted['parameters']['properties']['items'];
+        $itemsParam = $properties['items'];
         $this->assertSame(['id'], $itemsParam['items']['required']);
+    }
+
+    public function testFormatToolWithoutParameters(): void
+    {
+        $tool = new ToolInfo(
+            type: ToolTypeEnum::FUNCTION,
+            name: 'test',
+            description: 'Test',
+            parameters: [],
+        );
+
+        $formatted = ToolFormatter::formatTool($tool);
+
+        // an empty array would be encoded as [] and is rejected by the api
+        $this->assertInstanceOf(\stdClass::class, $formatted['parameters']['properties']);
+        $this->assertStringContainsString('"properties":{}', (string) \json_encode($formatted));
+    }
+
+    public function testFormatToolWithObjectParameterWithoutProperties(): void
+    {
+        $tool = new ToolInfo(
+            type: ToolTypeEnum::FUNCTION,
+            name: 'test',
+            description: 'Test',
+            parameters: [
+                new Parameter(name: 'data', type: 'object', description: 'Data object', itemsOrProperties: []),
+            ],
+        );
+
+        $formatted = ToolFormatter::formatTool($tool);
+
+        $properties = $formatted['parameters']['properties'];
+        $this->assertIsArray($properties);
+        $data = $properties['data'];
+        $this->assertInstanceOf(\stdClass::class, $data['properties']);
+    }
+
+    public function testFormatToolWithArrayParameterWithoutItemProperties(): void
+    {
+        $tool = new ToolInfo(
+            type: ToolTypeEnum::FUNCTION,
+            name: 'test',
+            description: 'Test',
+            parameters: [
+                new Parameter(name: 'items', type: 'array', description: 'Items', itemsOrProperties: []),
+            ],
+        );
+
+        $formatted = ToolFormatter::formatTool($tool);
+
+        $properties = $formatted['parameters']['properties'];
+        $this->assertIsArray($properties);
+        $items = $properties['items'];
+        $this->assertIsArray($items['items']);
+        $this->assertInstanceOf(\stdClass::class, $items['items']['properties']);
     }
 }

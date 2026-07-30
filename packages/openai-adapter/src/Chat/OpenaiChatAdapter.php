@@ -234,7 +234,7 @@ final readonly class OpenaiChatAdapter implements AIChatAdapterInterface, Suppor
      *             description: string,
      *             parameters: array{
      *                 type: string,
-     *                 properties: array<string, mixed[]>,
+     *                 properties: array<string, mixed[]>|\stdClass,
      *                 required: string[],
      *            },
      *         },
@@ -327,7 +327,7 @@ final readonly class OpenaiChatAdapter implements AIChatAdapterInterface, Suppor
      *             description: string,
      *             parameters: array{
      *                 type: string,
-     *                 properties: array<string, mixed[]>,
+     *                 properties: array<string, mixed[]>|\stdClass,
      *                 required: string[],
      *            },
      *         },
