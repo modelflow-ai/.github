@@ -28,7 +28,7 @@ use ModelflowAi\Anthropic\Responses\Messages\CreateStreamedResponse;
  *     description: string,
  *     input_schema: array{
  *         type: string,
- *         properties: array<string, array<string, mixed>>,
+ *         properties: array<string, array<string, mixed>>|\stdClass,
  *         required?: string[],
  *     }
  * }

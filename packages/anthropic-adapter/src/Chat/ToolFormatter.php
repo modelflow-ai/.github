@@ -24,7 +24,7 @@ final class ToolFormatter
      *     description: string,
      *     input_schema: array{
      *         type: string,
-     *         properties: array<string, array<string, mixed>>,
+     *         properties: array<string, array<string, mixed>>|\stdClass,
      *         required?: string[],
      *     },
      * }
@@ -47,7 +47,9 @@ final class ToolFormatter
             'description' => $tool->description,
             'input_schema' => [
                 'type' => 'object',
-                'properties' => $parameters,
+                // a tool without parameters has to send an empty object, an empty array would be
+                // encoded as [] and is rejected by the api
+                'properties' => [] !== $parameters ? $parameters : new \stdClass(),
                 'required' => $requiredParameters,
             ],
         ];
@@ -61,7 +63,7 @@ final class ToolFormatter
      *     description: string,
      *     input_schema: array{
      *         type: string,
-     *         properties: array<string, array<string, mixed>>,
+     *         properties: array<string, array<string, mixed>>|\stdClass,
      *         required?: string[],
      *     },
      * }>
@@ -104,7 +106,7 @@ final class ToolFormatter
 
                 $items = [
                     'type' => 'object',
-                    'properties' => $properties,
+                    'properties' => [] !== $properties ? $properties : new \stdClass(),
                 ];
 
                 if ([] !== $parameter->required) {
@@ -126,7 +128,7 @@ final class ToolFormatter
                 $properties[$item->name] = self::formatParameter($item);
             }
 
-            $param['properties'] = $properties;
+            $param['properties'] = [] !== $properties ? $properties : new \stdClass();
 
             if ([] !== $parameter->required) {
                 $param['required'] = $parameter->required;
