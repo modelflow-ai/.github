@@ -137,7 +137,9 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
                             'type' => 'tool_use',
                             'id' => $toolCall->id,
                             'name' => $toolCall->name,
-                            'input' => $toolCall->arguments,
+                            // a tool call without arguments has to send an empty object, an empty
+                            // array would be encoded as [] and is rejected by the api
+                            'input' => [] !== $toolCall->arguments ? $toolCall->arguments : new \stdClass(),
                         ];
                     }
                 } elseif ($part instanceof ToolCallPart) {

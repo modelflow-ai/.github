@@ -75,7 +75,9 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface, Suppo
                             'type' => $tool->type->value,
                             'function' => [
                                 'name' => $tool->name,
-                                'arguments' => (string) \json_encode($tool->arguments),
+                                // a tool call without arguments has to send an empty object, an
+                                // empty array would be encoded as []
+                                'arguments' => (string) \json_encode([] !== $tool->arguments ? $tool->arguments : new \stdClass()),
                             ],
                         ],
                         $part->toolCalls,

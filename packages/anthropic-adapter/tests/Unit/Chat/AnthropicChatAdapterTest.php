@@ -19,11 +19,14 @@ use ModelflowAi\Anthropic\DataFixtures;
 use ModelflowAi\Anthropic\Model;
 use ModelflowAi\AnthropicAdapter\Chat\AnthropicChatAdapter;
 use ModelflowAi\ApiClient\Responses\MetaInformation;
+use ModelflowAi\ApiClient\Transport\Payload;
 use ModelflowAi\ApiClient\Transport\Response\ObjectResponse;
+use ModelflowAi\ApiClient\Transport\Response\TextResponse;
 use ModelflowAi\ApiClient\Transport\Testing\MockResponseMatcher;
 use ModelflowAi\ApiClient\Transport\Testing\MockTransport;
 use ModelflowAi\ApiClient\Transport\Testing\PartialPayload;
 use ModelflowAi\ApiClient\Transport\Testing\StreamedResponse;
+use ModelflowAi\ApiClient\Transport\TransportInterface;
 use ModelflowAi\Chat\Request\AIChatMessageCollection;
 use ModelflowAi\Chat\Request\AIChatRequest;
 use ModelflowAi\Chat\Request\AIChatStreamedRequest;
@@ -594,6 +597,62 @@ final class AnthropicChatAdapterTest extends TestCase
 
         $this->assertInstanceOf(AIChatResponse::class, $result);
         $this->assertSame(AIChatMessageRoleEnum::ASSISTANT, $result->getMessage()->role);
+    }
+
+    public function testHandleRequestWithToolCallsPartWithoutArguments(): void
+    {
+        // the payload is captured instead of being matched because two empty objects are never
+        // identical, which is what the response matcher compares
+        $transport = new class implements TransportInterface {
+            /**
+             * @var array<string, mixed>
+             */
+            public array $parameters = [];
+
+            public function requestText(Payload $payload): TextResponse
+            {
+                throw new \BadMethodCallException('Not expected to be called.');
+            }
+
+            public function requestObject(Payload $payload): ObjectResponse
+            {
+                $this->parameters = $payload->parameters;
+
+                return new ObjectResponse(DataFixtures::MESSAGES_CREATE_RESPONSE, MetaInformation::empty());
+            }
+
+            public function requestStream(Payload $payload, ?callable $decoder = null): \Iterator
+            {
+                throw new \BadMethodCallException('Not expected to be called.');
+            }
+        };
+
+        $toolCall = new AIChatToolCall(
+            ToolTypeEnum::FUNCTION,
+            'toolu_123',
+            'get_current_time',
+            [],
+        );
+
+        $request = new AIChatRequest(
+            new AIChatMessageCollection(
+                new AIChatMessage(AIChatMessageRoleEnum::USER, 'What time is it?'),
+                new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, ToolCallsPart::create([$toolCall])),
+                new AIChatMessage(AIChatMessageRoleEnum::USER, ToolCallPart::create('toolu_123', 'get_current_time', '11:07')),
+            ),
+            new CriteriaCollection(),
+            [],
+            [],
+            [],
+            static fn () => null,
+        );
+
+        $adapter = new AnthropicChatAdapter(new Client($transport), Model::CLAUDE_3_HAIKU->value, 100);
+        $adapter->handleRequest($request);
+
+        // a tool call without arguments is rejected with "messages.N.content.0.tool_use.input:
+        // Input should be an object" when it is sent as an empty array
+        $this->assertStringContainsString('"input":{}', (string) \json_encode($transport->parameters));
     }
 
     public function testHandleRequestWithToolCallPart(): void

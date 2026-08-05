@@ -285,7 +285,11 @@ final readonly class Messages implements MessagesInterface
                     Assert::keyExists($content, 'name');
                     Assert::string($content['name']);
                     Assert::keyExists($content, 'input');
-                    Assert::isArray($content['input']);
+                    // a tool call without arguments is sent as an empty object, an empty array
+                    // would be encoded as [] and is rejected by the api
+                    if (!$content['input'] instanceof \stdClass) {
+                        Assert::isArray($content['input']);
+                    }
                 } elseif ('tool_result' === $content['type']) {
                     Assert::keyExists($content, 'tool_use_id');
                     Assert::string($content['tool_use_id']);
