@@ -43,6 +43,9 @@ class ClientFactory
 
         return \Gemini::factory()
             ->withApiKey($this->apiKey)
+            // The charset is redundant for application/json, but spelling it out costs nothing and
+            // rules the header out as a suspect when a response comes back with mangled characters.
+            ->withHttpHeader('Content-Type', 'application/json; charset=utf-8')
             ->withHttpClient($client)
             ->withStreamHandler(static fn (RequestInterface $request): ResponseInterface => $client->sendRequest($request))
             ->make();
