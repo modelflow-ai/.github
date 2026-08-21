@@ -39,6 +39,7 @@ use ModelflowAi\Anthropic\Responses\Messages\CreateStreamedResponse;
  *         schema: array<string, mixed>,
  *     }
  * }
+ * @phpstan-type Thinking array{type: "adaptive"|"disabled", display?: "summarized"|"omitted"}
  * @phpstan-type Parameters array{
  *     model: string,
  *     messages: Message[],
@@ -49,6 +50,7 @@ use ModelflowAi\Anthropic\Responses\Messages\CreateStreamedResponse;
  *     temperature?: float,
  *     top_k?: int,
  *     top_p?: float,
+ *     thinking?: Thinking,
  *     output_config?: OutputConfig,
  * }
  */
