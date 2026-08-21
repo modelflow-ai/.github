@@ -72,10 +72,11 @@ final readonly class Messages implements MessagesInterface
 
                 $eventName = \trim(\substr($event[0], 6));
                 $data = \trim(\substr($event[1], 5));
-
                 if ('ping' === $eventName) {
                     continue;
-                } elseif ('message_start' === $eventName) {
+                }
+
+                if ('message_start' === $eventName) {
                     /** @var array{
                      *     message: array{
                      *          id: string,
@@ -90,7 +91,6 @@ final readonly class Messages implements MessagesInterface
                      * } $object */
                     $object = \json_decode($data, true);
                     $message = $object['message'];
-
                     yield $message;
                 } elseif ('content_block_start' === $eventName) {
                     /** @var array{
@@ -123,8 +123,6 @@ final readonly class Messages implements MessagesInterface
 
                     // @phpstan-ignore-next-line
                     yield [...$message, 'content' => ['index' => $object['index'], ...$object['delta']]];
-                } elseif ('content_block_stop' === $eventName) {
-                    continue;
                 } elseif ('message_delta' === $eventName) {
                     /** @var array{
                      *     delta: array{
@@ -147,6 +145,8 @@ final readonly class Messages implements MessagesInterface
                     $message = [...$message, ...$object['delta']];
 
                     yield $message;
+                } elseif ('content_block_stop' === $eventName) {
+                    continue;
                 } elseif ('message_stop' === $eventName) {
                     continue;
                 }

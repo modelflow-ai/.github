@@ -33,6 +33,6 @@ return static function (RectorConfig $rectorConfig, string $directory): void {
     $rectorConfig->sets([
         SetList::CODE_QUALITY,
         LevelSetList::UP_TO_PHP_82,
-        PHPUnitSetList::PHPUNIT_100,
+        PHPUnitSetList::COMPOSER_BASED,
     ]);
 };

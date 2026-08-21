@@ -36,7 +36,8 @@ final readonly class CreateResponseContent
                 $attributes['type'],
                 $attributes['text'],
             );
-        } elseif ('tool_use' === $attributes['type']) {
+        }
+        if ('tool_use' === $attributes['type']) {
             return new self(
                 $attributes['type'],
                 null,

@@ -116,7 +116,7 @@ class OptimisticJsonParser
         // Trailing comma before end of string (will be followed by structure closure)
         $trimmed = \rtrim($jsonString);
         if (\preg_match('/,\s*$/', $trimmed)) {
-            $jsonString = \preg_replace('/,\s*$/', '', $trimmed) ?? $trimmed;
+            return \preg_replace('/,\s*$/', '', $trimmed) ?? $trimmed;
         }
 
         return $jsonString;

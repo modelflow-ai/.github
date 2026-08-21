@@ -38,7 +38,7 @@
         "phpstan/phpstan": "^2.1",
         "phpstan/phpstan-phpunit": "^2.0",
         "phpunit/phpunit": "^11.0",
-        "rector/rector": "^2.0",
+        "rector/rector": "^2.6",
         "symfony/cache": "^7.0 || ^8.0",
         "ramsey/uuid": "^4.7",
         "symfony/dotenv": "^7.1 || ^8.0",
