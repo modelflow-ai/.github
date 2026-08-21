@@ -29,6 +29,7 @@ final class ModelCapabilities
     private const SAMPLING_REMOVED = [
         'claude-fable-5',
         'claude-mythos-5',
+        'claude-mythos-preview',
         'claude-opus-5',
         'claude-sonnet-5',
         'claude-opus-4-8',
@@ -44,6 +45,7 @@ final class ModelCapabilities
     private const THINKING_SUPPORTED = [
         'claude-fable-5',
         'claude-mythos-5',
+        'claude-mythos-preview',
         'claude-opus-5',
         'claude-sonnet-5',
         'claude-opus-4-8',
@@ -61,6 +63,7 @@ final class ModelCapabilities
     private const THINKING_ON_BY_DEFAULT = [
         'claude-fable-5',
         'claude-mythos-5',
+        'claude-mythos-preview',
         'claude-opus-5',
         'claude-sonnet-5',
     ];
@@ -73,6 +76,7 @@ final class ModelCapabilities
     private const THINKING_ALWAYS_ON = [
         'claude-fable-5',
         'claude-mythos-5',
+        'claude-mythos-preview',
     ];
 
     public static function supportsSampling(string $model): bool

@@ -34,6 +34,7 @@ final class ModelCapabilitiesTest extends TestCase
         yield 'claude-opus-5' => ['claude-opus-5', false];
         yield 'claude-sonnet-5' => ['claude-sonnet-5', false];
         yield 'claude-fable-5' => ['claude-fable-5', false];
+        yield 'claude-mythos-preview' => ['claude-mythos-preview', false];
     }
 
     #[DataProvider('samplingProvider')]
@@ -53,6 +54,7 @@ final class ModelCapabilitiesTest extends TestCase
         yield 'claude-opus-4-8' => ['claude-opus-4-8', true];
         yield 'claude-sonnet-5' => ['claude-sonnet-5', true];
         yield 'claude-fable-5' => ['claude-fable-5', true];
+        yield 'claude-mythos-preview' => ['claude-mythos-preview', true];
     }
 
     #[DataProvider('thinkingProvider')]
@@ -73,6 +75,7 @@ final class ModelCapabilitiesTest extends TestCase
         yield 'claude-opus-5' => ['claude-opus-5', true];
         yield 'claude-sonnet-5' => ['claude-sonnet-5', true];
         yield 'claude-fable-5' => ['claude-fable-5', true];
+        yield 'claude-mythos-preview' => ['claude-mythos-preview', true];
     }
 
     #[DataProvider('thinksByDefaultProvider')]
@@ -92,6 +95,7 @@ final class ModelCapabilitiesTest extends TestCase
         yield 'claude-sonnet-5' => ['claude-sonnet-5', true];
         yield 'claude-fable-5' => ['claude-fable-5', false];
         yield 'claude-mythos-5' => ['claude-mythos-5', false];
+        yield 'claude-mythos-preview' => ['claude-mythos-preview', false];
     }
 
     #[DataProvider('disabledThinkingProvider')]

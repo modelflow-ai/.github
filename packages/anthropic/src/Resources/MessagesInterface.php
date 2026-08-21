@@ -39,7 +39,9 @@ use ModelflowAi\Anthropic\Responses\Messages\CreateStreamedResponse;
  *         schema: array<string, mixed>,
  *     }
  * }
- * @phpstan-type Thinking array{type: "adaptive"|"disabled", display?: "summarized"|"omitted"}
+ * @phpstan-type Thinking array{type: "adaptive", display?: "summarized"|"omitted"}
+ *     |array{type: "disabled"}
+ *     |array{type: "enabled", budget_tokens: int, display?: "summarized"|"omitted"}
  * @phpstan-type Parameters array{
  *     model: string,
  *     messages: Message[],
