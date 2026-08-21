@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c9ac3b724ae10da2f58d95d264b3bba9",
+    "content-hash": "4182c7d5c382f19c5a01cf99a6ca8d56",
     "packages": [
         {
             "name": "psr/cache",
@@ -1018,7 +1018,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../api-client",
-                "reference": "9adb5673aaf0c41b72ceb599e1526cdac8860a0b"
+                "reference": "6a54678b4000e5dedfa00e2abcdfd3aabde7c9f0"
             },
             "require": {
                 "php": "^8.2",
@@ -1034,7 +1034,7 @@
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
-                "rector/rector": "^2.0"
+                "rector/rector": "^2.6"
             },
             "type": "library",
             "extra": {
@@ -1114,7 +1114,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../ollama",
-                "reference": "8a31f2e635c62306403e6ffef2acfdce61d9bd50"
+                "reference": "db638557428600c9d5867ff3713a0dc8813e4129"
             },
             "require": {
                 "modelflow-ai/api-client": "^0.4",
@@ -1130,7 +1130,7 @@
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
-                "rector/rector": "^2.0"
+                "rector/rector": "^2.6"
             },
             "type": "library",
             "extra": {
@@ -1212,7 +1212,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../ollama-adapter",
-                "reference": "92858069e82c52d17a2e31ddb8a5597bb2d92be9"
+                "reference": "f869673b7c297465973ec0730c4e4909f2674737"
             },
             "require": {
                 "modelflow-ai/ollama": "^0.4",
@@ -1232,7 +1232,7 @@
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
-                "rector/rector": "^2.0",
+                "rector/rector": "^2.6",
                 "symfony/cache": "^7.4 || ^8.0",
                 "symfony/dotenv": "^7.2 || ^8.0"
             },
@@ -2012,8 +2012,8 @@
             "version": "2.2.x-dev",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e336b2b9dd4f2c8b6af3a0b46d75bbf1ea0932e5",
-                "reference": "e336b2b9dd4f2c8b6af3a0b46d75bbf1ea0932e5",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/f5e1836289d12aa3f59eaa3d1dc9e439bd85d5ea",
+                "reference": "f5e1836289d12aa3f59eaa3d1dc9e439bd85d5ea",
                 "shasum": ""
             },
             "require": {
@@ -2070,7 +2070,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-06-01T19:08:05+00:00"
+            "time": "2026-08-20T14:28:37+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
@@ -2624,21 +2624,21 @@
         },
         {
             "name": "rector/rector",
-            "version": "2.4.5",
+            "version": "2.6.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "cbd86024be5014d3c14d9f0b3f7aae8ecbffd62c"
+                "reference": "7e46709996a4b3dc59e1d6ecbb6a38ace335bd58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/cbd86024be5014d3c14d9f0b3f7aae8ecbffd62c",
-                "reference": "cbd86024be5014d3c14d9f0b3f7aae8ecbffd62c",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/7e46709996a4b3dc59e1d6ecbb6a38ace335bd58",
+                "reference": "7e46709996a4b3dc59e1d6ecbb6a38ace335bd58",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.4|^8.0",
-                "phpstan/phpstan": "^2.1.56"
+                "phpstan/phpstan": "^2.2.6"
             },
             "conflict": {
                 "rector/rector-doctrine": "*",
@@ -2672,7 +2672,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.4.5"
+                "source": "https://github.com/rectorphp/rector/tree/2.6.3"
             },
             "funding": [
                 {
@@ -2680,7 +2680,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-26T21:03:22+00:00"
+            "time": "2026-08-18T22:01:18+00:00"
         },
         {
             "name": "sebastian/cli-parser",

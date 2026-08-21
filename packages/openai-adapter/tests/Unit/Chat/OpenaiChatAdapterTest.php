@@ -543,8 +543,8 @@ final class OpenaiChatAdapterTest extends TestCase
 
     public function testSupportResponseFormatWithSupportedInstance(): void
     {
-        $client = $this->createMock(ClientContract::class);
-        $unsupportedFormat = $this->createMock(JsonSchemaResponseFormat::class);
+        $client = $this->createStub(ClientContract::class);
+        $unsupportedFormat = $this->createStub(JsonSchemaResponseFormat::class);
 
         $adapter = new OpenaiChatAdapter($client);
 
@@ -553,8 +553,8 @@ final class OpenaiChatAdapterTest extends TestCase
 
     public function testSupportResponseFormatWithUnsupportedInstance(): void
     {
-        $client = $this->createMock(ClientContract::class);
-        $unsupportedFormat = $this->createMock(ResponseFormatInterface::class);
+        $client = $this->createStub(ClientContract::class);
+        $unsupportedFormat = $this->createStub(ResponseFormatInterface::class);
 
         $adapter = new OpenaiChatAdapter($client);
 

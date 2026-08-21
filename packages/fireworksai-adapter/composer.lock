@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5edcb019c63576eb9cf701401bb341e1",
+    "content-hash": "e595889abbbc72cd61cb42248076097b",
     "packages": [
         {
             "name": "nyholm/psr7",
@@ -1147,7 +1147,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../chat",
-                "reference": "dbf738ea4388be5e3291deef3a3f61545132f123"
+                "reference": "9d0c1e10c9fb55ffd417e2660110b0a0128b7924"
             },
             "require": {
                 "ext-fileinfo": "*",
@@ -1166,7 +1166,7 @@
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
-                "rector/rector": "^2.0",
+                "rector/rector": "^2.6",
                 "symfony/dotenv": "^7.2 || ^8.0"
             },
             "type": "library",
@@ -1259,7 +1259,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../completion",
-                "reference": "b11bf4474cb972630f8e2c4f761de0afbacd036f"
+                "reference": "6b24d8f88ef3d188c60bbfe626df5266059a3cd0"
             },
             "require": {
                 "ext-fileinfo": "*",
@@ -1277,7 +1277,7 @@
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
-                "rector/rector": "^2.0",
+                "rector/rector": "^2.6",
                 "symfony/dotenv": "^7.2 || ^8.0"
             },
             "type": "library",
@@ -1364,7 +1364,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../decision-tree",
-                "reference": "5513626695500dc6be4481b7c52530b54124c0aa"
+                "reference": "6821da1380fd56b31d76972a273eb12793fcdfa9"
             },
             "require": {
                 "php": "^8.2"
@@ -1378,7 +1378,7 @@
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
-                "rector/rector": "^2.0",
+                "rector/rector": "^2.6",
                 "symfony/console": "^7.1 || ^8.0"
             },
             "type": "library",
@@ -1458,7 +1458,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../embeddings",
-                "reference": "b9e6dd3b8469574414564f8db320ce7fae919f0f"
+                "reference": "8ca6b5fe7d6a0c7c88a20cbccb3e7356ccac2c76"
             },
             "require": {
                 "php": "^8.2",
@@ -1475,7 +1475,7 @@
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
-                "rector/rector": "^2.0",
+                "rector/rector": "^2.6",
                 "symfony/cache": "^6.4 || ^7.0 || ^8.0"
             },
             "suggest": {
@@ -1566,7 +1566,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../image",
-                "reference": "b61135f6b8d2344cd5a09e9d534d7f7887ec5f68"
+                "reference": "4d6be440c01189d973012053d43fbf12835a347e"
             },
             "require": {
                 "modelflow-ai/decision-tree": "^0.4",
@@ -1582,7 +1582,7 @@
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
-                "rector/rector": "^2.0",
+                "rector/rector": "^2.6",
                 "symfony/console": "^7.1 || ^8.0"
             },
             "suggest": {
@@ -1669,7 +1669,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../prompt-template",
-                "reference": "f134851c1d83a6d6d532f7828ccb898b741bf6d4"
+                "reference": "ac90008a05ae122ff02d0e9046c8ed77cec05268"
             },
             "require": {
                 "modelflow-ai/chat": "^0.4",
@@ -1682,7 +1682,7 @@
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.0",
-                "rector/rector": "^2.0"
+                "rector/rector": "^2.6"
             },
             "type": "library",
             "extra": {
@@ -2457,8 +2457,8 @@
             "version": "2.2.x-dev",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e336b2b9dd4f2c8b6af3a0b46d75bbf1ea0932e5",
-                "reference": "e336b2b9dd4f2c8b6af3a0b46d75bbf1ea0932e5",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/f5e1836289d12aa3f59eaa3d1dc9e439bd85d5ea",
+                "reference": "f5e1836289d12aa3f59eaa3d1dc9e439bd85d5ea",
                 "shasum": ""
             },
             "require": {
@@ -2515,7 +2515,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-06-01T19:08:05+00:00"
+            "time": "2026-08-20T14:28:37+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
@@ -3071,21 +3071,21 @@
         },
         {
             "name": "rector/rector",
-            "version": "2.4.5",
+            "version": "2.6.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "cbd86024be5014d3c14d9f0b3f7aae8ecbffd62c"
+                "reference": "7e46709996a4b3dc59e1d6ecbb6a38ace335bd58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/cbd86024be5014d3c14d9f0b3f7aae8ecbffd62c",
-                "reference": "cbd86024be5014d3c14d9f0b3f7aae8ecbffd62c",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/7e46709996a4b3dc59e1d6ecbb6a38ace335bd58",
+                "reference": "7e46709996a4b3dc59e1d6ecbb6a38ace335bd58",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.4|^8.0",
-                "phpstan/phpstan": "^2.1.56"
+                "phpstan/phpstan": "^2.2.6"
             },
             "conflict": {
                 "rector/rector-doctrine": "*",
@@ -3119,7 +3119,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.4.5"
+                "source": "https://github.com/rectorphp/rector/tree/2.6.3"
             },
             "funding": [
                 {
@@ -3127,7 +3127,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-26T21:03:22+00:00"
+            "time": "2026-08-18T22:01:18+00:00"
         },
         {
             "name": "sebastian/cli-parser",
