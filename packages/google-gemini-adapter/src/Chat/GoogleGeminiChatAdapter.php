@@ -23,12 +23,14 @@ use Gemini\Data\FunctionResponse;
 use Gemini\Data\GenerationConfig;
 use Gemini\Data\Part;
 use Gemini\Data\Schema;
+use Gemini\Data\ThinkingConfig;
 use Gemini\Data\ToolConfig;
 use Gemini\Enums\DataType;
 use Gemini\Enums\MimeType;
 use Gemini\Enums\Mode;
 use Gemini\Enums\ResponseMimeType;
 use Gemini\Enums\Role;
+use Gemini\Enums\ThinkingLevel;
 use Gemini\Responses\GenerativeModel\GenerateContentResponse;
 use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;
 use ModelflowAi\Chat\Request\AIChatRequest;
@@ -65,6 +67,7 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface, 
     public function __construct(
         private ClientContract $client,
         private string $model,
+        private ?ThinkingLevel $thinkingLevel = null,
     ) {
     }
 
@@ -155,6 +158,8 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface, 
             $responseMimeType = ResponseMimeType::APPLICATION_JSON;
         }
 
+        $thinkingConfig = $this->buildThinkingConfig();
+
         if (null !== $temperature) {
             Assert::float($temperature);
 
@@ -162,6 +167,7 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface, 
                 temperature: $temperature,
                 responseMimeType: $responseMimeType,
                 responseSchema: $responseSchema,
+                thinkingConfig: $thinkingConfig,
             );
         }
 
@@ -169,10 +175,34 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface, 
             return new GenerationConfig(
                 responseMimeType: $responseMimeType,
                 responseSchema: $responseSchema,
+                thinkingConfig: $thinkingConfig,
             );
         }
 
-        return new GenerationConfig();
+        return new GenerationConfig(
+            thinkingConfig: $thinkingConfig,
+        );
+    }
+
+    /**
+     * Gemini 3 thinks at medium level unless told otherwise, and every generated thought is billed
+     * as an output token. Ask for the lowest level the generation accepts; unlike other providers
+     * thinking cannot be turned off entirely.
+     */
+    private function buildThinkingConfig(): ?ThinkingConfig
+    {
+        if (!ModelCapabilities::supportsThinkingLevel($this->model)) {
+            if ($this->thinkingLevel instanceof ThinkingLevel) {
+                @\trigger_error(\sprintf('Thinking level is not supported by "%s".', $this->model), \E_USER_WARNING);
+            }
+
+            return null;
+        }
+
+        return new ThinkingConfig(
+            includeThoughts: false,
+            thinkingLevel: $this->thinkingLevel ?? ThinkingLevel::LOW,
+        );
     }
 
     /**

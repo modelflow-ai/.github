@@ -35,6 +35,7 @@ use ModelflowAi\Chat\ToolInfo\ToolInfoBuilder;
 use ModelflowAi\Chat\ToolInfo\ToolTypeEnum;
 use ModelflowAi\DecisionTree\Criteria\CriteriaCollection;
 use ModelflowAi\OpenaiAdapter\Chat\OpenaiChatAdapter;
+use ModelflowAi\OpenaiAdapter\Chat\ReasoningEffortEnum;
 use OpenAI\Contracts\ClientContract;
 use OpenAI\Contracts\Resources\ChatContract;
 use OpenAI\Responses\Chat\CreateResponse;
@@ -634,5 +635,134 @@ final class OpenaiChatAdapterTest extends TestCase
     public function toolMethod(string $required, string $optional = ''): string
     {
         return $required . $optional;
+    }
+
+    public function testHandleRequestAsksForNoReasoningOnReasoningModels(): void
+    {
+        $chat = $this->prophesize(ChatContract::class);
+        $client = $this->prophesize(ClientContract::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->create([
+            'model' => 'gpt-5.6-sol',
+            'messages' => [
+                ['role' => 'user', 'content' => 'User message'],
+            ],
+            'reasoning_effort' => 'none',
+        ])->willReturn($this->createFixtureResponse())->shouldBeCalled();
+
+        $adapter = new OpenaiChatAdapter($client->reveal(), 'gpt-5.6-sol');
+        $adapter->handleRequest($this->createRequest());
+    }
+
+    public function testHandleRequestOmitsTemperatureOnReasoningModels(): void
+    {
+        $chat = $this->prophesize(ChatContract::class);
+        $client = $this->prophesize(ClientContract::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->create([
+            'model' => 'gpt-5.6-sol',
+            'messages' => [
+                ['role' => 'user', 'content' => 'User message'],
+            ],
+            'reasoning_effort' => 'none',
+        ])->willReturn($this->createFixtureResponse())->shouldBeCalled();
+
+        $adapter = new OpenaiChatAdapter($client->reveal(), 'gpt-5.6-sol');
+        @$adapter->handleRequest($this->createRequest(['temperature' => 0.5]));
+    }
+
+    public function testHandleRequestSendsTheConfiguredReasoningEffort(): void
+    {
+        $chat = $this->prophesize(ChatContract::class);
+        $client = $this->prophesize(ClientContract::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->create([
+            'model' => 'gpt-5.6-sol',
+            'messages' => [
+                ['role' => 'user', 'content' => 'User message'],
+            ],
+            'reasoning_effort' => 'high',
+        ])->willReturn($this->createFixtureResponse())->shouldBeCalled();
+
+        $adapter = new OpenaiChatAdapter($client->reveal(), 'gpt-5.6-sol', ReasoningEffortEnum::HIGH);
+        $adapter->handleRequest($this->createRequest());
+    }
+
+    public function testHandleRequestOmitsReasoningEffortOnModelsWithoutSupport(): void
+    {
+        $chat = $this->prophesize(ChatContract::class);
+        $client = $this->prophesize(ClientContract::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->create([
+            'model' => 'gpt-4',
+            'messages' => [
+                ['role' => 'user', 'content' => 'User message'],
+            ],
+            'temperature' => 0.5,
+        ])->willReturn($this->createFixtureResponse())->shouldBeCalled();
+
+        $adapter = new OpenaiChatAdapter($client->reveal());
+        $adapter->handleRequest($this->createRequest(['temperature' => 0.5]));
+    }
+
+    public function testHandleRequestWarnsWhenNoneIsUnsupported(): void
+    {
+        $chat = $this->prophesize(ChatContract::class);
+        $client = $this->prophesize(ClientContract::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->create([
+            'model' => 'o3',
+            'messages' => [
+                ['role' => 'user', 'content' => 'User message'],
+            ],
+        ])->willReturn($this->createFixtureResponse())->shouldBeCalled();
+
+        $adapter = new OpenaiChatAdapter($client->reveal(), 'o3', ReasoningEffortEnum::NONE);
+        @$adapter->handleRequest($this->createRequest());
+    }
+
+    private function createFixtureResponse(): CreateResponse
+    {
+        $attributes = CreateResponseFixture::ATTRIBUTES;
+        $attributes['system_fingerprint'] = '123-123-123';
+
+        return CreateResponse::from(
+            $attributes,
+            MetaInformation::from([
+                'x-request-id' => ['123'],
+                'openai-model' => ['gpt-4'],
+                'openai-organization' => ['org'],
+                'openai-version' => ['2021-10-10'],
+                'openai-processing-ms' => ['123'],
+                'x-ratelimit-limit-requests' => ['123'],
+                'x-ratelimit-limit-tokens' => ['123'],
+                'x-ratelimit-remaining-requests' => ['123'],
+                'x-ratelimit-remaining-tokens' => ['123'],
+                'x-ratelimit-reset-requests' => ['123'],
+                'x-ratelimit-reset-tokens' => ['123'],
+            ]),
+        );
+    }
+
+    /**
+     * @param array{seed?: int, temperature?: float} $options
+     */
+    private function createRequest(array $options = []): AIChatRequest
+    {
+        return new AIChatRequest(
+            new AIChatMessageCollection(
+                new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
+            ),
+            new CriteriaCollection(),
+            [],
+            [],
+            $options,
+            static fn () => null,
+        );
     }
 }

@@ -18,11 +18,13 @@ use Gemini\Data\Content;
 use Gemini\Data\FunctionCall;
 use Gemini\Data\FunctionResponse;
 use Gemini\Data\GenerationConfig;
+use Gemini\Data\ThinkingConfig;
 use Gemini\Data\Tool;
 use Gemini\Enums\DataType;
 use Gemini\Enums\ModelType;
 use Gemini\Enums\ResponseMimeType;
 use Gemini\Enums\Role;
+use Gemini\Enums\ThinkingLevel;
 use Gemini\Responses\GenerativeModel\GenerateContentResponse;
 use Gemini\Testing\ClientFake;
 use ModelflowAi\Chat\Request\AIChatMessageCollection;
@@ -572,5 +574,86 @@ final class GoogleGeminiChatAdapterTest extends TestCase
                         && Role::USER === $args[2]->role;
                 },
             );
+    }
+
+    public function testHandleRequestAsksForTheLowestThinkingLevel(): void
+    {
+        $client = $this->createResponseFake();
+        $adapter = new GoogleGeminiChatAdapter($client, 'gemini-3.7-flash');
+
+        $adapter->handleRequest($this->createRequest());
+
+        $client->generativeModel('gemini-3.7-flash')
+            ->assertFunctionCalled(
+                static fn (string $method, array $args) => 'withGenerationConfig' === $method
+                    && $args[0] instanceof GenerationConfig
+                    && $args[0]->thinkingConfig instanceof ThinkingConfig
+                    && ThinkingLevel::LOW === $args[0]->thinkingConfig->thinkingLevel
+                    && false === $args[0]->thinkingConfig->includeThoughts,
+            );
+    }
+
+    public function testHandleRequestSendsTheConfiguredThinkingLevel(): void
+    {
+        $client = $this->createResponseFake();
+        $adapter = new GoogleGeminiChatAdapter($client, 'gemini-3.7-flash', ThinkingLevel::HIGH);
+
+        $adapter->handleRequest($this->createRequest());
+
+        $client->generativeModel('gemini-3.7-flash')
+            ->assertFunctionCalled(
+                static fn (string $method, array $args) => 'withGenerationConfig' === $method
+                    && $args[0] instanceof GenerationConfig
+                    && $args[0]->thinkingConfig instanceof ThinkingConfig
+                    && ThinkingLevel::HIGH === $args[0]->thinkingConfig->thinkingLevel,
+            );
+    }
+
+    public function testHandleRequestOmitsThinkingForOlderGenerations(): void
+    {
+        $client = $this->createResponseFake();
+        $adapter = new GoogleGeminiChatAdapter($client, ModelType::GEMINI_FLASH->value);
+
+        $adapter->handleRequest($this->createRequest());
+
+        $client->generativeModel(ModelType::GEMINI_FLASH->value)
+            ->assertFunctionCalled(
+                static fn (string $method, array $args) => 'withGenerationConfig' === $method
+                    && $args[0] instanceof GenerationConfig
+                    && !$args[0]->thinkingConfig instanceof ThinkingConfig,
+            );
+    }
+
+    private function createResponseFake(): ClientFake
+    {
+        return new ClientFake([
+            GenerateContentResponse::fake([
+                'candidates' => [
+                    [
+                        'content' => [
+                            'parts' => [
+                                [
+                                    'text' => 'success',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ]),
+        ]);
+    }
+
+    private function createRequest(): AIChatRequest
+    {
+        return new AIChatRequest(
+            new AIChatMessageCollection(
+                new AIChatMessage(AIChatMessageRoleEnum::USER, 'Hello'),
+            ),
+            new CriteriaCollection(),
+            [],
+            [],
+            [],
+            static fn () => null,
+        );
     }
 }
