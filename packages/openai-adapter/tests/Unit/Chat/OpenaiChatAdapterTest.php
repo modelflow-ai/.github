@@ -44,6 +44,7 @@ use OpenAI\Responses\Meta\MetaInformation;
 use OpenAI\Testing\ClientFake;
 use OpenAI\Testing\Responses\Fixtures\Chat\CreateResponseFixture;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 final class OpenaiChatAdapterTest extends TestCase
@@ -767,6 +768,73 @@ final class OpenaiChatAdapterTest extends TestCase
         $warnings = $this->captureWarnings(fn () => $adapter->handleRequest($this->createRequest()));
 
         $this->assertSame([], $warnings);
+    }
+
+    public function testHandleRequestAsksForNoReasoningWhenToolsAreSent(): void
+    {
+        $chat = $this->prophesize(ChatContract::class);
+        $client = $this->prophesize(ClientContract::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->create(Argument::withEntry('reasoning_effort', 'none'))
+            ->willReturn($this->createFixtureResponse())
+            ->shouldBeCalled();
+
+        $adapter = new OpenaiChatAdapter($client->reveal(), 'gpt-5.6-sol');
+        $adapter->handleRequest($this->createToolRequest());
+    }
+
+    public function testHandleRequestDropsAConfiguredEffortWhenToolsAreSent(): void
+    {
+        $chat = $this->prophesize(ChatContract::class);
+        $client = $this->prophesize(ClientContract::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->create(Argument::withEntry('reasoning_effort', 'none'))
+            ->willReturn($this->createFixtureResponse())
+            ->shouldBeCalled();
+
+        $adapter = new OpenaiChatAdapter($client->reveal(), 'gpt-5.6-sol', ReasoningEffortEnum::HIGH);
+        $warnings = $this->captureWarnings(fn () => $adapter->handleRequest($this->createToolRequest()));
+
+        $this->assertSame(
+            ['Reasoning effort "high" cannot be combined with tools for "gpt-5.6-sol", falling back to "none".'],
+            $warnings,
+        );
+    }
+
+    public function testHandleRequestKeepsTheEffortWithToolsOnOtherModels(): void
+    {
+        $chat = $this->prophesize(ChatContract::class);
+        $client = $this->prophesize(ClientContract::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->create(Argument::withEntry('reasoning_effort', 'high'))
+            ->willReturn($this->createFixtureResponse())
+            ->shouldBeCalled();
+
+        $adapter = new OpenaiChatAdapter($client->reveal(), 'o3', ReasoningEffortEnum::HIGH);
+        $warnings = $this->captureWarnings(fn () => $adapter->handleRequest($this->createToolRequest()));
+
+        $this->assertSame([], $warnings);
+    }
+
+    private function createToolRequest(): AIChatRequest
+    {
+        return new AIChatRequest(
+            new AIChatMessageCollection(
+                new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
+            ),
+            new CriteriaCollection(),
+            [
+                'test' => [$this, 'toolMethod'],
+            ],
+            [
+                ToolInfoBuilder::buildToolInfo($this, 'toolMethod', 'test'),
+            ],
+            [],
+            static fn () => null,
+        );
     }
 
     /**

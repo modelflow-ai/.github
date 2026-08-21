@@ -43,6 +43,17 @@ final class ModelCapabilities
         'gpt-5.6' => ['none', 'low', 'medium', 'high', 'xhigh', 'max'],
     ];
 
+    /**
+     * Families whose Chat Completions endpoint refuses function tools while reasoning is active.
+     * The default effort of `medium` is enough to trigger it, so sending nothing does not help; the
+     * API names `reasoning_effort: none` as the way out.
+     *
+     * @var list<string>
+     */
+    private const TOOLS_REQUIRE_NO_REASONING = [
+        'gpt-5.6',
+    ];
+
     public static function supportsSampling(string $model): bool
     {
         return !self::matches($model, self::SAMPLING_REMOVED);
@@ -53,6 +64,11 @@ final class ModelCapabilities
         $efforts = self::reasoningEffortsFor($model);
 
         return null !== $efforts && \in_array(ReasoningEffortEnum::NONE->value, $efforts, true);
+    }
+
+    public static function toolsRequireNoReasoning(string $model): bool
+    {
+        return self::matches($model, self::TOOLS_REQUIRE_NO_REASONING);
     }
 
     public static function supportsReasoningEffort(string $model, ReasoningEffortEnum $effort): bool

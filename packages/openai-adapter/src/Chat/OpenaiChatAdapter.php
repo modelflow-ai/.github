@@ -150,7 +150,7 @@ final readonly class OpenaiChatAdapter implements AIChatAdapterInterface, Suppor
             }
         }
 
-        $reasoningEffort = $this->resolveReasoningEffort();
+        $reasoningEffort = $this->resolveReasoningEffort($request);
         if ($reasoningEffort instanceof ReasoningEffortEnum) {
             $parameters['reasoning_effort'] = $reasoningEffort->value;
         }
@@ -173,8 +173,16 @@ final readonly class OpenaiChatAdapter implements AIChatAdapterInterface, Suppor
      * Completions API rejects function tools while reasoning is active. Ask for no reasoning where
      * the model supports it, unless the caller configured a level.
      */
-    private function resolveReasoningEffort(): ?ReasoningEffortEnum
+    private function resolveReasoningEffort(AIChatRequest $request): ?ReasoningEffortEnum
     {
+        if ($request->hasTools() && ModelCapabilities::toolsRequireNoReasoning($this->model)) {
+            if ($this->reasoningEffort instanceof ReasoningEffortEnum && ReasoningEffortEnum::NONE !== $this->reasoningEffort) {
+                @\trigger_error(\sprintf('Reasoning effort "%s" cannot be combined with tools for "%s", falling back to "none".', $this->reasoningEffort->value, $this->model), \E_USER_WARNING);
+            }
+
+            return ReasoningEffortEnum::NONE;
+        }
+
         if (!$this->reasoningEffort instanceof ReasoningEffortEnum) {
             return ModelCapabilities::supportsReasoningEffortNone($this->model)
                 ? ReasoningEffortEnum::NONE
