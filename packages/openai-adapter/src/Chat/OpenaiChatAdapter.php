@@ -46,6 +46,7 @@ final readonly class OpenaiChatAdapter implements AIChatAdapterInterface, Suppor
     public function __construct(
         private ClientContract $client,
         private string $model = 'gpt-4',
+        private ?ReasoningEffortEnum $reasoningEffort = null,
     ) {
     }
 
@@ -141,8 +142,17 @@ final readonly class OpenaiChatAdapter implements AIChatAdapterInterface, Suppor
         }
 
         if ($temperature = $request->getOption('temperature')) {
-            /** @var float $temperature */
-            $parameters['temperature'] = $temperature;
+            if (ModelCapabilities::supportsSampling($this->model)) {
+                /** @var float $temperature */
+                $parameters['temperature'] = $temperature;
+            } else {
+                @\trigger_error(\sprintf('Temperature option is not supported by "%s".', $this->model), \E_USER_WARNING);
+            }
+        }
+
+        $reasoningEffort = $this->resolveReasoningEffort($request);
+        if ($reasoningEffort instanceof ReasoningEffortEnum) {
+            $parameters['reasoning_effort'] = $reasoningEffort->value;
         }
 
         if ($request->hasTools()) {
@@ -156,6 +166,36 @@ final readonly class OpenaiChatAdapter implements AIChatAdapterInterface, Suppor
         }
 
         return $this->create($request, $parameters);
+    }
+
+    /**
+     * Reasoning models spend output tokens on reasoning unless told otherwise, and the Chat
+     * Completions API rejects function tools while reasoning is active. Ask for no reasoning where
+     * the model supports it, unless the caller configured a level.
+     */
+    private function resolveReasoningEffort(AIChatRequest $request): ?ReasoningEffortEnum
+    {
+        if ($request->hasTools() && ModelCapabilities::toolsRequireNoReasoning($this->model)) {
+            if ($this->reasoningEffort instanceof ReasoningEffortEnum && ReasoningEffortEnum::NONE !== $this->reasoningEffort) {
+                @\trigger_error(\sprintf('Reasoning effort "%s" cannot be combined with tools for "%s", falling back to "none".', $this->reasoningEffort->value, $this->model), \E_USER_WARNING);
+            }
+
+            return ReasoningEffortEnum::NONE;
+        }
+
+        if (!$this->reasoningEffort instanceof ReasoningEffortEnum) {
+            return ModelCapabilities::supportsReasoningEffortNone($this->model)
+                ? ReasoningEffortEnum::NONE
+                : null;
+        }
+
+        if (!ModelCapabilities::supportsReasoningEffort($this->model, $this->reasoningEffort)) {
+            @\trigger_error(\sprintf('Reasoning effort "%s" is not supported by "%s".', $this->reasoningEffort->value, $this->model), \E_USER_WARNING);
+
+            return null;
+        }
+
+        return $this->reasoningEffort;
     }
 
     /**

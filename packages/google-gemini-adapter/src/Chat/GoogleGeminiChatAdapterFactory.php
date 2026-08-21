@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ModelflowAi\GoogleGeminiAdapter\Chat;
 
 use Gemini\Contracts\ClientContract;
+use Gemini\Enums\ThinkingLevel;
 use ModelflowAi\Chat\Adapter\AIChatAdapterFactoryInterface;
 use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;
 
@@ -21,6 +22,7 @@ final readonly class GoogleGeminiChatAdapterFactory implements AIChatAdapterFact
 {
     public function __construct(
         private ClientContract $client,
+        private ?ThinkingLevel $thinkingLevel = null,
     ) {
     }
 
@@ -29,6 +31,7 @@ final readonly class GoogleGeminiChatAdapterFactory implements AIChatAdapterFact
         return new GoogleGeminiChatAdapter(
             $this->client,
             $options['model'],
+            $this->thinkingLevel,
         );
     }
 }

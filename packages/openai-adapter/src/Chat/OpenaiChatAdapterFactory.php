@@ -21,16 +21,24 @@ final readonly class OpenaiChatAdapterFactory implements AIChatAdapterFactoryInt
 {
     public function __construct(
         private ClientContract $client,
+        private ?ReasoningEffortEnum $reasoningEffort = null,
     ) {
     }
 
     public function createChatAdapter(array $options): AIChatAdapterInterface
     {
-        $model = \str_replace('gpt', 'gpt-', (string) $options['model']);
+        $model = (string) $options['model'];
+
+        // Adapter keys have historically been written without the dash, such as "gpt4o" for the
+        // "gpt-4o" model. Newer model ids already carry it and must not get a second one.
+        if (\str_starts_with($model, 'gpt') && !\str_starts_with($model, 'gpt-')) {
+            $model = 'gpt-' . \substr($model, 3);
+        }
 
         return new OpenaiChatAdapter(
             $this->client,
             $model,
+            $this->reasoningEffort,
         );
     }
 }

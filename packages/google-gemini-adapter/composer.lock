@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e65f859e834dacec2c53bac9707cb535",
+    "content-hash": "0057458e32f0e582ab7f8d112a60de06",
     "packages": [
         {
             "name": "google-gemini-php/client",
