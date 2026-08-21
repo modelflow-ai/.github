@@ -181,8 +181,8 @@ final readonly class OpenaiChatAdapter implements AIChatAdapterInterface, Suppor
                 : null;
         }
 
-        if (ReasoningEffortEnum::NONE === $this->reasoningEffort && !ModelCapabilities::supportsReasoningEffortNone($this->model)) {
-            @\trigger_error(\sprintf('Reasoning effort "none" is not supported by "%s".', $this->model), \E_USER_WARNING);
+        if (!ModelCapabilities::supportsReasoningEffort($this->model, $this->reasoningEffort)) {
+            @\trigger_error(\sprintf('Reasoning effort "%s" is not supported by "%s".', $this->reasoningEffort->value, $this->model), \E_USER_WARNING);
 
             return null;
         }

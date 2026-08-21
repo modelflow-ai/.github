@@ -670,7 +670,9 @@ final class OpenaiChatAdapterTest extends TestCase
         ])->willReturn($this->createFixtureResponse())->shouldBeCalled();
 
         $adapter = new OpenaiChatAdapter($client->reveal(), 'gpt-5.6-sol');
-        @$adapter->handleRequest($this->createRequest(['temperature' => 0.5]));
+        $warnings = $this->captureWarnings(fn () => $adapter->handleRequest($this->createRequest(['temperature' => 0.5])));
+
+        $this->assertSame(['Temperature option is not supported by "gpt-5.6-sol".'], $warnings);
     }
 
     public function testHandleRequestSendsTheConfiguredReasoningEffort(): void
@@ -723,7 +725,75 @@ final class OpenaiChatAdapterTest extends TestCase
         ])->willReturn($this->createFixtureResponse())->shouldBeCalled();
 
         $adapter = new OpenaiChatAdapter($client->reveal(), 'o3', ReasoningEffortEnum::NONE);
-        @$adapter->handleRequest($this->createRequest());
+        $warnings = $this->captureWarnings(fn () => $adapter->handleRequest($this->createRequest()));
+
+        $this->assertSame(['Reasoning effort "none" is not supported by "o3".'], $warnings);
+    }
+
+    public function testHandleRequestWarnsWhenMinimalIsUnsupported(): void
+    {
+        $chat = $this->prophesize(ChatContract::class);
+        $client = $this->prophesize(ClientContract::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->create([
+            'model' => 'gpt-5.6-sol',
+            'messages' => [
+                ['role' => 'user', 'content' => 'User message'],
+            ],
+        ])->willReturn($this->createFixtureResponse())->shouldBeCalled();
+
+        $adapter = new OpenaiChatAdapter($client->reveal(), 'gpt-5.6-sol', ReasoningEffortEnum::MINIMAL);
+        $warnings = $this->captureWarnings(fn () => $adapter->handleRequest($this->createRequest()));
+
+        $this->assertSame(['Reasoning effort "minimal" is not supported by "gpt-5.6-sol".'], $warnings);
+    }
+
+    public function testHandleRequestPassesAnEffortThroughForUnknownModels(): void
+    {
+        $chat = $this->prophesize(ChatContract::class);
+        $client = $this->prophesize(ClientContract::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->create([
+            'model' => 'o3',
+            'messages' => [
+                ['role' => 'user', 'content' => 'User message'],
+            ],
+            'reasoning_effort' => 'high',
+        ])->willReturn($this->createFixtureResponse())->shouldBeCalled();
+
+        $adapter = new OpenaiChatAdapter($client->reveal(), 'o3', ReasoningEffortEnum::HIGH);
+        $warnings = $this->captureWarnings(fn () => $adapter->handleRequest($this->createRequest()));
+
+        $this->assertSame([], $warnings);
+    }
+
+    /**
+     * The adapter suppresses its warnings with @, which PHPUnit honours, so they have to be read
+     * from an error handler instead.
+     *
+     * @return list<string>
+     */
+    private function captureWarnings(callable $callback): array
+    {
+        $warnings = [];
+
+        \set_error_handler(static function (int $severity, string $message) use (&$warnings): bool {
+            if (\E_USER_WARNING === $severity) {
+                $warnings[] = $message;
+            }
+
+            return true;
+        });
+
+        try {
+            $callback();
+        } finally {
+            \restore_error_handler();
+        }
+
+        return $warnings;
     }
 
     private function createFixtureResponse(): CreateResponse

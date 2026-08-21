@@ -34,13 +34,13 @@ final class ModelCapabilities
     ];
 
     /**
-     * Models documented to accept `reasoning_effort: none`. Older reasoning models know `minimal` as
-     * their lowest level instead, so they are deliberately not listed.
+     * Reasoning effort levels per model family. The GPT-5.6 family dropped `minimal`, the lowest
+     * level of the generations before it, and gained `none`.
      *
-     * @var list<string>
+     * @var array<string, list<string>>
      */
-    private const REASONING_EFFORT_NONE = [
-        'gpt-5.6',
+    private const REASONING_EFFORTS = [
+        'gpt-5.6' => ['none', 'low', 'medium', 'high', 'xhigh', 'max'],
     ];
 
     public static function supportsSampling(string $model): bool
@@ -50,7 +50,37 @@ final class ModelCapabilities
 
     public static function supportsReasoningEffortNone(string $model): bool
     {
-        return self::matches($model, self::REASONING_EFFORT_NONE);
+        $efforts = self::reasoningEffortsFor($model);
+
+        return null !== $efforts && \in_array(ReasoningEffortEnum::NONE->value, $efforts, true);
+    }
+
+    public static function supportsReasoningEffort(string $model, ReasoningEffortEnum $effort): bool
+    {
+        $efforts = self::reasoningEffortsFor($model);
+
+        if (null === $efforts) {
+            // Nothing is documented here for this model, so only `none` is refused: it exists on
+            // the GPT-5.6 family and not on the reasoning models before it. Any other level is the
+            // caller's choice.
+            return ReasoningEffortEnum::NONE !== $effort;
+        }
+
+        return \in_array($effort->value, $efforts, true);
+    }
+
+    /**
+     * @return list<string>|null
+     */
+    private static function reasoningEffortsFor(string $model): ?array
+    {
+        foreach (self::REASONING_EFFORTS as $candidate => $efforts) {
+            if (self::matches($model, [$candidate])) {
+                return $efforts;
+            }
+        }
+
+        return null;
     }
 
     /**

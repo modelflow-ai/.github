@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ModelflowAi\OpenaiAdapter\Tests\Unit\Chat;
 
 use ModelflowAi\OpenaiAdapter\Chat\ModelCapabilities;
+use ModelflowAi\OpenaiAdapter\Chat\ReasoningEffortEnum;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -57,5 +58,25 @@ final class ModelCapabilitiesTest extends TestCase
     public function testSupportsReasoningEffortNone(string $model, bool $expected): void
     {
         $this->assertSame($expected, ModelCapabilities::supportsReasoningEffortNone($model));
+    }
+
+    /**
+     * @return \Generator<string, array{0: string, 1: ReasoningEffortEnum, 2: bool}>
+     */
+    public static function reasoningEffortProvider(): \Generator
+    {
+        yield 'gpt-5.6 knows none' => ['gpt-5.6-sol', ReasoningEffortEnum::NONE, true];
+        yield 'gpt-5.6 dropped minimal' => ['gpt-5.6-sol', ReasoningEffortEnum::MINIMAL, false];
+        yield 'gpt-5.6 knows xhigh' => ['gpt-5.6-terra', ReasoningEffortEnum::XHIGH, true];
+        yield 'gpt-5.6 knows max' => ['gpt-5.6-luna', ReasoningEffortEnum::MAX, true];
+        yield 'unknown model refuses none' => ['o3', ReasoningEffortEnum::NONE, false];
+        yield 'unknown model keeps minimal' => ['o3', ReasoningEffortEnum::MINIMAL, true];
+        yield 'unknown model keeps high' => ['o3', ReasoningEffortEnum::HIGH, true];
+    }
+
+    #[DataProvider('reasoningEffortProvider')]
+    public function testSupportsReasoningEffort(string $model, ReasoningEffortEnum $effort, bool $expected): void
+    {
+        $this->assertSame($expected, ModelCapabilities::supportsReasoningEffort($model, $effort));
     }
 }
