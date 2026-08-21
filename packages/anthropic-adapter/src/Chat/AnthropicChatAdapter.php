@@ -71,6 +71,7 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
         private ClientInterface $client,
         private string $model,
         private int $maxTokens = 1024,
+        private ?ThinkingModeEnum $thinking = null,
     ) {
     }
 
@@ -88,8 +89,17 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
         }
 
         if ($temperature = $request->getOption('temperature')) {
-            /** @var float $temperature */
-            $parameters['temperature'] = $temperature;
+            if (ModelCapabilities::supportsSampling($this->model)) {
+                /** @var float $temperature */
+                $parameters['temperature'] = $temperature;
+            } else {
+                @\trigger_error(\sprintf('Temperature option is not supported by "%s".', $this->model), \E_USER_WARNING);
+            }
+        }
+
+        $thinking = $this->resolveThinking();
+        if ($thinking instanceof ThinkingModeEnum) {
+            $parameters['thinking'] = ['type' => $thinking->value];
         }
 
         if ($request->hasTools()) {
@@ -194,6 +204,35 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
         }
 
         return $this->create($request, $parameters);
+    }
+
+    /**
+     * Anthropic thinks adaptively on newer models unless told otherwise, which costs output tokens
+     * and latency. Keep the adapter's long standing behaviour and opt out unless configured
+     * otherwise.
+     */
+    private function resolveThinking(): ?ThinkingModeEnum
+    {
+        if (!$this->thinking instanceof ThinkingModeEnum) {
+            return ModelCapabilities::thinksByDefault($this->model)
+                && ModelCapabilities::supportsDisabledThinking($this->model)
+                    ? ThinkingModeEnum::DISABLED
+                    : null;
+        }
+
+        if (!ModelCapabilities::supportsThinking($this->model)) {
+            @\trigger_error(\sprintf('Thinking is not supported by "%s".', $this->model), \E_USER_WARNING);
+
+            return null;
+        }
+
+        if (ThinkingModeEnum::DISABLED === $this->thinking && !ModelCapabilities::supportsDisabledThinking($this->model)) {
+            @\trigger_error(\sprintf('Thinking cannot be disabled for "%s".', $this->model), \E_USER_WARNING);
+
+            return null;
+        }
+
+        return $this->thinking;
     }
 
     /**

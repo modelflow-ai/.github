@@ -18,6 +18,7 @@ use ModelflowAi\Anthropic\ClientInterface;
 use ModelflowAi\Anthropic\DataFixtures;
 use ModelflowAi\Anthropic\Model;
 use ModelflowAi\AnthropicAdapter\Chat\AnthropicChatAdapter;
+use ModelflowAi\AnthropicAdapter\Chat\ThinkingModeEnum;
 use ModelflowAi\ApiClient\Responses\MetaInformation;
 use ModelflowAi\ApiClient\Transport\Payload;
 use ModelflowAi\ApiClient\Transport\Response\ObjectResponse;
@@ -802,5 +803,127 @@ final class AnthropicChatAdapterTest extends TestCase
         $adapter = new AnthropicChatAdapter($client->reveal(), Model::CLAUDE_3_SONNET->value);
 
         $this->assertFalse($adapter->supportsResponseFormat($unsupportedFormat->reveal()));
+    }
+
+    public function testHandleRequestDisablesThinkingForThinkingByDefaultModel(): void
+    {
+        $transport = $this->createCapturingTransport();
+        $adapter = new AnthropicChatAdapter(new Client($transport), 'claude-sonnet-5', 100);
+
+        $adapter->handleRequest($this->createRequest());
+
+        $this->assertSame(['type' => 'disabled'], $transport->parameters['thinking'] ?? null);
+    }
+
+    public function testHandleRequestOmitsThinkingForModelWithoutThinking(): void
+    {
+        $transport = $this->createCapturingTransport();
+        $adapter = new AnthropicChatAdapter(new Client($transport), Model::CLAUDE_3_HAIKU->value, 100);
+
+        $adapter->handleRequest($this->createRequest());
+
+        $this->assertArrayNotHasKey('thinking', $transport->parameters);
+    }
+
+    public function testHandleRequestOmitsThinkingForModelWithThinkingOffByDefault(): void
+    {
+        $transport = $this->createCapturingTransport();
+        $adapter = new AnthropicChatAdapter(new Client($transport), 'claude-opus-4-8', 100);
+
+        $adapter->handleRequest($this->createRequest());
+
+        $this->assertArrayNotHasKey('thinking', $transport->parameters);
+    }
+
+    public function testHandleRequestSendsConfiguredThinking(): void
+    {
+        $transport = $this->createCapturingTransport();
+        $adapter = new AnthropicChatAdapter(new Client($transport), 'claude-opus-4-8', 100, ThinkingModeEnum::ADAPTIVE);
+
+        $adapter->handleRequest($this->createRequest());
+
+        $this->assertSame(['type' => 'adaptive'], $transport->parameters['thinking'] ?? null);
+    }
+
+    public function testHandleRequestIgnoresThinkingForModelWithoutSupport(): void
+    {
+        $transport = $this->createCapturingTransport();
+        $adapter = new AnthropicChatAdapter(new Client($transport), Model::CLAUDE_3_HAIKU->value, 100, ThinkingModeEnum::ADAPTIVE);
+
+        $warnings = $this->captureWarnings(fn () => $adapter->handleRequest($this->createRequest()));
+
+        $this->assertSame(['Thinking is not supported by "claude-3-haiku-20240307".'], $warnings);
+        $this->assertArrayNotHasKey('thinking', $transport->parameters);
+    }
+
+    public function testHandleRequestIgnoresDisabledThinkingForAlwaysThinkingModel(): void
+    {
+        $transport = $this->createCapturingTransport();
+        $adapter = new AnthropicChatAdapter(new Client($transport), 'claude-fable-5', 100, ThinkingModeEnum::DISABLED);
+
+        $warnings = $this->captureWarnings(fn () => $adapter->handleRequest($this->createRequest()));
+
+        $this->assertSame(['Thinking cannot be disabled for "claude-fable-5".'], $warnings);
+        $this->assertArrayNotHasKey('thinking', $transport->parameters);
+    }
+
+    public function testHandleRequestOmitsTemperatureForModelWithoutSampling(): void
+    {
+        $transport = $this->createCapturingTransport();
+        $adapter = new AnthropicChatAdapter(new Client($transport), 'claude-opus-4-8', 100);
+
+        $warnings = $this->captureWarnings(fn () => $adapter->handleRequest($this->createRequest(['temperature' => 0.5])));
+
+        $this->assertSame(['Temperature option is not supported by "claude-opus-4-8".'], $warnings);
+        $this->assertArrayNotHasKey('temperature', $transport->parameters);
+    }
+
+    /**
+     * @param array{seed?: int, temperature?: float} $options
+     */
+    private function createRequest(array $options = []): AIChatRequest
+    {
+        return new AIChatRequest(
+            new AIChatMessageCollection(
+                new AIChatMessage(AIChatMessageRoleEnum::USER, 'Hello world!'),
+            ),
+            new CriteriaCollection(),
+            [],
+            [],
+            $options,
+            static fn () => null,
+        );
+    }
+
+    private function createCapturingTransport(): CapturingTransport
+    {
+        return new CapturingTransport();
+    }
+
+    /**
+     * The adapter suppresses its warnings with @, which PHPUnit honours, so they have to be read
+     * from an error handler instead.
+     *
+     * @return list<string>
+     */
+    private function captureWarnings(callable $callback): array
+    {
+        $warnings = [];
+
+        \set_error_handler(static function (int $severity, string $message) use (&$warnings): bool {
+            if (\E_USER_WARNING === $severity) {
+                $warnings[] = $message;
+            }
+
+            return true;
+        });
+
+        try {
+            $callback();
+        } finally {
+            \restore_error_handler();
+        }
+
+        return $warnings;
     }
 }

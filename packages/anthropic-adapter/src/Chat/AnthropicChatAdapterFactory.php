@@ -22,6 +22,7 @@ final readonly class AnthropicChatAdapterFactory implements AIChatAdapterFactory
     public function __construct(
         private ClientInterface $client,
         private int $maxTokens = 1024,
+        private ?ThinkingModeEnum $thinking = null,
     ) {
     }
 
@@ -31,6 +32,7 @@ final readonly class AnthropicChatAdapterFactory implements AIChatAdapterFactory
             $this->client,
             $options['model'],
             $this->maxTokens,
+            $this->thinking,
         );
     }
 }
