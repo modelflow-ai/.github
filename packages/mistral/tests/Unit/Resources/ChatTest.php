@@ -100,13 +100,66 @@ final class ChatTest extends TestCase
         $this->assertInstanceOf(CreateResponse::class, $result);
     }
 
-    public function testCreateWithFormatForNonLargeModel(): void
+    public function testCreateWithFormatForModelWithoutJsonSupport(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $parameters = DataFixtures::CHAT_CREATE_REQUEST;
+        $parameters['model'] = Model::TINY->value;
+        $parameters['response_format'] = ['type' => 'json_object'];
+
+        $this->transport->requestObject(Argument::cetera())->shouldNotBeCalled();
+
+        $chat = $this->createInstance($this->transport->reveal());
+
+        $chat->create($parameters);
+    }
+
+    public function testCreateWithFormatForModelOutsideTheCatalog(): void
+    {
+        $response = DataFixtures::CHAT_CREATE_RESPONSE;
+        $response['model'] = 'zai-glm-5-2';
+
+        $parameters = DataFixtures::CHAT_CREATE_REQUEST;
+        $parameters['model'] = 'zai-glm-5-2';
+        $parameters['response_format'] = ['type' => 'json_object'];
+
+        $response = new ObjectResponse($response, MetaInformation::from([]));
+        $this->transport->requestObject(
+            Argument::that(static fn (Payload $payload) => $parameters === $payload->parameters),
+        )->willReturn($response);
+
+        $chat = $this->createInstance($this->transport->reveal());
+
+        $this->assertSame('zai-glm-5-2', $chat->create($parameters)->model);
+    }
+
+    public function testCreateWithReasoningEffort(): void
+    {
+        $response = DataFixtures::CHAT_CREATE_RESPONSE;
+        $response['model'] = Model::MEDIUM->value;
+
+        $parameters = DataFixtures::CHAT_CREATE_REQUEST;
+        $parameters['model'] = Model::MEDIUM->value;
+        $parameters['reasoning_effort'] = 'none';
+
+        $response = new ObjectResponse($response, MetaInformation::from([]));
+        $this->transport->requestObject(
+            Argument::that(static fn (Payload $payload) => $parameters === $payload->parameters),
+        )->willReturn($response);
+
+        $chat = $this->createInstance($this->transport->reveal());
+
+        $this->assertSame(Model::MEDIUM->value, $chat->create($parameters)->model);
+    }
+
+    public function testCreateWithUnknownReasoningEffort(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
         $parameters = DataFixtures::CHAT_CREATE_REQUEST;
         $parameters['model'] = Model::MEDIUM->value;
-        $parameters['response_format'] = ['type' => 'json_object'];
+        $parameters['reasoning_effort'] = 'medium';
 
         $this->transport->requestObject(Argument::cetera())->shouldNotBeCalled();
 

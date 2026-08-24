@@ -27,11 +27,26 @@ enum Model: string
 
     public function jsonSupported(): bool
     {
-        return \in_array($this, [self::SMALL, self::LARGE], true);
+        return \in_array($this, [self::SMALL, self::MEDIUM, self::LARGE], true);
     }
 
     public function toolsSupported(): bool
     {
         return \in_array($this, [self::SMALL, self::MEDIUM, self::LARGE, self::NEMO, self::PIXTRAL_LARGE], true);
+    }
+
+    /**
+     * Mistral adds models faster than this list follows them, and the models it merely hosts, such
+     * as `zai-glm-5-2`, will never be part of it. An id that is unknown here is therefore treated as
+     * a current model, which supports both response formats and tools.
+     */
+    public static function jsonSupportedBy(string $model): bool
+    {
+        return self::tryFrom($model)?->jsonSupported() ?? true;
+    }
+
+    public static function toolsSupportedBy(string $model): bool
+    {
+        return self::tryFrom($model)?->toolsSupported() ?? true;
     }
 }
