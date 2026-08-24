@@ -21,6 +21,7 @@ final readonly class MistralChatAdapterFactory implements AIChatAdapterFactoryIn
 {
     public function __construct(
         private ClientInterface $client,
+        private ?ReasoningEffortEnum $reasoningEffort = null,
     ) {
     }
 
@@ -29,6 +30,7 @@ final readonly class MistralChatAdapterFactory implements AIChatAdapterFactoryIn
         return new MistralChatAdapter(
             $this->client,
             $options['model'],
+            $this->reasoningEffort,
         );
     }
 }
