@@ -28,7 +28,7 @@ final readonly class CreateResponseMessage
     /**
      * @param array{
      *     role: string,
-     *     content: ?string,
+     *     content: string|list<string|array{type?: string, text?: string, thinking?: mixed}>|null,
      *     tool_calls?: array<array{
      *         id: string,
      *         type: string,
@@ -48,7 +48,7 @@ final readonly class CreateResponseMessage
 
         return new self(
             $attributes['role'],
-            $attributes['content'] ?? null,
+            ContentChunks::toText($attributes['content'] ?? null),
             $toolCalls,
         );
     }

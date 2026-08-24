@@ -30,6 +30,18 @@ final class CreateStreamedResponseDeltaTest extends TestCase
         $this->assertSame($attributes['content'], $message->content);
     }
 
+    public function testFromThinkingModel(): void
+    {
+        $message = CreateStreamedResponseDelta::from([
+            'content' => [
+                ['type' => 'thinking', 'thinking' => [['type' => 'text', 'text' => 'Let me think.']]],
+                ['type' => 'text', 'text' => 'Lorem'],
+            ],
+        ]);
+
+        $this->assertSame('Lorem', $message->content);
+    }
+
     public function testFromWithTools(): void
     {
         $attributes = DataFixtures::CHAT_CREATE_STREAMED_RESPONSES_WITH_TOOLS[0]['choices'][0]['delta'];

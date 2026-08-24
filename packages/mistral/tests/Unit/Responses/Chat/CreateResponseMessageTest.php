@@ -29,4 +29,17 @@ final class CreateResponseMessageTest extends TestCase
         $this->assertSame($messageData['role'], $message->role);
         $this->assertSame($messageData['content'], $message->content);
     }
+
+    public function testFromThinkingModel(): void
+    {
+        $message = CreateResponseMessage::from([
+            'role' => 'assistant',
+            'content' => [
+                ['type' => 'thinking', 'thinking' => [['type' => 'text', 'text' => 'Let me think.']]],
+                ['type' => 'text', 'text' => 'Lorem Ipsum'],
+            ],
+        ]);
+
+        $this->assertSame('Lorem Ipsum', $message->content);
+    }
 }
