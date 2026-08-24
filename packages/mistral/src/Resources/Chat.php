@@ -111,7 +111,7 @@ final readonly class Chat implements ChatInterface
             }
         }
 
-        if (!Model::from($parameters['model'])->toolsSupported()) {
+        if (!Model::toolsSupportedBy($parameters['model'])) {
             Assert::keyNotExists($parameters, 'tools');
             Assert::keyNotExists($parameters, 'tool_choice');
         } else {
@@ -158,10 +158,14 @@ final readonly class Chat implements ChatInterface
         if (isset($parameters['random_seed'])) {
             Assert::integer($parameters['random_seed']);
         }
+        if (isset($parameters['reasoning_effort'])) {
+            Assert::string($parameters['reasoning_effort']);
+            Assert::inArray($parameters['reasoning_effort'], ['none', 'high']);
+        }
 
-        if (!Model::from($parameters['model'])->jsonSupported()) {
+        if (!Model::jsonSupportedBy($parameters['model'])) {
             Assert::keyNotExists($parameters, 'response_format');
-        } elseif (Model::from($parameters['model'])->jsonSupported() && isset($parameters['response_format'])) {
+        } elseif (isset($parameters['response_format'])) {
             Assert::keyExists($parameters, 'response_format');
             Assert::isArray($parameters['response_format']);
             Assert::keyExists($parameters['response_format'], 'type');

@@ -43,6 +43,7 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface, Suppo
     public function __construct(
         private ClientInterface $client,
         private string $model = Model::TINY->value,
+        private ?ReasoningEffortEnum $reasoningEffort = null,
     ) {
     }
 
@@ -107,7 +108,7 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface, Suppo
             'messages' => $messages,
         ];
 
-        if (Model::from($this->model)->jsonSupported()) {
+        if (Model::jsonSupportedBy($this->model)) {
             $responseFormat = $request->getResponseFormat();
 
             if ($responseFormat instanceof JsonSchemaResponseFormat) {
@@ -136,6 +137,11 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface, Suppo
 
         if ($temperature = $request->getOption('temperature')) {
             $parameters['temperature'] = $temperature;
+        }
+
+        $reasoningEffort = $this->resolveReasoningEffort();
+        if ($reasoningEffort instanceof ReasoningEffortEnum) {
+            $parameters['reasoning_effort'] = $reasoningEffort->value;
         }
 
         if ($request instanceof AIChatStreamedRequest) {
@@ -171,6 +177,7 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface, Suppo
      *         },
      *     }>,
      *     tool_choice?: string,
+     *     reasoning_effort?: string,
      * } $parameters
      */
     private function create(AIChatRequest $request, array $parameters): AIChatResponse
@@ -242,6 +249,7 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface, Suppo
      *         },
      *     }>,
      *     tool_choice?: string,
+     *     reasoning_effort?: string,
      * } $parameters
      */
     private function createStreamed(AIChatStreamedRequest $request, array $parameters): AIChatResponse
@@ -317,6 +325,23 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface, Suppo
     }
 
     /**
+     * Reasoning is off unless a request asks for it, but saying so explicitly keeps a changed
+     * default from silently billing thinking tokens.
+     */
+    private function resolveReasoningEffort(): ?ReasoningEffortEnum
+    {
+        if (!ModelCapabilities::supportsReasoningEffort($this->model)) {
+            if ($this->reasoningEffort instanceof ReasoningEffortEnum) {
+                @\trigger_error(\sprintf('Reasoning effort is not supported by "%s".', $this->model), \E_USER_WARNING);
+            }
+
+            return null;
+        }
+
+        return $this->reasoningEffort ?? ReasoningEffortEnum::NONE;
+    }
+
+    /**
      * @return array<string, mixed>
      */
     private function decodeArguments(string $arguments): array
@@ -330,11 +355,11 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface, Suppo
     public function supportsResponseFormat(ResponseFormatInterface $responseFormat): bool
     {
         if ($responseFormat instanceof JsonResponseFormat) {
-            return Model::from($this->model)->jsonSupported();
+            return Model::jsonSupportedBy($this->model);
         }
 
         if ($responseFormat instanceof JsonSchemaResponseFormat) {
-            return Model::from($this->model)->jsonSupported();
+            return Model::jsonSupportedBy($this->model);
         }
 
         return false;
@@ -343,6 +368,6 @@ final readonly class MistralChatAdapter implements AIChatAdapterInterface, Suppo
     public function supports(object $request): bool
     {
         return $request instanceof AIChatRequest
-            && (!$request->hasTools() || Model::from($this->model)->toolsSupported());
+            && (!$request->hasTools() || Model::toolsSupportedBy($this->model));
     }
 }

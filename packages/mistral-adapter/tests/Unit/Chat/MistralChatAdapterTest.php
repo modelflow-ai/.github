@@ -38,6 +38,7 @@ use ModelflowAi\Mistral\Resources\ChatInterface;
 use ModelflowAi\Mistral\Responses\Chat\CreateResponse;
 use ModelflowAi\Mistral\Responses\Chat\CreateStreamedResponse;
 use ModelflowAi\MistralAdapter\Chat\MistralChatAdapter;
+use ModelflowAi\MistralAdapter\Chat\ReasoningEffortEnum;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
@@ -811,6 +812,190 @@ final class MistralChatAdapterTest extends TestCase
             'type' => 'object',
             'properties' => [],
         ])));
+    }
+
+    public function testHandleRequestAsksAHybridModelNotToThink(): void
+    {
+        $chat = $this->prophesize(ChatInterface::class);
+        $client = $this->prophesize(ClientInterface::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->create([
+            'model' => Model::MEDIUM->value,
+            'messages' => [
+                ['role' => 'user', 'content' => 'some text'],
+            ],
+            'reasoning_effort' => 'none',
+        ])->willReturn($this->createResponse(Model::MEDIUM->value));
+
+        $adapter = new MistralChatAdapter($client->reveal(), Model::MEDIUM->value);
+        $result = $adapter->handleRequest($this->createRequest());
+
+        $this->assertSame('Lorem Ipsum', $result->getMessage()->content);
+    }
+
+    public function testHandleRequestSendsTheConfiguredReasoningEffort(): void
+    {
+        $chat = $this->prophesize(ChatInterface::class);
+        $client = $this->prophesize(ClientInterface::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->create([
+            'model' => Model::SMALL->value,
+            'messages' => [
+                ['role' => 'user', 'content' => 'some text'],
+            ],
+            'reasoning_effort' => 'high',
+        ])->willReturn($this->createResponse(Model::SMALL->value));
+
+        $adapter = new MistralChatAdapter($client->reveal(), Model::SMALL->value, ReasoningEffortEnum::HIGH);
+        $result = $adapter->handleRequest($this->createRequest());
+
+        $this->assertSame('Lorem Ipsum', $result->getMessage()->content);
+    }
+
+    public function testHandleRequestOmitsTheReasoningEffortOnAModelWithoutIt(): void
+    {
+        $chat = $this->prophesize(ChatInterface::class);
+        $client = $this->prophesize(ClientInterface::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->create([
+            'model' => Model::LARGE->value,
+            'messages' => [
+                ['role' => 'user', 'content' => 'some text'],
+            ],
+        ])->willReturn($this->createResponse(Model::LARGE->value));
+
+        $adapter = new MistralChatAdapter($client->reveal(), Model::LARGE->value, ReasoningEffortEnum::HIGH);
+
+        $warnings = $this->captureWarnings(fn () => $adapter->handleRequest($this->createRequest()));
+
+        $this->assertSame(['Reasoning effort is not supported by "mistral-large-latest".'], $warnings);
+    }
+
+    public function testHandleRequestKeepsTheResponseFormatForAModelOutsideTheCatalog(): void
+    {
+        $chat = $this->prophesize(ChatInterface::class);
+        $client = $this->prophesize(ClientInterface::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->create([
+            'model' => 'zai-glm-5-2',
+            'messages' => [
+                ['role' => 'user', 'content' => 'some text'],
+            ],
+            'response_format' => ['type' => 'json_object'],
+        ])->willReturn($this->createResponse('zai-glm-5-2'));
+
+        $request = new AIChatRequest(
+            new AIChatMessageCollection(
+                new AIChatMessage(AIChatMessageRoleEnum::USER, 'some text'),
+            ),
+            new CriteriaCollection(),
+            [],
+            [],
+            [],
+            static fn () => null,
+            [],
+            new JsonResponseFormat(),
+        );
+
+        $adapter = new MistralChatAdapter($client->reveal(), 'zai-glm-5-2');
+        $result = $adapter->handleRequest($request);
+
+        $this->assertSame('Lorem Ipsum', $result->getMessage()->content);
+    }
+
+    public function testSupportsAModelOutsideTheCatalogWithTools(): void
+    {
+        $client = $this->prophesize(ClientInterface::class);
+
+        $adapter = new MistralChatAdapter($client->reveal(), 'zai-glm-5-2');
+
+        $request = new AIChatRequest(
+            new AIChatMessageCollection(
+                new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
+            ),
+            new CriteriaCollection(),
+            [
+                'test' => [$this, 'toolMethod'],
+            ],
+            [
+                ToolInfoBuilder::buildToolInfo($this, 'toolMethod', 'test'),
+            ],
+            [],
+            static fn () => null,
+        );
+
+        $this->assertTrue($adapter->supports($request));
+        $this->assertTrue($adapter->supportsResponseFormat(new JsonResponseFormat()));
+    }
+
+    private function createRequest(): AIChatRequest
+    {
+        return new AIChatRequest(
+            new AIChatMessageCollection(
+                new AIChatMessage(AIChatMessageRoleEnum::USER, 'some text'),
+            ),
+            new CriteriaCollection(),
+            [],
+            [],
+            [],
+            static fn () => null,
+        );
+    }
+
+    private function createResponse(string $model): CreateResponse
+    {
+        return CreateResponse::from([
+            'id' => 'cmpl-e5cc70bb28c444948073e77776eb30ef',
+            'object' => 'chat.completion',
+            'created' => 1_702_256_327,
+            'model' => $model,
+            'choices' => [
+                [
+                    'index' => 1,
+                    'message' => [
+                        'role' => 'assistant',
+                        'content' => 'Lorem Ipsum',
+                    ],
+                    'finish_reason' => 'testFinishReason',
+                ],
+            ],
+            'usage' => [
+                'prompt_tokens' => 312,
+                'completion_tokens' => 324,
+                'total_tokens' => 636,
+            ],
+        ], MetaInformation::from([]));
+    }
+
+    /**
+     * The adapter suppresses its warnings with @, which PHPUnit honours, so they have to be read
+     * from an error handler instead.
+     *
+     * @return list<string>
+     */
+    private function captureWarnings(callable $callback): array
+    {
+        $warnings = [];
+
+        \set_error_handler(static function (int $severity, string $message) use (&$warnings): bool {
+            if (\E_USER_WARNING === $severity) {
+                $warnings[] = $message;
+            }
+
+            return true;
+        });
+
+        try {
+            $callback();
+        } finally {
+            \restore_error_handler();
+        }
+
+        return $warnings;
     }
 
     /**

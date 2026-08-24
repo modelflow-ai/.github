@@ -28,7 +28,7 @@ final readonly class CreateStreamedResponseDelta
     /**
      * @param array{
      *     role?: string|null,
-     *     content?: string|null,
+     *     content?: string|list<string|array{type?: string, text?: string, thinking?: mixed}>|null,
      *     tool_calls?: array<array{
      *         id?: string,
      *         type?: string,
@@ -48,7 +48,7 @@ final readonly class CreateStreamedResponseDelta
 
         return new self(
             $attributes['role'] ?? null,
-            $attributes['content'] ?? null,
+            ContentChunks::toText($attributes['content'] ?? null),
             $toolCalls,
         );
     }
