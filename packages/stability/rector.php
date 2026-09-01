@@ -11,11 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\ApiClient\Transport\Enums;
+use Rector\Config\RectorConfig;
 
-enum ContentType: string
-{
-    case JSON = 'application/json';
-
-    case MULTIPART = 'multipart/form-data';
-}
+return static function (RectorConfig $rectorConfig): void {
+    $config = require __DIR__ . '/../../rector.php';
+    $config($rectorConfig, __DIR__);
+};

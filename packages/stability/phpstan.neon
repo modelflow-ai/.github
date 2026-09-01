@@ -1,0 +1,7 @@
+parameters:
+    paths:
+        - examples
+        - src
+    level: max
+    excludePaths:
+        - vendor/*

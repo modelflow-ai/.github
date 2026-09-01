@@ -16,6 +16,7 @@ namespace ModelflowAi\ApiClient\Transport\Testing;
 use ModelflowAi\ApiClient\Responses\MetaInformation;
 use ModelflowAi\ApiClient\Transport\Payload;
 use ModelflowAi\ApiClient\Transport\Response\ObjectResponse;
+use ModelflowAi\ApiClient\Transport\Response\RawResponse;
 use ModelflowAi\ApiClient\Transport\Response\TextResponse;
 use ModelflowAi\ApiClient\Transport\TransportInterface;
 use Symfony\Component\HttpClient\Chunk\DataChunk;
@@ -64,5 +65,15 @@ class MockTransport implements TransportInterface
                 yield new ObjectResponse($data, MetaInformation::empty());
             }
         }
+    }
+
+    public function requestRaw(Payload $payload): RawResponse
+    {
+        $response = $this->matcher->matchRawResponse($payload);
+        if (!$response instanceof RawResponse) {
+            throw new \RuntimeException('No matching response found for payload');
+        }
+
+        return $response;
     }
 }
