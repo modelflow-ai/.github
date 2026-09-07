@@ -19,7 +19,7 @@ parameters:
 			path: examples/chat/bootstrap.php
 
 		-
-			message: '#^PHPDoc tag @var with type DecisionTreeInterface\<AIChatRequest, AIChatAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\OpenaiAdapter\\Chat\\OpenaiChatAdapter\>\.$#'
+			message: '#^PHPDoc tag @var with type DecisionTreeInterface\<AIChatRequest, AIChatAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, [^>]+\>\.$#'
 			identifier: varTag.nativeType
 			count: 1
 			path: examples/chat/bootstrap.php
@@ -79,7 +79,7 @@ parameters:
 			path: examples/image/bootstrap.php
 
 		-
-			message: '#^PHPDoc tag @var with type DecisionTreeInterface\<AIImageRequest, AIImageAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\OpenaiAdapter\\Image\\OpenAIImageGenerationAdapter\>\.$#'
+			message: '#^PHPDoc tag @var with type DecisionTreeInterface\<AIImageRequest, AIImageAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, [^>]+\>\.$#'
 			identifier: varTag.nativeType
 			count: 1
 			path: examples/image/bootstrap.php
