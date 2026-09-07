@@ -1,7 +1,7 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^PHPDoc tag @var with type ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Chat\\Request\\AIChatRequest, ModelflowAi\\Chat\\Adapter\\AIChatAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\GoogleGeminiAdapter\\Chat\\GoogleGeminiChatAdapter\>\.$#'
+			message: '#^PHPDoc tag @var with type ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Chat\\Request\\AIChatRequest, ModelflowAi\\Chat\\Adapter\\AIChatAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, [^>]+\>\.$#'
 			identifier: varTag.nativeType
 			count: 1
 			path: examples/bootstrap.php

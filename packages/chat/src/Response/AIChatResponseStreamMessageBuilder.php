@@ -30,9 +30,7 @@ class AIChatResponseStreamMessageBuilder
         $role = null;
         $contentParts = [];
         foreach ($this->messages as $message) {
-            if (null === $role) {
-                $role = $message->role;
-            }
+            $role ??= $message->role;
             $contentParts[] = $message->content;
         }
 

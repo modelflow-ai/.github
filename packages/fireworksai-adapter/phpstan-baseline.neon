@@ -25,7 +25,7 @@ parameters:
 			path: examples/chat/bootstrap.php
 
 		-
-			message: '#^PHPDoc tag @var with type DecisionTreeInterface\<AIChatRequest, AIChatAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\FireworksAiAdapter\\Chat\\FireworksAiChatAdapter\>\.$#'
+			message: '#^PHPDoc tag @var with type DecisionTreeInterface\<AIChatRequest, AIChatAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, [^>]+\>\.$#'
 			identifier: varTag.nativeType
 			count: 1
 			path: examples/chat/bootstrap.php
@@ -85,7 +85,7 @@ parameters:
 			path: examples/completion/bootstrap.php
 
 		-
-			message: '#^PHPDoc tag @var with type DecisionTreeInterface\<AICompletionRequest, AICompletionAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\FireworksAiAdapter\\Completion\\FireworksAiCompletionAdapter\>\.$#'
+			message: '#^PHPDoc tag @var with type DecisionTreeInterface\<AICompletionRequest, AICompletionAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, [^>]+\>\.$#'
 			identifier: varTag.nativeType
 			count: 1
 			path: examples/completion/bootstrap.php
@@ -229,7 +229,7 @@ parameters:
 			path: examples/image/bootstrap.php
 
 		-
-			message: '#^PHPDoc tag @var with type ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Image\\Request\\AIImageRequest, ModelflowAi\\Image\\Adapter\\AIImageAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\FireworksAiAdapter\\Image\\FireworksAiImageGenerationAdapter\>\.$#'
+			message: '#^PHPDoc tag @var with type ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Image\\Request\\AIImageRequest, ModelflowAi\\Image\\Adapter\\AIImageAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, [^>]+\>\.$#'
 			identifier: varTag.nativeType
 			count: 1
 			path: examples/image/bootstrap.php

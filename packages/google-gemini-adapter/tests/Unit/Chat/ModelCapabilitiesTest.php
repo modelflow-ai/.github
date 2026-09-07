@@ -38,4 +38,21 @@ final class ModelCapabilitiesTest extends TestCase
     {
         $this->assertSame($expected, ModelCapabilities::supportsThinkingLevel($model));
     }
+
+    /**
+     * @return \Generator<string, array{0: string, 1: bool}>
+     */
+    public static function minimalThinkingLevelProvider(): \Generator
+    {
+        yield 'gemini-3.7-flash' => ['gemini-3.7-flash', true];
+        yield 'gemini-3.7-flash qualified' => ['models/gemini-3.7-flash', true];
+        yield 'gemini-3-pro has no minimal' => ['gemini-3-pro', false];
+        yield 'gemini-2.5-flash does not take a thinking level at all' => ['gemini-2.5-flash', false];
+    }
+
+    #[DataProvider('minimalThinkingLevelProvider')]
+    public function testSupportsMinimalThinkingLevel(string $model, bool $expected): void
+    {
+        $this->assertSame($expected, ModelCapabilities::supportsMinimalThinkingLevel($model));
+    }
 }

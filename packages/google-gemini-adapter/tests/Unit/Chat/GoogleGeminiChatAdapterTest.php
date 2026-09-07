@@ -576,7 +576,7 @@ final class GoogleGeminiChatAdapterTest extends TestCase
             );
     }
 
-    public function testHandleRequestAsksForTheLowestThinkingLevel(): void
+    public function testHandleRequestAsksFlashForMinimalThinking(): void
     {
         $client = $this->createResponseFake();
         $adapter = new GoogleGeminiChatAdapter($client, 'gemini-3.7-flash');
@@ -588,8 +588,24 @@ final class GoogleGeminiChatAdapterTest extends TestCase
                 static fn (string $method, array $args) => 'withGenerationConfig' === $method
                     && $args[0] instanceof GenerationConfig
                     && $args[0]->thinkingConfig instanceof ThinkingConfig
-                    && ThinkingLevel::LOW === $args[0]->thinkingConfig->thinkingLevel
+                    && ThinkingLevel::MINIMAL === $args[0]->thinkingConfig->thinkingLevel
                     && false === $args[0]->thinkingConfig->includeThoughts,
+            );
+    }
+
+    public function testHandleRequestAsksProForLowThinkingSinceItHasNoMinimal(): void
+    {
+        $client = $this->createResponseFake();
+        $adapter = new GoogleGeminiChatAdapter($client, 'gemini-3-pro');
+
+        $adapter->handleRequest($this->createRequest());
+
+        $client->generativeModel('gemini-3-pro')
+            ->assertFunctionCalled(
+                static fn (string $method, array $args) => 'withGenerationConfig' === $method
+                    && $args[0] instanceof GenerationConfig
+                    && $args[0]->thinkingConfig instanceof ThinkingConfig
+                    && ThinkingLevel::LOW === $args[0]->thinkingConfig->thinkingLevel,
             );
     }
 

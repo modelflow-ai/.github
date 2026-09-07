@@ -19,7 +19,7 @@ parameters:
 			path: examples/index.php
 
 		-
-			message: '#^PHPDoc tag @var with type ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Image\\Request\\AIImageRequest, ModelflowAi\\Image\\Adapter\\AIImageAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, ModelflowAi\\Image\\Adapter\\Fake\\FakeAdapter\>\.$#'
+			message: '#^PHPDoc tag @var with type ModelflowAi\\DecisionTree\\DecisionTreeInterface\<ModelflowAi\\Image\\Request\\AIImageRequest, ModelflowAi\\Image\\Adapter\\AIImageAdapterInterface\> is not subtype of native type ModelflowAi\\DecisionTree\\DecisionTree\<ModelflowAi\\DecisionTree\\Behaviour\\CriteriaBehaviour, [^>]+\>\.$#'
 			identifier: varTag.nativeType
 			count: 1
 			path: examples/index.php
