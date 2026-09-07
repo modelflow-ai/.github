@@ -44,4 +44,13 @@ final class ModelCapabilities
 
         return false;
     }
+
+    /**
+     * Within the models taking a thinking level, only the Flash line accepts "minimal". Pro tops
+     * out at "low", so asking Pro for "minimal" would fail the request.
+     */
+    public static function supportsMinimalThinkingLevel(string $model): bool
+    {
+        return self::supportsThinkingLevel($model) && \str_contains($model, 'flash');
+    }
 }

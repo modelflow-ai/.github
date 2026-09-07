@@ -185,9 +185,10 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface, 
     }
 
     /**
-     * Gemini 3 thinks at medium level unless told otherwise, and every generated thought is billed
-     * as an output token. Ask for the lowest level the generation accepts; unlike other providers
-     * thinking cannot be turned off entirely.
+     * Gemini 3 thinks by default unless told otherwise, and every generated thought is billed as
+     * an output token. Ask for the lowest level the model accepts: "minimal" on Flash, "low" on
+     * Pro, which does not support "minimal". Unlike other providers thinking cannot be turned off
+     * entirely.
      */
     private function buildThinkingConfig(): ?ThinkingConfig
     {
@@ -199,9 +200,11 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface, 
             return null;
         }
 
+        $lowestLevel = ModelCapabilities::supportsMinimalThinkingLevel($this->model) ? ThinkingLevel::MINIMAL : ThinkingLevel::LOW;
+
         return new ThinkingConfig(
             includeThoughts: false,
-            thinkingLevel: $this->thinkingLevel ?? ThinkingLevel::LOW,
+            thinkingLevel: $this->thinkingLevel ?? $lowestLevel,
         );
     }
 
