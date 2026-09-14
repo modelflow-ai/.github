@@ -44,7 +44,7 @@ $googleGeminiClient = \Gemini::factory()
     ->withStreamHandler(static fn (RequestInterface $request): ResponseInterface => $client->sendRequest($request))
     ->make();
 
-$flashAdapter = new GoogleGeminiChatAdapter($googleGeminiClient, 'models/gemini-2.0-flash');
+$flashAdapter = new GoogleGeminiChatAdapter($googleGeminiClient, 'models/gemini-2.5-pro');
 
 $adapters[] = new DecisionRule($flashAdapter, [FeatureCriteria::STREAM, FeatureCriteria::IMAGE_TO_TEXT]);
 
