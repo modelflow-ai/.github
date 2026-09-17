@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App;
 
-require_once \dirname(__DIR__) . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Http\Discovery\Psr18ClientDiscovery;
 use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;

@@ -14,7 +14,7 @@ declare(strict_types=1);
 use ModelflowAi\Embeddings\Adapter\Request\EmbedRequest;
 use ModelflowAi\OllamaAdapter\Embeddings\OllamaEmbeddingAdapter;
 
-$ollamaClient = require_once \dirname(__DIR__) . '/bootstrap.php';
+$ollamaClient = require_once __DIR__ . '/../bootstrap.php';
 
 echo "=== Simple Ollama Embeddings Example ===\n\n";
 

@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-$fireworksAiClient = require_once \dirname(__DIR__) . '/bootstrap.php';
+$fireworksAiClient = require_once __DIR__ . '/../bootstrap.php';
 
 use ModelflowAi\Completion\Adapter\AICompletionAdapterInterface;
 use ModelflowAi\Completion\AICompletionRequestHandler;

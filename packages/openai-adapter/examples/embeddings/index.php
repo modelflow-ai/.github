@@ -24,7 +24,7 @@ use ModelflowAi\Embeddings\Store\Memory\MemoryEmbeddingsStore;
 use ModelflowAi\OpenaiAdapter\Embeddings\OpenaiEmbeddingAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
-$openaiClient = require_once \dirname(__DIR__) . '/bootstrap.php';
+$openaiClient = require_once __DIR__ . '/../bootstrap.php';
 require_once __DIR__ . '/ExampleEmbedding.php';
 
 $embeddingSplitter = new EmbeddingSplitter(500);

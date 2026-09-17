@@ -20,7 +20,7 @@ trait ResourceTrait
      */
     public function getDogImageResource()
     {
-        $fileName = \dirname(__DIR__) . '/examples/resources/dog.jpeg';
+        $fileName = __DIR__ . '/../examples/resources/dog.jpeg';
         $file = \fopen($fileName, 'r');
         if (!$file) {
             throw new \RuntimeException('Could not open image "dog.jpeg"');
@@ -34,7 +34,7 @@ trait ResourceTrait
      */
     public function getCatImageResource()
     {
-        $fileName = \dirname(__DIR__) . '/examples/resources/cat.png';
+        $fileName = __DIR__ . '/../examples/resources/cat.png';
         $file = \fopen($fileName, 'r');
         if (!$file) {
             throw new \RuntimeException('Could not open image "cat.png"');

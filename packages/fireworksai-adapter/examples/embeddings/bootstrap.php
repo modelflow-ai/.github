@@ -24,7 +24,7 @@ use ModelflowAi\Embeddings\Store\Memory\MemoryEmbeddingsStore;
 use ModelflowAi\FireworksAiAdapter\Embeddings\FireworksAiEmbeddingAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
-$fireworksAiClient = require_once \dirname(__DIR__) . '/bootstrap.php';
+$fireworksAiClient = require_once __DIR__ . '/../bootstrap.php';
 require_once __DIR__ . '/ExampleEmbedding.php';
 
 $embeddingSplitter = new EmbeddingSplitter(500);

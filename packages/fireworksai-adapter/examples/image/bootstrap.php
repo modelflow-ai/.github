@@ -26,7 +26,7 @@ use Symfony\Component\HttpClient\HttpClient;
 require_once \dirname(__DIR__, 2) . '/vendor/autoload.php';
 
 // Load environment for API key
-(new Dotenv())->bootEnv(\dirname(__DIR__) . '/.env');
+(new Dotenv())->bootEnv(__DIR__ . '/../.env');
 
 $fireworksaiApiKey = $_ENV['FIREWORKSAI_API_KEY'];
 if (!$fireworksaiApiKey) {

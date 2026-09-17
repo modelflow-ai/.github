@@ -24,7 +24,7 @@ use ModelflowAi\Embeddings\Store\Memory\MemoryEmbeddingsStore;
 use ModelflowAi\OllamaAdapter\Embeddings\OllamaEmbeddingAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
-$ollamaClient = require_once \dirname(__DIR__) . '/bootstrap.php';
+$ollamaClient = require_once __DIR__ . '/../bootstrap.php';
 require_once __DIR__ . '/ExampleEmbedding.php';
 
 $embeddingSplitter = new EmbeddingSplitter(500);

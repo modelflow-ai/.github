@@ -24,7 +24,7 @@ use ModelflowAi\DecisionTree\DecisionTreeInterface;
 use ModelflowAi\Mistral\Model;
 use ModelflowAi\MistralAdapter\Chat\MistralChatAdapter;
 
-$mistralClient = require_once \dirname(__DIR__) . '/bootstrap.php';
+$mistralClient = require_once __DIR__ . '/../bootstrap.php';
 
 $adapter = [];
 
