@@ -46,11 +46,20 @@ final class ModelCapabilities
     }
 
     /**
-     * Within the models taking a thinking level, only the Flash line accepts "minimal". Pro tops
-     * out at "low", so asking Pro for "minimal" would fail the request.
+     * Google's docs advertise "minimal" for the whole Flash line, but the live API rejects it for
+     * gemini-3.7-flash while accepting it for gemini-3.1-flash-lite, so "flash" in the name is not
+     * a reliable signal. This lists only models confirmed against the real API.
+     *
+     * @var list<string>
      */
+    private const MINIMAL_THINKING_SUPPORTED = [
+        'gemini-3.1-flash-lite',
+    ];
+
     public static function supportsMinimalThinkingLevel(string $model): bool
     {
-        return self::supportsThinkingLevel($model) && \str_contains($model, 'flash');
+        $name = \str_starts_with($model, 'models/') ? \substr($model, 7) : $model;
+
+        return \in_array($name, self::MINIMAL_THINKING_SUPPORTED, true);
     }
 }

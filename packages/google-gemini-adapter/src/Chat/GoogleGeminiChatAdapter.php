@@ -186,9 +186,9 @@ final readonly class GoogleGeminiChatAdapter implements AIChatAdapterInterface, 
 
     /**
      * Gemini 3 thinks by default unless told otherwise, and every generated thought is billed as
-     * an output token. Ask for the lowest level the model accepts: "minimal" on Flash, "low" on
-     * Pro, which does not support "minimal". Unlike other providers thinking cannot be turned off
-     * entirely.
+     * an output token. Ask for the lowest level the model accepts: "minimal" where confirmed to
+     * work, "low" otherwise, since "low" is accepted across the generation. Unlike other providers
+     * thinking cannot be turned off entirely.
      */
     private function buildThinkingConfig(): ?ThinkingConfig
     {

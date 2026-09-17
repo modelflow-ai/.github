@@ -44,8 +44,9 @@ final class ModelCapabilitiesTest extends TestCase
      */
     public static function minimalThinkingLevelProvider(): \Generator
     {
-        yield 'gemini-3.7-flash' => ['gemini-3.7-flash', true];
-        yield 'gemini-3.7-flash qualified' => ['models/gemini-3.7-flash', true];
+        yield 'gemini-3.1-flash-lite' => ['gemini-3.1-flash-lite', true];
+        yield 'gemini-3.1-flash-lite qualified' => ['models/gemini-3.1-flash-lite', true];
+        yield 'gemini-3.7-flash rejects minimal despite the name' => ['gemini-3.7-flash', false];
         yield 'gemini-3-pro has no minimal' => ['gemini-3-pro', false];
         yield 'gemini-2.5-flash does not take a thinking level at all' => ['gemini-2.5-flash', false];
     }
