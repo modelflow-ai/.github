@@ -25,7 +25,7 @@ use ModelflowAi\Mistral\Model;
 use ModelflowAi\MistralAdapter\Embeddings\MistralEmbeddingAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
-$mistralClient = require_once \dirname(__DIR__) . '/bootstrap.php';
+$mistralClient = require_once __DIR__ . '/../bootstrap.php';
 require_once __DIR__ . '/ExampleEmbedding.php';
 
 $embeddingSplitter = new EmbeddingSplitter(500);

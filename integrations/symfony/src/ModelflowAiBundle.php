@@ -217,7 +217,7 @@ class ModelflowAiBundle extends AbstractBundle
         $this->setProviderParameters($config['providers'] ?? [], $container);
 
         // Load commands
-        $container->import(\dirname(__DIR__) . '/config/commands.php');
+        $container->import(__DIR__ . '/../config/commands.php');
 
         // Extract and validate configurations
         $providersConfig = $this->extractProvidersConfig($config['providers'] ?? []);
@@ -228,7 +228,7 @@ class ModelflowAiBundle extends AbstractBundle
         // Load configuration files
         $configFiles = $this->getConfigurationFiles($adaptersConfig, $embeddingsConfig, $providersConfig);
         foreach (\array_unique($configFiles) as $configFile) {
-            $filePath = \dirname(__DIR__) . '/config/providers/' . $configFile;
+            $filePath = __DIR__ . '/../config/providers/' . $configFile;
             if (!\file_exists($filePath)) {
                 throw new \RuntimeException(\sprintf('Missing provider config file: %s', $filePath));
             }
@@ -392,7 +392,7 @@ class ModelflowAiBundle extends AbstractBundle
     ): void {
         $chatAdapters = $adaptersConfig['chatAdapters'];
 
-        $container->import(\dirname(__DIR__) . '/config/chat_request_handler.php');
+        $container->import(__DIR__ . '/../config/chat_request_handler.php');
 
         if (empty($chatAdapters)) {
             return;
@@ -422,7 +422,7 @@ class ModelflowAiBundle extends AbstractBundle
     ): void {
         $completionAdapters = $adaptersConfig['completionAdapters'];
 
-        $container->import(\dirname(__DIR__) . '/config/completion_request_handler.php');
+        $container->import(__DIR__ . '/../config/completion_request_handler.php');
 
         if (empty($completionAdapters)) {
             return;
@@ -452,7 +452,7 @@ class ModelflowAiBundle extends AbstractBundle
     ): void {
         $imageAdapters = $adaptersConfig['imageAdapters'];
 
-        $container->import(\dirname(__DIR__) . '/config/image_request_handler.php');
+        $container->import(__DIR__ . '/../config/image_request_handler.php');
 
         if (empty($imageAdapters)) {
             return;
@@ -481,7 +481,7 @@ class ModelflowAiBundle extends AbstractBundle
         $stores = $embeddingsConfig['stores'] ?? [];
         $requestHandler = $embeddingsConfig['request_handler'] ?? ['enabled' => false];
 
-        $container->import(\dirname(__DIR__) . '/config/embeddings.php');
+        $container->import(__DIR__ . '/../config/embeddings.php');
 
         if (empty($generators) && empty($stores) && !$requestHandler['enabled']) {
             return;
@@ -523,7 +523,7 @@ class ModelflowAiBundle extends AbstractBundle
      */
     private function setupExperts(ContainerConfigurator $container, array $expertsConfig): void
     {
-        $container->import(\dirname(__DIR__) . '/config/experts.php');
+        $container->import(__DIR__ . '/../config/experts.php');
 
         if ([] === $expertsConfig) {
             return;

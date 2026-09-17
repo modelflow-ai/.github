@@ -15,7 +15,7 @@ use ModelflowAi\Embeddings\Adapter\Request\EmbedRequest;
 use ModelflowAi\Mistral\Model;
 use ModelflowAi\MistralAdapter\Embeddings\MistralEmbeddingAdapter;
 
-$mistralClient = require_once \dirname(__DIR__) . '/bootstrap.php';
+$mistralClient = require_once __DIR__ . '/../bootstrap.php';
 
 echo "=== Simple Mistral Embeddings Example ===\n\n";
 

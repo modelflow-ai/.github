@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-$openaiClient = require_once \dirname(__DIR__) . '/bootstrap.php';
+$openaiClient = require_once __DIR__ . '/../bootstrap.php';
 
 use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;
 use ModelflowAi\Chat\AIChatRequestHandler;

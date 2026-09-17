@@ -14,7 +14,7 @@ declare(strict_types=1);
 use ModelflowAi\Embeddings\Adapter\Request\EmbedRequest;
 use ModelflowAi\OpenaiAdapter\Embeddings\OpenaiEmbeddingAdapter;
 
-$openaiClient = require_once \dirname(__DIR__) . '/bootstrap.php';
+$openaiClient = require_once __DIR__ . '/../bootstrap.php';
 
 echo "=== Simple OpenAI Embeddings Example ===\n\n";
 

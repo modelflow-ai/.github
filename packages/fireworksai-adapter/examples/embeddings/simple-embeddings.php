@@ -14,7 +14,7 @@ declare(strict_types=1);
 use ModelflowAi\Embeddings\Adapter\Request\EmbedRequest;
 use ModelflowAi\FireworksAiAdapter\Embeddings\FireworksAiEmbeddingAdapter;
 
-$fireworksAiClient = require_once \dirname(__DIR__) . '/bootstrap.php';
+$fireworksAiClient = require_once __DIR__ . '/../bootstrap.php';
 
 echo "=== Simple FireworksAI Embeddings Example ===\n\n";
 

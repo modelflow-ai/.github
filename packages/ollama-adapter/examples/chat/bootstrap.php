@@ -22,7 +22,7 @@ use ModelflowAi\DecisionTree\DecisionTree;
 use ModelflowAi\DecisionTree\DecisionTreeInterface;
 use ModelflowAi\OllamaAdapter\Chat\OllamaChatAdapter;
 
-$client = require_once \dirname(__DIR__) . '/bootstrap.php';
+$client = require_once __DIR__ . '/../bootstrap.php';
 
 $adapter = [];
 

@@ -22,7 +22,7 @@ use ModelflowAi\DecisionTree\DecisionTree;
 use ModelflowAi\DecisionTree\DecisionTreeInterface;
 use ModelflowAi\OllamaAdapter\Completion\OllamaCompletionAdapter;
 
-$ollamaClient = require_once \dirname(__DIR__) . '/bootstrap.php';
+$ollamaClient = require_once __DIR__ . '/../bootstrap.php';
 
 $adapter = [];
 

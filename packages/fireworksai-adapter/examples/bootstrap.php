@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-require_once \dirname(__DIR__) . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use ModelflowAi\FireworksAiAdapter\ClientFactory;
 use Symfony\Component\Dotenv\Dotenv;
