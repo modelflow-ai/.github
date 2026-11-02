@@ -36,12 +36,46 @@ final class ModelCapabilitiesTest extends TestCase
         yield 'claude-sonnet-5' => ['claude-sonnet-5', false];
         yield 'claude-fable-5' => ['claude-fable-5', false];
         yield 'claude-mythos-preview' => ['claude-mythos-preview', false];
+        yield 'claude-opus-5-5' => ['claude-opus-5-5', false];
+        yield 'claude-sonnet-5-5' => ['claude-sonnet-5-5', false];
+        yield 'claude-haiku-5-5' => ['claude-haiku-5-5', false];
+        yield 'claude-fable-5-1' => ['claude-fable-5-1', false];
     }
 
     #[DataProvider('samplingProvider')]
     public function testSupportsSampling(string $model, bool $expected): void
     {
         $this->assertSame($expected, ModelCapabilities::supportsSampling($model));
+    }
+
+    /**
+     * @return \Generator<string, array{0: string, 1: bool}>
+     */
+    public static function prefillProvider(): \Generator
+    {
+        yield 'claude-3-haiku' => [Model::CLAUDE_3_HAIKU->value, true];
+        yield 'claude-haiku-4-5 snapshot' => ['claude-haiku-4-5-20251001', true];
+        yield 'claude-opus-4-5' => ['claude-opus-4-5', true];
+        yield 'claude-sonnet-4-5' => ['claude-sonnet-4-5', true];
+        yield 'claude-opus-4-6' => ['claude-opus-4-6', false];
+        yield 'claude-sonnet-4-6' => ['claude-sonnet-4-6', false];
+        yield 'claude-opus-4-7' => ['claude-opus-4-7', false];
+        yield 'claude-opus-4-8' => ['claude-opus-4-8', false];
+        yield 'claude-opus-5' => ['claude-opus-5', false];
+        yield 'claude-opus-5-5' => ['claude-opus-5-5', false];
+        yield 'claude-sonnet-5' => ['claude-sonnet-5', false];
+        yield 'claude-sonnet-5-5' => ['claude-sonnet-5-5', false];
+        yield 'claude-haiku-5-5' => ['claude-haiku-5-5', false];
+        yield 'claude-fable-5' => ['claude-fable-5', false];
+        yield 'claude-fable-5-1' => ['claude-fable-5-1', false];
+        yield 'claude-mythos-5' => ['claude-mythos-5', false];
+        yield 'claude-mythos-preview' => ['claude-mythos-preview', false];
+    }
+
+    #[DataProvider('prefillProvider')]
+    public function testSupportsPrefill(string $model, bool $expected): void
+    {
+        $this->assertSame($expected, ModelCapabilities::supportsPrefill($model));
     }
 
     /**

@@ -32,8 +32,28 @@ final class ModelCapabilities
         'claude-mythos-preview',
         'claude-opus-5',
         'claude-sonnet-5',
+        'claude-haiku-5-5',
         'claude-opus-4-8',
         'claude-opus-4-7',
+    ];
+
+    /**
+     * Models rejecting an assistant message at the end of the conversation, which is how a JSON
+     * answer is started. Every later model of a family is covered by its base name.
+     *
+     * @var list<string>
+     */
+    private const PREFILL_REMOVED = [
+        'claude-fable-5',
+        'claude-mythos-5',
+        'claude-mythos-preview',
+        'claude-opus-5',
+        'claude-sonnet-5',
+        'claude-haiku-5-5',
+        'claude-opus-4-8',
+        'claude-opus-4-7',
+        'claude-opus-4-6',
+        'claude-sonnet-4-6',
     ];
 
     /**
@@ -92,6 +112,11 @@ final class ModelCapabilities
     public static function supportsSampling(string $model): bool
     {
         return !self::matches($model, self::SAMPLING_REMOVED);
+    }
+
+    public static function supportsPrefill(string $model): bool
+    {
+        return !self::matches($model, self::PREFILL_REMOVED);
     }
 
     public static function supportsThinking(string $model): bool
