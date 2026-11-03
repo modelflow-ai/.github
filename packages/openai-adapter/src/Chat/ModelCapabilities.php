@@ -28,19 +28,24 @@ final class ModelCapabilities
      */
     private const SAMPLING_REMOVED = [
         'gpt-5',
+        'gpt-6',
         'o1',
         'o3',
         'o4',
     ];
 
     /**
-     * Reasoning effort levels per model family. The GPT-5.6 family dropped `minimal`, the lowest
-     * level of the generations before it, and gained `none`.
+     * Reasoning effort levels per model family, the first match wins. The GPT-5.6 family dropped
+     * `minimal`, the lowest level of the generations before it, and gained `none`. GPT-6.1 Sol and
+     * GPT-6 Astra have no `none`, so they cannot call function tools on Chat Completions at all.
      *
      * @var array<string, list<string>>
      */
     private const REASONING_EFFORTS = [
         'gpt-5.6' => ['none', 'low', 'medium', 'high', 'xhigh', 'max'],
+        'gpt-6.1-sol' => ['low', 'medium', 'high', 'xhigh'],
+        'gpt-6-astra' => ['low', 'medium', 'high', 'xhigh'],
+        'gpt-6' => ['none', 'low', 'medium', 'high', 'xhigh'],
     ];
 
     /**
@@ -52,6 +57,7 @@ final class ModelCapabilities
      */
     private const TOOLS_REQUIRE_NO_REASONING = [
         'gpt-5.6',
+        'gpt-6',
     ];
 
     public static function supportsSampling(string $model): bool
@@ -68,7 +74,8 @@ final class ModelCapabilities
 
     public static function toolsRequireNoReasoning(string $model): bool
     {
-        return self::matches($model, self::TOOLS_REQUIRE_NO_REASONING);
+        // Without a `none` level there is nothing to ask for, the API answers the tools itself.
+        return self::matches($model, self::TOOLS_REQUIRE_NO_REASONING) && self::supportsReasoningEffortNone($model);
     }
 
     public static function supportsReasoningEffort(string $model, ReasoningEffortEnum $effort): bool

@@ -784,6 +784,71 @@ final class OpenaiChatAdapterTest extends TestCase
         $adapter->handleRequest($this->createToolRequest());
     }
 
+    public function testHandleRequestAsksForNoReasoningWhenToolsAreSentToGpt6(): void
+    {
+        $chat = $this->prophesize(ChatContract::class);
+        $client = $this->prophesize(ClientContract::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->create(Argument::withEntry('reasoning_effort', 'none'))
+            ->willReturn($this->createFixtureResponse())
+            ->shouldBeCalled();
+
+        $adapter = new OpenaiChatAdapter($client->reveal(), 'gpt-6-sol');
+        $adapter->handleRequest($this->createToolRequest());
+    }
+
+    public function testHandleRequestOmitsTemperatureAndAsksForNoReasoningOnGpt6(): void
+    {
+        $chat = $this->prophesize(ChatContract::class);
+        $client = $this->prophesize(ClientContract::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->create([
+            'model' => 'gpt-6.1-terra',
+            'messages' => [
+                ['role' => 'user', 'content' => 'User message'],
+            ],
+            'reasoning_effort' => 'none',
+        ])->willReturn($this->createFixtureResponse())->shouldBeCalled();
+
+        $adapter = new OpenaiChatAdapter($client->reveal(), 'gpt-6.1-terra');
+        $warnings = $this->captureWarnings(fn () => $adapter->handleRequest($this->createRequest(['temperature' => 0.5])));
+
+        $this->assertSame(['Temperature option is not supported by "gpt-6.1-terra".'], $warnings);
+    }
+
+    public function testHandleRequestDoesNotAskForNoReasoningOnGpt6WithoutThatLevel(): void
+    {
+        $chat = $this->prophesize(ChatContract::class);
+        $client = $this->prophesize(ClientContract::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->create([
+            'model' => 'gpt-6.1-sol',
+            'messages' => [
+                ['role' => 'user', 'content' => 'User message'],
+            ],
+        ])->willReturn($this->createFixtureResponse())->shouldBeCalled();
+
+        $adapter = new OpenaiChatAdapter($client->reveal(), 'gpt-6.1-sol');
+        $adapter->handleRequest($this->createRequest());
+    }
+
+    public function testHandleRequestKeepsTheToolsOfGpt6WithoutNoneAndLetsTheApiAnswer(): void
+    {
+        $chat = $this->prophesize(ChatContract::class);
+        $client = $this->prophesize(ClientContract::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->create(Argument::that(static fn (array $parameters): bool => !\array_key_exists('reasoning_effort', $parameters)))
+            ->willReturn($this->createFixtureResponse())
+            ->shouldBeCalled();
+
+        $adapter = new OpenaiChatAdapter($client->reveal(), 'gpt-6-astra');
+        $adapter->handleRequest($this->createToolRequest());
+    }
+
     public function testHandleRequestDropsAConfiguredEffortWhenToolsAreSent(): void
     {
         $chat = $this->prophesize(ChatContract::class);
