@@ -902,14 +902,24 @@ final class AnthropicChatAdapterTest extends TestCase
         $this->assertArrayNotHasKey('thinking', $transport->parameters);
     }
 
-    public function testHandleRequestOmitsThinkingForHaiku55(): void
+    public function testHandleRequestDisablesThinkingForHaiku55(): void
     {
         $transport = $this->createCapturingTransport();
         $adapter = new AnthropicChatAdapter(new Client($transport), 'claude-haiku-5-5', 100);
 
         $adapter->handleRequest($this->createRequest());
 
-        $this->assertArrayNotHasKey('thinking', $transport->parameters);
+        $this->assertSame(['type' => 'disabled'], $transport->parameters['thinking'] ?? null);
+    }
+
+    public function testHandleRequestSendsConfiguredThinkingForHaiku55(): void
+    {
+        $transport = $this->createCapturingTransport();
+        $adapter = new AnthropicChatAdapter(new Client($transport), 'claude-haiku-5-5', 100, ThinkingModeEnum::ADAPTIVE);
+
+        $adapter->handleRequest($this->createRequest());
+
+        $this->assertSame(['type' => 'adaptive'], $transport->parameters['thinking'] ?? null);
     }
 
     public function testHandleRequestOmitsThinkingForModelWithoutThinking(): void
