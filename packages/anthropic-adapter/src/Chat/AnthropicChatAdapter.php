@@ -186,7 +186,7 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
             ];
         }
 
-        if ('json' === $request->getFormat()) {
+        if ($this->prefillsJson($request)) {
             $parameters['messages'][] = [
                 'role' => 'assistant',
                 'content' => [
@@ -204,6 +204,15 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
         }
 
         return $this->create($request, $parameters);
+    }
+
+    /**
+     * Plain JSON is requested by starting the answer with an opening brace. Newer models answer a
+     * trailing assistant message with a 400, they get the format as an instruction instead.
+     */
+    private function prefillsJson(AIChatRequest $request): bool
+    {
+        return 'json' === $request->getFormat() && ModelCapabilities::supportsPrefill($this->model);
     }
 
     /**
@@ -260,7 +269,7 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
             }
         }
 
-        if ('json' === $request->getFormat() && \str_ends_with($content, '}')) {
+        if ($this->prefillsJson($request) && \str_ends_with($content, '}')) {
             $content = '{' . $content;
         }
 
@@ -290,7 +299,7 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
 
         return new AIChatResponseStream(
             request: $request,
-            messages: $this->createStreamedMessages($responses, 'json' === $request->getFormat() ? '{' : '', $usageTracker),
+            messages: $this->createStreamedMessages($responses, $this->prefillsJson($request) ? '{' : '', $usageTracker),
             usageTracker: $usageTracker,
         );
     }

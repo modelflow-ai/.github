@@ -805,6 +805,63 @@ final class AnthropicChatAdapterTest extends TestCase
         $this->assertFalse($adapter->supportsResponseFormat($unsupportedFormat->reveal()));
     }
 
+    public function testHandleRequestWithJsonPrefillsTheAnswerForModelWithPrefill(): void
+    {
+        $transport = $this->createCapturingTransport();
+        $adapter = new AnthropicChatAdapter(new Client($transport), 'claude-opus-4-5', 100);
+
+        $adapter->handleRequest($this->createJsonRequest());
+
+        $this->assertSame(
+            ['role' => 'assistant', 'content' => [['type' => 'text', 'text' => '{']]],
+            $this->lastMessage($transport),
+        );
+    }
+
+    public function testHandleRequestWithJsonDoesNotPrefillForModelWithoutPrefill(): void
+    {
+        $transport = $this->createCapturingTransport();
+        $adapter = new AnthropicChatAdapter(new Client($transport), 'claude-haiku-5-5', 100);
+
+        $adapter->handleRequest($this->createJsonRequest());
+
+        $this->assertSame('user', $this->lastMessage($transport)['role']);
+    }
+
+    public function testHandleRequestWithJsonKeepsTheAnswerOfModelWithoutPrefill(): void
+    {
+        $response = DataFixtures::MESSAGES_CREATE_RESPONSE;
+        $response['content'][0]['text'] = '{"answer": 42}';
+        $transport = new class($response) implements TransportInterface {
+            /**
+             * @param array<string, mixed> $response
+             */
+            public function __construct(private readonly array $response)
+            {
+            }
+
+            public function requestObject(Payload $payload): ObjectResponse
+            {
+                return new ObjectResponse($this->response, MetaInformation::empty());
+            }
+
+            public function requestText(Payload $payload): TextResponse
+            {
+                throw new \BadMethodCallException();
+            }
+
+            public function requestStream(Payload $payload, ?callable $decoder = null): \Iterator
+            {
+                throw new \BadMethodCallException();
+            }
+        };
+        $adapter = new AnthropicChatAdapter(new Client($transport), 'claude-sonnet-5-5', 100);
+
+        $result = $adapter->handleRequest($this->createJsonRequest());
+
+        $this->assertSame('{"answer": 42}', $result->getMessage()->content);
+    }
+
     public function testHandleRequestDisablesThinkingForThinkingByDefaultModel(): void
     {
         $transport = $this->createCapturingTransport();
@@ -932,6 +989,35 @@ final class AnthropicChatAdapterTest extends TestCase
             [],
             $options,
             static fn () => null,
+        );
+    }
+
+    /**
+     * @return array{role: string, content: mixed}
+     */
+    private function lastMessage(CapturingTransport $transport): array
+    {
+        /** @var list<array{role: string, content: mixed}> $messages */
+        $messages = $transport->parameters['messages'];
+
+        $last = \end($messages);
+        $this->assertIsArray($last);
+
+        return $last;
+    }
+
+    private function createJsonRequest(): AIChatRequest
+    {
+        return new AIChatRequest(
+            new AIChatMessageCollection(
+                new AIChatMessage(AIChatMessageRoleEnum::USER, 'Hello world!'),
+            ),
+            new CriteriaCollection(),
+            [],
+            [],
+            [],
+            static fn () => null,
+            responseFormat: new JsonResponseFormat(),
         );
     }
 
