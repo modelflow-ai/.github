@@ -17,4 +17,5 @@ enum ThinkingModeEnum: string
 {
     case ADAPTIVE = 'adaptive';
     case DISABLED = 'disabled';
+    case BETWEEN_TOOLS = 'between_tools';
 }

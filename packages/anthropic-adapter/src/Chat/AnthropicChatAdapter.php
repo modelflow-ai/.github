@@ -215,9 +215,8 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
     {
         if (!$this->thinking instanceof ThinkingModeEnum) {
             return ModelCapabilities::thinksByDefault($this->model)
-                && ModelCapabilities::supportsDisabledThinking($this->model)
-                    ? ThinkingModeEnum::DISABLED
-                    : null;
+                ? ModelCapabilities::disabledThinkingMode($this->model)
+                : null;
         }
 
         if (!ModelCapabilities::supportsThinking($this->model)) {
@@ -226,10 +225,13 @@ final readonly class AnthropicChatAdapter implements AIChatAdapterInterface, Sup
             return null;
         }
 
-        if (ThinkingModeEnum::DISABLED === $this->thinking && !ModelCapabilities::supportsDisabledThinking($this->model)) {
-            @\trigger_error(\sprintf('Thinking cannot be disabled for "%s".', $this->model), \E_USER_WARNING);
+        if (ThinkingModeEnum::DISABLED === $this->thinking) {
+            $disabled = ModelCapabilities::disabledThinkingMode($this->model);
+            if (!$disabled instanceof ThinkingModeEnum) {
+                @\trigger_error(\sprintf('Thinking cannot be disabled for "%s".', $this->model), \E_USER_WARNING);
+            }
 
-            return null;
+            return $disabled;
         }
 
         return $this->thinking;

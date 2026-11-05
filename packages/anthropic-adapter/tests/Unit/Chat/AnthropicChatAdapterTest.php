@@ -815,6 +815,46 @@ final class AnthropicChatAdapterTest extends TestCase
         $this->assertSame(['type' => 'disabled'], $transport->parameters['thinking'] ?? null);
     }
 
+    public function testHandleRequestSendsBetweenToolsForSonnet55(): void
+    {
+        $transport = $this->createCapturingTransport();
+        $adapter = new AnthropicChatAdapter(new Client($transport), 'claude-sonnet-5-5', 100);
+
+        $adapter->handleRequest($this->createRequest());
+
+        $this->assertSame(['type' => 'between_tools'], $transport->parameters['thinking'] ?? null);
+    }
+
+    public function testHandleRequestMapsDisabledThinkingToBetweenToolsForSonnet55(): void
+    {
+        $transport = $this->createCapturingTransport();
+        $adapter = new AnthropicChatAdapter(new Client($transport), 'claude-sonnet-5-5', 100, ThinkingModeEnum::DISABLED);
+
+        $adapter->handleRequest($this->createRequest());
+
+        $this->assertSame(['type' => 'between_tools'], $transport->parameters['thinking'] ?? null);
+    }
+
+    public function testHandleRequestOmitsThinkingForOpus55(): void
+    {
+        $transport = $this->createCapturingTransport();
+        $adapter = new AnthropicChatAdapter(new Client($transport), 'claude-opus-5-5', 100);
+
+        $adapter->handleRequest($this->createRequest());
+
+        $this->assertArrayNotHasKey('thinking', $transport->parameters);
+    }
+
+    public function testHandleRequestOmitsThinkingForHaiku55(): void
+    {
+        $transport = $this->createCapturingTransport();
+        $adapter = new AnthropicChatAdapter(new Client($transport), 'claude-haiku-5-5', 100);
+
+        $adapter->handleRequest($this->createRequest());
+
+        $this->assertArrayNotHasKey('thinking', $transport->parameters);
+    }
+
     public function testHandleRequestOmitsThinkingForModelWithoutThinking(): void
     {
         $transport = $this->createCapturingTransport();
