@@ -50,16 +50,21 @@ final readonly class CreateResponse
      *         input_tokens: int,
      *         output_tokens: int,
      *     },
-     *     content: array<TextMessage|ToolUseMessage>,
+     *     content: array<TextMessage|ToolUseMessage|array{type: "thinking"|"redacted_thinking"}>,
      *     stop_reason: "end_turn"|"max_tokens"|"stop_sequence"|"tool_use",
      * } $attributes
      */
     public static function from(array $attributes, MetaInformation $meta): self
     {
-        $content = \array_map(
-            CreateResponseContent::from(...),
-            $attributes['content'],
-        );
+        // Models thinking by default return their reasoning as blocks of their own, which are no output.
+        $content = [];
+        foreach ($attributes['content'] as $block) {
+            if ('thinking' === $block['type'] || 'redacted_thinking' === $block['type']) {
+                continue;
+            }
+
+            $content[] = CreateResponseContent::from($block);
+        }
 
         return new self(
             $attributes['id'],

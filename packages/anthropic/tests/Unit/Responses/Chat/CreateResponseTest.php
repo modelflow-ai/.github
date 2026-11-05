@@ -68,4 +68,26 @@ final class CreateResponseTest extends TestCase
         $this->assertSame($responseData['stop_reason'], $instance->stopReason);
         $this->assertInstanceOf(MetaInformation::class, $instance->meta);
     }
+
+    public function testFromSkipsThinkingBlocks(): void
+    {
+        $instance = CreateResponse::from([
+            'id' => 'msg_1',
+            'type' => 'message',
+            'role' => 'assistant',
+            'model' => 'claude-haiku-5-5',
+            'stop_sequence' => null,
+            'usage' => ['input_tokens' => 1, 'output_tokens' => 2],
+            'content' => [
+                ['type' => 'thinking'],
+                ['type' => 'redacted_thinking'],
+                ['type' => 'text', 'text' => 'HALLO: WELT'],
+            ],
+            'stop_reason' => 'end_turn',
+        ], MetaInformation::empty());
+
+        $this->assertCount(1, $instance->content);
+        $this->assertSame('text', $instance->content[0]->type);
+        $this->assertSame('HALLO: WELT', $instance->content[0]->text);
+    }
 }
