@@ -61,7 +61,7 @@ final readonly class Messages implements MessagesInterface
          * @see https://docs.anthropic.com/claude/reference/messages-streaming#raw-http-stream-response
          */
         $buffer = '';
-        $decoder = function (ChunkInterface $chunk) use (&$message, &$buffer): \Iterator {
+        $decoder = static function (ChunkInterface $chunk) use (&$message, &$buffer): \Iterator {
             foreach (self::extractEvents($buffer, $chunk->getContent()) as [$eventName, $data]) {
                 if ('ping' === $eventName) {
                     continue;
