@@ -625,6 +625,22 @@ final class GoogleGeminiChatAdapterTest extends TestCase
             );
     }
 
+    public function testHandleRequestAsksGemini4ForLowThinkingSinceMinimalIsRejected(): void
+    {
+        $client = $this->createResponseFake();
+        $adapter = new GoogleGeminiChatAdapter($client, 'gemini-4-argon');
+
+        $adapter->handleRequest($this->createRequest());
+
+        $client->generativeModel('gemini-4-argon')
+            ->assertFunctionCalled(
+                static fn (string $method, array $args) => 'withGenerationConfig' === $method
+                    && $args[0] instanceof GenerationConfig
+                    && $args[0]->thinkingConfig instanceof ThinkingConfig
+                    && ThinkingLevel::LOW === $args[0]->thinkingConfig->thinkingLevel,
+            );
+    }
+
     public function testHandleRequestSendsTheConfiguredThinkingLevel(): void
     {
         $client = $this->createResponseFake();
