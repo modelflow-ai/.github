@@ -16,6 +16,7 @@ use Rector\Config\RectorConfig;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig
         ->skip([
+            __DIR__ . '/config/reference.php',
             __DIR__ . '/config/providers/anthropic/common.php',
             __DIR__ . '/config/providers/fireworksai/common.php',
             __DIR__ . '/config/providers/google_gemini/common.php',
