@@ -60,18 +60,9 @@ final readonly class Messages implements MessagesInterface
         /**
          * @see https://docs.anthropic.com/claude/reference/messages-streaming#raw-http-stream-response
          */
-        $decoder = static function (ChunkInterface $chunk) use (&$message): \Iterator {
-            $content = $chunk->getContent();
-
-            $lines = \array_filter(\explode(\PHP_EOL, $content));
-            $events = \array_chunk($lines, 2);
-            foreach ($events as $event) {
-                if (2 !== \count($event)) {
-                    continue;
-                }
-
-                $eventName = \trim(\substr($event[0], 6));
-                $data = \trim(\substr($event[1], 5));
+        $buffer = '';
+        $decoder = static function (ChunkInterface $chunk) use (&$message, &$buffer): \Iterator {
+            foreach (self::extractEvents($buffer, $chunk->getContent()) as [$eventName, $data]) {
                 if ('ping' === $eventName) {
                     continue;
                 }
@@ -157,6 +148,55 @@ final readonly class Messages implements MessagesInterface
             // @phpstan-ignore-next-line
             yield CreateStreamedResponse::from($index, $response->data, $response->meta);
         }
+    }
+
+    /**
+     * A network chunk can end anywhere, also inside an event, so the unfinished rest is kept in the
+     * buffer until the next chunk completes it. An event without the terminating blank line counts
+     * as complete as soon as its data is valid json.
+     *
+     * @return list<array{string, string}> the name and the raw data of every complete event
+     */
+    private static function extractEvents(string &$buffer, string $content): array
+    {
+        $buffer .= \str_replace("\r\n", "\n", $content);
+
+        $events = [];
+        while (false !== ($end = \strpos($buffer, "\n\n"))) {
+            $block = \substr($buffer, 0, $end);
+            $buffer = \substr($buffer, $end + 2);
+
+            $event = self::parseEvent($block);
+            if (null !== $event) {
+                $events[] = $event;
+            }
+        }
+
+        $event = self::parseEvent($buffer);
+        if (null !== $event && null !== \json_decode($event[1], true)) {
+            $events[] = $event;
+            $buffer = '';
+        }
+
+        return $events;
+    }
+
+    /**
+     * @return array{string, string}|null
+     */
+    private static function parseEvent(string $block): ?array
+    {
+        $name = null;
+        $data = null;
+        foreach (\explode("\n", $block) as $line) {
+            if (\str_starts_with($line, 'event:')) {
+                $name = \trim(\substr($line, 6));
+            } elseif (\str_starts_with($line, 'data:')) {
+                $data = \trim(\substr($line, 5));
+            }
+        }
+
+        return null !== $name && null !== $data ? [$name, $data] : null;
     }
 
     /**
