@@ -26,6 +26,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -258,7 +259,7 @@ class ModelflowAiBundle extends AbstractBundle
         $arguments = $argv ?? $_SERVER['argv'] ?? null;
 
         $container = $this->container ?? null;
-        if ($container && $arguments) {
+        if ($container instanceof ContainerInterface && $arguments) {
             /** @var KernelInterface $kernel */
             $kernel = $container->get('kernel');
             $application = new Application($kernel);
