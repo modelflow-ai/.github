@@ -841,12 +841,34 @@ final class OpenaiChatAdapterTest extends TestCase
         $client = $this->prophesize(ClientContract::class);
         $client->chat()->willReturn($chat->reveal());
 
-        $chat->create(Argument::that(static fn (array $parameters): bool => !\array_key_exists('reasoning_effort', $parameters)))
+        $chat->create(Argument::that(static fn (array $parameters): bool => !\array_key_exists('reasoning_effort', $parameters)
+            && \is_array($parameters['tools'] ?? null)
+            && 1 === \count($parameters['tools'])
+            && 'auto' === ($parameters['tool_choice'] ?? null)))
             ->willReturn($this->createFixtureResponse())
             ->shouldBeCalled();
 
         $adapter = new OpenaiChatAdapter($client->reveal(), 'gpt-6-astra');
         $adapter->handleRequest($this->createToolRequest());
+    }
+
+    public function testHandleRequestDropsAConfiguredEffortWhenToolsAreSentToGpt6(): void
+    {
+        $chat = $this->prophesize(ChatContract::class);
+        $client = $this->prophesize(ClientContract::class);
+        $client->chat()->willReturn($chat->reveal());
+
+        $chat->create(Argument::withEntry('reasoning_effort', 'none'))
+            ->willReturn($this->createFixtureResponse())
+            ->shouldBeCalled();
+
+        $adapter = new OpenaiChatAdapter($client->reveal(), 'gpt-6.1-terra', ReasoningEffortEnum::HIGH);
+        $warnings = $this->captureWarnings(fn () => $adapter->handleRequest($this->createToolRequest()));
+
+        $this->assertSame(
+            ['Reasoning effort "high" cannot be combined with tools for "gpt-6.1-terra", falling back to "none".'],
+            $warnings,
+        );
     }
 
     public function testHandleRequestDropsAConfiguredEffortWhenToolsAreSent(): void
