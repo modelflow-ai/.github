@@ -69,7 +69,7 @@ final class ModelCapabilities
     ];
 
     /**
-     * Fable and Mythos always think; `disabled` is rejected with a 400.
+     * Fable, Mythos and Opus 5.5 always think; `disabled` is rejected with a 400.
      *
      * @var list<string>
      */
@@ -77,6 +77,16 @@ final class ModelCapabilities
         'claude-fable-5',
         'claude-mythos-5',
         'claude-mythos-preview',
+        'claude-opus-5-5',
+    ];
+
+    /**
+     * Sonnet 5.5 rejects `disabled` and takes `between_tools` instead, which skips the up-front thinking.
+     *
+     * @var list<string>
+     */
+    private const THINKING_BETWEEN_TOOLS = [
+        'claude-sonnet-5-5',
     ];
 
     public static function supportsSampling(string $model): bool
@@ -96,7 +106,21 @@ final class ModelCapabilities
 
     public static function supportsDisabledThinking(string $model): bool
     {
-        return self::supportsThinking($model) && !self::matches($model, self::THINKING_ALWAYS_ON);
+        return self::supportsThinking($model)
+            && !self::matches($model, self::THINKING_ALWAYS_ON)
+            && !self::matches($model, self::THINKING_BETWEEN_TOOLS);
+    }
+
+    /**
+     * The mode switching off the up-front thinking, null when the model cannot turn it off.
+     */
+    public static function disabledThinkingMode(string $model): ?ThinkingModeEnum
+    {
+        if (self::supportsThinking($model) && self::matches($model, self::THINKING_BETWEEN_TOOLS)) {
+            return ThinkingModeEnum::BETWEEN_TOOLS;
+        }
+
+        return self::supportsDisabledThinking($model) ? ThinkingModeEnum::DISABLED : null;
     }
 
     /**

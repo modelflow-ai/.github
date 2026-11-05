@@ -15,6 +15,7 @@ namespace ModelflowAi\AnthropicAdapter\Tests\Unit\Chat;
 
 use ModelflowAi\Anthropic\Model;
 use ModelflowAi\AnthropicAdapter\Chat\ModelCapabilities;
+use ModelflowAi\AnthropicAdapter\Chat\ThinkingModeEnum;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -55,6 +56,9 @@ final class ModelCapabilitiesTest extends TestCase
         yield 'claude-sonnet-5' => ['claude-sonnet-5', true];
         yield 'claude-fable-5' => ['claude-fable-5', true];
         yield 'claude-mythos-preview' => ['claude-mythos-preview', true];
+        yield 'claude-opus-5-5' => ['claude-opus-5-5', true];
+        yield 'claude-sonnet-5-5' => ['claude-sonnet-5-5', true];
+        yield 'claude-haiku-5-5' => ['claude-haiku-5-5', false];
     }
 
     #[DataProvider('thinkingProvider')]
@@ -96,11 +100,33 @@ final class ModelCapabilitiesTest extends TestCase
         yield 'claude-fable-5' => ['claude-fable-5', false];
         yield 'claude-mythos-5' => ['claude-mythos-5', false];
         yield 'claude-mythos-preview' => ['claude-mythos-preview', false];
+        yield 'claude-opus-5-5' => ['claude-opus-5-5', false];
+        yield 'claude-sonnet-5-5' => ['claude-sonnet-5-5', false];
+        yield 'claude-haiku-5-5' => ['claude-haiku-5-5', false];
     }
 
     #[DataProvider('disabledThinkingProvider')]
     public function testSupportsDisabledThinking(string $model, bool $expected): void
     {
         $this->assertSame($expected, ModelCapabilities::supportsDisabledThinking($model));
+    }
+
+    /**
+     * @return \Generator<string, array{0: string, 1: ThinkingModeEnum|null}>
+     */
+    public static function disabledThinkingModeProvider(): \Generator
+    {
+        yield 'claude-sonnet-5' => ['claude-sonnet-5', ThinkingModeEnum::DISABLED];
+        yield 'claude-sonnet-5-5' => ['claude-sonnet-5-5', ThinkingModeEnum::BETWEEN_TOOLS];
+        yield 'claude-sonnet-5-5 snapshot' => ['claude-sonnet-5-5-20261001', ThinkingModeEnum::BETWEEN_TOOLS];
+        yield 'claude-opus-5-5' => ['claude-opus-5-5', null];
+        yield 'claude-fable-5' => ['claude-fable-5', null];
+        yield 'claude-3-haiku' => [Model::CLAUDE_3_HAIKU->value, null];
+    }
+
+    #[DataProvider('disabledThinkingModeProvider')]
+    public function testDisabledThinkingMode(string $model, ?ThinkingModeEnum $expected): void
+    {
+        $this->assertSame($expected, ModelCapabilities::disabledThinkingMode($model));
     }
 }
