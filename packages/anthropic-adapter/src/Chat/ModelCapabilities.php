@@ -63,6 +63,7 @@ final class ModelCapabilities
      * @var list<string>
      */
     private const THINKING_SUPPORTED = [
+        'claude-haiku-5-5',
         'claude-fable-5',
         'claude-mythos-5',
         'claude-mythos-preview',
@@ -81,6 +82,7 @@ final class ModelCapabilities
      * @var list<string>
      */
     private const THINKING_ON_BY_DEFAULT = [
+        'claude-haiku-5-5',
         'claude-fable-5',
         'claude-mythos-5',
         'claude-mythos-preview',

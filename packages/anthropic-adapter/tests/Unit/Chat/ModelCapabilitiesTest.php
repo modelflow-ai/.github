@@ -92,7 +92,7 @@ final class ModelCapabilitiesTest extends TestCase
         yield 'claude-mythos-preview' => ['claude-mythos-preview', true];
         yield 'claude-opus-5-5' => ['claude-opus-5-5', true];
         yield 'claude-sonnet-5-5' => ['claude-sonnet-5-5', true];
-        yield 'claude-haiku-5-5' => ['claude-haiku-5-5', false];
+        yield 'claude-haiku-5-5' => ['claude-haiku-5-5', true];
     }
 
     #[DataProvider('thinkingProvider')]
@@ -114,6 +114,7 @@ final class ModelCapabilitiesTest extends TestCase
         yield 'claude-sonnet-5' => ['claude-sonnet-5', true];
         yield 'claude-fable-5' => ['claude-fable-5', true];
         yield 'claude-mythos-preview' => ['claude-mythos-preview', true];
+        yield 'claude-haiku-5-5' => ['claude-haiku-5-5', true];
     }
 
     #[DataProvider('thinksByDefaultProvider')]
@@ -136,7 +137,7 @@ final class ModelCapabilitiesTest extends TestCase
         yield 'claude-mythos-preview' => ['claude-mythos-preview', false];
         yield 'claude-opus-5-5' => ['claude-opus-5-5', false];
         yield 'claude-sonnet-5-5' => ['claude-sonnet-5-5', false];
-        yield 'claude-haiku-5-5' => ['claude-haiku-5-5', false];
+        yield 'claude-haiku-5-5' => ['claude-haiku-5-5', true];
     }
 
     #[DataProvider('disabledThinkingProvider')]
@@ -153,6 +154,7 @@ final class ModelCapabilitiesTest extends TestCase
         yield 'claude-sonnet-5' => ['claude-sonnet-5', ThinkingModeEnum::DISABLED];
         yield 'claude-sonnet-5-5' => ['claude-sonnet-5-5', ThinkingModeEnum::BETWEEN_TOOLS];
         yield 'claude-sonnet-5-5 snapshot' => ['claude-sonnet-5-5-20261001', ThinkingModeEnum::BETWEEN_TOOLS];
+        yield 'claude-haiku-5-5' => ['claude-haiku-5-5', ThinkingModeEnum::DISABLED];
         yield 'claude-opus-5-5' => ['claude-opus-5-5', null];
         yield 'claude-fable-5' => ['claude-fable-5', null];
         yield 'claude-3-haiku' => [Model::CLAUDE_3_HAIKU->value, null];
