@@ -24,6 +24,7 @@ use ModelflowAi\ApiClient\Transport\Testing\MockResponseMatcher;
 use ModelflowAi\ApiClient\Transport\Testing\MockTransport;
 use ModelflowAi\ApiClient\Transport\Testing\PartialPayload;
 use ModelflowAi\ApiClient\Transport\Testing\StreamedResponse;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class MessagesTest extends TestCase
@@ -122,6 +123,68 @@ final class MessagesTest extends TestCase
             }
             $this->assertSame($responseData['stop_reason'], $response->stopReason);
         }
+    }
+
+    /**
+     * @return \Generator<string, array{list<int>}>
+     */
+    public static function provideChunkBoundaries(): \Generator
+    {
+        $events = [];
+        foreach (DataFixtures::MESSAGES_CREATE_STREAMED_RESPONSES_RAW as $response) {
+            $events[] = \implode("\n", $response);
+        }
+        $raw = \implode("\n\n", $events) . "\n\n";
+
+        $secondEvent = \strlen($events[0]) + 2;
+        $json = \strpos($raw, '{"type": "content_block_delta"') ?: 0;
+
+        yield 'in the middle of the json' => [[$json + 40]];
+        yield 'in the middle of the field name data' => [[\strpos($raw, 'data:', $secondEvent) + 2]];
+        yield 'between the event and the data line' => [[\strpos($raw, "\ndata:", $secondEvent) + 1]];
+        yield 'inside the blank line' => [[$secondEvent - 1]];
+        yield 'several boundaries' => [[10, 120, $json + 5, $json + 80, \strlen($raw) - 3]];
+        yield 'byte by byte' => [\range(1, \strlen($raw) - 1)];
+    }
+
+    /**
+     * @param list<int> $boundaries
+     */
+    #[DataProvider('provideChunkBoundaries')]
+    public function testCreateStreamedJoinsEventsSplitAcrossChunks(array $boundaries): void
+    {
+        $events = [];
+        foreach (DataFixtures::MESSAGES_CREATE_STREAMED_RESPONSES_RAW as $response) {
+            $events[] = \implode("\n", $response);
+        }
+        $raw = \implode("\n\n", $events) . "\n\n";
+
+        $chunks = [];
+        $previous = 0;
+        foreach ($boundaries as $boundary) {
+            $chunks[] = \substr($raw, $previous, $boundary - $previous);
+            $previous = $boundary;
+        }
+        $chunks[] = \substr($raw, $previous);
+
+        $mockResponseMatcher = new MockResponseMatcher();
+        $instance = $this->createInstance($mockResponseMatcher);
+        $mockResponseMatcher->addResponse(PartialPayload::create(
+            'messages',
+            DataFixtures::MESSAGES_CREATE_STREAMED_REQUEST,
+        ), new StreamedResponse($chunks, MetaInformation::empty()));
+
+        $texts = [];
+        $stopReason = null;
+        foreach ($instance->createStreamed(DataFixtures::MESSAGES_CREATE_REQUEST_RAW) as $response) {
+            if (null !== $response->content?->text && '' !== $response->content->text) {
+                $texts[] = $response->content->text;
+            }
+            $stopReason = $response->stopReason ?? $stopReason;
+        }
+
+        $this->assertSame(['Hello', '!'], $texts);
+        $this->assertSame('end_turn', $stopReason);
     }
 
     public function testCreateStreamedWithTools(): void
