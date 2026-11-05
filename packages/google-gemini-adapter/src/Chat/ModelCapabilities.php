@@ -28,6 +28,7 @@ final class ModelCapabilities
      */
     private const THINKING_LEVEL_SUPPORTED = [
         'gemini-3',
+        'gemini-4',
     ];
 
     public static function supportsThinkingLevel(string $model): bool

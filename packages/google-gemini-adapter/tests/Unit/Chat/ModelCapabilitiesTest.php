@@ -30,6 +30,9 @@ final class ModelCapabilitiesTest extends TestCase
         yield 'gemini-3-pro' => ['gemini-3-pro', true];
         yield 'gemini-3.7-flash' => ['gemini-3.7-flash', true];
         yield 'gemini-3.7-flash qualified' => ['models/gemini-3.7-flash', true];
+        yield 'gemini-4-argon' => ['gemini-4-argon', true];
+        yield 'gemini-4-argon qualified' => ['models/gemini-4-argon', true];
+        yield 'gemini-40 is a different generation' => ['gemini-40-flash', false];
         yield 'gemini-30 is a different generation' => ['gemini-30-flash', false];
     }
 
@@ -48,6 +51,7 @@ final class ModelCapabilitiesTest extends TestCase
         yield 'gemini-3.1-flash-lite qualified' => ['models/gemini-3.1-flash-lite', true];
         yield 'gemini-3.7-flash rejects minimal despite the name' => ['gemini-3.7-flash', false];
         yield 'gemini-3-pro has no minimal' => ['gemini-3-pro', false];
+        yield 'gemini-4-argon rejects minimal' => ['gemini-4-argon', false];
         yield 'gemini-2.5-flash does not take a thinking level at all' => ['gemini-2.5-flash', false];
     }
 
